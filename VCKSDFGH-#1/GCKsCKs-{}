@@ -1,1 +1,473 @@
+local openshit = Instance.new("ScreenGui")
+local mainopen = Instance.new("TextButton")
+local mainopens = Instance.new("UICorner")
+local loki = Instance.new("ImageLabel")
+local posto = Instance.new("UIStroke")
 
+openshit.Name = "openshit"
+openshit.Parent = game:GetService("Players").LocalPlayer:WaitForChild("PlayerGui")
+openshit.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+openshit.ResetOnSpawn = false
+
+mainopen.Name = "mainopen"
+mainopen.Parent = openshit
+mainopen.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
+mainopen.Position = UDim2.new(0.101969875, 0, 0.110441767, 0)
+mainopen.Size = UDim2.new(0, 64, 0, 42)
+mainopen.Text = ""
+mainopen.Visible = true
+
+mainopens.Parent = mainopen
+ 
+loki.Name = "loki"
+loki.Parent = mainopen
+loki.BackgroundColor3 = Color3.fromRGB(224,224,224)
+loki.BackgroundTransparency = 1.000
+loki.Position = UDim2.new(-0.0529999994, 0, -0.244000003, 0)
+loki.Size = UDim2.new(0, 69, 0, 62)
+loki.Image = "rbxassetid://17339439921"
+ 
+posto.Name = "posto"
+posto.Parent = mainopen
+posto.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+posto.Color = Color3.fromRGB(224,224,224)
+posto.LineJoinMode = Enum.LineJoinMode.Round
+posto.Thickness = 1
+posto.Transparency = 0
+posto.Enabled = true
+posto.Archivable = true
+ 
+local UserInputService = game:GetService("UserInputService")
+local TweenService = game:GetService("TweenService")
+ 
+local function MakeDraggable(topbarobject, object)
+    local Dragging = nil
+    local DragInput = nil
+    local DragStart = nil
+    local StartPosition = nil
+    
+    local function Update(input)
+        local Delta = input.Position - DragStart
+        local pos = UDim2.new(StartPosition.X.Scale, StartPosition.X.Offset + Delta.X, StartPosition.Y.Scale, StartPosition.Y.Offset + Delta.Y)
+        local Tween = TweenService:Create(object, TweenInfo.new(0.15), {
+            Position = pos
+        })
+        Tween:Play()
+    end
+    
+    topbarobject.InputBegan:Connect(
+        function(input)
+            if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+                Dragging = true
+                DragStart = input.Position
+                StartPosition = object.Position
+                
+                input.Changed:Connect(
+                    function()
+                        if input.UserInputState == Enum.UserInputState.End then
+                            Dragging = false
+                        end
+                    end
+                )
+            end
+        end
+    )
+    
+    topbarobject.InputChanged:Connect(
+        function(input)
+            if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
+                DragInput = input
+            end
+        end
+    )
+    
+    UserInputService.InputChanged:Connect(
+        function(input)
+            if input == DragInput and Dragging then
+                Update(input)
+            end
+        end
+    )
+end
+
+MakeDraggable(mainopen, mainopen) -- Making the button draggable
+
+mainopen.MouseButton1Click:Connect(function()
+    game:GetService("VirtualInputManager"):SendKeyEvent(true, "LeftControl", false, game)
+    game:GetService("VirtualInputManager"):SendKeyEvent(false, "LeftControl", false, game)
+end)
+
+
+-- instances
+getgenv().Get =
+    setmetatable(
+    {},
+    {
+        __index = function(A, B)
+            return game:GetService(B)
+        end
+    }
+)
+
+print("Gui: Fluent Library")
+
+print("-- Fast Loader V2")
+print("-- Unknown TQ Hub 1/5: Checking Game...")
+
+wait(0.2)
+
+print("-- Unknown TQ Hub 2/5: Getting Service...")
+
+-- Test literally
+local request = http_request or request or HttpPost
+
+-- waiting for game load
+while not game:IsLoaded() do
+    RunService.Heartbeat:Wait()
+end
+
+-- Valuable 1
+repeat wait() until game:IsLoaded()
+local ReplicatedStorage = Get.ReplicatedStorage
+local Players = Get.Players
+local RunService = Get.RunService
+local TweenService = Get.TweenService
+local Workspace = Get.Workspace
+local HttpService = Get.HttpService
+local Player = Players.LocalPlayer
+local InventoryController = require(game:GetService("Players").LocalPlayer.PlayerScripts:WaitForChild("Shared"):WaitForChild("Client"):WaitForChild("InventoryController"))
+
+print("-- Unknown TQ Hub 3/5: Bypassing Random Name...")
+
+print("-- Unknown TQ Hub 3.5/5: Bypassing... *DumbExploiterController* ")
+
+-- Valuable Servers
+local isWaveDefense
+local isGrandGrotto
+local isLobby = game.PlaceId == 2960777560
+
+function bypassAntiCheat()
+    local exploiterController = game:GetService("Players").LocalPlayer.PlayerScripts.Shared.Client:WaitForChild(
+        'DumbExploiterController')
+
+    -- bypass anti-cheat
+    local cheat = require(exploiterController)
+    cheat._Update = function()
+        return
+    end
+
+    cheat._SetupDummyRemotes = function()
+        return
+    end
+
+    while not game:GetService("Players") do
+        wait()
+    end
+
+    while not game:GetService("ReplicatedStorage") do
+        wait()
+    end
+
+    task.wait(2)
+
+    game:GetService("Players").Name = 'Players'
+    game:GetService("ReplicatedStorage").Name = 'ReplicatedStorage'
+    workspace.Name = 'Workspace'
+
+    if isLobby then
+        return
+    end
+
+    workspace:GetChildren()[5].Name = 'Dungeon'
+
+    -- Wave defense
+    if workspace.Dungeon:FindFirstChild("EnemySpawns") then
+        workspace.Dungeon:GetChildren()[5].Name = 'Enemies'
+        isWaveDefense = workspace.Dungeon:FindFirstChild("EnemySpawns")
+        return
+    end
+
+    -- Nomal dungeon
+    workspace.Dungeon:GetChildren()[1].Name = 'Enemies'
+    workspace.Dungeon:GetChildren()[2].Name = 'Rooms'
+
+    -- Grand Grotto
+    if workspace.Dungeon.Rooms:FindFirstChild("Start"):FindFirstChild("Traps") then
+        isGrandGrotto = true
+end
+
+-- Dungeon
+    if workspace.Dungeon.Rooms:FindFirstChild("Start") then
+        isDungeon = true
+   end
+end
+
+bypassAntiCheat()
+
+function getPlayer()
+    while not game:GetService('Players').LocalPlayer do
+        RunService.Heartbeat:Wait()
+    end
+    while not game:GetService('Players').LocalPlayer.Character do
+        RunService.Heartbeat:Wait()
+    end
+    while not game:GetService('Players').LocalPlayer.Character:FindFirstChild("HumanoidRootPart") do
+        RunService.Heartbeat:Wait()
+    end
+    while not game:GetService('Players').LocalPlayer.Character:FindFirstChild("Humanoid") do
+        RunService.Heartbeat:Wait()
+    end
+
+    local player = game:GetService('Players').LocalPlayer
+    local cha = game:GetService('Players').LocalPlayer.Character
+    local plr = game:GetService('Players').LocalPlayer.Character.HumanoidRootPart
+    local hum = game:GetService('Players').LocalPlayer.Character.Humanoid
+    return player, cha, plr, hum
+end
+
+-- Function to get dungeon components
+function getDungeon()
+
+    while not game:GetService("Workspace"):FindFirstChild("Dungeon") do
+        RunService.Heartbeat:Wait()
+    end
+    while not game:GetService("Workspace"):FindFirstChild("Dungeon"):FindFirstChild("Rooms") do
+        RunService.Heartbeat:Wait()
+    end
+    while not game:GetService("Workspace"):FindFirstChild("Dungeon"):FindFirstChild("Enemies") do
+        RunService.Heartbeat:Wait()
+    end
+    while not game:GetService("Workspace"):FindFirstChild("Dungeon"):FindFirstChild("Shrines") do
+        RunService.Heartbeat:Wait()
+    end
+
+    local dungeon = game:GetService("Workspace").Dungeon
+    local rooms = dungeon.Rooms
+    local enemies = dungeon.Enemies
+    local shrines = dungeon.Shrines
+    return dungeon, rooms, enemies, shrines
+end
+
+if game.PlaceId == 2960777560 then
+pcall(function()
+ReplicatedStorage.Lobby.Remotes.ClaimDailyReward:FireServer()
+ReplicatedStorage.Lobby.Remotes.ClaimTreasureReward:FireServer()
+end)
+end
+
+game:GetService("Workspace"):FindFirstChild("Map")
+
+print("-- Unknown TQ Hub 4/5: Checking Exploit Support...")
+
+wait(0.1)
+
+if not require then
+    return game.Players.LocalPlayer:Kick("Your Exploit doesn't support")
+end
+
+if not firetouchinterest then
+    return game.Players.LocalPlayer:Kick("Your Exploit doesn't support")
+end
+
+print("-- Unknown TQ Hub 5/5: Loaded, Pls Wait for Few Seconds...")
+
+wait(0.1)
+
+local Maps = {"Wave Defense", "Ancient Jungle", "Coral Kingdom", "Crystal Cave",
+"Sacred Sands", "Candy Land", "Sinister Sewerss", "Magical Mushrooms", "Space Base", "Daring Dojo", "Cryptic Castle",
+"Santa's Workshop", "Ice Palace", "Frenzy Factory", "Fiery Fortress", "Danger Depths", "Poison Prison",
+"Smog Sanctum", "Missing Map", "Brightest Beach", "Spookiest Mansion"}
+
+local dungeonraid = {"Wave Defense Dungeon", "Ancient Jungle Dungeon", "Coral Kingdom Dungeon", "Crystal Cave Dungeon",
+"Sacred Sands Dungeon", "Candy Land Dungeon", "Sinister Sewerss Dungeon", "Magical Mushrooms Dungeon", "Space Base Dungeon", "Daring Dojo Dungeon", "Cryptic Castle Dungeon",
+"Santa's Workshop Dungeon", "Ice Palace Dungeon", "Frenzy Factory Dungeon", "Fiery Fortress Dungeon", "Danger Depths Dungeon", "Poison Prison Dungeon",
+"Smog Sanctum Dungeon", "Missing Map Dungeon", "Brightest Beach Dungeon", "Spookiest Mansion Dungeon"}
+
+local questrequest = require(game:GetService("Players").LocalPlayer.PlayerScripts.Shared.Modules.Pages.Quests)
+local questslot1 = questrequest["_quest_slots"][1]["_quest_info"].Name
+local questslot2 = questrequest["_quest_slots"][2]["_quest_info"].Name
+local QuestDiffculty = "Easy"
+local SecretShop_1 = false
+local SecretShop_2 = false
+local SecretShop_3 = false
+local Playtime_1 = false
+local Playtime_2 = false
+local Playtime_3 = false
+local sucesstoquest = false
+
+function StartAutoQuest()
+Fluent:Notify({
+        Title = "locating 1-2 Quest...",
+        Content = "",
+        SubContent = "", -- Optional
+        Duration = 5
+    })
+   
+wait(0.1)
+Fluent:Notify({
+        Title = "Creating Squad...",
+        Content = "",
+        SubContent = "", -- Optional
+        Duration = 5
+    })
+wait(0.1)
+Fluent:Notify({
+        Title = "Starting Auto Quest...",
+        Content = "Firing Remote...",
+        SubContent = "", -- Optional
+        Duration = 5
+    })
+wait(0.1)
+game:GetService("ReplicatedStorage").Lobby.Remotes.StartGame:FireServer()
+end
+
+function StartAutoQuest2()
+Fluent:Notify({
+        Title = "locating Combo Quest...",
+        Content = "",
+        SubContent = "", -- Optional
+        Duration = 5
+    })
+   
+game:GetService("ReplicatedStorage").Lobby.Remotes.StartGame:FireServer()
+end
+
+function AutoQuest_1()
+writefile("UnknownTQHub/AutoQuestConfig.txt", "NormalQuest")
+if questslot1 == "Wave Defense Bosses" or questslot1 == "Wave Defense Dungeon" or questslot1 == "Wave Defense Waves" or questslot1 == "Wave Defense Dungeon Monster Kills" then
+game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Wave Defense", "Wave Defense", "Classic", "Solo", 1);
+end
+
+if questslot1 == "Ancient Jungle Bosses" or questslot1 == "Ancient Jungle Dungeon" or questslot1 == "Ancient Jungle Dungeon Monster Kills" then
+game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Ancient Jungle", QuestDiffculty, "Endless", "Solo", 1);
+end
+
+if questslot1 == "Coral Kingdom Bosses" or questslot1 == "Coral Kingdom Dungeon" or questslot1 == "Coral Kingdom Dungeon Monster Kills" then
+game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Coral Kingdom", QuestDiffculty, "Endless", "Solo", 1);
+end
+
+if questslot1 == "Sacred Sands Bosses" or questslot1 == "Sacred Sands Dungeon" or questslot1 == "Sacred Sands Dungeon Monster Kills" then
+game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Sacred Sands", QuestDiffculty, "Endless", "Solo", 1);
+end
+
+if questslot1 == "Candy Land Bosses" or questslot1 == "Candy Land Dungeon" or questslot1 == "Candy Land Dungeon Monster Kills" then
+game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Candy Land", QuestDiffculty, "Endless", "Solo", 1);
+end
+
+if questslot1 == "Sinister Sewers Bosses" or questslot1 == "Sinister Sewers Dungeon" or questslot1 == "Sinister Sewers Dungeon Monster Kills" then
+game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Sinister Sewers", QuestDiffculty, "Endless", "Solo", 1);
+end
+
+if questslot1 == "Magical Mushrooms Bosses" or questslot1 == "Magical Mushrooms Dungeon" or questslot1 == "Magical Mushrooms Dungeon Monster Kills" then
+game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Magical Mushrooms", QuestDiffculty, "Endless", "Solo", 1);
+end
+
+if questslot1 == "Space Base Bosses" or questslot1 == "Space Base Dungeon" or questslot1 == "Space Base Dungeon Monster Kills" then
+game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Space Base", QuestDiffculty, "Endless", "Solo", 1);
+end
+
+if questslot1 == "Daring Dojo Bosses" or questslot1 == "Daring Dojo Dungeon" or questslot1 == "Daring Dojo Dungeon Monster Kills" then
+game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Daring Dojo", QuestDiffculty, "Endless", "Solo", 1);
+end
+
+if questslot1 == "Ice Palace Bosses" or questslot1 == "Ice Palace Dungeon" or questslot1 == "Ice Palace Dungeon Monster Kills" then
+game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Ice Palace", QuestDiffculty, "Endless", "Solo", 1);
+end
+
+if questslot1 == "Cryptic Castle Bosses" or questslot1 == "Cryptic Castle Dungeon" or questslot1 == "Cryptic Castle Dungeon Monster Kills" then
+game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Cryptic Castle", QuestDiffculty, "Endless", "Solo", 1);
+end
+
+if questslot1 == "Fiery Fortress Bosses" or questslot1 == "Fiery Fortress Dungeon" or questslot1 == "Fiery Fortress Dungeon Monster Kills" then
+game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Fiery Fortress", QuestDiffculty, "Endless", "Solo", 1);
+end
+
+if questslot1 == "Crystal Cave Bosses" or questslot1 == "Crystal Cave Dungeon" or questslot1 == "Crystal Cave Dungeon Monster Kills" then
+game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Crystal Cave", QuestDiffculty, "Endless", "Solo", 1);
+end
+
+if questslot1 == "Missing Map Bosses" or questslot1 == "Missing Map Dungeon" or questslot1 == "Missing Map Dungeon Monster Kills" then
+game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Missing Map", QuestDiffculty, "Endless", "Solo", 1);
+end
+
+if questslot1 == "Brightest Beach Bosses" or questslot1 == "Brightest Beach Dungeon" or questslot1 == "Brightest Beach Dungeon Monster Kills" then
+game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Brightest Beach", QuestDiffculty, "Endless", "Solo", 1);
+end
+
+if questslot1 == "Santa's Workshop Bosses" or questslot1 == "Santa's Workshop Dungeon" or questslot1 == "Santa's Workshop Dungeon Monster Kills" then
+game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Santa's Workshop", QuestDiffculty, "Endless", "Solo", 1);
+end
+
+if questslot1 == "Frenzy Factory Bosses" or questslot1 == "Frenzy Factory Dungeon" or questslot1 == "Frenzy Factory Dungeon Monster Kills" then
+game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Frenzy Factory", QuestDiffculty, "Endless", "Solo", 1);
+end
+
+if questslot1 == "Poison Prison Bosses" or questslot1 == "Poison Prison Dungeon" or questslot1 == "Poison Prison Dungeon Monster Kills" then
+game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Poison Prison", QuestDiffculty, "Endless", "Solo", 1);
+end
+
+if questslot1 == "Spookiest Mansion Bosses" or questslot1 == "Spookiest Mansion Dungeon" or questslot1 == "Spookiest Mansion Dungeon Monster Kills" then
+game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Spookiest Mansion", QuestDiffculty, "Endless", "Solo", 1);
+end
+
+if questslot1 == "Smog Sanctum Bosses" or questslot1 == "Smog Sanctum Dungeon" or questslot1 == "Smog Sanctum Dungeon Monster Kills" then
+game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Smog Sanctum", QuestDiffculty, "Endless", "Solo", 1);
+end
+
+if questslot1 == "Daily Dungeon Bosses" or questslot1 == "Daily Dungeon Dungeon" or questslot1 == "Daily Dungeon Dungeon Monster Kills" then
+game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Daily Dungeon", QuestDiffculty, "Endless", "Solo", 1);
+end
+
+if questslot1 == "Danger Depths Bosses" or questslot1 == "Danger Depths Dungeon" or questslot1 == "Danger Depths Dungeon Monster Kills" then
+game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Danger Depths", QuestDiffculty, "Endless", "Solo", 1);
+end
+
+if questslot2 == "Wave Defense Bosses" or questslot2 == "Wave Defense Dungeon" or questslot2 == "Wave Defense Waves" or questslot2 == "Wave Defense Dungeon Monster Kills" then
+game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Wave Defense", "Wave Defense", "Classic", "Solo", 1);
+end
+
+if questslot2 == "Danger Depths Bosses" or questslot2 == "Danger Depths Dungeon" or questslot2 == "Danger Depths Waves" or questslot2 == "Danger Depths Dungeon Monster Kills" then
+game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Danger Depths", "Danger Depths", "Classic", "Solo", 1);
+end
+
+if questslot2 == "Ancient Jungle Bosses" or questslot2 == "Ancient Jungle Dungeon" or questslot2 == "Ancient Jungle Dungeon Monster Kills" then
+game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Ancient Jungle", QuestDiffculty, "Endless", "Solo", 1);
+end
+
+if questslot2 == "Coral Kingdom Bosses" or questslot2 == "Coral Kingdom Dungeon" or questslot2 == "Coral Kingdom Dungeon Monster Kills" then
+game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Coral Kingdom", QuestDiffculty, "Endless", "Solo", 1);
+end
+
+if questslot2 == "Sacred Sands Bosses" or questslot2 == "Sacred Sands Dungeon" or questslot2 == "Sacred Sands Dungeon Monster Kills" then
+game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Sacred Sands", QuestDiffculty, "Endless", "Solo", 1);
+end
+
+if questslot2 == "Candy Land Bosses" or questslot2 == "Candy Land Dungeon" or questslot2 == "Candy Land Dungeon Monster Kills" then
+game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Candy Land", QuestDiffculty, "Endless", "Solo", 1);
+end
+
+if questslot2 == "Sinister Sewers Bosses" or questslot2 == "Sinister Sewers Dungeon" or questslot2 == "Sinister Sewers Dungeon Monster Kills" then
+game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Sinister Sewers", QuestDiffculty, "Endless", "Solo", 1);
+end
+
+if questslot2 == "Magical Mushrooms Bosses" or questslot2 == "Magical Mushrooms Dungeon" or questslot2 == "Magical Mushrooms Dungeon Monster Kills" then
+game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Magical Mushrooms", QuestDiffculty, "Endless", "Solo", 1);
+end
+
+if questslot2 == "Space Base Bosses" or questslot2 == "Space Base Dungeon" or questslot2 == "Space Base Dungeon Monster Kills" then
+game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Space Base", QuestDiffculty, "Endless", "Solo", 1);
+end
+
+if questslot2 == "Daring Dojo Bosses" or questslot2 == "Daring Dojo Dungeon" or questslot2 == "Daring Dojo Dungeon Monster Kills" then
+game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Daring Dojo", QuestDiffculty, "Endless", "Solo", 1);
+end
+
+if questslot2 == "Ice Palace Bosses" or questslot2 == "Ice Palace Dungeon" or questslot2 == "Ice Palace Dungeon Monster Kills" then
+game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Ice Palace", QuestDiffculty, "Endless", "Solo", 1);
+end
+
+if questslot2 == "Cryptic Castle Bosses" or questslot2 == "Cryptic Castle Dungeon" or questslot2 == "Cryptic Castle Dungeon Monster Kills" then
+game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Cryptic Castle", QuestDiffculty, "Endless", "Solo", 1);
+end
+
+if questslot2 == "Fiery Fortress Bosses" or questslot2 == "Fiery Fortress Dungeon" 
