@@ -21,7 +21,7 @@ local function saveKeyToFile(key)
 end
 
 local function runloadstring()
-    loadstring(game:HttpGet('http://pastefy.app/qOS0gldp/raw'))()
+    loadstring(game:HttpGet('https://raw.githubusercontent.com/jOSHCLABC/GajdkavdfJ-Test--1/main/Uaksgsksbf-Kysys-%231/Keagsy-%7B%7D'))()
 end
 
 -- Create GUI
