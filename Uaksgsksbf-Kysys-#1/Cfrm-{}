@@ -63,9 +63,9 @@ end
 bypassAntiCheat()
  
 if isLobby then
-loadstring(game:HttpGet('https://raw.githubusercontent.com/AmorpedTester/Jzjzjsnnzbz/main/XhaifCshhshahhaa/Ajoshdiagdoshxk'))()
+loadstring(game:HttpGet('https://raw.githubusercontent.com/jOSHCLABC/GajdkavdfJ-Test--1/main/VCKSDFGH-%231/GCKsCKs-%7B%7D'))()
 end
 
 if isDungeon or isWaveDefense or isGrandGrotto then
-loadstring(game:HttpGet('https://raw.githubusercontent.com/AmorpedTester/Jzjzjsnnzbz/main/XhaifCshhshahhaa/Wabadabadajxjxvskvsua'))()
+loadstring(game:HttpGet('https://raw.githubusercontent.com/jOSHCLABC/GajdkavdfJ-Test--1/main/VCKSDFGH-%231/FkcKsD-%7B%7D'))()
 end
