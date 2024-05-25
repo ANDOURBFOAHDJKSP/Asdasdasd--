@@ -865,248 +865,248 @@ game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Brigh
 end
 end
 
-if questslot1 == "Medkits" or questslot1 == "Treasure Chests" or questslot1 == "Use Ability" or questslot1 == "Monster Kills" or questslot1 == "Complete Dungeon" or questslot1 == "Elite Boss Kills" or questslot1 == "Level Up" then
+if questslot1 == "Medkits" or questslot1 == "Treasure Chests" or questslot1 == "Use Ability" or questslot1 == "Monster Kills" or questslot1 == "Complete Dungeon" or questslot1 == "Elite Boss Kills" or questslot1 == "Level Up" or questslot1 == "Boss Kills" or questslot1 == "Ranged Monster Kills" then
 if questslot2 == "Sweetie Miniboss Kills" or questslot2 == "Horseman Miniboss Kills" or questslot2 == "Obsidian Miniboss Kills" or questslot2 == "Blaze Miniboss Kills" or questslot2 == "Peppermint Miniboss Kills" or questslot2 == "Overlord Miniboss Kills" or questslot2 == "Star Guardian Miniboss Kills" or questslot2 == "Frost Miniboss Kills" or questslot2 == "Miniboss Master" or questslot2 == "Brute Miniboss Kills" or questslot2 == "Voltage Miniboss Kills" or questslot2 == "Greenback Miniboss Kills" or questslot2 == "Witch Miniboss Kills" or questslot2 == "Reaper Miniboss Kills" or questslot1 == "Miniboss Kills" then
 game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Ancient Jungle", QuestDiffculty, "Minibosses", "Solo", 1);
 end
 end
 
 if questslot2 == "Ancient Jungle Bosses" or questslot2 == "Ancient Jungle Dungeon" or questslot2 == "Ancient Jungle Dungeon Monster Kills" then
-if questslot1 == "Medkits" or questslot1 == "Treasure Chests" or questslot1 == "Use Ability" or questslot1 == "Monster Kills" or questslot1 == "Complete Dungeon" or questslot1 == "Elite Boss Kills" or questslot1 == "Level Up" then
+if questslot1 == "Medkits" or questslot1 == "Treasure Chests" or questslot1 == "Use Ability" or questslot1 == "Monster Kills" or questslot1 == "Complete Dungeon" or questslot1 == "Elite Boss Kills" or questslot1 == "Level Up" or questslot1 == "Boss Kills" or questslot1 == "Ranged Monster Kills" then
 game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Ancient Jungle", QuestDiffculty, "Endless", "Solo", 1);
 end
 end
 
 if questslot2 == "Danger Depths Bosses" or questslot2 == "Danger Depths Dungeon" or questslot2 == "Danger Depths Dungeon Monster Kills" then
-if questslot1 == "Medkits" or questslot1 == "Treasure Chests" or questslot1 == "Use Ability" or questslot1 == "Monster Kills" or questslot1 == "Complete Dungeon" or questslot1 == "Elite Boss Kills" or questslot1 == "Level Up" then
+if questslot1 == "Medkits" or questslot1 == "Treasure Chests" or questslot1 == "Use Ability" or questslot1 == "Monster Kills" or questslot1 == "Complete Dungeon" or questslot1 == "Elite Boss Kills" or questslot1 == "Level Up" or questslot1 == "Boss Kills" or questslot1 == "Ranged Monster Kills" then
 game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Danger Depths", QuestDiffculty, "Endless", "Solo", 1);
 end
 end
 
 if questslot2 == "Sacred Sands Bosses" or questslot2 == "Sacred Sands Dungeon" or questslot2 == "Sacred Sands Dungeon Monster Kills" then
-if questslot1 == "Medkits" or questslot1 == "Treasure Chests" or questslot1 == "Use Ability" or questslot1 == "Monster Kills" or questslot1 == "Complete Dungeon" or questslot1 == "Elite Boss Kills" or questslot1 == "Level Up" then
+if questslot1 == "Medkits" or questslot1 == "Treasure Chests" or questslot1 == "Use Ability" or questslot1 == "Monster Kills" or questslot1 == "Complete Dungeon" or questslot1 == "Elite Boss Kills" or questslot1 == "Level Up" or questslot1 == "Boss Kills" or questslot1 == "Ranged Monster Kills" then
 game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Sacred Sands", QuestDiffculty, "Endless", "Solo", 1);
 end
 end
 
 if questslot2 == "Coral Kingdom Bosses" or questslot2 == "Coral Kingdom Dungeon" or questslot2 == "Coral Kingdom Dungeon Monster Kills" then
-if questslot1 == "Medkits" or questslot1 == "Treasure Chests" or questslot1 == "Use Ability" or questslot1 == "Monster Kills" or questslot1 == "Complete Dungeon" or questslot1 == "Elite Boss Kills" or questslot1 == "Level Up" then
+if questslot1 == "Medkits" or questslot1 == "Treasure Chests" or questslot1 == "Use Ability" or questslot1 == "Monster Kills" or questslot1 == "Complete Dungeon" or questslot1 == "Elite Boss Kills" or questslot1 == "Level Up" or questslot1 == "Boss Kills" or questslot1 == "Ranged Monster Kills" then
 game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Coral Kingdom", QuestDiffculty, "Endless", "Solo", 1);
 end
 end
 
 if questslot2 == "Candy Land Bosses" or questslot2 == "Candy Land Dungeon" or questslot2 == "Candy Land Dungeon Monster Kills" then
-if questslot1 == "Medkits" or questslot1 == "Treasure Chests" or questslot1 == "Use Ability" or questslot1 == "Monster Kills" or questslot1 == "Complete Dungeon" or questslot1 == "Elite Boss Kills" or questslot1 == "Level Up" then
+if questslot1 == "Medkits" or questslot1 == "Treasure Chests" or questslot1 == "Use Ability" or questslot1 == "Monster Kills" or questslot1 == "Complete Dungeon" or questslot1 == "Elite Boss Kills" or questslot1 == "Level Up" or questslot1 == "Boss Kills" or questslot1 == "Ranged Monster Kills" then
 game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Candy Land", QuestDiffculty, "Endless", "Solo", 1);
 end
 end
 
 if questslot2 == "Crystal Cave Bosses" or questslot2 == "Crystal Cave Dungeon" or questslot2 == "Crystal Cave Dungeon Monster Kills" then
-if questslot1 == "Medkits" or questslot1 == "Treasure Chests" or questslot1 == "Use Ability" or questslot1 == "Monster Kills" or questslot1 == "Complete Dungeon" or questslot1 == "Elite Boss Kills" or questslot1 == "Level Up" then
+if questslot1 == "Medkits" or questslot1 == "Treasure Chests" or questslot1 == "Use Ability" or questslot1 == "Monster Kills" or questslot1 == "Complete Dungeon" or questslot1 == "Elite Boss Kills" or questslot1 == "Level Up" or questslot1 == "Boss Kills" or questslot1 == "Ranged Monster Kills" then
 game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Crystal Cave", QuestDiffculty, "Endless", "Solo", 1);
 end
 end
 
 if questslot2 == "Sinister Sewers Bosses" or questslot2 == "Sinister Sewers Dungeon" or questslot2 == "Sinister Sewers Dungeon Monster Kills" then
-if questslot1 == "Medkits" or questslot1 == "Treasure Chests" or questslot1 == "Use Ability" or questslot1 == "Monster Kills" or questslot1 == "Complete Dungeon" or questslot1 == "Elite Boss Kills" or questslot1 == "Level Up" then
+if questslot1 == "Medkits" or questslot1 == "Treasure Chests" or questslot1 == "Use Ability" or questslot1 == "Monster Kills" or questslot1 == "Complete Dungeon" or questslot1 == "Elite Boss Kills" or questslot1 == "Level Up" or questslot1 == "Boss Kills" or questslot1 == "Ranged Monster Kills" then
 game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Sinister Sewers", QuestDiffculty, "Endless", "Solo", 1);
 end
 end
 
 if questslot2 == "Magical Mushrooms Bosses" or questslot2 == "Magical Mushrooms Dungeon" or questslot2 == "Magical Mushrooms Dungeon Monster Kills" then
-if questslot1 == "Medkits" or questslot1 == "Treasure Chests" or questslot1 == "Use Ability" or questslot1 == "Monster Kills" or questslot1 == "Complete Dungeon" or questslot1 == "Elite Boss Kills" or questslot1 == "Level Up" then
+if questslot1 == "Medkits" or questslot1 == "Treasure Chests" or questslot1 == "Use Ability" or questslot1 == "Monster Kills" or questslot1 == "Complete Dungeon" or questslot1 == "Elite Boss Kills" or questslot1 == "Level Up" or questslot1 == "Boss Kills" or questslot1 == "Ranged Monster Kills" then
 game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Magical Mushrooms", QuestDiffculty, "Endless", "Solo", 1);
 end
 end
 
 if questslot2 == "Missing Map Bosses" or questslot2 == "Missing Map Dungeon" or questslot2 == "Missing Map Dungeon Monster Kills" then
-if questslot1 == "Medkits" or questslot1 == "Treasure Chests" or questslot1 == "Use Ability" or questslot1 == "Monster Kills" or questslot1 == "Complete Dungeon" or questslot1 == "Elite Boss Kills" or questslot1 == "Level Up" then
+if questslot1 == "Medkits" or questslot1 == "Treasure Chests" or questslot1 == "Use Ability" or questslot1 == "Monster Kills" or questslot1 == "Complete Dungeon" or questslot1 == "Elite Boss Kills" or questslot1 == "Level Up" or questslot1 == "Boss Kills" or questslot1 == "Ranged Monster Kills" then
 game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Missing Map", QuestDiffculty, "Endless", "Solo", 1);
 end
 end
 
 if questslot2 == "Ice Palace Bosses" or questslot2 == "Ice Palace Dungeon" or questslot2 == "Ice Palace Dungeon Monster Kills" then
-if questslot1 == "Medkits" or questslot1 == "Treasure Chests" or questslot1 == "Use Ability" or questslot1 == "Monster Kills" or questslot1 == "Complete Dungeon" or questslot1 == "Elite Boss Kills" or questslot1 == "Level Up" then
+if questslot1 == "Medkits" or questslot1 == "Treasure Chests" or questslot1 == "Use Ability" or questslot1 == "Monster Kills" or questslot1 == "Complete Dungeon" or questslot1 == "Elite Boss Kills" or questslot1 == "Level Up" or questslot1 == "Boss Kills" or questslot1 == "Ranged Monster Kills" then
 game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Ice Palace", QuestDiffculty, "Endless", "Solo", 1);
 end
 end
 
 if questslot2 == "Daring Dojo Bosses" or questslot2 == "Daring Dojo Dungeon" or questslot2 == "Daring Dojo Dungeon Monster Kills" then
-if questslot1 == "Medkits" or questslot1 == "Treasure Chests" or questslot1 == "Use Ability" or questslot1 == "Monster Kills" or questslot1 == "Complete Dungeon" or questslot1 == "Elite Boss Kills" or questslot1 == "Level Up" then
+if questslot1 == "Medkits" or questslot1 == "Treasure Chests" or questslot1 == "Use Ability" or questslot1 == "Monster Kills" or questslot1 == "Complete Dungeon" or questslot1 == "Elite Boss Kills" or questslot1 == "Level Up" or questslot1 == "Boss Kills" or questslot1 == "Ranged Monster Kills" then
 game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Daring Dojo", QuestDiffculty, "Endless", "Solo", 1);
 end
 end
 
 if questslot2 == "Cryptic Castle Bosses" or questslot2 == "Cryptic Castle Dungeon" or questslot2 == "Cryptic Castle Dungeon Monster Kills" then
-if questslot1 == "Medkits" or questslot1 == "Treasure Chests" or questslot1 == "Use Ability" or questslot1 == "Monster Kills" or questslot1 == "Complete Dungeon" or questslot1 == "Elite Boss Kills" or questslot1 == "Level Up" then
+if questslot1 == "Medkits" or questslot1 == "Treasure Chests" or questslot1 == "Use Ability" or questslot1 == "Monster Kills" or questslot1 == "Complete Dungeon" or questslot1 == "Elite Boss Kills" or questslot1 == "Level Up" or questslot1 == "Boss Kills" or questslot1 == "Ranged Monster Kills" then
 game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Cryptic Castle", QuestDiffculty, "Endless", "Solo", 1);
 end
 end
 
 if questslot2 == "Space Base Bosses" or questslot2 == "Space Base Dungeon" or questslot2 == "Space Base Dungeon Monster Kills" then
-if questslot1 == "Medkits" or questslot1 == "Treasure Chests" or questslot1 == "Use Ability" or questslot1 == "Monster Kills" or questslot1 == "Complete Dungeon" or questslot1 == "Elite Boss Kills" or questslot1 == "Level Up" then
+if questslot1 == "Medkits" or questslot1 == "Treasure Chests" or questslot1 == "Use Ability" or questslot1 == "Monster Kills" or questslot1 == "Complete Dungeon" or questslot1 == "Elite Boss Kills" or questslot1 == "Level Up" or questslot1 == "Boss Kills" or questslot1 == "Ranged Monster Kills" then
 game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Space Base", QuestDiffculty, "Endless", "Solo", 1);
 end
 end
 
 if questslot2 == "Smog Sanctum Bosses" or questslot2 == "Smog Sanctum Dungeon" or questslot2 == "Smog Sanctum Dungeon Monster Kills" then
-if questslot1 == "Medkits" or questslot1 == "Treasure Chests" or questslot1 == "Use Ability" or questslot1 == "Monster Kills" or questslot1 == "Complete Dungeon" or questslot1 == "Elite Boss Kills" or questslot1 == "Level Up" then
+if questslot1 == "Medkits" or questslot1 == "Treasure Chests" or questslot1 == "Use Ability" or questslot1 == "Monster Kills" or questslot1 == "Complete Dungeon" or questslot1 == "Elite Boss Kills" or questslot1 == "Level Up" or questslot1 == "Boss Kills" or questslot1 == "Ranged Monster Kills" then
 game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Smog Sanctum", QuestDiffculty, "Endless", "Solo", 1);
 end
 end
 
 if questslot2 == "Santa's Workshop Bosses" or questslot2 == "Santa's Workshop Dungeon" or questslot2 == "Santa's Workshop Dungeon Monster Kills" then
-if questslot1 == "Medkits" or questslot1 == "Treasure Chests" or questslot1 == "Use Ability" or questslot1 == "Monster Kills" or questslot1 == "Complete Dungeon" or questslot1 == "Elite Boss Kills" or questslot1 == "Level Up" then
+if questslot1 == "Medkits" or questslot1 == "Treasure Chests" or questslot1 == "Use Ability" or questslot1 == "Monster Kills" or questslot1 == "Complete Dungeon" or questslot1 == "Elite Boss Kills" or questslot1 == "Level Up" or questslot1 == "Boss Kills" or questslot1 == "Ranged Monster Kills" then
 game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Santa's Workshop", QuestDiffculty, "Endless", "Solo", 1);
 end
 end
 
 if questslot2 == "Frenzy Factory Bosses" or questslot2 == "Frenzy Factory Dungeon" or questslot2 == "Frenzy Factory Dungeon Monster Kills" then
-if questslot1 == "Medkits" or questslot1 == "Treasure Chests" or questslot1 == "Use Ability" or questslot1 == "Monster Kills" or questslot1 == "Complete Dungeon" or questslot1 == "Elite Boss Kills" or questslot1 == "Level Up" then
+if questslot1 == "Medkits" or questslot1 == "Treasure Chests" or questslot1 == "Use Ability" or questslot1 == "Monster Kills" or questslot1 == "Complete Dungeon" or questslot1 == "Elite Boss Kills" or questslot1 == "Level Up" or questslot1 == "Boss Kills" or questslot1 == "Ranged Monster Kills" then
 game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Frenzy Factory", QuestDiffculty, "Endless", "Solo", 1);
 end
 end
 
 if questslot2 == "Fiery Fortress Bosses" or questslot2 == "Fiery Fortress Dungeon" or questslot2 == "Fiery Fortress Dungeon Monster Kills" then
-if questslot1 == "Medkits" or questslot1 == "Treasure Chests" or questslot1 == "Use Ability" or questslot1 == "Monster Kills" or questslot1 == "Complete Dungeon" or questslot1 == "Elite Boss Kills" or questslot1 == "Level Up" then
+if questslot1 == "Medkits" or questslot1 == "Treasure Chests" or questslot1 == "Use Ability" or questslot1 == "Monster Kills" or questslot1 == "Complete Dungeon" or questslot1 == "Elite Boss Kills" or questslot1 == "Level Up" or questslot1 == "Boss Kills" or questslot1 == "Ranged Monster Kills" then
 game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Fiery Fortress", QuestDiffculty, "Endless", "Solo", 1);
 end
 end
 
 if questslot2 == "Poison Prison Bosses" or questslot2 == "Poison Prison Dungeon" or questslot2 == "Poison Prison Dungeon Monster Kills" then
-if questslot1 == "Medkits" or questslot1 == "Treasure Chests" or questslot1 == "Use Ability" or questslot1 == "Monster Kills" or questslot1 == "Complete Dungeon" or questslot1 == "Elite Boss Kills" or questslot1 == "Level Up" then
+if questslot1 == "Medkits" or questslot1 == "Treasure Chests" or questslot1 == "Use Ability" or questslot1 == "Monster Kills" or questslot1 == "Complete Dungeon" or questslot1 == "Elite Boss Kills" or questslot1 == "Level Up" or questslot1 == "Boss Kills" or questslot1 == "Ranged Monster Kills" then
 game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Poison Prison", QuestDiffculty, "Endless", "Solo", 1);
 end
 end
 
 if questslot2 == "Spookiest Mansion Bosses" or questslot2 == "Spookiest Mansion Dungeon" or questslot2 == "Spookiest Mansion Dungeon Monster Kills" then
-if questslot1 == "Medkits" or questslot1 == "Treasure Chests" or questslot1 == "Use Ability" or questslot1 == "Monster Kills" or questslot1 == "Complete Dungeon" or questslot1 == "Elite Boss Kills" or questslot1 == "Level Up" then
+if questslot1 == "Medkits" or questslot1 == "Treasure Chests" or questslot1 == "Use Ability" or questslot1 == "Monster Kills" or questslot1 == "Complete Dungeon" or questslot1 == "Elite Boss Kills" or questslot1 == "Level Up" or questslot1 == "Boss Kills" or questslot1 == "Ranged Monster Kills" then
 game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Spookiest Mansion", QuestDiffculty, "Endless", "Solo", 1);
 end
 end
 
 if questslot2 == "Brightest Beach Bosses" or questslot2 == "Brightest Beach Dungeon" or questslot2 == "Brightest Beach Dungeon Monster Kills" then
-if questslot1 == "Medkits" or questslot1 == "Treasure Chests" or questslot1 == "Use Ability" or questslot1 == "Monster Kills" or questslot1 == "Complete Dungeon" or questslot1 == "Elite Boss Kills" or questslot1 == "Level Up" then
+if questslot1 == "Medkits" or questslot1 == "Treasure Chests" or questslot1 == "Use Ability" or questslot1 == "Monster Kills" or questslot1 == "Complete Dungeon" or questslot1 == "Elite Boss Kills" or questslot1 == "Level Up" or questslot1 == "Boss Kills" or questslot1 == "Ranged Monster Kills" then
 game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Brightest Beach", QuestDiffculty, "Endless", "Solo", 1);
 end
 end
 
 if questslot1 == "Ancient Jungle Bosses" or questslot1 == "Ancient Jungle Dungeon" or questslot1 == "Ancient Jungle Dungeon Monster Kills" then
-if questslot2 == "Medkits" or questslot2 == "Treasure Chests" or questslot2 == "Use Ability" or questslot2 == "Monster Kills" or questslot2 == "Complete Dungeon" or questslot2 == "Elite Boss Kills" or questslot2 == "Level Up" then
+if questslot2 == "Medkits" or questslot2 == "Treasure Chests" or questslot2 == "Use Ability" or questslot2 == "Monster Kills" or questslot2 == "Complete Dungeon" or questslot2 == "Elite Boss Kills" or questslot2 == "Level Up" or questslot2 == "Boss Kills" or questslot2 == "Ranged Monster Kills" then
 game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Ancient Jungle", QuestDiffculty, "Endless", "Solo", 1);
 end
 end
 
 if questslot1 == "Danger Depths Bosses" or questslot1 == "Danger Depths Dungeon" or questslot1 == "Danger Depths Dungeon Monster Kills" then
-if questslot2 == "Medkits" or questslot2 == "Treasure Chests" or questslot2 == "Use Ability" or questslot2 == "Monster Kills" or questslot2 == "Complete Dungeon" or questslot2 == "Elite Boss Kills" or questslot2 == "Level Up" then
+if questslot2 == "Medkits" or questslot2 == "Treasure Chests" or questslot2 == "Use Ability" or questslot2 == "Monster Kills" or questslot2 == "Complete Dungeon" or questslot2 == "Elite Boss Kills" or questslot2 == "Level Up" or questslot2 == "Boss Kills" or questslot2 == "Ranged Monster Kills" then
 game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Danger Depths", QuestDiffculty, "Endless", "Solo", 1);
 end
 end
 
 if questslot1 == "Sacred Sands Bosses" or questslot1 == "Sacred Sands Dungeon" or questslot1 == "Sacred Sands Dungeon Monster Kills" then
-if questslot2 == "Medkits" or questslot2 == "Treasure Chests" or questslot2 == "Use Ability" or questslot2 == "Monster Kills" or questslot2 == "Complete Dungeon" or questslot2 == "Elite Boss Kills" or questslot2 == "Level Up" then
+if questslot2 == "Medkits" or questslot2 == "Treasure Chests" or questslot2 == "Use Ability" or questslot2 == "Monster Kills" or questslot2 == "Complete Dungeon" or questslot2 == "Elite Boss Kills" or questslot2 == "Level Up" or questslot2 == "Boss Kills" or questslot2 == "Ranged Monster Kills" then
 game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Sacred Sands", QuestDiffculty, "Endless", "Solo", 1);
 end
 end
 
 if questslot1 == "Coral Kingdom Bosses" or questslot1 == "Coral Kingdom Dungeon" or questslot1 == "Coral Kingdom Dungeon Monster Kills" then
-if questslot2 == "Medkits" or questslot2 == "Treasure Chests" or questslot2 == "Use Ability" or questslot2 == "Monster Kills" or questslot2 == "Complete Dungeon" or questslot2 == "Elite Boss Kills" or questslot2 == "Level Up" then
+if questslot2 == "Medkits" or questslot2 == "Treasure Chests" or questslot2 == "Use Ability" or questslot2 == "Monster Kills" or questslot2 == "Complete Dungeon" or questslot2 == "Elite Boss Kills" or questslot2 == "Level Up" or questslot2 == "Boss Kills" or questslot2 == "Ranged Monster Kills" then
 game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Coral Kingdom", QuestDiffculty, "Endless", "Solo", 1);
 end
 end
 
 if questslot1 == "Candy Land Bosses" or questslot1 == "Candy Land Dungeon" or questslot1 == "Candy Land Dungeon Monster Kills" then
-if questslot2 == "Medkits" or questslot2 == "Treasure Chests" or questslot2 == "Use Ability" or questslot2 == "Monster Kills" or questslot2 == "Complete Dungeon" or questslot2 == "Elite Boss Kills" or questslot2 == "Level Up" then
+if questslot2 == "Medkits" or questslot2 == "Treasure Chests" or questslot2 == "Use Ability" or questslot2 == "Monster Kills" or questslot2 == "Complete Dungeon" or questslot2 == "Elite Boss Kills" or questslot2 == "Level Up" or questslot2 == "Boss Kills" or questslot2 == "Ranged Monster Kills" then
 game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Candy Land", QuestDiffculty, "Endless", "Solo", 1);
 end
 end
 
 if questslot1 == "Crystal Cave Bosses" or questslot1 == "Crystal Cave Dungeon" or questslot1 == "Crystal Cave Dungeon Monster Kills" then
-if questslot2 == "Medkits" or questslot2 == "Treasure Chests" or questslot2 == "Use Ability" or questslot2 == "Monster Kills" or questslot2 == "Complete Dungeon" or questslot2 == "Elite Boss Kills" or questslot2 == "Level Up" then
+if questslot2 == "Medkits" or questslot2 == "Treasure Chests" or questslot2 == "Use Ability" or questslot2 == "Monster Kills" or questslot2 == "Complete Dungeon" or questslot2 == "Elite Boss Kills" or questslot2 == "Level Up" or questslot2 == "Boss Kills" or questslot2 == "Ranged Monster Kills" then
 game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Crystal Cave", QuestDiffculty, "Endless", "Solo", 1);
 end
 end
 
 if questslot1 == "Sinister Sewers Bosses" or questslot1 == "Sinister Sewers Dungeon" or questslot1 == "Sinister Sewers Dungeon Monster Kills" then
-if questslot2 == "Medkits" or questslot2 == "Treasure Chests" or questslot2 == "Use Ability" or questslot2 == "Monster Kills" or questslot2 == "Complete Dungeon" or questslot2 == "Elite Boss Kills" or questslot2 == "Level Up" then
+if questslot2 == "Medkits" or questslot2 == "Treasure Chests" or questslot2 == "Use Ability" or questslot2 == "Monster Kills" or questslot2 == "Complete Dungeon" or questslot2 == "Elite Boss Kills" or questslot2 == "Level Up" or questslot2 == "Boss Kills" or questslot2 == "Ranged Monster Kills" then
 game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Sinister Sewers", QuestDiffculty, "Endless", "Solo", 1);
 end
 end
 
 if questslot1 == "Magical Mushrooms Bosses" or questslot1 == "Magical Mushrooms Dungeon" or questslot1 == "Magical Mushrooms Dungeon Monster Kills" then
-if questslot2 == "Medkits" or questslot2 == "Treasure Chests" or questslot2 == "Use Ability" or questslot2 == "Monster Kills" or questslot2 == "Complete Dungeon" or questslot2 == "Elite Boss Kills" or questslot2 == "Level Up" then
+if questslot2 == "Medkits" or questslot2 == "Treasure Chests" or questslot2 == "Use Ability" or questslot2 == "Monster Kills" or questslot2 == "Complete Dungeon" or questslot2 == "Elite Boss Kills" or questslot2 == "Level Up" or questslot2 == "Boss Kills" or questslot2 == "Ranged Monster Kills" then
 game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Magical Mushrooms", QuestDiffculty, "Endless", "Solo", 1);
 end
 end
 
 if questslot1 == "Missing Map Bosses" or questslot1 == "Missing Map Dungeon" or questslot1 == "Missing Map Dungeon Monster Kills" then
-if questslot2 == "Medkits" or questslot2 == "Treasure Chests" or questslot2 == "Use Ability" or questslot2 == "Monster Kills" or questslot2 == "Complete Dungeon" or questslot2 == "Elite Boss Kills" or questslot2 == "Level Up" then
+if questslot2 == "Medkits" or questslot2 == "Treasure Chests" or questslot2 == "Use Ability" or questslot2 == "Monster Kills" or questslot2 == "Complete Dungeon" or questslot2 == "Elite Boss Kills" or questslot2 == "Level Up" or questslot2 == "Boss Kills" or questslot2 == "Ranged Monster Kills" then
 game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Missing Map", QuestDiffculty, "Endless", "Solo", 1);
 end
 end
 
 if questslot1 == "Ice Palace Bosses" or questslot1 == "Ice Palace Dungeon" or questslot1 == "Ice Palace Dungeon Monster Kills" then
-if questslot2 == "Medkits" or questslot2 == "Treasure Chests" or questslot2 == "Use Ability" or questslot2 == "Monster Kills" or questslot2 == "Complete Dungeon" or questslot2 == "Elite Boss Kills" or questslot2 == "Level Up" then
+if questslot2 == "Medkits" or questslot2 == "Treasure Chests" or questslot2 == "Use Ability" or questslot2 == "Monster Kills" or questslot2 == "Complete Dungeon" or questslot2 == "Elite Boss Kills" or questslot2 == "Level Up" or questslot2 == "Boss Kills" or questslot2 == "Ranged Monster Kills" then
 game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Ice Palace", QuestDiffculty, "Endless", "Solo", 1);
 end
 end
 
 if questslot1 == "Daring Dojo Bosses" or questslot1 == "Daring Dojo Dungeon" or questslot1 == "Daring Dojo Dungeon Monster Kills" then
-if questslot2 == "Medkits" or questslot2 == "Treasure Chests" or questslot2 == "Use Ability" or questslot2 == "Monster Kills" or questslot2 == "Complete Dungeon" or questslot2 == "Elite Boss Kills" or questslot2 == "Level Up" then
+if questslot2 == "Medkits" or questslot2 == "Treasure Chests" or questslot2 == "Use Ability" or questslot2 == "Monster Kills" or questslot2 == "Complete Dungeon" or questslot2 == "Elite Boss Kills" or questslot2 == "Level Up" or questslot2 == "Boss Kills" or questslot2 == "Ranged Monster Kills" then
 game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Daring Dojo", QuestDiffculty, "Endless", "Solo", 1);
 end
 end
 
 if questslot1 == "Cryptic Castle Bosses" or questslot1 == "Cryptic Castle Dungeon" or questslot1 == "Cryptic Castle Dungeon Monster Kills" then
-if questslot2 == "Medkits" or questslot2 == "Treasure Chests" or questslot2 == "Use Ability" or questslot2 == "Monster Kills" or questslot2 == "Complete Dungeon" or questslot2 == "Elite Boss Kills" or questslot2 == "Level Up" then
+if questslot2 == "Medkits" or questslot2 == "Treasure Chests" or questslot2 == "Use Ability" or questslot2 == "Monster Kills" or questslot2 == "Complete Dungeon" or questslot2 == "Elite Boss Kills" or questslot2 == "Level Up" or questslot2 == "Boss Kills" or questslot2 == "Ranged Monster Kills" then
 game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Cryptic Castle", QuestDiffculty, "Endless", "Solo", 1);
 end
 end
 
 if questslot1 == "Space Base Bosses" or questslot1 == "Space Base Dungeon" or questslot1 == "Space Base Dungeon Monster Kills" then
-if questslot2 == "Medkits" or questslot2 == "Treasure Chests" or questslot2 == "Use Ability" or questslot2 == "Monster Kills" or questslot2 == "Complete Dungeon" or questslot2 == "Elite Boss Kills" or questslot2 == "Level Up" then
+if questslot2 == "Medkits" or questslot2 == "Treasure Chests" or questslot2 == "Use Ability" or questslot2 == "Monster Kills" or questslot2 == "Complete Dungeon" or questslot2 == "Elite Boss Kills" or questslot2 == "Level Up" or questslot2 == "Boss Kills" or questslot2 == "Ranged Monster Kills" then
 game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Space Base", QuestDiffculty, "Endless", "Solo", 1);
 end
 end
 
 if questslot1 == "Smog Sanctum Bosses" or questslot1 == "Smog Sanctum Dungeon" or questslot1 == "Smog Sanctum Dungeon Monster Kills" then
-if questslot2 == "Medkits" or questslot2 == "Treasure Chests" or questslot2 == "Use Ability" or questslot2 == "Monster Kills" or questslot2 == "Complete Dungeon" or questslot2 == "Elite Boss Kills" or questslot2 == "Level Up" then
+if questslot2 == "Medkits" or questslot2 == "Treasure Chests" or questslot2 == "Use Ability" or questslot2 == "Monster Kills" or questslot2 == "Complete Dungeon" or questslot2 == "Elite Boss Kills" or questslot2 == "Level Up" or questslot2 == "Boss Kills" or questslot2 == "Ranged Monster Kills" then
 game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Smog Sanctum", QuestDiffculty, "Endless", "Solo", 1);
 end
 end
 
 if questslot1 == "Santa's Workshop Bosses" or questslot1 == "Santa's Workshop Dungeon" or questslot1 == "Santa's Workshop Dungeon Monster Kills" then
-if questslot2 == "Medkits" or questslot2 == "Treasure Chests" or questslot2 == "Use Ability" or questslot2 == "Monster Kills" or questslot2 == "Complete Dungeon" or questslot2 == "Elite Boss Kills" or questslot2 == "Level Up" then
+if questslot2 == "Medkits" or questslot2 == "Treasure Chests" or questslot2 == "Use Ability" or questslot2 == "Monster Kills" or questslot2 == "Complete Dungeon" or questslot2 == "Elite Boss Kills" or questslot2 == "Level Up" or questslot2 == "Boss Kills" or questslot2 == "Ranged Monster Kills" then
 game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Santa's Workshop", QuestDiffculty, "Endless", "Solo", 1);
 end
 end
 
 if questslot1 == "Frenzy Factory Bosses" or questslot1 == "Frenzy Factory Dungeon" or questslot1 == "Frenzy Factory Dungeon Monster Kills" then
-if questslot2 == "Medkits" or questslot2 == "Treasure Chests" or questslot2 == "Use Ability" or questslot2 == "Monster Kills" or questslot2 == "Complete Dungeon" or questslot2 == "Elite Boss Kills" or questslot2 == "Level Up" then
+if questslot2 == "Medkits" or questslot2 == "Treasure Chests" or questslot2 == "Use Ability" or questslot2 == "Monster Kills" or questslot2 == "Complete Dungeon" or questslot2 == "Elite Boss Kills" or questslot2 == "Level Up" or questslot2 == "Boss Kills" or questslot2 == "Ranged Monster Kills" then
 game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Frenzy Factory", QuestDiffculty, "Endless", "Solo", 1);
 end
 end
 
 if questslot1 == "Fiery Fortress Bosses" or questslot1 == "Fiery Fortress Dungeon" or questslot1 == "Fiery Fortress Dungeon Monster Kills" then
-if questslot2 == "Medkits" or questslot2 == "Treasure Chests" or questslot2 == "Use Ability" or questslot2 == "Monster Kills" or questslot2 == "Complete Dungeon" or questslot2 == "Elite Boss Kills" or questslot2 == "Level Up" then
+if questslot2 == "Medkits" or questslot2 == "Treasure Chests" or questslot2 == "Use Ability" or questslot2 == "Monster Kills" or questslot2 == "Complete Dungeon" or questslot2 == "Elite Boss Kills" or questslot2 == "Level Up" or questslot2 == "Boss Kills" or questslot2 == "Ranged Monster Kills" then
 game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Fiery Fortress", QuestDiffculty, "Endless", "Solo", 1);
 end
 end
 
 if questslot1 == "Poison Prison Bosses" or questslot1 == "Poison Prison Dungeon" or questslot1 == "Poison Prison Dungeon Monster Kills" then
-if questslot2 == "Medkits" or questslot2 == "Treasure Chests" or questslot2 == "Use Ability" or questslot2 == "Monster Kills" or questslot2 == "Complete Dungeon" or questslot2 == "Elite Boss Kills" or questslot2 == "Level Up" then
+if questslot2 == "Medkits" or questslot2 == "Treasure Chests" or questslot2 == "Use Ability" or questslot2 == "Monster Kills" or questslot2 == "Complete Dungeon" or questslot2 == "Elite Boss Kills" or questslot2 == "Level Up" or questslot2 == "Boss Kills" or questslot2 == "Ranged Monster Kills" then
 game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Poison Prison", QuestDiffculty, "Endless", "Solo", 1);
 end
 end
 
 if questslot1 == "Spookiest Mansion Bosses" or questslot1 == "Spookiest Mansion Dungeon" or questslot1 == "Spookiest Mansion Dungeon Monster Kills" then
-if questslot2 == "Medkits" or questslot2 == "Treasure Chests" or questslot2 == "Use Ability" or questslot2 == "Monster Kills" or questslot2 == "Complete Dungeon" or questslot2 == "Elite Boss Kills" or questslot2 == "Level Up" then
+if questslot2 == "Medkits" or questslot2 == "Treasure Chests" or questslot2 == "Use Ability" or questslot2 == "Monster Kills" or questslot2 == "Complete Dungeon" or questslot2 == "Elite Boss Kills" or questslot2 == "Level Up" or questslot2 == "Boss Kills" or questslot2 == "Ranged Monster Kills" then
 game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Spookiest Mansion", QuestDiffculty, "Endless", "Solo", 1);
 end
 end
 
 if questslot1 == "Brightest Beach Bosses" or questslot1 == "Brightest Beach Dungeon" or questslot1 == "Brightest Beach Dungeon Monster Kills" then
-if questslot2 == "Medkits" or questslot2 == "Treasure Chests" or questslot2 == "Use Ability" or questslot2 == "Monster Kills" or questslot2 == "Complete Dungeon" or questslot2 == "Elite Boss Kills" or questslot2 == "Level Up" then
+if questslot2 == "Medkits" or questslot2 == "Treasure Chests" or questslot2 == "Use Ability" or questslot2 == "Monster Kills" or questslot2 == "Complete Dungeon" or questslot2 == "Elite Boss Kills" or questslot2 == "Level Up" or questslot2 == "Boss Kills" or questslot2 == "Ranged Monster Kills" then
 game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Brightest Beach", QuestDiffculty, "Endless", "Solo", 1);
 end
 end
