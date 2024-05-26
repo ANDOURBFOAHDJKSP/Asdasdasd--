@@ -796,7 +796,7 @@ Fluent:Notify({
     
 local Window = Fluent:CreateWindow({
     Title = "Unknown Hub X TQ ",
-    SubTitle = "V4.7 (Dungeon) (Easter Event) discord.gg/d2a3KkTD6r",
+    SubTitle = "V4.7 (Dungeon) (REMAKE LOADER) discord.gg/d2a3KkTD6r",
     TabWidth = 160,
     Size = UDim2.fromOffset(580, 460),
     Acrylic = true, -- The blur may be detectable, setting this to false disables blur entirely
@@ -805,8 +805,15 @@ local Window = Fluent:CreateWindow({
 })
 
 local Tabs = {
-    Main = Window:AddTab({ Title = "Auto Farms", Icon = "rbxassetid://7733960981" }),
+    Main = Window:AddTab({ Title = "Farmings", Icon = "rbxassetid://7733960981" }),
+    Enemies = Window:AddTab({ Title = "Enemy Mods", Icon = "rbxassetid://7734022107" }),
+    Character = Window:AddTab({ Title = "Player Mods", Icon = "rbxassetid://7734022107" }),
+    FarmSettings = Window:AddTab({ Title = "Farming Settings", Icon = "settings" }),
+    Misc = Window:AddTab({ Title = "Misc-Dungeon", Icon = "rbxassetid://7734068321" }),
+    Settings = Window:AddTab({ Title = "Settings", Icon = "rbxassetid://7734052335" }),
 }
+
+-- Main
 
 if isLobby or isMainDungeon or isEventDungeon then
 
@@ -814,17 +821,6 @@ Tabs.Main:AddParagraph({
         Title = "Auto Farm",
         Content = "Enable Kill Aura To Farm Faster!"
     })
-
-Tabs.Main:AddParagraph({
-        Title = "Warrior: Set The Hitbox Ever you want!",
-        Content = "Kill Aura: Allowed "
-    })
-
-Tabs.Main:AddParagraph({
-        Title = "Wizard: Best Farm Ability is Tsunami",
-        Content = "Kill Aura: Allowed (Fast But Only High Device)"
-    })
-
 
 -- Example usage in your second script
 local Toggle1 = Tabs.Main:AddToggle("AutokillMobsWarrior", {Title = "Auto Kill Mobs (Warrior)", Default = false })
@@ -921,7 +917,7 @@ Options.AutoKillMobsWizard:SetValue(false)
 
 Tabs.Main:AddParagraph({
         Title = "Auto Collects",
-        Content = " "
+        Content = ""
     })
 
 local Toggle2 = Tabs.Main:AddToggle("AutoChest", {Title = "Auto Collect Chest", Default = false })
@@ -974,18 +970,8 @@ end
 if isWaveDefense then
 
 Tabs.Main:AddParagraph({
-        Title = "Wave Defense Farms (BETA)",
+        Title = "Wave Defense Farms",
         Content = "This is Not Support in Public Wave, Defense Only Solo Wave Defense"
-    })
-
-Tabs.Main:AddParagraph({
-        Title = "Warrior: Set the Hitbox Ever you want!",
-        Content = "Kill Aura: Allowed"
-    })
-
-Tabs.Main:AddParagraph({
-        Title = "Wizard: Use Safe Farm and Kill Aura",
-        Content = "Kill Aura: Allowed"
     })
 
 function InstantKill2()
@@ -1044,7 +1030,7 @@ Options.WaveDefenseFarm:SetValue(false)
 
 Tabs.Main:AddParagraph({
         Title = "Auto Collects",
-        Content = " "
+        Content = ""
     })
     
 local questrequest = require(game:GetService("Players").LocalPlayer.PlayerScripts.Shared.Modules.Pages.Quests)
@@ -1079,8 +1065,8 @@ Options.AutoMedkits:SetValue(false)
 end
    
 Tabs.Main:AddParagraph({
-        Title = "Auto Farm Event",
-        Content = "Capybara bruh"
+        Title = "Farming Events",
+        Content = ""
     })
 
 local Toggle1 = Tabs.Main:AddToggle("WarriorEventFarn", {Title = "Auto Kill Event Mobs (Warrior)", Default = false })
@@ -1262,7 +1248,7 @@ end
 
 Tabs.Main:AddParagraph({
         Title = "Auto Shrine",
-        Content = " "
+        Content = ""
     })
 
 local ToggleShrine = Tabs.Main:AddToggle("TweenToShrine", {Title = "Auto Collect Shrine", Default = false })
@@ -1289,15 +1275,291 @@ local ShrineName = Tabs.Main:AddInput("ShrineName", {
         end
     })
 
-local Tabs = {
-    Main = Window:AddTab({ Title = "Hitbox Settings", Icon = "rbxassetid://7734022107" }),
+-- Define toggle settings in _G
+_G.Setting = {
+    AutoEquip = {
+        Emblem = false,
+    },
+    AutoLeave = {
+        WhenDied = {
+            Enabled = false,
+            Delay = 2
+        },
+        WhenInventoryFull = {
+            Enabled = false,
+            Delay = 2
+        }
+    }
 }
+
+Tabs.Main:AddParagraph({
+        Title = "Auto Leave",
+        Content = ""
+    })
+
+if isEventDungeon or isMainDungeon or isWaveDefense then
+Tabs.Main:AddParagraph({
+        Title = "Auto Leave",
+        Content = "this will be cool at lobby auto create dungeon"
+    })
+
+local backpack = rightSideFrame:WaitForChild("Backpack")
+
+local function AutoLeaveFull()
+    local capacityLabel = backpack:FindFirstChild("Capacity") -- Use FindFirstChild to avoid errors if Capacity doesn't exist
+    
+    if capacityLabel and capacityLabel:IsA("TextLabel") then
+        if tostring(capacityLabel.Text) == "FULL!" or tostring(capacityLabel.Text) == "FULL!!!" then
+            wait(3)
+            game.ReplicatedStorage.Dungeon.Remotes.BackToLobby:FireServer()
+        end
+    end
+end
+
+local AutoLeave1 = Tabs.Main:AddToggle("AutoLeaveWhenFull", {Title = "Auto-Leave When Full Inventory", Default = false })
+
+local autoLeaveFullT = false
+
+AutoLeave1:OnChanged(function(isEnabled)
+    autoLeaveFullT = isEnabled
+end)
+
+-- Function to continuously check and auto-leave when the inventory is full
+local function AutoLeaveFullLoop()
+    while true and wait(0.2) do
+        if autoLeaveFullT then
+            AutoLeaveFull()
+        end
+        wait(3)
+    end
+end
+
+-- Start the AutoLeaveLoop function in a separate thread
+spawn(AutoLeaveFullLoop)
+
+local function AutoLeaveDied()
+    local deadCard = mainFrame.Bottom:WaitForChild("DeadCard")
+
+    if deadCard and deadCard.Visible == true then
+        print("You died and ran out of lives.")
+        wait(3)
+        game.ReplicatedStorage.Dungeon.Remotes.BackToLobby:FireServer()    
+    end
+end
+
+local AutoLeave2 = Tabs.Main:AddToggle("AutoLeaveWhenDied", {Title = "Auto-Leave When Died", Default = false })
+
+local autoLeaveDiedT = false
+
+AutoLeave2:OnChanged(function(isEnabled)
+    autoLeaveDiedT = isEnabled
+end)
+
+-- Function to continuously check and auto-leave when the inventory is full
+local function AutoLeaveDiedLoop()
+    while true and wait(0.2) do
+        if autoLeaveDiedT then
+            AutoLeaveDied()
+        end
+        wait(3)
+    end
+end
+
+-- Start the AutoLeaveLoop function in a separate thread
+spawn(AutoLeaveDiedLoop)
+end
+
+local AutoQuestLeaving = false
+
+--[[
+function AutoQuestLeave()
+    local coreGui = game:GetService("CoreGui")
+    local robloxGui = coreGui.RobloxGui
+    local notificationFrame = robloxGui.NotificationFrame
+    
+    -- Check if the notification is an ImageLabel
+    if notificationFrame:FindFirstChild("Notification") then
+        -- Check if the asset is rbxassetid://3200915096
+        if notificationFrame.Notification.NotificationImage.Image == "rbxassetid://3200915096" then
+         print("Quest Complete!")
+            wait(0.3)
+            print("firing remote...")
+            wait(0.1)
+            game.ReplicatedStorage.Dungeon.Remotes.BackToLobby:FireServer()    
+        end
+    end
+end
+]]
+
+function AutoQuestLeave()
+    local coreGui = game:GetService("CoreGui")
+    local robloxGui = coreGui.RobloxGui
+    local notificationFrame = robloxGui.NotificationFrame
+    
+    -- Get descendants of NotificationFrame
+    local descendants = notificationFrame:GetDescendants()
+    
+    -- Target Descendants: Notification.NotificationImage == rbxassetid
+    for _, descendant in ipairs(descendants) do
+        if descendant.Name == "Notification" then
+            local notificationImage = descendant:FindFirstChild("NotificationImage")
+            if notificationImage and notificationImage.Image == "rbxassetid://3200915096" then
+                print("Quest Complete!")
+                wait(0.3)
+                print("firing remote...")
+                wait(0.1)
+                game.ReplicatedStorage.Dungeon.Remotes.BackToLobby:FireServer() 
+            end
+        end
+    end
+end
+
+
+local Toggle = Tabs.Main:AddToggle("AutoLeaveWhenQuestComplete", {Title = "Auto-Leave When Quest is Completed", Default = false })
+
+Toggle:OnChanged(function(isEnabled)
+    AutoQuestLeaving = isEnabled
+    repeat
+    wait(2)
+        spawn(AutoQuestLeave)
+    until AutoQuestLeaving == false
+end)
+    
+Tabs.Main:AddParagraph({
+        Title = "Auto Claim",
+        Content = ""
+    })
+    
+local AutoClaim1 = false
+
+local Toggle1 = Tabs.Main:AddToggle("AutoClaim1", {Title = "Auto Claim Treasure Pass", Default = false})
+
+Toggle1:OnChanged(function(State)
+    AutoClaim1 = State
+    
+ while AutoClaim1 do
+    wait(1)
+      game:GetService("ReplicatedStorage").Shared.Remotes.Data.ClaimAllTreasurePassRewards:FireServer()
+    end
+end)
+
+Tabs.Main:AddParagraph({
+        Title = "Auto Healing",
+        Content = ""
+    })
+ 
+ Tabs.Main:AddButton({
+    Title = "View Equipped Weapon Data (Button)",
+    Description = "",
+    Callback = function()
+        local Fightingctrl = require(game:GetService("Players").LocalPlayer.PlayerScripts.Shared.Client.FighterController)
+        Window:Dialog({
+            Title = "ID: " .. tostring(Fightingctrl.Fighters[1].RightHand.ItemID),
+            Content = "Name: " .. tostring(Fightingctrl.Fighters[1].RightHand.Name),
+            Buttons = {
+                {
+                    Title = "Copy ID",
+                    Callback = function()
+                        setclipboard(tostring(Fightingctrl.Fighters[1].RightHand.ItemID))
+                    end
+                },
+                {
+                    Title = "Cancel",
+                    Callback = function()
+                        print("Uncopied ID")
+                    end
+                }
+            }
+        })
+    end
+})
+ 
+ local maxHealth = 100
+local minHealth = 20
+local maxHealthItemId = "0" -- Initialize as string
+local minHealthItemId = "0" -- Initialize as string
+local autoHealthEnabled = false
+
+-- Function to check health and perform actions accordingly
+local function checkHealth()
+    local humanoid = game:GetService("Players").LocalPlayer.Character:FindFirstChildOfClass("Humanoid")
+    if humanoid then
+        local currentHealth = humanoid.Health
+
+        -- Check if health is at maximum
+        if currentHealth >= maxHealth then
+            -- Fire the server to equip the max health item
+            game:GetService("ReplicatedStorage").Shared.Remotes.Data.EquipItem:FireServer("ItemsEquipped", "RightHand", maxHealthItemId)
+        end
+
+        -- Check if health is at minimum
+        if currentHealth <= minHealth then
+            -- Fire the server to equip the min health item
+            game:GetService("ReplicatedStorage").Shared.Remotes.Data.EquipItem:FireServer("ItemsEquipped", "RightHand", minHealthItemId)
+        end
+    end
+end
+
+local Toggle = Tabs.Main:AddToggle("AutoHealingToggle", {Title = "Auto Healing Toggle", Default = false })
+
+    Toggle:OnChanged(function(DDF)
+        autoHealthEnabled = DDF
+   while autoHealthEnabled and wait(0.3) do
+        checkHealth()
+        end
+    end)
+    
+local Input = Tabs.Main:AddInput("InsertID_1", {
+        Title = "Insert Main Item",
+        Default = maxHealthItemId,
+        Placeholder = "Automatically Change",
+        Numeric = false, -- Only allows numbers
+        Finished = false, -- Only calls callback when you press enter
+        Callback = function(AutoHeal1)
+            maxHealthItemId = AutoHeal1
+        end
+    })
+    
+local Input = Tabs.Main:AddInput("InsertID_2", {
+        Title = "Insert Healing Ability Item",
+        Default = minHealthItemId,
+        Placeholder = "Automatically Change",
+        Numeric = false, -- Only allows numbers
+        Finished = false, -- Only calls callback when you press enter
+        Callback = function(AutoHeal2)
+            minHealthItemId = AutoHeal2
+        end
+    })
+    
+ local Input = Tabs.Main:AddInput("MaxHealthInput", {
+        Title = "Max Health to Change item",
+        Default = maxHealth,
+        Placeholder = "Automatically Change",
+        Numeric = false, -- Only allows numbers
+        Finished = false, -- Only calls callback when you press enter
+        Callback = function(AutoHeal3)
+            maxHealth = tonumber(AutoHeal3)
+        end
+    })
+    
+local Input = Tabs.Main:AddInput("MinHealthInput", {
+        Title = "Min Health to Change Item",
+        Default = minHealth,
+        Placeholder = "Automatically Change",
+        Numeric = false, -- Only allows numbers
+        Finished = false, -- Only calls callback when you press enter
+        Callback = function(AutoHeal4)
+            minHealth = tonumber(AutoHeal4)
+        end
+    })
+ 
+-- Enemies
 
 if isLobby or isMainDungeon or isEventDungeon then
 
-Tabs.Main:AddParagraph({
-        Title = "Hitbox Toggle",
-        Content = "Hitbox V2"
+Tabs.Enemies:AddParagraph({
+        Title = "Size a Hitbox",
+        Content = ""
     })
 
 local RunService = game:GetService("RunService")
@@ -1340,7 +1602,7 @@ local function toggleHitboxState()
     end
 end
 
-local Toggle = Tabs.Main:AddToggle("HitboxEnemies", {Title = "Hitbox Toggle", Default = false })
+local Toggle = Tabs.Enemies:AddToggle("HitboxEnemies", {Title = "Hitbox Toggle", Default = false })
 
 Toggle:OnChanged(function(isEnabled)
     hitboxTest = isEnabled
@@ -1353,7 +1615,7 @@ end)
 
 Options.HitboxEnemies:SetValue(false)
 
-local InputX = Tabs.Main:AddInput("InputX", {
+local InputX = Tabs.Enemies:AddInput("InputX", {
         Title = "Hitbox Size X",
         Default = "1",
         Placeholder = "Placeholder",
@@ -1364,7 +1626,7 @@ local InputX = Tabs.Main:AddInput("InputX", {
         end
       })
 
-local InputY = Tabs.Main:AddInput("InputY", {
+local InputY = Tabs.Enemies:AddInput("InputY", {
         Title = "Hitbox Size Y",
         Default = "1",
         Placeholder = "Placeholder",
@@ -1375,7 +1637,7 @@ local InputY = Tabs.Main:AddInput("InputY", {
         end
       })
       
-local InputZ = Tabs.Main:AddInput("InputZ", {
+local InputZ = Tabs.Enemies:AddInput("InputZ", {
         Title = "Hitbox Size Z",
         Default = "1",
         Placeholder = "Placeholder",
@@ -1386,7 +1648,7 @@ local InputZ = Tabs.Main:AddInput("InputZ", {
         end
      })
 
-local InputTransparency = Tabs.Main:AddInput("InputTransparency", {
+local InputTransparency = Tabs.Enemies:AddInput("InputTransparency", {
         Title = "Hitbox Transparency",
         Default = "0.5",
         Placeholder = "Placeholder",
@@ -1397,14 +1659,14 @@ local InputTransparency = Tabs.Main:AddInput("InputTransparency", {
         end
      })
 
-AuraSecond = 1
-
-Tabs.Main:AddParagraph({
-        Title = "Kill Aura",
-        Content = "Ability Only And Hitbox"
+Tabs.Enemies:AddParagraph({
+        Title = "More Things",
+        Content = ""
     })
 
-local Toggle = Tabs.Main:AddToggle("KillAuraOptimized", {Title = "Kill Aura (Optimized)", Default = false })
+AuraSecond = 1
+
+local Toggle = Tabs.Enemies:AddToggle("KillAuraOptimized", {Title = "Kill Aura (Optimized)", Default = false })
 local isToggleActive = false
 
 Toggle:OnChanged(function(isToggled)
@@ -1416,319 +1678,6 @@ Toggle:OnChanged(function(isToggled)
 end)
 
 Options.KillAuraOptimized:SetValue(false)
-
-if Player.Name == "Guilfordy_sagalol" or Player.Name == "Guesttester_1" or Player.Name == "Guilfordy_sagalol3" or Player.Name == "Peleeelallee" then
-
-Tabs.Main:AddParagraph({
-        Title = "ABILITY AURA VERY OP!!!",
-        Content = " "
-    })
-
-local isToggleActive = false
-
-local Toggle = Tabs.Main:AddToggle("Ability_Aura", { Title = "Ability Aura Toggle", Default = false })
-
-Toggle:OnChanged(function(isToggled)
-    isToggleActive = isToggled
-
-    while isToggleActive do
-        AllKill3()
-        wait(0.3)
-    end
-end)
-
-Tabs.Main:AddInput("Ability_X", {
-    Title = "Ability Size X",
-    Default = "10",
-    Placeholder = "Placeholder",
-    Numeric = true,
-    Callback = function(abx)
-        UwUSizeX = tonumber(abx) or 10
-    end
-})
-
-Tabs.Main:AddInput("Ability_Y", {
-    Title = "Ability Size Y",
-    Default = "10",
-    Placeholder = "Placeholder",
-    Numeric = true,
-    Callback = function(aby)
-        UwUSizeY = tonumber(aby) or 10
-    end
-})
-
-Tabs.Main:AddInput("Ability_Z", {
-    Title = "Ability Size Z",
-    Default = "10",
-    Placeholder = "Placeholder",
-    Numeric = true,
-    Callback = function(abz)
-        UwUSizeZ = tonumber(abz) or 10
-    end
-})
-
-Tabs.Main:AddInput("Ability_Trans", {
-    Title = "Ability Transparency",
-    Default = "0.7",
-    Placeholder = "Placeholder",
-    Numeric = true,
-    Callback = function(abt)
-        UwUTrans = tonumber(abt) or 0.7
-    end
-})
-
-Tabs.Main:AddInput("Ability_Speed", {
-    Title = "Ability Speed",
-    Default = "1",
-    Placeholder = "Placeholder",
-    Numeric = true,
-    Callback = function(abs)
-        powerspeed = tonumber(abs) or 1
-    end
-})
-
-end
-
-end
-
-if isWaveDefense then
-
-Tabs.Main:AddParagraph({
-        Title = "Wave Defense Version",
-        Content = "(BETA)"
-    })
-
-local xhx, yhx, zhx, txx = 1, 1, 1, 0.5
-local hitboxTest = false
-local lastUpdateTime = 0
-local updateInterval = 1  -- Set the interval in seconds
-
-local function enableHitbox()
-    for _, value in pairs(workspace.Dungeon:GetDescendants()) do
-        if value:IsA("Model") and value:FindFirstChild("HumanoidRootPart") then
-            if value.Name ~= game.Players.LocalPlayer.Name then
-                value.HumanoidRootPart.Transparency = txx
-                value.HumanoidRootPart.Size = Vector3.new(xhx, yhx, zhx)
-            end
-        end
-    end
-end
-
-local function disableHitbox()
-    for _, value in pairs(workspace.Dungeon:GetDescendants()) do
-        if value:IsA("Model") and value:FindFirstChild("HumanoidRootPart") then
-            if value.Name ~= game.Players.LocalPlayer.Name then
-                value.HumanoidRootPart.Transparency = 1
-                value.HumanoidRootPart.Size = Vector3.new(5, 5, 5)
-            end
-        end
-    end
-end
-
-local RunService = game:GetService("RunService")
-
-local function toggleHitboxState()
-    local currentTime = tick()
-    if currentTime - lastUpdateTime >= updateInterval then
-        lastUpdateTime = currentTime
-
-        if hitboxTest then
-            enableHitbox()
-        else
-            disableHitbox()
-        end
-    end
-end
-
-local Toggle = Tabs.Main:AddToggle("HitboxEnemies", { Title = "Hitbox Toggle", Default = false })
-
-Toggle:OnChanged(function(isEnabled)
-    hitboxTest = isEnabled
-    toggleHitboxState()
-end)
-
-RunService.RenderStepped:Connect(function()
-  if hitboxTest then
-    toggleHitboxState()
-    end
-end)
-
-Options.HitboxEnemies:SetValue(false)
-
-local InputX = Tabs.Main:AddInput("InputX", {
-        Title = "Hitbox Size X",
-        Default = "1",
-        Placeholder = "Placeholder",
-        Numeric = false, -- Only allows numbers
-        Finished = false, -- Only calls callback when you press enter
-        Callback = function(jxk)
-        xhx = tonumber(jxk) or 5
-        end
-      })
-
-local InputY = Tabs.Main:AddInput("InputY", {
-        Title = "Hitbox Size Y",
-        Default = "1",
-        Placeholder = "Placeholder",
-        Numeric = false, -- Only allows numbers
-        Finished = false, -- Only calls callback when you press enter
-        Callback = function(gxk)
-        yhx = tonumber(gxk) or 5
-        end
-      })
-      
-local InputZ = Tabs.Main:AddInput("InputZ", {
-        Title = "Hitbox Size Z",
-        Default = "1",
-        Placeholder = "Placeholder",
-        Numeric = false, -- Only allows numbers
-        Finished = false, -- Only calls callback when you press enter
-        Callback = function(rxk)
-        zhx = tonumber(rxk) or 5
-        end
-     })
-
-local InputTransparency = Tabs.Main:AddInput("InputTransparency", {
-        Title = "Hitbox Transparency",
-        Default = "0.5",
-        Placeholder = "Placeholder",
-        Numeric = false, -- Only allows numbers
-        Finished = false, -- Only calls callback when you press enter
-        Callback = function(xxk)
-        txx = tonumber(xxk) or 0.5
-        end
-     })
-
-AuraSecond = 1
-
-Tabs.Main:AddParagraph({
-        Title = "Wave Defense Kill Aura",
-        Content = ""
-    })
-
-local Toggle = Tabs.Main:AddToggle("KillAuraOptimized", {Title = "Kill Aura (Optimized)", Default = false })
-local isToggleActive = false
-
-Toggle:OnChanged(function(isToggled)
-    isToggleActive = isToggled
-
-      while isToggleActive and wait(000000.000001) do
-         AllKill()
-    end
-end)
-
-Options.KillAuraOptimized:SetValue(false)
-
-if Player.Name == "Guilfordy_sagalol" or Player.Name == "Guesttester_1" or Player.Name == "Guilfordy_sagalol3" or Player.Name == "Peleeelallee" then
-
-Tabs.Main:AddParagraph({
-        Title = "ABILITY AURA VERY OP!!!",
-        Content = " "
-    })
-    
-local isToggleActive = false
-
-local Toggle = Tabs.Main:AddToggle("Ability_Aura", { Title = "Ability Aura Toggle", Default = false })
-
-Toggle:OnChanged(function(isToggled)
-    isToggleActive = isToggled
-
-    while isToggleActive do
-        AllKill3()
-        wait(1)
-    end
-end)
-
-Tabs.Main:AddInput("Ability_X", {
-    Title = "Ability Size X",
-    Default = "10",
-    Placeholder = "Placeholder",
-    Numeric = true,
-    Callback = function(abx)
-        UwUSizeX = tonumber(abx) or 10
-    end
-})
-
-Tabs.Main:AddInput("Ability_Y", {
-    Title = "Ability Size Y",
-    Default = "10",
-    Placeholder = "Placeholder",
-    Numeric = true,
-    Callback = function(aby)
-        UwUSizeY = tonumber(aby) or 10
-    end
-})
-
-Tabs.Main:AddInput("Ability_Z", {
-    Title = "Ability Size Z",
-    Default = "10",
-    Placeholder = "Placeholder",
-    Numeric = true,
-    Callback = function(abz)
-        UwUSizeZ = tonumber(abz) or 10
-    end
-})
-
-Tabs.Main:AddInput("Ability_Trans", {
-    Title = "Ability Transparency",
-    Default = "0.7",
-    Placeholder = "Placeholder",
-    Numeric = true,
-    Callback = function(abt)
-        UwUTrans = tonumber(abt) or 0.7
-    end
-})
-
-Tabs.Main:AddInput("Ability_Speed", {
-    Title = "Ability Speed",
-    Default = "1",
-    Placeholder = "Placeholder",
-    Numeric = true,
-    Callback = function(abs)
-        powerspeed = tonumber(abs) or 1
-    end
-})
-    
-end
-
-end
-
-local Tabs = {
-    Main = Window:AddTab({ Title = "Custom Visuals", Icon = "rbxassetid://7734022107" }),
-}
-
-Tabs.Main:AddParagraph({
-        Title = "Health (Visual) ",
-        Content = " "
-    })
-
-local Input = Tabs.Main:AddInput("Input", {
-        Title = "Min Health",
-        Default = "100000",
-        Placeholder = "Placeholder",
-        Numeric = false, -- Only allows numbers
-        Finished = false, -- Only calls callback when you press enter
-        Callback = function(Hmin)
-game.Players.LocalPlayer.Character.Humanoid.Health = Hmin
-        end
-    })
-
-local Input = Tabs.Main:AddInput("Input", {
-        Title = "Max Health",
-        Default = "Default",
-        Placeholder = "Placeholder",
-        Numeric = false, -- Only allows numbers
-        Finished = false, -- Only calls callback when you press enter
-        Callback = function(Hmax)
-game.Players.LocalPlayer.Character.Humanoid.MaxHealth = Hmax
-        end
-    })
-
-if isLobby or isMainDungeon or isEventDungeon then
-Tabs.Main:AddParagraph({
-        Title = "Enemies Modify",
-        Content = " "
-    })
 
 spawn(function()
     while wait(1) do
@@ -1783,7 +1732,7 @@ spawn(function()
     end
 end)
 
-local Toggle = Tabs.Main:AddToggle("EspMobs", {Title = "Esp Enemies", Default = false })
+local Toggle = Tabs.Enemies:AddToggle("EspMobs", {Title = "Esp Enemies", Default = false })
 
     Toggle:OnChanged(function(nec)
         MobESP = nec
@@ -1840,7 +1789,7 @@ local function toggleArchorMobsState()
     end
 end
 
-local ToggleArchorMobs = Tabs.Main:AddToggle("ArchorMobs", {Title = "Freeze Enemies Toggle", Default = false })
+local ToggleArchorMobs = Tabs.Enemies:AddToggle("ArchorMobs", {Title = "Freeze Enemies", Default = false })
 
 ToggleArchorMobs:OnChanged(function(isEnabled)
     archorMobsEnabled = isEnabled
@@ -1851,125 +1800,6 @@ RunService.RenderStepped:Connect(function()
 end)
 
 Options.ArchorMobs:SetValue(false)
-
-end
-
-if isWaveDefense then
-Tabs.Main:AddParagraph({
-        Title = "Enemies Modify",
-        Content = "(Wave Defense)"
-    })
-
-spawn(function()
-    while wait(1) do
-        pcall(function()
-            if MobESP then
-                for i, v in pairs(game:GetService("Workspace").Dungeon.Enemies:GetChildren()) do
-                    if v:FindFirstChild('HumanoidRootPart') then
-                        local evilHumanoid = v:FindFirstChild("EvilHumanoid") or v:FindFirstChildOfClass("Humanoid")  -- Change "Humanoid" to "EvilHumanoid"
-                        
-                        if not v:FindFirstChild("MobEap") then
-                            local BillboardGui = Instance.new("BillboardGui")
-                            local TextLabel = Instance.new("TextLabel")
-
-                            BillboardGui.Parent = v
-                            BillboardGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
-                            BillboardGui.Active = true
-                            BillboardGui.Name = "MobEap"
-                            BillboardGui.AlwaysOnTop = true
-                            BillboardGui.LightInfluence = 1.000
-                            BillboardGui.Size = UDim2.new(0, 200, 0, 50)
-                            BillboardGui.StudsOffset = Vector3.new(0, 2.5, 0)
-
-                            TextLabel.Parent = BillboardGui
-                            TextLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-                            TextLabel.BackgroundTransparency = 1.000
-                            TextLabel.Size = UDim2.new(0, 200, 0, 50)
-                            TextLabel.Font = Enum.Font.GothamBold
-                            TextLabel.TextColor3 = Color3.fromRGB(7, 236, 240)
-                            TextLabel.TextSize = 14  -- Adjust the text size to your preference
-
-                            v.MobEap = BillboardGui  -- Store the BillboardGui in MobEap for later use
-                        end
-
-                        local distance = math.floor((game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.HumanoidRootPart.Position).Magnitude)
-
-                        if evilHumanoid then
-                            local health = math.floor(evilHumanoid.Health)
-                            v.MobEap.TextLabel.Text = v.Name.." - "..distance.." M\nHealth: "..health
-                        else
-                            v.MobEap.TextLabel.Text = v.Name.." - "..distance.." M"
-                        end
-                    end
-                end
-            else
-                for i, v in pairs(game:GetService("Workspace").Dungeon.Enemies:GetChildren()) do
-                    if v:FindFirstChild("MobEap") then
-                        v.MobEap:Destroy()
-                    end
-                end
-            end
-        end)
-    end
-end)
-
-local Toggle = Tabs.Main:AddToggle("EspMobs", {Title = "Esp Enemies", Default = false })
-
-    Toggle:OnChanged(function(nec)
-        MobESP = nec
-    end)
-    
-Options.EspMobs:SetValue(false)
-    
-
-local RunService = game:GetService("RunService")
-
-local archorMobsEnabled = false
-local lastUpdateTime = 0
-local updateInterval = 1
-
-local function archorMobsEnable(monsterRootPart)
-    monsterRootPart.Anchored = true
-end
-
-local function archorMobsDisable(monsterRootPart)
-    monsterRootPart.Anchored = false
-end
-
-local function toggleArchorMobsState()
-    local currentTime = tick()
-    if currentTime - lastUpdateTime >= updateInterval then
-        lastUpdateTime = currentTime
-
-   for _, monster in pairs(workspace:GetDescendants()) do
-    if monster:FindFirstChild("HumanoidRootPart") then
-        if monster.Name ~= game.Players.LocalPlayer.Name then
-            local monsterRootPart = monster.HumanoidRootPart
-
-                if archorMobsEnabled then
-                    archorMobsEnable(monsterRootPart)
-                else
-                    archorMobsDisable(monsterRootPart)
-                end
-             end
-         end
-      end
-   end
-end
-
-local ToggleArchorMobs = Tabs.Main:AddToggle("ArchorMobs", {Title = "Freeze Enemies Toggle", Default = false })
-
-ToggleArchorMobs:OnChanged(function(isEnabled)
-    archorMobsEnabled = isEnabled
-end)
-
-RunService.RenderStepped:Connect(function()
-    toggleArchorMobsState()
-end)
-
-Options.ArchorMobs:SetValue(false)
-
-end
 
 -- Function to get the nearest target
 function getNearestTarget()
@@ -2086,279 +1916,400 @@ Tabs.Main:AddButton({
 -- Initialize the variable to control the loop
 local isUpdatingCamera = false
 
-Tabs.Main:AddParagraph({
-        Title = "Character and Weapon Mods",
+
+if Player.Name == "Guilfordy_sagalol" or Player.Name == "Guesttester_1" or Player.Name == "Guilfordy_sagalol3" or Player.Name == "Peleeelallee" then
+
+Tabs.Enemies:AddParagraph({
+        Title = "ABILITY AURA VERY OP!!!",
         Content = " "
     })
 
-local SizeWeapon = false
-local TheSize = 1
+local isToggleActive = false
 
-local Fightingctrl = require(game:GetService("Players").LocalPlayer.PlayerScripts.Shared.Client.FighterController)
+local Toggle = Tabs.Enemies:AddToggle("Ability_Aura", { Title = "Ability Aura Toggle", Default = false })
 
-local Toggle = Tabs.Main:AddToggle("ToggleSizeWeapon", {Title = "Custom Weapon Size", Default = false })
+Toggle:OnChanged(function(isToggled)
+    isToggleActive = isToggled
 
- Toggle:OnChanged(function(ValueDay)
- SizeWeapon = ValueDay
-while wait(0.01) and SizeWeapon do
-Fightingctrl.FighterAdded["_args"][1].Boosts.WeaponScale = TheSize
-Fightingctrl.Fighters[1].Boosts.WeaponScale = TheSize
-end
+    while isToggleActive do
+        AllKill3()
+        wait(0.3)
+    end
 end)
 
-Tabs.Main:AddInput("SizeWeapon", {
-        Title = "Weapon Size",
+Tabs.Enemies:AddInput("Ability_X", {
+    Title = "Ability Size X",
+    Default = "10",
+    Placeholder = "Placeholder",
+    Numeric = true,
+    Callback = function(abx)
+        UwUSizeX = tonumber(abx) or 10
+    end
+})
+
+Tabs.Enemies:AddInput("Ability_Y", {
+    Title = "Ability Size Y",
+    Default = "10",
+    Placeholder = "Placeholder",
+    Numeric = true,
+    Callback = function(aby)
+        UwUSizeY = tonumber(aby) or 10
+    end
+})
+
+Tabs.Enemies:AddInput("Ability_Z", {
+    Title = "Ability Size Z",
+    Default = "10",
+    Placeholder = "Placeholder",
+    Numeric = true,
+    Callback = function(abz)
+        UwUSizeZ = tonumber(abz) or 10
+    end
+})
+
+Tabs.Enemies:AddInput("Ability_Trans", {
+    Title = "Ability Transparency",
+    Default = "0.7",
+    Placeholder = "Placeholder",
+    Numeric = true,
+    Callback = function(abt)
+        UwUTrans = tonumber(abt) or 0.7
+    end
+})
+
+Tabs.Enemies:AddInput("Ability_Speed", {
+    Title = "Ability Speed",
+    Default = "1",
+    Placeholder = "Placeholder",
+    Numeric = true,
+    Callback = function(abs)
+        powerspeed = tonumber(abs) or 1
+    end
+})
+
+end
+
+end
+
+if isWaveDefense then
+
+Tabs.Enemies:AddParagraph({
+        Title = "Wave Defense Version",
+        Content = ""
+    })
+
+local xhx, yhx, zhx, txx = 1, 1, 1, 0.5
+local hitboxTest = false
+local lastUpdateTime = 0
+local updateInterval = 1  -- Set the interval in seconds
+
+local function enableHitbox()
+    for _, value in pairs(workspace.Dungeon:GetDescendants()) do
+        if value:IsA("Model") and value:FindFirstChild("HumanoidRootPart") then
+            if value.Name ~= game.Players.LocalPlayer.Name then
+                value.HumanoidRootPart.Transparency = txx
+                value.HumanoidRootPart.Size = Vector3.new(xhx, yhx, zhx)
+            end
+        end
+    end
+end
+
+local function disableHitbox()
+    for _, value in pairs(workspace.Dungeon:GetDescendants()) do
+        if value:IsA("Model") and value:FindFirstChild("HumanoidRootPart") then
+            if value.Name ~= game.Players.LocalPlayer.Name then
+                value.HumanoidRootPart.Transparency = 1
+                value.HumanoidRootPart.Size = Vector3.new(5, 5, 5)
+            end
+        end
+    end
+end
+
+local RunService = game:GetService("RunService")
+
+local function toggleHitboxState()
+    local currentTime = tick()
+    if currentTime - lastUpdateTime >= updateInterval then
+        lastUpdateTime = currentTime
+
+        if hitboxTest then
+            enableHitbox()
+        else
+            disableHitbox()
+        end
+    end
+end
+
+local Toggle = Tabs.Enemies:AddToggle("HitboxEnemies", { Title = "Hitbox Toggle", Default = false })
+
+Toggle:OnChanged(function(isEnabled)
+    hitboxTest = isEnabled
+    toggleHitboxState()
+end)
+
+RunService.RenderStepped:Connect(function()
+  if hitboxTest then
+    toggleHitboxState()
+    end
+end)
+
+Options.HitboxEnemies:SetValue(false)
+
+local InputX = Tabs.Enemies:AddInput("InputX", {
+        Title = "Hitbox Size X",
         Default = "1",
-        Placeholder = "",
-        Numeric = false, -- Only allows numbers
-        Finished = false, -- Only calls callback when you press enter
-        Callback = function(WS_1)
-TheSize = tonumber(WS_1) or 1
-        end
-    })
-
-local ToggleInfRoll = false
-
-local Toggle = Tabs.Main:AddToggle("INFINITEROLL", {Title = "Infinite Rolling Ability", Default = false })
-
- Toggle:OnChanged(function(InfRool)
- ToggleInfRoll = InfRool
-while wait(0.01) and InfRool do
-local Combatctrl = require(game:GetService("Players").LocalPlayer.PlayerScripts.Shared.Client.CombatController)
-Combatctrl["_roll_cooldown"] = -1
-end
-end)
-
-local Input = Tabs.Main:AddInput("Input", {
-        Title = "WalkSpeed",
-        Default = "26",
         Placeholder = "Placeholder",
         Numeric = false, -- Only allows numbers
         Finished = false, -- Only calls callback when you press enter
-        Callback = function(WS)
-BypassWS = true
-while wait(0.2) do
-if BypassWS == true then
-game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = WS
-end
-end
+        Callback = function(jxk)
+        xhx = tonumber(jxk) or 5
         end
-    })
-    
-    Tabs.Main:AddButton({
-        Title = "Reset Walkspeed",
-        Description = "",
-        Callback = function()
-BypassWS = false
-game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = 18
-        end
-    })
-    
-local Input = Tabs.Main:AddInput("Input", {
-        Title = "Jump Height",
-        Default = "50",
+      })
+
+local InputY = Tabs.Enemies:AddInput("InputY", {
+        Title = "Hitbox Size Y",
+        Default = "1",
         Placeholder = "Placeholder",
         Numeric = false, -- Only allows numbers
         Finished = false, -- Only calls callback when you press enter
-        Callback = function(JP)
-BypassJP = true
-while wait(0.2) do
-if BypassJP == true then
-game.Players.LocalPlayer.Character.Humanoid.JumpPower = JP
-end
-end
+        Callback = function(gxk)
+        yhx = tonumber(gxk) or 5
         end
+      })
+      
+local InputZ = Tabs.Enemies:AddInput("InputZ", {
+        Title = "Hitbox Size Z",
+        Default = "1",
+        Placeholder = "Placeholder",
+        Numeric = false, -- Only allows numbers
+        Finished = false, -- Only calls callback when you press enter
+        Callback = function(rxk)
+        zhx = tonumber(rxk) or 5
+        end
+     })
+
+local InputTransparency = Tabs.Enemies:AddInput("InputTransparency", {
+        Title = "Hitbox Transparency",
+        Default = "0.5",
+        Placeholder = "Placeholder",
+        Numeric = false, -- Only allows numbers
+        Finished = false, -- Only calls callback when you press enter
+        Callback = function(xxk)
+        txx = tonumber(xxk) or 0.5
+        end
+     })
+
+AuraSecond = 1
+
+Tabs.Enemies:AddParagraph({
+        Title = "More Things",
+        Content = ""
     })
 
-Tabs.Main:AddButton({
-        Title = "Reset JumpHeight",
-        Description = "",
-        Callback = function()
-BypassJP = false
-game.Players.LocalPlayer.Character.Humanoid.JumpPower = 50
-        end
-    })
+local Toggle = Tabs.Enemies:AddToggle("KillAuraOptimized", {Title = "Kill Aura (Optimized)", Default = false })
+local isToggleActive = false
 
-Tabs.Main:AddParagraph({
-        Title = "Graphics",
-        Content = " "
-    })
+Toggle:OnChanged(function(isToggled)
+    isToggleActive = isToggled
 
-Tabs.Main:AddButton({
-        Title = "Legacy Graphic",
-        Description = "",
-        Callback = function()
-local Lighting = game:FindService("Lighting")
-
-setscriptable(Lighting, "Technology", true)
-Lighting.Technology = Enum.Technology.Legacy
-
-for _, v in next, workspace:GetDescendants() do
-    if v:IsA("PointLight") or v:IsA("SpotLighting") or v:IsA("SurfaceLight") then
-        local Light = v
-        if not Light.Shadows then
-            Light.Shadows = true
-        end
-    end
-end
-        end
-    })
-
-Tabs.Main:AddButton({
-        Title = "Shadow Map Graphic",
-        Description = "",
-        Callback = function()
-local Lighting = game:FindService("Lighting")
-
-setscriptable(Lighting, "Technology", true)
-Lighting.Technology = Enum.Technology.ShadowMap
-
-for _, v in next, workspace:GetDescendants() do
-    if v:IsA("PointLight") or v:IsA("SpotLighting") or v:IsA("SurfaceLight") then
-        local Light = v
-        if not Light.Shadows then
-            Light.Shadows = true
-        end
-    end
-end
-        end
-    })
-
-Tabs.Main:AddButton({
-        Title = "Future Graphic",
-        Description = "",
-        Callback = function()
-local Lighting = game:FindService("Lighting")
-
-setscriptable(Lighting, "Technology", true)
-Lighting.Technology = Enum.Technology.Future
-
-for _, v in next, workspace:GetDescendants() do
-    if v:IsA("PointLight") or v:IsA("SpotLighting") or v:IsA("SurfaceLight") then
-        local Light = v
-        if not Light.Shadows then
-            Light.Shadows = true
-        end
-    end
-end
-        end
-    })
-
-local Tabs = {
-    Main = Window:AddTab({ Title = "Auto-Farm Settings", Icon = "settings" }),
-}
-
-Tabs.Main:AddParagraph({
-        Title = "Tween Settings",
-        Content = "Edit it, if u want"
-    })
-    
-local TweenSpeed = Tabs.Main:AddDropdown("TweenSpeedType", {
-        Title = "Tween Calculation Speed",
-        Values = {"Slow (20-40)", "Normal (30-50)", "Fast (40-60)", "Malicious (50-70)"},
-        Multi = false,
-        Default = 2,
-    })
-
-TweenSpeed:OnChanged(function(Type)
-    if Type == "Slow (20-40)" then
-        SlowTween = Type
-    elseif Type == "Normal (30-50)" then
-        NormalTween = Type
-    elseif Type == "Fast (40-60)" then
-        FastTween = Type
-    elseif Type == "Malicious (50-70)" then
-        MaliciousTween = Type
+      while isToggleActive and wait(000000.000001) do
+         AllKill()
     end
 end)
 
---[[ local twSpeed = Tabs.Main:AddInput("TweenS", {
-        Title = "Tween Speed",
-        Default = "50",
-        Placeholder = "Put a Speed",
-        Numeric = true, -- Only allows numbers
-        Finished = false, -- Only calls callback when you press enter
-        Callback = function(speedtw)
-                 speed = tonumber(speedtw) or 50
+Options.KillAuraOptimized:SetValue(false)
+
+spawn(function()
+    while wait(1) do
+        pcall(function()
+            if MobESP then
+                for i, v in pairs(game:GetService("Workspace").Dungeon.Enemies:GetChildren()) do
+                    if v:FindFirstChild('HumanoidRootPart') then
+                        local evilHumanoid = v:FindFirstChild("EvilHumanoid") or v:FindFirstChildOfClass("Humanoid")  -- Change "Humanoid" to "EvilHumanoid"
+                        
+                        if not v:FindFirstChild("MobEap") then
+                            local BillboardGui = Instance.new("BillboardGui")
+                            local TextLabel = Instance.new("TextLabel")
+
+                            BillboardGui.Parent = v
+                            BillboardGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+                            BillboardGui.Active = true
+                            BillboardGui.Name = "MobEap"
+                            BillboardGui.AlwaysOnTop = true
+                            BillboardGui.LightInfluence = 1.000
+                            BillboardGui.Size = UDim2.new(0, 200, 0, 50)
+                            BillboardGui.StudsOffset = Vector3.new(0, 2.5, 0)
+
+                            TextLabel.Parent = BillboardGui
+                            TextLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+                            TextLabel.BackgroundTransparency = 1.000
+                            TextLabel.Size = UDim2.new(0, 200, 0, 50)
+                            TextLabel.Font = Enum.Font.GothamBold
+                            TextLabel.TextColor3 = Color3.fromRGB(7, 236, 240)
+                            TextLabel.TextSize = 14  -- Adjust the text size to your preference
+
+                            v.MobEap = BillboardGui  -- Store the BillboardGui in MobEap for later use
+                        end
+
+                        local distance = math.floor((game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.HumanoidRootPart.Position).Magnitude)
+
+                        if evilHumanoid then
+                            local health = math.floor(evilHumanoid.Health)
+                            v.MobEap.TextLabel.Text = v.Name.." - "..distance.." M\nHealth: "..health
+                        else
+                            v.MobEap.TextLabel.Text = v.Name.." - "..distance.." M"
+                        end
+                    end
+                end
+            else
+                for i, v in pairs(game:GetService("Workspace").Dungeon.Enemies:GetChildren()) do
+                    if v:FindFirstChild("MobEap") then
+                        v.MobEap:Destroy()
+                    end
+                end
+            end
+        end)
+    end
+end)
+
+local Toggle = Tabs.Enemies:AddToggle("EspMobs", {Title = "Esp Enemies", Default = false })
+
+    Toggle:OnChanged(function(nec)
+        MobESP = nec
+    end)
+    
+Options.EspMobs:SetValue(false)
+    
+
+local RunService = game:GetService("RunService")
+
+local archorMobsEnabled = false
+local lastUpdateTime = 0
+local updateInterval = 1
+
+local function archorMobsEnable(monsterRootPart)
+    monsterRootPart.Anchored = true
+end
+
+local function archorMobsDisable(monsterRootPart)
+    monsterRootPart.Anchored = false
+end
+
+local function toggleArchorMobsState()
+    local currentTime = tick()
+    if currentTime - lastUpdateTime >= updateInterval then
+        lastUpdateTime = currentTime
+
+   for _, monster in pairs(workspace:GetDescendants()) do
+    if monster:FindFirstChild("HumanoidRootPart") then
+        if monster.Name ~= game.Players.LocalPlayer.Name then
+            local monsterRootPart = monster.HumanoidRootPart
+
+                if archorMobsEnabled then
+                    archorMobsEnable(monsterRootPart)
+                else
+                    archorMobsDisable(monsterRootPart)
+                end
+             end
+         end
       end
-    })
-]]
+   end
+end
 
-    local TweenX = Tabs.Main:AddInput("TweenX", {
-        Title = "Tween Position X",
-        Default = "0",
-        Placeholder = "Placeholder",
-        Numeric = false, -- Only allows numbers
-        Finished = false, -- Only calls callback when you press enter
-        Callback = function(xtw)
-x = tonumber(xtw) or 0
-        end
-    })
+local ToggleArchorMobs = Tabs.Enemies:AddToggle("ArchorMobs", {Title = "Freeze Enemies Toggle", Default = false })
 
+ToggleArchorMobs:OnChanged(function(isEnabled)
+    archorMobsEnabled = isEnabled
+end)
 
-    local TweenY = Tabs.Main:AddInput("TweenY", {
-        Title = "Tween Position Y",
-        Default = "0",
-        Placeholder = "Placeholder",
-        Numeric = false, -- Only allows numbers
-        Finished = false, -- Only calls callback when you press enter
-        Callback = function(ytw)
-y = tonumber(ytw) or 0
-        end
-    })
+RunService.RenderStepped:Connect(function()
+    toggleArchorMobsState()
+end)
 
-    local TweenZ = Tabs.Main:AddInput("TweenZ", {
-        Title = "Tween Position Z",
-        Default = "-2",
-        Placeholder = "Placeholder",
-        Numeric = false, -- Only allows numbers
-        Finished = false, -- Only calls callback when you press enter
-        Callback = function(ztw)
-z = tonumber(ztw) or -2
-        end
-    })
+Options.ArchorMobs:SetValue(false)
 
-Tabs.Main:AddParagraph({
-        Title = "Settings",
+if Player.Name == "Guilfordy_sagalol" or Player.Name == "Guesttester_1" or Player.Name == "Guilfordy_sagalol3" or Player.Name == "Peleeelallee" then
+
+Tabs.Enemies:AddParagraph({
+        Title = "ABILITY AURA VERY OP!!!",
         Content = " "
     })
+    
+local isToggleActive = false
 
-local DelayStart = 0.1
-local AutoStartToggle = false
+local Toggle = Tabs.Enemies:AddToggle("Ability_Aura", { Title = "Ability Aura Toggle", Default = false })
 
-function StartDungeonRemote()
- ReplicatedStorage.Dungeon.Remotes.StartDungeon:FireServer()
- ReplicatedStorage.Dungeon.Remotes.StartDungeon:FireServer()
- ReplicatedStorage.Dungeon.Remotes.StartWaveDefense:FireServer()
+Toggle:OnChanged(function(isToggled)
+    isToggleActive = isToggled
+
+    while isToggleActive do
+        AllKill3()
+        wait(1)
+    end
+end)
+
+Tabs.Enemies:AddInput("Ability_X", {
+    Title = "Ability Size X",
+    Default = "10",
+    Placeholder = "Placeholder",
+    Numeric = true,
+    Callback = function(abx)
+        UwUSizeX = tonumber(abx) or 10
+    end
+})
+
+Tabs.Enemies:AddInput("Ability_Y", {
+    Title = "Ability Size Y",
+    Default = "10",
+    Placeholder = "Placeholder",
+    Numeric = true,
+    Callback = function(aby)
+        UwUSizeY = tonumber(aby) or 10
+    end
+})
+
+Tabs.Enemies:AddInput("Ability_Z", {
+    Title = "Ability Size Z",
+    Default = "10",
+    Placeholder = "Placeholder",
+    Numeric = true,
+    Callback = function(abz)
+        UwUSizeZ = tonumber(abz) or 10
+    end
+})
+
+Tabs.Enemies:AddInput("Ability_Trans", {
+    Title = "Ability Transparency",
+    Default = "0.7",
+    Placeholder = "Placeholder",
+    Numeric = true,
+    Callback = function(abt)
+        UwUTrans = tonumber(abt) or 0.7
+    end
+})
+
+Tabs.Enemies:AddInput("Ability_Speed", {
+    Title = "Ability Speed",
+    Default = "1",
+    Placeholder = "Placeholder",
+    Numeric = true,
+    Callback = function(abs)
+        powerspeed = tonumber(abs) or 1
+    end
+})
+    
 end
 
-local Toggle = Tabs.Main:AddToggle("Auto-Start", {Title = "Auto-Start", Default = false })
-
-    Toggle:OnChanged(function(bool)
-    AutoStartToggle = bool
- while AutoStartToggle do
- wait(DelayStart)
- StartDungeonRemote()
 end
- end)
 
-Tabs.Main:AddInput("DelayToStart", {
-        Title = "Delay to Start",
-        Default = DelayStart,
-        Placeholder = "Delay to start",
-        Numeric = false, -- Only allows numbers
-        Finished = false, -- Only calls callback when you press enter
-        Callback = function(delaytest)
-DelayStart = tonumber(delaytest) or 0.1
-        end
-    })
+-- Character
 
-Tabs.Main:AddParagraph({
+Tabs.Character:AddParagraph({
         Title = "Toggles",
-        Content = " "
+        Content = ""
     })
 
-local Toggle = Tabs.Main:AddToggle("AntiAfk", {Title = "Anti-AFK", Default = false })
+local Toggle = Tabs.Character:AddToggle("AntiAfk", {Title = "Anti-AFK", Default = false })
 
     Toggle:OnChanged(function()
 local vu = game:GetService("VirtualUser")
@@ -2375,7 +2326,7 @@ Options.AntiAfk:SetValue(true)
 
 local InfiniteJumpEnabled = false
 
-local Toggle = Tabs.Main:AddToggle("AirJump", {Title = "Air Jump", Default = false })
+local Toggle = Tabs.Character:AddToggle("AirJump", {Title = "Air Jump", Default = false })
 
 Toggle:OnChanged(function(State)
     InfiniteJumpEnabled = State
@@ -2391,7 +2342,7 @@ end)
 Options.AirJump:SetValue(false)
   
 
-local Toggle = Tabs.Main:AddToggle("Noclip", {Title = "Noclip", Default = false })
+local Toggle = Tabs.Character:AddToggle("Noclip", {Title = "Noclip", Default = false })
 
 local NoClipx = false
 
@@ -2417,19 +2368,6 @@ NoClipx = State
 Options.Noclip:SetValue(false)
 
 Noclip()
- 
-Tabs.Main:AddParagraph({
-        Title = "Auto-Farm Support",
-        Content = " "
-    })
-
-Tabs.Main:AddButton({
-        Title = "Fly Gui",
-        Description = "Manual",
-        Callback = function()
-loadstring(game:HttpGet("https://raw.githubusercontent.com/XNEOFF/FlyGuiV3/main/FlyGuiV3.txt"))()
-        end
-    })
 
 local FLYING = false
 local velocityHandlerName = "VelocityHandler"
@@ -2567,7 +2505,7 @@ local function flyLoop()
     end
 end
 
-local Toggle = Tabs.Main:AddToggle("FlyToggle", { Title = "Fly Toggle", Default = false })
+local Toggle = Tabs.Character:AddToggle("FlyToggle", { Title = "Fly Toggle", Default = false })
 
 Toggle:OnChanged(function()
     local player = game.Players.LocalPlayer
@@ -2579,7 +2517,7 @@ Options.FlyToggle:SetValue(false)
 
 _G.flySpeed = 20  -- Default fly speed
 
-local FlySpeedInput = Tabs.Main:AddInput("FlySpeedInput", {
+local FlySpeedInput = Tabs.Character:AddInput("FlySpeedInput", {
     Title = "Fly Speed (ignore about the error)",
     Default = tostring(_G.flySpeed),
     Placeholder = "Enter fly speed",
@@ -2594,507 +2532,204 @@ local FlySpeedInput = Tabs.Main:AddInput("FlySpeedInput", {
 -- Start the loop
 spawn(flyLoop)
 
-local Tabs = {
-    Main = Window:AddTab({ Title = "Misc-Dungeon", Icon = "rbxassetid://7734068321" }),
-}
-
--- Define toggle settings in _G
-_G.Setting = {
-    AutoEquip = {
-        Emblem = false,
-    },
-    AutoLeave = {
-        WhenDied = {
-            Enabled = false,
-            Delay = 2
-        },
-        WhenInventoryFull = {
-            Enabled = false,
-            Delay = 2
-        }
-    }
-}
-
-if isEventDungeon or isMainDungeon or isWaveDefense then
-Tabs.Main:AddParagraph({
-        Title = "Auto Leave",
-        Content = "this will be cool at lobby auto create dungeon"
+Tabs.Character:AddParagraph({
+        Title = "Mods",
+        Content = ""
     })
 
-local backpack = rightSideFrame:WaitForChild("Backpack")
+local SizeWeapon = false
+local TheSize = 1
 
-local function AutoLeaveFull()
-    local capacityLabel = backpack:FindFirstChild("Capacity") -- Use FindFirstChild to avoid errors if Capacity doesn't exist
-    
-    if capacityLabel and capacityLabel:IsA("TextLabel") then
-        if tostring(capacityLabel.Text) == "FULL!" or tostring(capacityLabel.Text) == "FULL!!!" then
-            wait(3)
-            game.ReplicatedStorage.Dungeon.Remotes.BackToLobby:FireServer()
-        end
-    end
+local Fightingctrl = require(game:GetService("Players").LocalPlayer.PlayerScripts.Shared.Client.FighterController)
+
+local Toggle = Tabs.Character:AddToggle("ToggleSizeWeapon", {Title = "Custom Weapon Size", Default = false })
+
+ Toggle:OnChanged(function(ValueDay)
+ SizeWeapon = ValueDay
+while wait(0.01) and SizeWeapon do
+Fightingctrl.FighterAdded["_args"][1].Boosts.WeaponScale = TheSize
+Fightingctrl.Fighters[1].Boosts.WeaponScale = TheSize
 end
-
-local AutoLeave1 = Tabs.Main:AddToggle("AutoLeaveWhenFull", {Title = "Auto-Leave When Full Inventory", Default = false })
-
-local autoLeaveFullT = false
-
-AutoLeave1:OnChanged(function(isEnabled)
-    autoLeaveFullT = isEnabled
 end)
 
--- Function to continuously check and auto-leave when the inventory is full
-local function AutoLeaveFullLoop()
-    while true and wait(0.2) do
-        if autoLeaveFullT then
-            AutoLeaveFull()
+Tabs.Character:AddInput("SizeWeapon", {
+        Title = "Weapon Size",
+        Default = "1",
+        Placeholder = "",
+        Numeric = false, -- Only allows numbers
+        Finished = false, -- Only calls callback when you press enter
+        Callback = function(WS_1)
+TheSize = tonumber(WS_1) or 1
         end
-        wait(3)
-    end
+    })
+
+local ToggleInfRoll = false
+
+local Toggle = Tabs.Character:AddToggle("INFINITEROLL", {Title = "Infinite Rolling Ability", Default = false })
+
+ Toggle:OnChanged(function(InfRool)
+ ToggleInfRoll = InfRool
+while wait(0.01) and InfRool do
+local Combatctrl = require(game:GetService("Players").LocalPlayer.PlayerScripts.Shared.Client.CombatController)
+Combatctrl["_roll_cooldown"] = -1
 end
-
--- Start the AutoLeaveLoop function in a separate thread
-spawn(AutoLeaveFullLoop)
-
-local function AutoLeaveDied()
-    local deadCard = mainFrame.Bottom:WaitForChild("DeadCard")
-
-    if deadCard and deadCard.Visible == true then
-        print("You died and ran out of lives.")
-        wait(3)
-        game.ReplicatedStorage.Dungeon.Remotes.BackToLobby:FireServer()    
-    end
-end
-
-local AutoLeave2 = Tabs.Main:AddToggle("AutoLeaveWhenDied", {Title = "Auto-Leave When Died", Default = false })
-
-local autoLeaveDiedT = false
-
-AutoLeave2:OnChanged(function(isEnabled)
-    autoLeaveDiedT = isEnabled
 end)
 
--- Function to continuously check and auto-leave when the inventory is full
-local function AutoLeaveDiedLoop()
-    while true and wait(0.2) do
-        if autoLeaveDiedT then
-            AutoLeaveDied()
+local Input = Tabs.Character:AddInput("Input", {
+        Title = "WalkSpeed",
+        Default = "26",
+        Placeholder = "Placeholder",
+        Numeric = false, -- Only allows numbers
+        Finished = false, -- Only calls callback when you press enter
+        Callback = function(WS)
+game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = WS
         end
-        wait(3)
-    end
-end
-
--- Start the AutoLeaveLoop function in a separate thread
-spawn(AutoLeaveDiedLoop)
-end
-
-local AutoQuestLeaving = false
-
---[[
-function AutoQuestLeave()
-    local coreGui = game:GetService("CoreGui")
-    local robloxGui = coreGui.RobloxGui
-    local notificationFrame = robloxGui.NotificationFrame
+    })
     
-    -- Check if the notification is an ImageLabel
-    if notificationFrame:FindFirstChild("Notification") then
-        -- Check if the asset is rbxassetid://3200915096
-        if notificationFrame.Notification.NotificationImage.Image == "rbxassetid://3200915096" then
-         print("Quest Complete!")
-            wait(0.3)
-            print("firing remote...")
-            wait(0.1)
-            game.ReplicatedStorage.Dungeon.Remotes.BackToLobby:FireServer()    
+    Tabs.Character:AddButton({
+        Title = "Reset Walkspeed",
+        Description = "",
+        Callback = function()
+game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = 18
         end
+    })
+    
+local Input = Tabs.Character:AddInput("Input", {
+        Title = "Jump Height",
+        Default = "50",
+        Placeholder = "Placeholder",
+        Numeric = false, -- Only allows numbers
+        Finished = false, -- Only calls callback when you press enter
+        Callback = function(JP)
+game.Players.LocalPlayer.Character.Humanoid.JumpPower = JP
+        end
+    })
+
+Tabs.Character:AddButton({
+        Title = "Reset JumpHeight",
+        Description = "",
+        Callback = function()
+game.Players.LocalPlayer.Character.Humanoid.JumpPower = 50
+        end
+    })
+
+-- FarmSettings
+
+Tabs.FarmSettings:AddParagraph({
+        Title = "Tween Settings",
+        Content = "Edit it, if u want"
+    })
+    
+local TweenSpeed = Tabs.FarmSettings:AddDropdown("TweenSpeedType", {
+        Title = "Tween Calculation Speed",
+        Values = {"Slow (20-40)", "Normal (30-50)", "Fast (40-60)", "Malicious (50-70)"},
+        Multi = false,
+        Default = 2,
+    })
+
+TweenSpeed:OnChanged(function(Type)
+    if Type == "Slow (20-40)" then
+        SlowTween = Type
+    elseif Type == "Normal (30-50)" then
+        NormalTween = Type
+    elseif Type == "Fast (40-60)" then
+        FastTween = Type
+    elseif Type == "Malicious (50-70)" then
+        MaliciousTween = Type
     end
-end
+end)
+
+--[[ local twSpeed = Tabs.FarmSettings:AddInput("TweenS", {
+        Title = "Tween Speed",
+        Default = "50",
+        Placeholder = "Put a Speed",
+        Numeric = true, -- Only allows numbers
+        Finished = false, -- Only calls callback when you press enter
+        Callback = function(speedtw)
+                 speed = tonumber(speedtw) or 50
+      end
+    })
 ]]
 
-function AutoQuestLeave()
-    local coreGui = game:GetService("CoreGui")
-    local robloxGui = coreGui.RobloxGui
-    local notificationFrame = robloxGui.NotificationFrame
-    
-    -- Get descendants of NotificationFrame
-    local descendants = notificationFrame:GetDescendants()
-    
-    -- Target Descendants: Notification.NotificationImage == rbxassetid
-    for _, descendant in ipairs(descendants) do
-        if descendant.Name == "Notification" then
-            local notificationImage = descendant:FindFirstChild("NotificationImage")
-            if notificationImage and notificationImage.Image == "rbxassetid://3200915096" then
-                print("Quest Complete!")
-                wait(0.3)
-                print("firing remote...")
-                wait(0.1)
-                game.ReplicatedStorage.Dungeon.Remotes.BackToLobby:FireServer() 
-            end
+    local TweenX = Tabs.FarmSettings:AddInput("TweenX", {
+        Title = "Tween Position X",
+        Default = "0",
+        Placeholder = "Placeholder",
+        Numeric = false, -- Only allows numbers
+        Finished = false, -- Only calls callback when you press enter
+        Callback = function(xtw)
+x = tonumber(xtw) or 0
         end
-    end
-end
-
-
-local Toggle = Tabs.Main:AddToggle("AutoLeaveWhenQuestComplete", {Title = "Auto-Leave When Quest is Completed", Default = false })
-
-Toggle:OnChanged(function(isEnabled)
-    AutoQuestLeaving = isEnabled
-    repeat
-    wait(2)
-        spawn(AutoQuestLeave)
-    until AutoQuestLeaving == false
-end)
-
-Tabs.Main:AddParagraph({
-        Title = "Auto Claim",
-        Content = "Claim a Loots"
     })
 
-local AutoClaim1 = false
 
-local Toggle1 = Tabs.Main:AddToggle("AutoClaim1", {Title = "Auto Claim Treasure Pass", Default = false})
-
-Toggle1:OnChanged(function(State)
-    AutoClaim1 = State
-    
- while AutoClaim1 do
-    wait(1)
-      game:GetService("ReplicatedStorage").Shared.Remotes.Data.ClaimAllTreasurePassRewards:FireServer()
-    end
-end)
-
-
-Tabs.Main:AddParagraph({
-        Title = "Auto Buy Secret Shop",
-        Content = "make sure u encounter the mystery shop!"
-    })
-
-Tabs.Main:AddParagraph({
-        Title = "Coral Kingdom",
-        Content = ""
-    })
-
-local BuyitemCK = false
-local selectedAmountCK = 1
-local selectedShopCK = "Aquatic Chest"
-
-local shopDataCK = {
-    ["Aquatic Chest"] = {
-        [1] = "AquaticArsenal",
-        [2] = "0",
-        [3] = selectedAmountCK
-    },
-    ["Bubble Effect"] = {
-        [1] = "AquaticArsenal",
-        [2] = "1",
-        [3] = selectedAmountCK
-    },
-    ["Speed Potion"] = {
-        [1] = "AquaticArsenal",
-        [2] = "2",
-        [3] = selectedAmountCK
-    },
-    ["Ability Potion"] = {
-        [1] = "AquaticArsenal",
-        [2] = "3",
-        [3] = selectedAmountCK
-    }
-}
-
-local Dropdown = Tabs.Main:AddDropdown("Dropdown", {
-        Title = "Aquatic Shop",
-        Values = {"Aquatic Chest", "Bubble Effect", "Speed Potion", "Ability Potion"},
-        Multi = false,
-        Default = selectedShopCK,
-    })
-    
-Dropdown:OnChanged(function(value)
-        selectedShopCK = value
-    end)
-
-local Dropdown = Tabs.Main:AddDropdown("Dropdown", {
-        Title = "Amount",
-        Values = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "15", "20", "25"},
-        Multi = false,
-        Default = tostring(selectedAmountCK),
-    })
-
-Dropdown:OnChanged(function(value)
-        selectedAmountCK = tonumber(value) or 1
-    end)
-
-local Toggle = Tabs.Main:AddToggle("Buy1", {Title = "Buy item", Default = false })
-
-    Toggle:OnChanged(function(value)
-BuyitemCK = value
-        if BuyitemCK then
-            local c = shopDataCK[selectedShopCK]
-            args[3] = selectedAmountCK
-            game:GetService("ReplicatedStorage").Lobby.Remotes.ShopPurchase:FireServer(args[1], args[2], args[3])
-            wait(0.1)
-            game:GetService("ReplicatedStorage").Shared.Remotes.Data.ClaimPrizes:FireServer()
+    local TweenY = Tabs.FarmSettings:AddInput("TweenY", {
+        Title = "Tween Position Y",
+        Default = "0",
+        Placeholder = "Placeholder",
+        Numeric = false, -- Only allows numbers
+        Finished = false, -- Only calls callback when you press enter
+        Callback = function(ytw)
+y = tonumber(ytw) or 0
         end
-    end)
-
-Tabs.Main:AddParagraph({
-        Title = "Daring Dojo",
-        Content = ""
     })
 
-local BuyitemDD = false
-local selectedAmountDD = 1
-local selectedShopDD = "Daring Chest"
-
-local shopDataDD = {
-    ["Daring Chest"] = {
-        [1] = "SilentStash",
-        [2] = "0",
-        [3] = selectedAmountDD
-    },
-    ["Stealth Effect"] = {
-        [1] = "SilentStash",
-        [2] = "1",
-        [3] = selectedAmountDD
-    },
-    ["Jump Potion"] = {
-        [1] = "SilentStash",
-        [2] = "2",
-        [3] = selectedAmountDD
-    }
-}
-
-local Dropdown = Tabs.Main:AddDropdown("Dropdown", {
-        Title = "Silent Shop",
-        Values = {"Daring Chest", "Stealth Effect", "Jump Potion"},
-        Multi = false,
-        Default = selectedShopDD,
-    })
-    
-Dropdown:OnChanged(function(value)
-        selectedShopDD = value
-    end)
-
-local Dropdown = Tabs.Main:AddDropdown("Dropdown", {
-        Title = "Amount",
-        Values = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "15", "20", "25"},
-        Multi = false,
-        Default = tostring(selectedAmountDD),
-    })
-
-Dropdown:OnChanged(function(value)
-        selectedAmountDD = tonumber(value) or 1
-    end)
-
-local Toggle = Tabs.Main:AddToggle("Buy2", {Title = "Buy item", Default = false })
-
-    Toggle:OnChanged(function(value)
-BuyitemDD = value
-        if BuyitemDD then
-            local args = shopDataDD[selectedShopDD]
-            args[3] = selectedAmountDD
-            game:GetService("ReplicatedStorage").Lobby.Remotes.ShopPurchase:FireServer(args[1], args[2], args[3])
-            wait(0.1)
-            game:GetService("ReplicatedStorage").Shared.Remotes.Data.ClaimPrizes:FireServer()
+    local TweenZ = Tabs.FarmSettings:AddInput("TweenZ", {
+        Title = "Tween Position Z",
+        Default = "-2",
+        Placeholder = "Placeholder",
+        Numeric = false, -- Only allows numbers
+        Finished = false, -- Only calls callback when you press enter
+        Callback = function(ztw)
+z = tonumber(ztw) or -2
         end
-    end)
-
-Tabs.Main:AddParagraph({
-        Title = "Fiery Fortress",
-        Content = ""
     })
 
-local BuyitemFF = false
-local selectedAmountFF = 1
-local selectedShopFF = "Molten Chest"
-
-local shopDataFF = {
-    ["Molten Chest"] = {
-        [1] = "MoltenMarket",
-        [2] = "0",
-        [3] = selectedAmountFF
-    },
-    ["Embers Effect"] = {
-        [1] = "MoltenMarket",
-        [2] = "1",
-        [3] = selectedAmountFF
-    },
-    ["Warrior Potion"] = {
-        [1] = "MoltenMarket",
-        [2] = "2",
-        [3] = selectedAmountFF
-    },
-    ["Wizard Potion"] = {
-        [1] = "MoltenMarket",
-        [2] = "3",
-        [3] = selectedAmountFF
-    },
-    ["Archer Potion"] = {
-        [1] = "MoltenMarket",
-        [2] = "4",
-        [3] = selectedAmountFF
-    }
-}
-
-local Dropdown = Tabs.Main:AddDropdown("Dropdown", {
-        Title = "Molten Market",
-        Values = {"Molten Chest", "Embers Effect", "Warrior Potion", "Wizard Potion", "Archer Potion"},
-        Multi = false,
-        Default = selectedShopFF,
-    })
-    
-Dropdown:OnChanged(function(value)
-        selectedShopFF = value
-    end)
-
-local Dropdown = Tabs.Main:AddDropdown("Dropdown", {
-        Title = "Amount",
-        Values = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "15", "20", "25"},
-        Multi = false,
-        Default = tostring(selectedAmountFF),
-    })
-
-Dropdown:OnChanged(function(value)
-        selectedAmountFF = tonumber(value) or 1
-    end)
-
-local Toggle = Tabs.Main:AddToggle("Buy3", {Title = "Buy item", Default = false })
-
-    Toggle:OnChanged(function(value)
-BuyitemFF = value
-        if BuyitemFF then
-            local args = shopDataFF[selectedShopFF]
-            args[3] = selectedAmountFF
-            game:GetService("ReplicatedStorage").Lobby.Remotes.ShopPurchase:FireServer(args[1], args[2], args[3])
-            wait(0.1)
-            game:GetService("ReplicatedStorage").Shared.Remotes.Data.ClaimPrizes:FireServer()
-        end
-    end)
-
-Tabs.Main:AddParagraph({
-        Title = "Weapon Misc",
+Tabs.FarmSettings:AddParagraph({
+        Title = "Settings",
         Content = " "
     })
 
-Tabs.Main:AddButton({
-    Title = "View Weapon Equipped Data (Button)",
-    Description = "",
-    Callback = function()
-        local Fightingctrl = require(game:GetService("Players").LocalPlayer.PlayerScripts.Shared.Client.FighterController)
-        Window:Dialog({
-            Title = "ID: " .. tostring(Fightingctrl.Fighters[1].RightHand.ItemID),
-            Content = "Name: " .. tostring(Fightingctrl.Fighters[1].RightHand.Name),
-            Buttons = {
-                {
-                    Title = "Copy ID",
-                    Callback = function()
-                        setclipboard(tostring(Fightingctrl.Fighters[1].RightHand.ItemID))
-                    end
-                },
-                {
-                    Title = "Cancel",
-                    Callback = function()
-                        print("Uncopied ID")
-                    end
-                }
-            }
-        })
-    end
-})
+local DelayStart = 0.1
+local AutoStartToggle = false
 
-Tabs.Main:AddParagraph({
-        Title = "Auto Healing",
-        Content = "Bieng Immortal"
-    })
-    
- local maxHealth = 100
-local minHealth = 20
-local maxHealthItemId = "0" -- Initialize as string
-local minHealthItemId = "0" -- Initialize as string
-local autoHealthEnabled = false
-
--- Function to check health and perform actions accordingly
-local function checkHealth()
-    local humanoid = game:GetService("Players").LocalPlayer.Character:FindFirstChildOfClass("Humanoid")
-    if humanoid then
-        local currentHealth = humanoid.Health
-
-        -- Check if health is at maximum
-        if currentHealth >= maxHealth then
-            -- Fire the server to equip the max health item
-            game:GetService("ReplicatedStorage").Shared.Remotes.Data.EquipItem:FireServer("ItemsEquipped", "RightHand", maxHealthItemId)
-        end
-
-        -- Check if health is at minimum
-        if currentHealth <= minHealth then
-            -- Fire the server to equip the min health item
-            game:GetService("ReplicatedStorage").Shared.Remotes.Data.EquipItem:FireServer("ItemsEquipped", "RightHand", minHealthItemId)
-        end
-    end
+function StartDungeonRemote()
+ ReplicatedStorage.Dungeon.Remotes.StartDungeon:FireServer()
+ ReplicatedStorage.Dungeon.Remotes.StartDungeon:FireServer()
+ ReplicatedStorage.Dungeon.Remotes.StartWaveDefense:FireServer()
 end
 
-local Toggle = Tabs.Main:AddToggle("AutoHealingToggle", {Title = "Auto Healing Toggle", Default = false })
+local Toggle = Tabs.FarmSettings:AddToggle("Auto-Start", {Title = "Auto-Start", Default = false })
 
-    Toggle:OnChanged(function(DDF)
-        autoHealthEnabled = DDF
-   while autoHealthEnabled and wait(0.3) do
-        checkHealth()
-        end
-    end)
-    
-local Input = Tabs.Main:AddInput("InsertID_1", {
-        Title = "Insert Main Item",
-        Default = maxHealthItemId,
-        Placeholder = "Automatically Change",
+    Toggle:OnChanged(function(bool)
+    AutoStartToggle = bool
+ while AutoStartToggle do
+ wait(DelayStart)
+ StartDungeonRemote()
+end
+ end)
+
+Tabs.FarmSettings:AddInput("DelayToStart", {
+        Title = "Delay to Start",
+        Default = DelayStart,
+        Placeholder = "Delay to start",
         Numeric = false, -- Only allows numbers
         Finished = false, -- Only calls callback when you press enter
-        Callback = function(AutoHeal1)
-            maxHealthItemId = AutoHeal1
-        end
-    })
-    
-local Input = Tabs.Main:AddInput("InsertID_2", {
-        Title = "Insert Healing Ability Item",
-        Default = minHealthItemId,
-        Placeholder = "Automatically Change",
-        Numeric = false, -- Only allows numbers
-        Finished = false, -- Only calls callback when you press enter
-        Callback = function(AutoHeal2)
-            minHealthItemId = AutoHeal2
-        end
-    })
-    
- local Input = Tabs.Main:AddInput("MaxHealthInput", {
-        Title = "Max Health to Change item",
-        Default = maxHealth,
-        Placeholder = "Automatically Change",
-        Numeric = false, -- Only allows numbers
-        Finished = false, -- Only calls callback when you press enter
-        Callback = function(AutoHeal3)
-            maxHealth = tonumber(AutoHeal3)
-        end
-    })
-    
-local Input = Tabs.Main:AddInput("MinHealthInput", {
-        Title = "Min Health to Change Item",
-        Default = minHealth,
-        Placeholder = "Automatically Change",
-        Numeric = false, -- Only allows numbers
-        Finished = false, -- Only calls callback when you press enter
-        Callback = function(AutoHeal4)
-            minHealth = tonumber(AutoHeal4)
+        Callback = function(delaytest)
+DelayStart = tonumber(delaytest) or 0.1
         end
     })
 
-local Tabs = {
-    Main = Window:AddTab({ Title = "Anti-Lags", Icon = "rbxassetid://7734053495" }),
-}
+-- Misc
 
-Tabs.Main:AddParagraph({
+Tabs.Misc:AddParagraph({
         Title = "Fps Cap",
         Content = ""
     })
 
 local Vav = "500"
     
-local Input = Tabs.Main:AddInput("Input", {
+local Input = Tabs.Misc:AddInput("Input", {
         Title = "Fps Cap",
         Default = Vav,
         Placeholder = "Placeholder",
@@ -3108,7 +2743,7 @@ setfpscap(Vav)
     
 setfpscap(500)
 
-Tabs.Main:AddParagraph({
+Tabs.Misc:AddParagraph({
         Title = "Destroy Misc",
         Content = ""
     })
@@ -3150,7 +2785,7 @@ if value.Name == "Chest" and value:IsA("BasePart") or value:IsA("MeshPart") and 
     end
 end
 
-local Toggle = Tabs.Main:AddToggle("DestroyMap", {Title = "Destroy Map", Default = false })
+local Toggle = Tabs.Misc:AddToggle("DestroyMap", {Title = "Destroy Map", Default = false })
 
 local toggleState = false -- Default state
 
@@ -3206,7 +2841,7 @@ end)
 local DestroyChest = false
 local DestroyShrine = false
 
-local Toggle = Tabs.Main:AddToggle("Destroy_Chest", {Title = "Destroy Chest (Bug) ", Default = false })
+local Toggle = Tabs.Misc:AddToggle("Destroy_Chest", {Title = "Destroy Chest (Bug) ", Default = false })
 
 Toggle:OnChanged(function(DVCH)
     DestroyChest = DVCH
@@ -3220,7 +2855,7 @@ wait(1)
 
 Options.Destroy_Chest:SetValue(false)
 
-local Toggle = Tabs.Main:AddToggle("Destroy_Shrine", {Title = "Destroy Shrine", Default = false })
+local Toggle = Tabs.Misc:AddToggle("Destroy_Shrine", {Title = "Destroy Shrine", Default = false })
 
 Toggle:OnChanged(function(DVSH)
     DestroyShrine = DVSH
@@ -3236,7 +2871,7 @@ Options.Destroy_Shrine:SetValue(false)
 
 local Destroy3 = false
 
-local Toggle = Tabs.Main:AddToggle("Destroy_Ability", {Title = "Destroy Ability", Default = false })
+local Toggle = Tabs.Misc:AddToggle("Destroy_Ability", {Title = "Destroy Ability", Default = false })
 
 Toggle:OnChanged(function(DV3)
     Destroy3 = DV3
@@ -3339,7 +2974,7 @@ function removeMobs()
 
 local Destroy4 = false
 
-local Toggle = Tabs.Main:AddToggle("Destroy_Enemies", {Title = "Destroy Enemies", Default = false })
+local Toggle = Tabs.Misc:AddToggle("Destroy_Enemies", {Title = "Destroy Enemies", Default = false })
 
     Toggle:OnChanged(function(DV4)
 Destroy4 = DV4
@@ -3355,7 +2990,7 @@ until not Destroy4 == true
 
 Options.Destroy_Enemies:SetValue(false)
 
-local Toggle = Tabs.Main:AddToggle("Destroy_Alert", {Title = "Destroy Enemies Alert", Default = false })
+local Toggle = Tabs.Misc:AddToggle("Destroy_Alert", {Title = "Destroy Enemies Alert", Default = false })
 
     Toggle:OnChanged(function(DV5)
         if DV5 then
@@ -3371,14 +3006,14 @@ target2.DamageEffect:WaitForChild("TextLabel").Text = ""
 
 Options.Destroy_Alert:SetValue(false)
 
-Tabs.Main:AddParagraph({
+Tabs.Misc:AddParagraph({
         Title = "Fps Booster and Anti-Lags",
         Content = ""
     })
 
 local Lag1 = false
 
-local Toggle = Tabs.Main:AddToggle("Anti_Lag1", {Title = "Anti Lag 1", Default = false })
+local Toggle = Tabs.Misc:AddToggle("Anti_Lag1", {Title = "Anti Lag 1", Default = false })
 
     Toggle:OnChanged(function(Value1)
         Lag1 = Value1
@@ -3404,7 +3039,7 @@ local AntiLag2 = false
 
 _G.Settings = {}
 
-local Toggle = Tabs.Main:AddToggle("Anti_Lag2", {Title = "Anti Lag 2", Default = false })
+local Toggle = Tabs.Misc:AddToggle("Anti_Lag2", {Title = "Anti Lag 2", Default = false })
 
 Toggle:OnChanged(function(Value2)
     AntiLag2 = Value2
@@ -3438,7 +3073,7 @@ end)
 ]]
 
 
-local Toggle = Tabs.Main:AddToggle("Anti_Lag2", {Title = "Anti Lag 2", Default = false })
+local Toggle = Tabs.Misc:AddToggle("Anti_Lag2", {Title = "Anti Lag 2", Default = false })
 
     Toggle:OnChanged(function(Value3)
         if Value3 then
@@ -3471,7 +3106,7 @@ end
 
 Options.Anti_Lag2:SetValue(false)
 
-local Toggle = Tabs.Main:AddToggle("Anti_Lag3", {Title = "Anti Lag 3", Default = false })
+local Toggle = Tabs.Misc:AddToggle("Anti_Lag3", {Title = "Anti Lag 3", Default = false })
 
     Toggle:OnChanged(function(Value4)
         if Value4 then
@@ -3575,7 +3210,7 @@ end
 
 local Destroy5 = false
 
-local Toggle = Tabs.Main:AddToggle("Destroy_Sky", {Title = "Dark Sky Mode", Default = false })
+local Toggle = Tabs.Misc:AddToggle("Destroy_Sky", {Title = "Dark Sky Mode", Default = false })
 
     Toggle:OnChanged(function(DV5)
 Destroy5 = DV5
@@ -3589,7 +3224,7 @@ until not Destroy5 == true
 
 Options.Destroy_Sky:SetValue(false)
 
-Tabs.Main:AddButton({
+Tabs.Misc:AddButton({
         Title = "White Screen (ON)",
         Description = "",
         Callback = function()
@@ -3597,7 +3232,7 @@ game:GetService("RunService"):Set3dRenderingEnabled(false)
         end
     })
 
-Tabs.Main:AddButton({
+Tabs.Misc:AddButton({
         Title = "White Screen (OFF)",
         Description = "",
         Callback = function()
@@ -3605,33 +3240,215 @@ game:GetService("RunService"):Set3dRenderingEnabled(true)
         end
     })
 
-local Tabs = {
-    Main = Window:AddTab({ Title = "Update Logs", Icon = "rbxassetid://7733793319" }),
+Tabs.Misc:AddParagraph({
+        Title = "Auto Buy Secret Shop",
+        Content = "make sure u encounter the mystery shop!"
+    })
+
+Tabs.Misc:AddParagraph({
+        Title = "Coral Kingdom",
+        Content = ""
+    })
+
+local BuyitemCK = false
+local selectedAmountCK = 1
+local selectedShopCK = "Aquatic Chest"
+
+local shopDataCK = {
+    ["Aquatic Chest"] = {
+        [1] = "AquaticArsenal",
+        [2] = "0",
+        [3] = selectedAmountCK
+    },
+    ["Bubble Effect"] = {
+        [1] = "AquaticArsenal",
+        [2] = "1",
+        [3] = selectedAmountCK
+    },
+    ["Speed Potion"] = {
+        [1] = "AquaticArsenal",
+        [2] = "2",
+        [3] = selectedAmountCK
+    },
+    ["Ability Potion"] = {
+        [1] = "AquaticArsenal",
+        [2] = "3",
+        [3] = selectedAmountCK
+    }
 }
 
-Tabs.Main:AddParagraph({
-        Title = "Temporary Closed",
-        Content = "Update Logs Was Moving to Discord..."
+local Dropdown = Tabs.Misc:AddDropdown("Dropdown", {
+        Title = "Aquatic Shop",
+        Values = {"Aquatic Chest", "Bubble Effect", "Speed Potion", "Ability Potion"},
+        Multi = false,
+        Default = selectedShopCK,
     })
     
-Tabs.Main:AddParagraph({
-        Title = "Status Update: 🟢",
-        Content = "Join Us? Discord: discord.gg/d2a3KkTD6r"
+Dropdown:OnChanged(function(value)
+        selectedShopCK = value
+    end)
+
+local Dropdown = Tabs.Misc:AddDropdown("Dropdown", {
+        Title = "Amount",
+        Values = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "15", "20", "25"},
+        Multi = false,
+        Default = tostring(selectedAmountCK),
     })
- 
-print("Changed SimulationRaduis")
 
-game:GetService("RunService").RenderStepped:Connect(function()
-    sethiddenproperty(game:GetService("Players").LocalPlayer, 'SimulationRadius', math.huge)
-    sethiddenproperty(game:GetService("Players").LocalPlayer, 'MaximumSimulationRadius', math.huge)
-end)
+Dropdown:OnChanged(function(value)
+        selectedAmountCK = tonumber(value) or 1
+    end)
 
+local Toggle = Tabs.Misc:AddToggle("Buy1", {Title = "Buy item", Default = false })
 
-local Tabs = {
-    Config = Window:AddTab({ Title = "Save Config", Icon = "rbxassetid://7734052335" }),
+    Toggle:OnChanged(function(value)
+BuyitemCK = value
+        if BuyitemCK then
+            local c = shopDataCK[selectedShopCK]
+            args[3] = selectedAmountCK
+            game:GetService("ReplicatedStorage").Lobby.Remotes.ShopPurchase:FireServer(args[1], args[2], args[3])
+            wait(0.1)
+            game:GetService("ReplicatedStorage").Shared.Remotes.Data.ClaimPrizes:FireServer()
+        end
+    end)
+
+Tabs.Misc:AddParagraph({
+        Title = "Daring Dojo",
+        Content = ""
+    })
+
+local BuyitemDD = false
+local selectedAmountDD = 1
+local selectedShopDD = "Daring Chest"
+
+local shopDataDD = {
+    ["Daring Chest"] = {
+        [1] = "SilentStash",
+        [2] = "0",
+        [3] = selectedAmountDD
+    },
+    ["Stealth Effect"] = {
+        [1] = "SilentStash",
+        [2] = "1",
+        [3] = selectedAmountDD
+    },
+    ["Jump Potion"] = {
+        [1] = "SilentStash",
+        [2] = "2",
+        [3] = selectedAmountDD
+    }
 }
 
-Tabs.Config:AddParagraph({
+local Dropdown = Tabs.Misc:AddDropdown("Dropdown", {
+        Title = "Silent Shop",
+        Values = {"Daring Chest", "Stealth Effect", "Jump Potion"},
+        Multi = false,
+        Default = selectedShopDD,
+    })
+    
+Dropdown:OnChanged(function(value)
+        selectedShopDD = value
+    end)
+
+local Dropdown = Tabs.Misc:AddDropdown("Dropdown", {
+        Title = "Amount",
+        Values = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "15", "20", "25"},
+        Multi = false,
+        Default = tostring(selectedAmountDD),
+    })
+
+Dropdown:OnChanged(function(value)
+        selectedAmountDD = tonumber(value) or 1
+    end)
+
+local Toggle = Tabs.Misc:AddToggle("Buy2", {Title = "Buy item", Default = false })
+
+    Toggle:OnChanged(function(value)
+BuyitemDD = value
+        if BuyitemDD then
+            local args = shopDataDD[selectedShopDD]
+            args[3] = selectedAmountDD
+            game:GetService("ReplicatedStorage").Lobby.Remotes.ShopPurchase:FireServer(args[1], args[2], args[3])
+            wait(0.1)
+            game:GetService("ReplicatedStorage").Shared.Remotes.Data.ClaimPrizes:FireServer()
+        end
+    end)
+
+Tabs.Misc:AddParagraph({
+        Title = "Fiery Fortress",
+        Content = ""
+    })
+
+local BuyitemFF = false
+local selectedAmountFF = 1
+local selectedShopFF = "Molten Chest"
+
+local shopDataFF = {
+    ["Molten Chest"] = {
+        [1] = "MoltenMarket",
+        [2] = "0",
+        [3] = selectedAmountFF
+    },
+    ["Embers Effect"] = {
+        [1] = "MoltenMarket",
+        [2] = "1",
+        [3] = selectedAmountFF
+    },
+    ["Warrior Potion"] = {
+        [1] = "MoltenMarket",
+        [2] = "2",
+        [3] = selectedAmountFF
+    },
+    ["Wizard Potion"] = {
+        [1] = "MoltenMarket",
+        [2] = "3",
+        [3] = selectedAmountFF
+    },
+    ["Archer Potion"] = {
+        [1] = "MoltenMarket",
+        [2] = "4",
+        [3] = selectedAmountFF
+    }
+}
+
+local Dropdown = Tabs.Misc:AddDropdown("Dropdown", {
+        Title = "Molten Market",
+        Values = {"Molten Chest", "Embers Effect", "Warrior Potion", "Wizard Potion", "Archer Potion"},
+        Multi = false,
+        Default = selectedShopFF,
+    })
+    
+Dropdown:OnChanged(function(value)
+        selectedShopFF = value
+    end)
+
+local Dropdown = Tabs.Misc:AddDropdown("Dropdown", {
+        Title = "Amount",
+        Values = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "15", "20", "25"},
+        Multi = false,
+        Default = tostring(selectedAmountFF),
+    })
+
+Dropdown:OnChanged(function(value)
+        selectedAmountFF = tonumber(value) or 1
+    end)
+
+local Toggle = Tabs.Misc:AddToggle("Buy3", {Title = "Buy item", Default = false })
+
+    Toggle:OnChanged(function(value)
+BuyitemFF = value
+        if BuyitemFF then
+            local args = shopDataFF[selectedShopFF]
+            args[3] = selectedAmountFF
+            game:GetService("ReplicatedStorage").Lobby.Remotes.ShopPurchase:FireServer(args[1], args[2], args[3])
+            wait(0.1)
+            game:GetService("ReplicatedStorage").Shared.Remotes.Data.ClaimPrizes:FireServer()
+        end
+    end)
+
+-- Settings
+
+Tabs.Settings:AddParagraph({
         Title = "Save Config",
         Content = "Save A Config"
     })
@@ -3646,10 +3463,17 @@ SaveManager:SetIgnoreIndexes({})
 InterfaceManager:SetFolder("UnknownTQHub")
 SaveManager:SetFolder("UnknownTQHub/TreasureQuest")
 
-InterfaceManager:BuildInterfaceSection(Tabs.Config)
-SaveManager:BuildConfigSection(Tabs.Config)
+InterfaceManager:BuildInterfaceSection(Tabs.Settings)
+SaveManager:BuildConfigSection(Tabs.Settings)
 
 Window:SelectTab(1)
 
 -- Auto Load Configuration
 SaveManager:LoadAutoloadConfig()
+
+print("Changed SimulationRaduis")
+
+game:GetService("RunService").RenderStepped:Connect(function()
+    sethiddenproperty(game:GetService("Players").LocalPlayer, 'SimulationRadius', math.huge)
+    sethiddenproperty(game:GetService("Players").LocalPlayer, 'MaximumSimulationRadius', math.huge)
+end)
