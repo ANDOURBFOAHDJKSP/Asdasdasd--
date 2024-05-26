@@ -1890,7 +1890,7 @@ speaker.Character.Head.Anchored = false
 end
 
 -- Add buttons to the UI
-Tabs.Main:AddButton({
+Tabs.Enemies:AddButton({
     Title = "View Enemies",
     Description = "",
     Callback = function()
@@ -1899,7 +1899,7 @@ Tabs.Main:AddButton({
     end
 })
 
-Tabs.Main:AddButton({
+Tabs.Enemies:AddButton({
     Title = "Reset Camera",
     Description = "",
     Callback = function()
