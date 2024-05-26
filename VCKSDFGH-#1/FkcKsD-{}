@@ -1292,15 +1292,11 @@ _G.Setting = {
     }
 }
 
+if isEventDungeon or isMainDungeon or isWaveDefense then
+
 Tabs.Main:AddParagraph({
         Title = "Auto Leave",
         Content = ""
-    })
-
-if isEventDungeon or isMainDungeon or isWaveDefense then
-Tabs.Main:AddParagraph({
-        Title = "Auto Leave",
-        Content = "this will be cool at lobby auto create dungeon"
     })
 
 local backpack = rightSideFrame:WaitForChild("Backpack")
