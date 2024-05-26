@@ -1113,6 +1113,16 @@ end
 
 end
 
+function skipmissingquest()
+if questslot1== "Shopper" or questslot1 == "Blacksmith" or questslot1 == "Magic Merchant" or questslot1 == "Use Scrolls" or questslot1 == "Power Scroll" or questslot1 == "Rename Item" then
+game:GetService("ReplicatedStorage").Shared.Remotes.Data.SkipQuest:FireServer(1)
+end
+
+if questslot2== "Shopper" or questslot2 == "Blacksmith" or questslot2 == "Magic Merchant" or questslot2 == "Use Scrolls" or questslot2 == "Power Scroll" or questslot2 == "Rename Item" then
+game:GetService("ReplicatedStorage").Shared.Remotes.Data.SkipQuest:FireServer(2)
+end
+end
+
 -- Troubleshooting Ui library
 local Fluent = loadstring(game:HttpGet("https://github.com/dawid-scripts/Fluent/releases/latest/download/main.lua"))()
 local SaveManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/dawid-scripts/Fluent/master/Addons/SaveManager.lua"))()
@@ -1135,8 +1145,8 @@ Fluent:Notify({
     })
     
 local Window = Fluent:CreateWindow({
-    Title = "Unknown Hub X TQ",
-    SubTitle = "V4.7 (Lobby) discord.gg/d2a3KkTD6r",
+    Title = "Unknown Hub X TQ ",
+    SubTitle = "V4.7 (Lobby) (REMAKE LOADER) discord.gg/d2a3KkTD6r",
     TabWidth = 160,
     Size = UDim2.fromOffset(580, 460),
     Acrylic = true, -- The blur may be detectable, setting this to false disables blur entirely
@@ -1146,7 +1156,12 @@ local Window = Fluent:CreateWindow({
 
 local Tabs = {
     Main = Window:AddTab({ Title = "Misc-Lobby", Icon = "rbxassetid://7734068321" }),
+    Quest = Window:AddTab({ Title = "Auto Quest", Icon = "rbxassetid://7733793319" }),
+    Teleports = Window:AddTab({ Title = "Teleports", Icon = "rbxassetid://7734037723" }),
+    Settings = Window:AddTab({ Title = "Settings", Icon = "rbxassetid://7734052335" }),
 }
+
+-- Main
 
 -- Define toggle settings in _G
 _G.Setting = {
@@ -1595,22 +1610,24 @@ UltimateToggle:OnChanged(function(Value)
     toggleBankCallback("Transfer_Ultimate", Value)
 end)
 
-local Tabs = {
-    Main = Window:AddTab({ Title = "Auto-Quest", Icon = "rbxassetid://7733793319" }),
-}
+-- Quest
 
-Tabs.Main:AddParagraph({
+Tabs.Quest:AddParagraph({
         Title = "Auto Quest (BETA)",
         Content = " "
     })
 
 local AutoQuestToggle = false
+local skipquest = false
 
-local Toggle = Tabs.Main:AddToggle("AutoQuest", {Title = "Auto Quest", Default = false })
+local Toggle = Tabs.Quest:AddToggle("AutoQuest", {Title = "Auto Quest", Default = false })
 
     Toggle:OnChanged(function(QuestValue)
     AutoQuestToggle = QuestValue
    while AutoQuestToggle and wait(1) do
+ if skipquest then
+ skipmissingquest()
+ end
  if not playtime_3 then
  AutoQuestCombo()
  StartAutoQuest2()
@@ -1631,7 +1648,7 @@ StartAutoQuest()
  end
 end)
 
-Tabs.Main:AddInput("QuestDiffculty", {
+Tabs.Quest:AddInput("QuestDiffculty", {
     Title = "Quest Difficulty",
     Default = QuestDiffculty,
     Placeholder = "Enter a Difficulty Pls",
@@ -1642,12 +1659,12 @@ Tabs.Main:AddInput("QuestDiffculty", {
     end
 })
 
-Tabs.Main:AddParagraph({
+Tabs.Quest:AddParagraph({
         Title = "Playtime Quest",
         Content = " "
     })
     
-local Dropdown = Tabs.Main:AddDropdown("PlaytimeMode", {
+local Dropdown = Tabs.Quest:AddDropdown("PlaytimeMode", {
         Title = "Playtime Quest",
         Values = {"AFK Lobby Mode", "Custom Farm Mode", "Auto Quest While Playtime"},
         Multi = false,
@@ -1660,12 +1677,12 @@ Dropdown:OnChanged(function(Value2)
 		Playtime_3 = Value2
     end)
     
-Tabs.Main:AddParagraph({
+Tabs.Quest:AddParagraph({
         Title = "Secret Shop Quest",
         Content = " "
     })
 
-local Dropdown = Tabs.Main:AddDropdown("SecretShopMode", {
+local Dropdown = Tabs.Quest:AddDropdown("SecretShopMode", {
         Title = "Secret Shop Quest",
         Values = {"Coral Kingdom", "Daring Dojo", "Fiery Fortress"},
         Multi = false,
@@ -1677,17 +1694,41 @@ Dropdown:OnChanged(function(Value)
 		SecretShop_2 = Value
 		SecretShop_3 = Value
     end)
+    
+local Dropdown = Tabs.Quest:AddDropdown("ShopRarity", {
+        Title = "Auto Buy Shop Quest (WIP)",
+        Values = {"Common", "Rare", "Legendary", "Mythical", "Ultimate"},
+        Multi = false,
+        Default = 1,
+    })
+ 
+Dropdown:OnChanged(function(RaritySelected)
+        ShopCommon = RaritySelected
+		ShopRare = RaritySelected
+		ShopLegendary = RaritySelected
+		ShopMythic = RaritySelected
+		ShopUltimate = RaritySelected
+    end)
 
-Tabs.Main:AddParagraph({
+Tabs.Quest:AddParagraph({
+        Title = "Toggles",
+        Content = " "
+    })
+
+local AutoSkip = Tabs.Quest:AddToggle("AutoSkipQuest", {Title = "Auto Skip When Missing Quest", Default = false })
+
+AutoSkip:OnChanged(function(Value)
+    skipquest = Value
+end)
+
+Tabs.Quest:AddParagraph({
         Title = "Releasing in June 12!",
         Content = "WIP :( (yep)"
     })
+    
+-- Teleports
 
-local Tabs = {
-    Main = Window:AddTab({ Title = "Teleport", Icon = "rbxassetid://7734037723" }),
-}
-
-Tabs.Main:AddButton({
+Tabs.Teleports:AddButton({
         Title = "Teleport Lobby Spawnpoint",
         Description = "",
         Callback = function()
@@ -1695,7 +1736,7 @@ game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(597.041,
         end
     })
 
-Tabs.Main:AddButton({
+Tabs.Teleports:AddButton({
         Title = "Teleport All Elemental Sword",
         Description = "Newbie User Only",
         Callback = function()
@@ -1735,7 +1776,7 @@ warn("All sword already get")
         end
     })
 
-Tabs.Main:AddButton({
+Tabs.Teleports:AddButton({
         Title = "Daily Rewards",
         Description = "",
         Callback = function()
@@ -1743,7 +1784,7 @@ game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(558.265,
         end
     })
 
-Tabs.Main:AddButton({
+Tabs.Teleports:AddButton({
         Title = "Spin Wheel",
         Description = "",
         Callback = function()
@@ -1751,7 +1792,7 @@ game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(523.958,
         end
     })
 
-Tabs.Main:AddButton({
+Tabs.Teleports:AddButton({
         Title = "Quest Rewards",
         Description = "",
         Callback = function()
@@ -1759,7 +1800,7 @@ game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(550.858,
         end
     })
 
-Tabs.Main:AddButton({
+Tabs.Teleports:AddButton({
         Title = "Daily Quest",
         Description = "",
         Callback = function()
@@ -1767,7 +1808,7 @@ game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(547.629,
         end
     })
 
-Tabs.Main:AddButton({
+Tabs.Teleports:AddButton({
         Title = "Weapon Shop",
         Description = "",
         Callback = function()
@@ -1775,7 +1816,7 @@ game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(561.511,
         end
     })
 
-Tabs.Main:AddButton({
+Tabs.Teleports:AddButton({
         Title = "Event Shop",
         Description = "",
         Callback = function()
@@ -1783,7 +1824,7 @@ game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(620.034,
         end
     })
 
-Tabs.Main:AddButton({
+Tabs.Teleports:AddButton({
         Title = "Food Cart",
         Description = "",
         Callback = function()
@@ -1791,7 +1832,7 @@ game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(717.144,
         end
     })
 
-Tabs.Main:AddButton({
+Tabs.Teleports:AddButton({
         Title = "Heroic Shop",
         Description = "",
         Callback = function()
@@ -1799,7 +1840,7 @@ game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(910.215,
         end
     })
 
-Tabs.Main:AddButton({
+Tabs.Teleports:AddButton({
         Title = "The Emporium",
         Description = "",
         Callback = function()
@@ -1807,7 +1848,7 @@ game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(758.942,
         end
     })
 
-Tabs.Main:AddButton({
+Tabs.Teleports:AddButton({
         Title = "Magic Merchant Shop",
         Description = "",
         Callback = function()
@@ -1815,7 +1856,7 @@ game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(550.498,
         end
     })
 
-Tabs.Main:AddButton({
+Tabs.Teleports:AddButton({
         Title = "Bank",
         Description = "",
         Callback = function()
@@ -1823,19 +1864,17 @@ game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(640.346,
         end
     })
 
-Tabs.Main:AddButton({
+Tabs.Teleports:AddButton({
         Title = "Blacksmith",
         Description = "",
         Callback = function()
 game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(660.68, 307.592, 497.431)
         end
     })
- 
- local Tabs = {
-    Config = Window:AddTab({ Title = "Save Config", Icon = "rbxassetid://7734052335" }),
-}
- 
-Tabs.Config:AddParagraph({
+
+-- Settings
+
+Tabs.Settings:AddParagraph({
         Title = "Save Config",
         Content = " "
     })
@@ -1850,8 +1889,8 @@ SaveManager:SetIgnoreIndexes({})
 InterfaceManager:SetFolder("UnknownTQHub")
 SaveManager:SetFolder("UnknownTQHub/TreasureQuest_Lobby")
 
-InterfaceManager:BuildInterfaceSection(Tabs.Config)
-SaveManager:BuildConfigSection(Tabs.Config)
+InterfaceManager:BuildInterfaceSection(Tabs.Settings)
+SaveManager:BuildConfigSection(Tabs.Settings)
 
 Window:SelectTab(1)
 
