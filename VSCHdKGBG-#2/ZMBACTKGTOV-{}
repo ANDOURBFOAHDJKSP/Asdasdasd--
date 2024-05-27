@@ -1,0 +1,461 @@
+local openshit = Instance.new("ScreenGui")
+local mainopen = Instance.new("TextButton")
+local mainopens = Instance.new("UICorner")
+local loki = Instance.new("ImageLabel")
+local posto = Instance.new("UIStroke")
+
+openshit.Name = "openshit"
+openshit.Parent = game:GetService("Players").LocalPlayer:WaitForChild("PlayerGui")
+openshit.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+openshit.ResetOnSpawn = false
+
+mainopen.Name = "mainopen"
+mainopen.Parent = openshit
+mainopen.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
+mainopen.Position = UDim2.new(0.101969875, 0, 0.110441767, 0)
+mainopen.Size = UDim2.new(0, 64, 0, 42)
+mainopen.Text = " "
+mainopen.Visible = true
+
+mainopens.Parent = mainopen
+ 
+loki.Name = "loki"
+loki.Parent = mainopen
+loki.BackgroundColor3 = Color3.fromRGB(224,224,224)
+loki.BackgroundTransparency = 1.000
+loki.Position = UDim2.new(-0.0529999994, 0, -0.244000003, 0)
+loki.Size = UDim2.new(0, 69, 0, 62)
+loki.Image = "rbxassetid://17339439921"
+ 
+posto.Name = "posto"
+posto.Parent = mainopen
+posto.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+posto.Color = Color3.fromRGB(224,224,224)
+posto.LineJoinMode = Enum.LineJoinMode.Round
+posto.Thickness = 1
+posto.Transparency = 0
+posto.Enabled = true
+posto.Archivable = true
+ 
+local UserInputService = game:GetService("UserInputService")
+local TweenService = game:GetService("TweenService")
+ 
+local function MakeDraggable(topbarobject, object)
+    local Dragging = nil
+    local DragInput = nil
+    local DragStart = nil
+    local StartPosition = nil
+    
+    local function Update(input)
+        local Delta = input.Position - DragStart
+        local pos = UDim2.new(StartPosition.X.Scale, StartPosition.X.Offset + Delta.X, StartPosition.Y.Scale, StartPosition.Y.Offset + Delta.Y)
+        local Tween = TweenService:Create(object, TweenInfo.new(0.15), {
+            Position = pos
+        })
+        Tween:Play()
+    end
+    
+    topbarobject.InputBegan:Connect(
+        function(input)
+            if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+                Dragging = true
+                DragStart = input.Position
+                StartPosition = object.Position
+                
+                input.Changed:Connect(
+                    function()
+                        if input.UserInputState == Enum.UserInputState.End then
+                            Dragging = false
+                        end
+                    end
+                )
+            end
+        end
+    )
+    
+    topbarobject.InputChanged:Connect(
+        function(input)
+            if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
+                DragInput = input
+            end
+        end
+    )
+    
+    UserInputService.InputChanged:Connect(
+        function(input)
+            if input == DragInput and Dragging then
+                Update(input)
+            end
+        end
+    )
+end
+
+MakeDraggable(mainopen, mainopen) -- Making the button draggable
+
+mainopen.MouseButton1Click:Connect(function()
+    game:GetService("VirtualInputManager"):SendKeyEvent(true, "LeftControl", false, game)
+    game:GetService("VirtualInputManager"):SendKeyEvent(false, "LeftControl", false, game)
+end)
+
+local player = game:GetService("Players").LocalPlayer
+local RunService = game:GetService("RunService")
+
+local fpsCounter = Instance.new("ScreenGui")
+fpsCounter.Parent = game.CoreGui
+fpsCounter.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+fpsCounter.ResetOnSpawn = false
+
+local label = Instance.new("TextLabel")
+label.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+label.BackgroundTransparency = 1.000
+label.TextColor3 = Color3.fromRGB(255, 255, 255)
+label.Font = Enum.Font.GothamBlack
+label.Size = UDim2.new(0, 150, 0, 70)
+label.Position = UDim2.new(0, 200, 0, 10)
+label.Text = "FPS: 0\nTime Played: 0h 0m 0s"
+label.TextSize = 10
+label.Parent = fpsCounter
+
+local startTime = tick()
+local lastUpdateTime = tick()
+local frameCount = 0
+
+RunService.RenderStepped:Connect(function()
+    local currentTime = tick()
+    local deltaTime = currentTime - lastUpdateTime
+    frameCount = frameCount + 1
+
+    if deltaTime >= 1 then
+        local fps = math.round(frameCount / deltaTime)
+        local elapsedTime = currentTime - startTime
+
+        local hours = math.floor(elapsedTime / 3600)
+        local minutes = math.floor((elapsedTime % 3600) / 60)
+        local seconds = math.floor(elapsedTime % 60)
+
+        label.Text = "FPS: " .. fps .. "\nTime Played: " .. hours .. "h " .. minutes .. "m " .. seconds .. "s"
+
+        lastUpdateTime = currentTime
+        frameCount = 0
+    end
+end)
+
+local workspace = game:GetService("Workspace")
+local Players = game:GetService("Players")
+local Player = game:GetService("Players").LocalPlayer
+local player = Player
+local targetFolders = {
+    workspace.enemies,
+    workspace.deadenemies,
+    workspace.BossFolder
+}
+
+function KillZombies(weapontype,partaim)
+if weapontype == "gun" then
+game:GetService("ReplicatedStorage").Gun:FireServer({["Normal"] = Vector3.new(0,0,0),["Direction"] = getNearest()[partaim].Position,["Name"] = getEquippedWeapon(game.Players.LocalPlayer),["Hit"] = getNearest()[partaim],["Origin"] = getNearest()[partaim].Position,["Pos"] = getNearest()[partaim].Position})
+elseif weapontype == "melee" then
+game:GetService("ReplicatedStorage")["forhackers"]:InvokeServer("hit",getEquippedWeapon(game.Players.LocalPlayer),getNearest()[partaim])
+else
+	return "INVALID WEAPON TYPE"
+end
+end
+
+function AddTable(TableTrigger,LocalTrigger)
+        for _,v in pairs(TableTrigger:GetChildren()) do
+            table.insert(LocalTrigger,v.Name)
+        end
+       end
+       
+
+local function getNearest()
+    local nearest, dist = nil, 999999999 -- Set a very large initial distance
+    for _, v in pairs(game.Workspace.BossFolder:GetDescendants()) do
+        if v:FindFirstChild("Head") then
+            local m = (Player.Character.Head.Position - v.Head.Position).magnitude
+            if m < dist then
+                dist = m
+                nearest = v
+            end
+        end
+    end
+    for _, v in pairs(game.Workspace.enemies:GetDescendants()) do
+        if v:FindFirstChild("Head") then
+            local m = (Player.Character.Head.Position - v.Head.Position).magnitude
+            if m < dist then
+                dist = m
+                nearest = v
+            end
+        end
+    end
+    return nearest
+end
+
+print("HWID FOUND!")
+
+print("-- Fast Main Loader V3")
+print("-- Unknown Hub X 1/3: Checking Game...")
+
+print("-- Unknown Hub X 2/3: Getting Service...")
+
+print("-- Unknown Hub X 3/3 Exploit Support...")
+
+print("Main Loaded")
+
+local Fluent = loadstring(game:HttpGet("https://github.com/dawid-scripts/Fluent/releases/latest/download/main.lua"))()
+local SaveManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/dawid-scripts/Fluent/master/Addons/SaveManager.lua"))()
+local InterfaceManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/dawid-scripts/Fluent/master/Addons/InterfaceManager.lua"))()
+
+local Window = Fluent:CreateWindow({
+    Title = "Unknown Hub X Zombie Attack V2",
+    SubTitle = "Made by Guesttester_1",
+    TabWidth = 160,
+    Size = UDim2.fromOffset(580, 460),
+    Acrylic = true, -- The blur may be detectable, setting this to false disables blur entirely
+    Theme = "Dark",
+    MinimizeKey = Enum.KeyCode.LeftControl -- Used when theres no MinimizeKeybind
+})
+
+local Options = Fluent.Options
+
+--Fluent provides Lucide Icons https://lucide.dev/icons/ for the tabs, icons are optional
+local Tabs = {
+    Farming = Window:AddTab({ Title = "Farming", Icon = " " }),
+    Zombie = Window:AddTab({ Title = "Zombie Mods", Icon = " " }),
+    Tool = Window:AddTab({ Title = "Tool Mods", Icon = " " }),
+    Settings = Window:AddTab({ Title = "Settings", Icon = "settings" })
+}
+
+-- Farming
+
+Tabs.Farming:AddParagraph({
+        Title = "Farmings",
+        Content = " "
+    })
+    
+  local normalgrav = workspace.Gravity
+  
+  local Toggle = Tabs.Farming:AddToggle("FarmZombie", {Title = "Auto Farm Zombie", Default = false })
+
+    Toggle:OnChanged(function(bool)
+        _G._tp_farm = bool
+if _G._tp_farm == true then
+	workspace.Gravity = 0
+else
+	workspace.Gravity = normalgrav
+end
+
+local near = getNearest()
+
+local groundDistance = 12
+
+function farmzombie()
+if _G._tp_farm == true then
+if _G._userGun == true and near then
+-- game:GetService("Workspace").CurrentCamera.CFrame = CFrame.new(game:GetService("Workspace").CurrentCamera.CFrame.p, getNearest().Head.Position)
+Player.Character.HumanoidRootPart.CFrame = (getNearest().HumanoidRootPart.CFrame * CFrame.new(0, groundDistance, 10))
+game:GetService("ReplicatedStorage")["forhackers"]:InvokeServer("hit",getEquippedWeapon(Player),getNearest()[_G._ZombieKillPart])
+else
+-- game:GetService("Workspace").CurrentCamera.CFrame = CFrame.new(game:GetService("Workspace").CurrentCamera.CFrame.p, getNearest().Head.Position)
+Player.Character.HumanoidRootPart.CFrame = (getNearest().HumanoidRootPart.CFrame * CFrame.new(0, groundDistance, 10))
+game.ReplicatedStorage.Gun:FireServer({["Normal"] = Vector3.new(0, 0, 0), ["Direction"] = getNearest()[_G._ZombieKillPart].Position, ["Name"] = getEquippedWeapon(Player), ["Hit"] = getNearest()[_G._ZombieKillPart], ["Origin"] = getNearest()[_G._ZombieKillPart].Position, ["Pos"] = getNearest()[_G._ZombieKillPart].Position,})
+end
+end
+end
+
+repeat
+wait(.2)
+spawn(farmzombie)
+until not _G._tp_farm == true
+    end)
+    
+local AutoCollectSystemIndic2 = false
+
+local Toggle = Tabs.Farming:AddToggle("CollectPowers", {Title = "Auto Collect Power Ups", Default = false })
+
+    Toggle:OnChanged(function(State)
+        AutoCollectSystemIndic2 = State
+workspace.Powerups.ChildAdded:Connect(function(variable)
+game:GetService("RunService").Heartbeat:Connect(function()
+if AutoCollectSystemIndic2 == true then
+for i,v in pairs(variable:GetDescendants()) do
+	if v:IsA("Part") or v:IsA("BasePart") then
+	v.CFrame = CFrame.new(Player.Character.Torso.Position + Vector3.new(0, 0, 0.8))
+	v.Position = Player.Character.Torso.Position + Vector3.new(0, 0, 0.8)
+	v.CanCollide = false
+	RunService.Heartbeat:Wait()
+	end
+	end
+	end
+    end)
+    end)
+    end)
+    
+local Toggle = Tabs.Farming:AddToggle("ClaimMission", {Title = "Auto Claim Mission", Default = false })
+
+    Toggle:OnChanged(function(State)
+        _G._claimUserMission = State
+	while wait() do
+		if _G._claimUserMission == false then break end
+			game:GetService("ReplicatedStorage")["RemoteEventContainer"]["CommunicationF"]:InvokeServer("claimReward",1)
+			game:GetService("ReplicatedStorage")["RemoteEventContainer"]["CommunicationF"]:InvokeServer("claimReward",2)
+			game:GetService("ReplicatedStorage")["RemoteEventContainer"]["CommunicationF"]:InvokeServer("claimReward",3)
+			game:GetService("ReplicatedStorage")["RemoteEventContainer"]["CommunicationF"]:InvokeServer("claimReward",4)
+			game:GetService("ReplicatedStorage")["RemoteEventContainer"]["CommunicationF"]:InvokeServer("claimReward",5)
+			game:GetService("ReplicatedStorage")["RemoteEventContainer"]["CommunicationF"]:InvokeServer("claimReward",6)
+			game:GetService("ReplicatedStorage")["RemoteEventContainer"]["CommunicationF"]:InvokeServer("claimReward",7)
+			game:GetService("ReplicatedStorage")["RemoteEventContainer"]["CommunicationF"]:InvokeServer("claimReward",8)
+			game:GetService("ReplicatedStorage")["RemoteEventContainer"]["CommunicationF"]:InvokeServer("claimReward",9)
+			game:GetService("ReplicatedStorage")["RemoteEventContainer"]["CommunicationF"]:InvokeServer("claimReward",10)
+			game:GetService("ReplicatedStorage")["RemoteEventContainer"]["CommunicationF"]:InvokeServer("claimReward",11)
+			game:GetService("ReplicatedStorage")["RemoteEventContainer"]["CommunicationF"]:InvokeServer("claimReward",12)
+			game:GetService("ReplicatedStorage")["RemoteEventContainer"]["CommunicationF"]:InvokeServer("claimReward",13)
+			game:GetService("ReplicatedStorage")["RemoteEventContainer"]["CommunicationF"]:InvokeServer("claimReward",14)
+			game:GetService("ReplicatedStorage")["RemoteEventContainer"]["CommunicationF"]:InvokeServer("claimReward",15)
+			game:GetService("ReplicatedStorage")["RemoteEventContainer"]["CommunicationF"]:InvokeServer("claimReward",16)
+			game:GetService("ReplicatedStorage")["RemoteEventContainer"]["CommunicationF"]:InvokeServer("claimReward",17)
+			game:GetService("ReplicatedStorage")["RemoteEventContainer"]["CommunicationF"]:InvokeServer("claimReward",18)
+			game:GetService("ReplicatedStorage")["RemoteEventContainer"]["CommunicationF"]:InvokeServer("claimReward",19)
+			game:GetService("ReplicatedStorage")["RemoteEventContainer"]["CommunicationF"]:InvokeServer("claimReward",20)
+			game:GetService("ReplicatedStorage")["RemoteEventContainer"]["CommunicationF"]:InvokeServer("claimReward",21)
+			game:GetService("ReplicatedStorage")["RemoteEventContainer"]["CommunicationF"]:InvokeServer("claimReward",22)
+			game:GetService("ReplicatedStorage")["RemoteEventContainer"]["CommunicationF"]:InvokeServer("claimReward",23)
+			game:GetService("ReplicatedStorage")["RemoteEventContainer"]["CommunicationF"]:InvokeServer("claimReward",24)
+			game:GetService("ReplicatedStorage")["RemoteEventContainer"]["CommunicationF"]:InvokeServer("claimReward",25)
+			game:GetService("ReplicatedStorage")["RemoteEventContainer"]["CommunicationF"]:InvokeServer("claimReward",26)
+			game:GetService("ReplicatedStorage")["RemoteEventContainer"]["CommunicationF"]:InvokeServer("claimReward",27)
+			game:GetService("ReplicatedStorage")["RemoteEventContainer"]["CommunicationF"]:InvokeServer("claimReward",28)
+			game:GetService("ReplicatedStorage")["RemoteEventContainer"]["CommunicationF"]:InvokeServer("claimReward",29)
+	end
+    end)
+    
+local Toggle = Tabs.Farming:AddToggle("ClearMission", {Title = "Auto Discard Mission", Default = false })
+
+    Toggle:OnChanged(function(State)
+        _G._discardUserMission = State
+	while wait() do
+		if _G._discardUserMission == false then break end
+			game:GetService("ReplicatedStorage")["RemoteEventContainer"]["CommunicationF"]:InvokeServer("discardTask",1)
+			game:GetService("ReplicatedStorage")["RemoteEventContainer"]["CommunicationF"]:InvokeServer("discardTask",2)
+			game:GetService("ReplicatedStorage")["RemoteEventContainer"]["CommunicationF"]:InvokeServer("discardTask",3)
+			game:GetService("ReplicatedStorage")["RemoteEventContainer"]["CommunicationF"]:InvokeServer("discardTask",4)
+			game:GetService("ReplicatedStorage")["RemoteEventContainer"]["CommunicationF"]:InvokeServer("discardTask",5)
+			game:GetService("ReplicatedStorage")["RemoteEventContainer"]["CommunicationF"]:InvokeServer("discardTask",6)
+			game:GetService("ReplicatedStorage")["RemoteEventContainer"]["CommunicationF"]:InvokeServer("discardTask",7)
+			game:GetService("ReplicatedStorage")["RemoteEventContainer"]["CommunicationF"]:InvokeServer("discardTask",8)
+			game:GetService("ReplicatedStorage")["RemoteEventContainer"]["CommunicationF"]:InvokeServer("discardTask",9)
+			game:GetService("ReplicatedStorage")["RemoteEventContainer"]["CommunicationF"]:InvokeServer("discardTask",10)
+			game:GetService("ReplicatedStorage")["RemoteEventContainer"]["CommunicationF"]:InvokeServer("discardTask",11)
+			game:GetService("ReplicatedStorage")["RemoteEventContainer"]["CommunicationF"]:InvokeServer("discardTask",12)
+			game:GetService("ReplicatedStorage")["RemoteEventContainer"]["CommunicationF"]:InvokeServer("discardTask",13)
+			game:GetService("ReplicatedStorage")["RemoteEventContainer"]["CommunicationF"]:InvokeServer("discardTask",14)
+			game:GetService("ReplicatedStorage")["RemoteEventContainer"]["CommunicationF"]:InvokeServer("discardTask",15)
+			game:GetService("ReplicatedStorage")["RemoteEventContainer"]["CommunicationF"]:InvokeServer("discardTask",16)
+			game:GetService("ReplicatedStorage")["RemoteEventContainer"]["CommunicationF"]:InvokeServer("discardTask",17)
+			game:GetService("ReplicatedStorage")["RemoteEventContainer"]["CommunicationF"]:InvokeServer("discardTask",18)
+			game:GetService("ReplicatedStorage")["RemoteEventContainer"]["CommunicationF"]:InvokeServer("discardTask",19)
+			game:GetService("ReplicatedStorage")["RemoteEventContainer"]["CommunicationF"]:InvokeServer("discardTask",20)
+			game:GetService("ReplicatedStorage")["RemoteEventContainer"]["CommunicationF"]:InvokeServer("discardTask",21)
+			game:GetService("ReplicatedStorage")["RemoteEventContainer"]["CommunicationF"]:InvokeServer("discardTask",22)
+			game:GetService("ReplicatedStorage")["RemoteEventContainer"]["CommunicationF"]:InvokeServer("discardTask",23)
+			game:GetService("ReplicatedStorage")["RemoteEventContainer"]["CommunicationF"]:InvokeServer("discardTask",24)
+			game:GetService("ReplicatedStorage")["RemoteEventContainer"]["CommunicationF"]:InvokeServer("discardTask",25)
+			game:GetService("ReplicatedStorage")["RemoteEventContainer"]["CommunicationF"]:InvokeServer("discardTask",26)
+			game:GetService("ReplicatedStorage")["RemoteEventContainer"]["CommunicationF"]:InvokeServer("discardTask",27)
+			game:GetService("ReplicatedStorage")["RemoteEventContainer"]["CommunicationF"]:InvokeServer("discardTask",28)
+			game:GetService("ReplicatedStorage")["RemoteEventContainer"]["CommunicationF"]:InvokeServer("discardTask",29)
+	end
+    end)
+    
+ Tabs.Farming:AddParagraph({
+        Title = "Notification",
+        Content = " "
+    })
+    
+local control = {
+	Money = false,
+	Kill = false,
+	Level = false
+}
+
+    local Toggle = Tabs.Farming:AddToggle("KillNotify", {Title = "Kill Notification", Default = false })
+
+    Toggle:OnChanged(function(State)
+        control.Kill = State
+    end)
+    
+    Options.KillNotify:SetValue(false)
+    
+    local Toggle = Tabs.Farming:AddToggle("LevelNotify", {Title = "Level Notification", Default = false })
+
+    Toggle:OnChanged(function(State)
+        control.Level = State
+    end)
+    
+    Options.LevelNotify:SetValue(false)
+    
+    local Toggle = Tabs.Farming:AddToggle("MoneyNotify", {Title = "Money Notification", Default = false })
+
+    Toggle:OnChanged(function(State)
+        control.Money = State
+    end)
+    
+    Options.MoneyNotify:SetValue(false)
+ 
+ Player.leaderstats.Cash:GetPropertyChangedSignal("Value"):Connect(function()
+if control.Money == true then
+game.StarterGui:SetCore("SendNotification", {
+    Title = "$ Money Notification $",
+    Text = "Money Counted: [ " .. tostring(Player.leaderstats.Cash.Value) .. " ]",
+    Duration = 5
+})
+end
+end)
+
+Player.leaderstats.Kills:GetPropertyChangedSignal("Value"):Connect(function()
+    if control.Kill == true then
+        game.StarterGui:SetCore("SendNotification", {
+            Title = "☠️ Killed Notification ☠️",
+            Text = "Weapon Type: " .. tostring(getEquippedWeapon(Player)) .. "\nKilled Counted: [  " .. tostring(Player.leaderstats.Kills.Value) .. " ]",
+            Duration = 5
+        })
+    end
+end)
+
+
+Player.leaderstats.Level:GetPropertyChangedSignal("Value"):Connect(function()
+if control.Level == true then
+game.StarterGui:SetCore("SendNotification", {
+    Title = "↑ Level Notification ↑",
+    Text = "Level Counted: [ " .. tostring(Player.leaderstats.Level.Value) .. " ]",
+    Duration = 5
+})
+
+end
+end)
+ 
+Tabs.Farming:AddParagraph({
+        Title = "Farming Settings",
+        Content = " "
+    })
+
+local Toggle = Tabs.Farming:AddToggle("AntiAfk", {Title = "Anti-AFK", Default = false })
+
+    Toggle:OnChanged(function()
+local vu = game:GetService("VirtualUser")
+repeat wait() until game:IsLoaded() 
+	game:GetService("Players").LocalPlayer.Idled:connect(function()
+    game:GetService("VirtualUser"):ClickButton2(Vector2.new())
+		vu:Button2Down(Vector2.new(0,0),workspace.CurrentCamera.CFrame)
+		wait(1)
+		vu:Button2Up(Vector2.new(0,0),workspace.CurrentCamera.CFrame)
+     end)
+ end)
+
+Options.AntiAfk:SetValue(true)
+
+local Input = Tabs.Farming:AddInput("Walkspeed", {
+        Title = "Walk Speed",
+        Default = 16,
+        Placeholder = "Placeholder",
+        Numeric = false, -- Only allows numbers
+        Finished = false, -- Only call
