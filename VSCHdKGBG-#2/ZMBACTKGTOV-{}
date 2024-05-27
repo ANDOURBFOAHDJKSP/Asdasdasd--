@@ -628,7 +628,8 @@ Tabs.Zombie:AddParagraph({
         Content = " "
     })
 
-local mainsize = 1
+local mainsize = 10
+local HitboxSize = 9
 
 local BigHead = false
 
@@ -669,6 +670,8 @@ end
 
     Options.BigHead:SetValue(false)
     
+ --[[
+    
 local Slider = Tabs.Zombie:AddSlider("HeadSize", {
         Title = "Zombies Head Size",
         Description = " ",
@@ -682,7 +685,7 @@ local Slider = Tabs.Zombie:AddSlider("HeadSize", {
     })
 
 local HitboxZombies = false
-local HitboxSize = 1
+
 
 local Toggle = Tabs.Zombie:AddToggle("HitboxedZombie", {Title = "Hitbox Zombie", Default = false })
 
@@ -696,7 +699,7 @@ Toggle:OnChanged(function(value2)
                     pcall(function()
                         if value.Name ~= game:GetService("Players").LocalPlayer.Name then
                             value.HumanoidRootPart.Transparency = 0.9
-                            value.HumanoidRootPart.CanCollide = false
+                --            value.HumanoidRootPart.CanCollide = false
                             value.HumanoidRootPart.Size = Vector3.new(HitboxSize, HitboxSize, HitboxSize)
                         end
                     end)
@@ -708,7 +711,7 @@ end)
 
 Options.HitboxedZombie:SetValue(false)
 
-local Slider = Tabs.Zombie:AddSlider("HitboxSize", {
+local Slider = Tabs.Zombie:AddSlider("Hitboxzombie", {
     Title = "Hitbox Size",
     Description = " ",
     Default = 1,
@@ -720,7 +723,8 @@ local Slider = Tabs.Zombie:AddSlider("HitboxSize", {
     end
 })
 
-    
+]]
+
 -- Tool
 
 local camera = workspace.CurrentCamera
@@ -1037,7 +1041,7 @@ Toggle:OnChanged(function(bool)
                 if value:FindFirstChild("HumanoidRootPart") then
                     pcall(function()
                         if value.Name ~= game:GetService("Players").LocalPlayer.Name then
-                            local humanoidrootpart = value:FindFirstChild("HumanoidRootPart")
+                            local humanoidrootpart = value:FindFirstChild("Head")
                             local char = game:GetService("Players").LocalPlayer.Character
                             if humanoidrootpart and char and char:FindFirstChild(KnifeName) then
                                 local distance = (char.HumanoidRootPart.Position - humanoidrootpart.Position).Magnitude
