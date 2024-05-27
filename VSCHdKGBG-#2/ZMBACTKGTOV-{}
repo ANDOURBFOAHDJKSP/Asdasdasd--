@@ -628,8 +628,7 @@ Tabs.Zombie:AddParagraph({
         Content = " "
     })
 
-local mainsize = 12
-local HitboxSize = 10
+local mainsize = 1
 
 local BigHead = false
 
@@ -678,47 +677,49 @@ local Slider = Tabs.Zombie:AddSlider("HeadSize", {
         Max = 30,
         Rounding = 1,
         Callback = function(Value)
-            mainsize = tonumber(Value) or 12
+            mainsize = tonumber(Value) or 1
         end
     })
 
 local HitboxZombies = false
+local HitboxSize = 1
 
 local Toggle = Tabs.Zombie:AddToggle("HitboxedZombie", {Title = "Hitbox Zombie", Default = false })
 
-    Toggle:OnChanged(function(value2)
-HitboxZombies = value2
+Toggle:OnChanged(function(value2)
+    HitboxZombies = value2
 
-while wait(0.2) and HitboxZombies do
-    for _, targetFolder in ipairs(targetFolders) do
-      for _, value in pairs(targetFolder:GetDescendants()) do
-        if value:FindFirstChild("HumanoidRootPart") then
-        pcall(function()
-            if value.Name ~= game:GetService("Players").LocalPlayer.Name then
-                value.HumanoidRootPart.Transparency = 0.9
-                value.HumanoidRootPart.CanCollide = false
-                value.HumanoidRootPart.Size = Vector3.new(HitboxSize, HitboxSize, HitboxSize)
+    while wait(0.2) and HitboxZombies do
+        for _, targetFolder in ipairs(targetFolders) do
+            for _, value in pairs(targetFolder:GetDescendants()) do
+                if value:FindFirstChild("HumanoidRootPart") then
+                    pcall(function()
+                        if value.Name ~= game:GetService("Players").LocalPlayer.Name then
+                            value.HumanoidRootPart.Transparency = 0.9
+                            value.HumanoidRootPart.CanCollide = false
+                            value.HumanoidRootPart.Size = Vector3.new(HitboxSize, HitboxSize, HitboxSize)
+                        end
+                    end)
                 end
-            end)
+            end
         end
     end
-end
-end
-    end)
+end)
 
-    Options.HitboxedZombie:SetValue(false)
-    
+Options.HitboxedZombie:SetValue(false)
+
 local Slider = Tabs.Zombie:AddSlider("HitboxSize", {
-        Title = "Hitbox Size",
-        Description = " ",
-        Default = 1,
-        Min = 1,
-        Max = 30,
-        Rounding = 1,
-        Callback = function(Value)
-            HitboxSize = tonumber(value) or 10
-        end
-    })
+    Title = "Hitbox Size",
+    Description = " ",
+    Default = 1,
+    Min = 1,
+    Max = 30,
+    Rounding = 1,
+    Callback = function(Value)
+        HitboxSize = tonumber(Value) or 1
+    end
+})
+
     
 -- Tool
 
@@ -1057,6 +1058,22 @@ Toggle:OnChanged(function(bool)
 end)
 
 Options.KillAura:SetValue(false)
+
+--[[
+
+local Slider = Tabs.Tool:AddSlider("KnifeRange", {
+    Title = "Kill Aura Range",
+    Description = "",
+    Default = 10,
+    Min = 0,
+    Max = 50,
+    Rounding = 1,
+    Callback = function(Value)
+        KillAuraRange = tonumber(Value) or 10
+    end
+})
+
+]]
 
 -- Settings
 
