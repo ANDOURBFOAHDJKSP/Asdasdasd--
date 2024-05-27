@@ -1042,8 +1042,10 @@ Toggle:OnChanged(function(bool)
                                 local distance = (char.HumanoidRootPart.Position - humanoidrootpart.Position).Magnitude
                                 if distance <= KillAuraRange then
                                     KillZombies("melee", _G._ZombieKillPart)
-                                    firetouchinterest(humanoidrootpart, char:FindFirstChild(KnifeName).Handle, 1)                                  
-                                    firetouchinterest(humanoidrootpart, char:FindFirstChild(KnifeName).Handle, 0)
+                                -- firetouchinterest(humanoidrootpart, char:FindFirstChild(KnifeName).Handle, 1)                                  
+                                --  firetouchinterest(humanoidrootpart, char:FindFirstChild(KnifeName).Handle, 0)
+                                    firetouchinterest(char:FindFirstChild(KnifeName).Handle, humanoidrootpart, 1)                                  
+                                    firetouchinterest(char:FindFirstChild(KnifeName).Handle, humanoidrootpart, 0)
                                 end
                             end
                         end
@@ -1061,7 +1063,7 @@ local Slider = Tabs.Tool:AddSlider("KnifeRange", {
     Description = "",
     Default = 10,
     Min = 0,
-    Max = 100,
+    Max = 50,
     Rounding = 1,
     Callback = function(Value)
         KillAuraRange = tonumber(Value) or 10
