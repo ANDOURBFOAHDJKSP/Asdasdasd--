@@ -14,7 +14,7 @@ mainopen.Parent = openshit
 mainopen.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
 mainopen.Position = UDim2.new(0.101969875, 0, 0.110441767, 0)
 mainopen.Size = UDim2.new(0, 64, 0, 42)
-mainopen.Text = ""
+mainopen.Text = " "
 mainopen.Visible = true
 
 mainopens.Parent = mainopen
@@ -782,15 +782,15 @@ local Options = Fluent.Options
 
 Fluent:Notify({
         Title = "Made by Unknownproooolucky and Guesttester_1",
-        Content = "",
-        SubContent = "", -- Optional
+        Content = " ",
+        SubContent = " ", -- Optional
         Duration = 5 -- Set to nil to make the notification not disappear
     })
    
 Fluent:Notify({
         Title = "Quick Optimzer",
         Content = "Done!",
-        SubContent = "", -- Optional
+        SubContent = " ", -- Optional
         Duration = 10 -- Set to nil to make the notification not disappear
     })
     
@@ -917,7 +917,7 @@ Options.AutoKillMobsWizard:SetValue(false)
 
 Tabs.Main:AddParagraph({
         Title = "Auto Collects",
-        Content = ""
+        Content = " "
     })
 
 local Toggle2 = Tabs.Main:AddToggle("AutoChest", {Title = "Auto Collect Chest", Default = false })
@@ -1030,7 +1030,7 @@ Options.WaveDefenseFarm:SetValue(false)
 
 Tabs.Main:AddParagraph({
         Title = "Auto Collects",
-        Content = ""
+        Content = " "
     })
     
 local questrequest = require(game:GetService("Players").LocalPlayer.PlayerScripts.Shared.Modules.Pages.Quests)
@@ -1066,7 +1066,7 @@ end
    
 Tabs.Main:AddParagraph({
         Title = "Farming Events",
-        Content = ""
+        Content = " "
     })
 
 local Toggle1 = Tabs.Main:AddToggle("WarriorEventFarn", {Title = "Auto Kill Event Mobs (Warrior)", Default = false })
@@ -1248,7 +1248,7 @@ end
 
 Tabs.Main:AddParagraph({
         Title = "Auto Shrine",
-        Content = ""
+        Content = " "
     })
 
 local ToggleShrine = Tabs.Main:AddToggle("TweenToShrine", {Title = "Auto Collect Shrine", Default = false })
@@ -1296,7 +1296,7 @@ if isEventDungeon or isMainDungeon or isWaveDefense then
 
 Tabs.Main:AddParagraph({
         Title = "Auto Leave",
-        Content = ""
+        Content = " "
     })
 
 local backpack = rightSideFrame:WaitForChild("Backpack")
@@ -1423,7 +1423,7 @@ end)
     
 Tabs.Main:AddParagraph({
         Title = "Auto Claim",
-        Content = ""
+        Content = " "
     })
     
 local AutoClaim1 = false
@@ -1441,12 +1441,12 @@ end)
 
 Tabs.Main:AddParagraph({
         Title = "Auto Healing",
-        Content = ""
+        Content = " "
     })
  
  Tabs.Main:AddButton({
     Title = "View Equipped Weapon Data (Button)",
-    Description = "",
+    Description = " ",
     Callback = function()
         local Fightingctrl = require(game:GetService("Players").LocalPlayer.PlayerScripts.Shared.Client.FighterController)
         Window:Dialog({
@@ -1555,7 +1555,7 @@ if isLobby or isMainDungeon or isEventDungeon then
 
 Tabs.Enemies:AddParagraph({
         Title = "Size a Hitbox",
-        Content = ""
+        Content = " "
     })
 
 local RunService = game:GetService("RunService")
@@ -1657,7 +1657,7 @@ local InputTransparency = Tabs.Enemies:AddInput("InputTransparency", {
 
 Tabs.Enemies:AddParagraph({
         Title = "More Things",
-        Content = ""
+        Content = " "
     })
 
 AuraSecond = 1
@@ -1822,7 +1822,7 @@ function generateRandomString()
     local chars = {"q", "w", "e", "r", "t", "y", "u", "i", "o", "p", "a", "s", "d", "f", "g", "h", "j", "k", "l", "z",
                    "x", "c", "v", "b", "n", "m", "1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "X", "A", "B", "V",
                    "R", "I", "O", "P", "L"}
-    local str = ""
+    local str = " "
 
     for i = 1, 16 do
         str = str .. chars[math.random(1, #chars)]
@@ -1892,7 +1892,7 @@ end
 -- Add buttons to the UI
 Tabs.Enemies:AddButton({
     Title = "View Enemies",
-    Description = "",
+    Description = " ",
     Callback = function()
         isUpdatingCamera = true  -- Start the camera update loop
         updateCamera()
@@ -1901,7 +1901,7 @@ Tabs.Enemies:AddButton({
 
 Tabs.Enemies:AddButton({
     Title = "Reset Camera",
-    Description = "",
+    Description = " ",
     Callback = function()
         resetCamera()
         resetCamera2()
@@ -1991,7 +1991,7 @@ if isWaveDefense then
 
 Tabs.Enemies:AddParagraph({
         Title = "Wave Defense Version",
-        Content = ""
+        Content = " "
     })
 
 local xhx, yhx, zhx, txx = 1, 1, 1, 0.5
@@ -2099,7 +2099,7 @@ AuraSecond = 1
 
 Tabs.Enemies:AddParagraph({
         Title = "More Things",
-        Content = ""
+        Content = " "
     })
 
 local Toggle = Tabs.Enemies:AddToggle("KillAuraOptimized", {Title = "Kill Aura (Optimized)", Default = false })
@@ -2302,7 +2302,7 @@ end
 
 Tabs.Character:AddParagraph({
         Title = "Toggles",
-        Content = ""
+        Content = " "
     })
 
 local Toggle = Tabs.Character:AddToggle("AntiAfk", {Title = "Anti-AFK", Default = false })
@@ -2346,7 +2346,7 @@ local function Noclip()
     game:GetService('RunService').RenderStepped:Connect(function()
         if NoClipx then
             pcall(function()
-                for i, v in pairs(game.Players.LocalPlayer.Character:GetChildren()) do
+                for i, v in pairs(game.Players.LocalPlayer.Character:GetDescendants()) do
                     if v:IsA("BasePart") then
                         v.CanCollide = false
                         RunService.RenderStepped:Wait()
@@ -2530,7 +2530,7 @@ spawn(flyLoop)
 
 Tabs.Character:AddParagraph({
         Title = "Mods",
-        Content = ""
+        Content = " "
     })
 
 local SizeWeapon = false
@@ -2551,7 +2551,7 @@ end)
 Tabs.Character:AddInput("SizeWeapon", {
         Title = "Weapon Size",
         Default = "1",
-        Placeholder = "",
+        Placeholder = " ",
         Numeric = false, -- Only allows numbers
         Finished = false, -- Only calls callback when you press enter
         Callback = function(WS_1)
@@ -2584,7 +2584,7 @@ game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = WS
     
     Tabs.Character:AddButton({
         Title = "Reset Walkspeed",
-        Description = "",
+        Description = " ",
         Callback = function()
 game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = 18
         end
@@ -2603,7 +2603,7 @@ game.Players.LocalPlayer.Character.Humanoid.JumpPower = JP
 
 Tabs.Character:AddButton({
         Title = "Reset JumpHeight",
-        Description = "",
+        Description = " ",
         Callback = function()
 game.Players.LocalPlayer.Character.Humanoid.JumpPower = 50
         end
@@ -2720,7 +2720,7 @@ DelayStart = tonumber(delaytest) or 0.1
 
 Tabs.Misc:AddParagraph({
         Title = "Fps Cap",
-        Content = ""
+        Content = " "
     })
 
 local Vav = "500"
@@ -2741,7 +2741,7 @@ setfpscap(500)
 
 Tabs.Misc:AddParagraph({
         Title = "Destroy Misc",
-        Content = ""
+        Content = " "
     })
 
 local function destroyMap2()
@@ -2894,7 +2894,7 @@ Toggle:OnChanged(function(DV3)
                 v.Reflectance = 0
                 v.Transparency = 1
             elseif v:IsA("MeshPart") then
-                v.MeshId = ""
+                v.MeshId = " "
             elseif (v:IsA("Decal") or v:IsA("Texture")) and decalsyeeted then
                 v.Transparency = 1
             elseif v:IsA("ParticleEmitter") or v:IsA("Trail") then
@@ -2992,11 +2992,11 @@ local Toggle = Tabs.Misc:AddToggle("Destroy_Alert", {Title = "Destroy Enemies Al
         if DV5 then
 local target = game:GetService("Players").LocalPlayer.PlayerScripts.Dungeon.UserInterface
 
-target.Alert:WaitForChild("TextLabel").Text = ""
+target.Alert:WaitForChild("TextLabel").Text = " "
 
 local target2 = game:GetService("Players").LocalPlayer.PlayerScripts.Shared.UserInterface
 
-target2.DamageEffect:WaitForChild("TextLabel").Text = ""
+target2.DamageEffect:WaitForChild("TextLabel").Text = " "
         end
     end)
 
@@ -3004,7 +3004,7 @@ Options.Destroy_Alert:SetValue(false)
 
 Tabs.Misc:AddParagraph({
         Title = "Fps Booster and Anti-Lags",
-        Content = ""
+        Content = " "
     })
 
 local Lag1 = false
@@ -3222,7 +3222,7 @@ Options.Destroy_Sky:SetValue(false)
 
 Tabs.Misc:AddButton({
         Title = "White Screen (ON)",
-        Description = "",
+        Description = " ",
         Callback = function()
 game:GetService("RunService"):Set3dRenderingEnabled(false)
         end
@@ -3230,7 +3230,7 @@ game:GetService("RunService"):Set3dRenderingEnabled(false)
 
 Tabs.Misc:AddButton({
         Title = "White Screen (OFF)",
-        Description = "",
+        Description = " ",
         Callback = function()
 game:GetService("RunService"):Set3dRenderingEnabled(true)
         end
@@ -3243,7 +3243,7 @@ Tabs.Misc:AddParagraph({
 
 Tabs.Misc:AddParagraph({
         Title = "Coral Kingdom",
-        Content = ""
+        Content = " "
     })
 
 local BuyitemCK = false
@@ -3310,7 +3310,7 @@ BuyitemCK = value
 
 Tabs.Misc:AddParagraph({
         Title = "Daring Dojo",
-        Content = ""
+        Content = " "
     })
 
 local BuyitemDD = false
@@ -3372,7 +3372,7 @@ BuyitemDD = value
 
 Tabs.Misc:AddParagraph({
         Title = "Fiery Fortress",
-        Content = ""
+        Content = " "
     })
 
 local BuyitemFF = false
