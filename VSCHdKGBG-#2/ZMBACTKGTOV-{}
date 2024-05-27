@@ -458,4 +458,637 @@ local Input = Tabs.Farming:AddInput("Walkspeed", {
         Default = 16,
         Placeholder = "Placeholder",
         Numeric = false, -- Only allows numbers
-        Finished = false, -- Only call
+        Finished = false, -- Only calls callback when you press enter
+        Callback = function(WS)
+game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = WS
+        end
+    })
+    
+local Input = Tabs.Farming:AddInput("Jumppower", {
+        Title = "Jump Power",
+        Default = 50,
+        Placeholder = "Placeholder",
+        Numeric = false, -- Only allows numbers
+        Finished = false, -- Only calls callback when you press enter
+        Callback = function(JP)
+game.Players.LocalPlayer.Character.Humanoid.JumpPower = JP
+        end
+    })
+
+local Slider = Tabs.Farming:AddSlider("GroundDistance", {
+        Title = "Ground Distance",
+        Description = "",
+        Default = 12,
+        Min = 0,
+        Max = 30,
+        Rounding = 1,
+        Callback = function(Value)
+            groundDistance = tonumber(Value) or 12
+        end
+    })
+
+-- Zombie
+
+Tabs.Zombie:AddParagraph({
+        Title = "Zombie ESP",
+        Content = " "
+    })
+
+local ESP = false
+
+local Toggle = Tabs.Zombie:AddToggle("EspZombie", {Title = "Esp Zombie", Default = false })
+
+    Toggle:OnChanged(function(bool)
+ESP = bool
+
+spawn(function()
+    while wait(0.2) do
+        pcall(function()
+            if ESP then
+                for i, v in pairs(game:GetService("Workspace").enemies:GetChildren()) do
+                    if v:FindFirstChild('HumanoidRootPart') then
+                        local evilHumanoid = v:FindFirstChild("Humanoid")  -- Change "Humanoid" to "EvilHumanoid"
+                        
+                        if not v:FindFirstChild("MobEap") then
+                            local BillboardGui = Instance.new("BillboardGui")
+                            local TextLabel = Instance.new("TextLabel")
+
+                            BillboardGui.Parent = v
+                            BillboardGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+                            BillboardGui.Active = true
+                            BillboardGui.Name = "MobEap"
+                            BillboardGui.AlwaysOnTop = true
+                            BillboardGui.LightInfluence = 1.000
+                            BillboardGui.Size = UDim2.new(0, 200, 0, 50)
+                            BillboardGui.StudsOffset = Vector3.new(0, 2.5, 0)
+
+                            TextLabel.Parent = BillboardGui
+                            TextLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+                            TextLabel.BackgroundTransparency = 1.000
+                            TextLabel.Size = UDim2.new(0, 200, 0, 50)
+                            TextLabel.TextScaled = false
+                            TextLabel.TextColor3 = Color3.fromRGB(0, 255, 0)
+                            TextLabel.Font = Enum.Font.GothamBold
+                            TextLabel.TextSize = 14  -- Adjust the text size to your preference
+
+                            v.MobEap = BillboardGui  -- Store the BillboardGui in MobEap for later use
+                        end
+
+                        local distance = math.floor((game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.HumanoidRootPart.Position).Magnitude)
+
+                        if evilHumanoid then
+                            local health = math.floor(evilHumanoid.Health)
+                            v.MobEap.TextLabel.Text = v.Name.." - "..distance.." M\nHealth: "..health
+                        else
+                            v.MobEap.TextLabel.Text = v.Name.." - "..distance.." M"
+                        end
+                    end
+                end
+            else
+                for i, v in pairs(game:GetService("Workspace").enemies:GetChildren()) do
+                    if v:FindFirstChild("MobEap") then
+                        v.MobEap:Destroy()
+                    end
+                end
+            end
+        end)
+    end
+end)
+    end)
+
+    Options.EspZombie:SetValue(false)
+    
+    
+ local ESP2 = false
+ 
+local Toggle = Tabs.Zombie:AddToggle("EspBoss", {Title = "Esp Boss", Default = false })
+
+    Toggle:OnChanged(function(bool)
+        ESP2 = bool
+
+spawn(function()
+    while wait(0.2) do
+        pcall(function()
+            if ESP2 then
+                for i, v in pairs(game:GetService("Workspace").BossFolder:GetChildren()) do
+                    if v:FindFirstChild('HumanoidRootPart') then
+                        local evilHumanoid = v:FindFirstChild("Humanoid")  -- Change "Humanoid" to "EvilHumanoid"
+                        
+                        if not v:FindFirstChild("MobEap") then
+                            local BillboardGui = Instance.new("BillboardGui")
+                            local TextLabel = Instance.new("TextLabel")
+
+                            BillboardGui.Parent = v
+                            BillboardGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+                            BillboardGui.Active = true
+                            BillboardGui.Name = "MobEap"
+                            BillboardGui.AlwaysOnTop = true
+                            BillboardGui.LightInfluence = 1.000
+                            BillboardGui.Size = UDim2.new(0, 200, 0, 50)
+                            BillboardGui.StudsOffset = Vector3.new(0, 2.5, 0)
+
+                            TextLabel.Parent = BillboardGui
+                            TextLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+                            TextLabel.BackgroundTransparency = 1.000
+                            TextLabel.Size = UDim2.new(0, 200, 0, 50)
+                            TextLabel.TextScaled = false
+                            TextLabel.TextColor3 = Color3.fromRGB(255, 0, 0)
+                            TextLabel.Font = Enum.Font.GothamBold
+                            TextLabel.TextSize = 14  -- Adjust the text size to your preference
+
+                            v.MobEap = BillboardGui  -- Store the BillboardGui in MobEap for later use
+                        end
+
+                        local distance = math.floor((game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.HumanoidRootPart.Position).Magnitude)
+
+                        if evilHumanoid then
+                            local health = math.floor(evilHumanoid.Health)
+                            v.MobEap.TextLabel.Text = v.Name.." - "..distance.." M\nHealth: "..health
+                        else
+                            v.MobEap.TextLabel.Text = v.Name.." - "..distance.." M"
+                        end
+                    end
+                end
+            else
+                for i, v in pairs(game:GetService("Workspace").BossFolder:GetChildren()) do
+                    if v:FindFirstChild("MobEap") then
+                        v.MobEap:Destroy()
+                    end
+                end
+            end
+        end)
+    end
+end)
+    end)
+
+    Options.EspBoss:SetValue(false)
+
+Tabs.Zombie:AddParagraph({
+        Title = "Zombie Mods",
+        Content = " "
+    })
+
+local mainsize = 12
+local HitboxSize = 10
+
+local BigHead = false
+
+local Toggle = Tabs.Zombie:AddToggle("BigHead", {Title = "Big Zombie Head", Default = false })
+
+    Toggle:OnChanged(function(value)
+    BigHead = value
+while BigHead and wait(0.2) do
+
+for _, targetFolder in ipairs(targetFolders) do
+    for _, value in pairs(targetFolder:GetDescendants()) do
+        if value:FindFirstChild("Head") or value:FindFirstChild("Torso") then
+            if value.Name ~= game:GetService("Players").LocalPlayer.Name then
+            pcall(function()
+                value.Head.Transparency = 0.7
+                value.Head.CanCollide = false
+                value.Head.Size = Vector3.new(mainsize, mainsize, mainsize)
+                value.Head.CFrame = value.Torso.CFrame * CFrame.new(0, mainsize/2, 0)
+                end)
+            end
+        end
+    end
+
+for _, value in pairs(targetFolder:GetDescendants()) do
+        if value:FindFirstChild("HumanoidRootPart") then
+        pcall(function()
+            if value.Name ~= game:GetService("Players").LocalPlayer.Name then
+                value.HumanoidRootPart.Transparency = 0.9
+                value.HumanoidRootPart.CanCollide = false
+                value.HumanoidRootPart.Size = Vector3.new(HitboxSize, HitboxSize, HitboxSize)
+                end
+            end)
+        end
+    end
+end
+end
+    end)
+
+    Options.BigHead:SetValue(false)
+    
+local Slider = Tabs.Zombie:AddSlider("HeadSize", {
+        Title = "Zombies Head Size",
+        Description = " ",
+        Default = 1,
+        Min = 1,
+        Max = 30,
+        Rounding = 1,
+        Callback = function(Value)
+            mainsize = tonumber(Value) or 12
+        end
+    })
+
+local HitboxZombies = false
+
+local Toggle = Tabs.Zombie:AddToggle("HitboxedZombie", {Title = "Hitbox Zombie", Default = false })
+
+    Toggle:OnChanged(function(value2)
+HitboxZombies = value2
+
+while wait(0.2) and HitboxZombies do
+    for _, targetFolder in ipairs(targetFolders) do
+      for _, value in pairs(targetFolder:GetDescendants()) do
+        if value:FindFirstChild("HumanoidRootPart") then
+        pcall(function()
+            if value.Name ~= game:GetService("Players").LocalPlayer.Name then
+                value.HumanoidRootPart.Transparency = 0.9
+                value.HumanoidRootPart.CanCollide = false
+                value.HumanoidRootPart.Size = Vector3.new(HitboxSize, HitboxSize, HitboxSize)
+                end
+            end)
+        end
+    end
+end
+end
+    end)
+
+    Options.HitboxedZombie:SetValue(false)
+    
+local Slider = Tabs.Zombie:AddSlider("HitboxSize", {
+        Title = "Hitbox Size",
+        Description = " ",
+        Default = 1,
+        Min = 1,
+        Max = 30,
+        Rounding = 1,
+        Callback = function(Value)
+            HitboxSize = tonumber(value) or 10
+        end
+    })
+    
+-- Tool
+
+local camera = workspace.CurrentCamera
+
+_G._ZombieKillPart = "Head"
+
+local function isBehindWall(player)
+    local ray = Ray.new(camera.CFrame.Position, player.Head.Position - camera.CFrame.Position)
+    local hit = game.GetService(game, "Workspace").FindPartOnRayWithWhitelist(game.GetService(game, "Workspace"), ray, {game.GetService(game, "Workspace").enemies})
+    if hit and hit.Parent == player then
+        return false
+    end
+    return true
+end
+
+function getEquippedWeapon(player)
+        local char = player.Character
+        local weapon = char and char:FindFirstChildWhichIsA("Tool")
+    
+        if weapon ~= nil then
+            return weapon.Name
+        else
+            return "None"
+        end
+    end
+
+function KillZombies(weapontype,partaim)
+if weapontype == "gun" then
+game:GetService("ReplicatedStorage").Gun:FireServer({["Normal"] = Vector3.new(0,0,0),["Direction"] = getNearest()[partaim].Position,["Name"] = getEquippedWeapon(game.Players.LocalPlayer),["Hit"] = getNearest()[partaim],["Origin"] = getNearest()[partaim].Position,["Pos"] = getNearest()[partaim].Position})
+elseif weapontype == "melee" then
+game:GetService("ReplicatedStorage")["forhackers"]:InvokeServer("hit",getEquippedWeapon(game.Players.LocalPlayer),getNearest()[partaim])
+else
+	return "INVALID WEAPON TYPE"
+end
+end
+
+function GetToolName()
+for _,Thing in pairs(game:GetService("ReplicatedStorage").Guns:GetChildren()) do
+   if Thing:IsA("Tool") then
+      return Thing.Name
+   end
+ end
+end
+
+
+local ConfirmSystem = {
+	Damage = false,
+	Tracking = false,
+	Wallbang = false
+}
+
+local gmt = getrawmetatable(game)
+setreadonly(gmt, false)
+local oldNamecall = gmt.__namecall
+gmt.__namecall = newcclosure(function(self, ...)
+                local Args = {...}
+                local method = getnamecallmethod()
+                if tostring(self) == "Gun" and tostring(method) == "FireServer" and ConfirmSystem.Damage == true then
+		      Args[1]["Normal"] = Vector3.new(0,0,0)
+                      Args[1]["Direction"] = getNearest()[_G._ZombieKillPart].Position
+                      Args[1]["Name"] = getEquippedWeapon(game.Players.LocalPlayer)
+                      Args[1]["Hit"] = getNearest()[_G._ZombieKillPart]
+                      Args[1]["Origin"] = getNearest()[_G._ZombieKillPart].Position
+                      Args[1]["Pos"] = getNearest()[_G._ZombieKillPart].Position
+		    return self.FireServer(self, unpack(Args))
+		--end
+	        elseif tostring(self) == "forhackers" and tostring(method) == "InvokeServer" and ConfirmSystem.Damage == true then
+		      Args[2] = getEquippedWeapon(Player)
+		      Args[3] = getNearest()[_G._ZombieKillPart]
+		    return self.InvokeServer(self, unpack(Args))
+                end
+                return oldNamecall(self, ...)
+            end)
+
+local Obfuscatedstr = {}
+function BlacklistedPart()
+workspace.ChildAdded:Connect(function(p)
+if p.Name == "map" then
+for _,map in pairs(p:GetChildren()) do
+	for _,VirtualBlacklisted in pairs(map:GetChildren()) do
+		 AddTable(VirtualBlacklisted,Obfuscatedstr)
+end
+end
+end
+end)
+--function end
+end
+
+local Circle = Drawing.new("Circle")
+Circle.Color = Color3.fromRGB(22, 13, 56)
+Circle.Thickness = 1
+Circle.Radius = 500
+Circle.Visible = false
+Circle.NumSides = 2000
+Circle.Filled = false
+Circle.Transparency = 1
+Circle.Position = Vector2.new(camera.ViewportSize.X / 2, camera.ViewportSize.Y / 2)
+
+local function isWithinFOVCircle(vector)
+    local circleCenter = Vector2.new(camera.ViewportSize.X / 2, camera.ViewportSize.Y / 2)
+    local distToCenter = (circleCenter - Vector2.new(vector.X, vector.Y)).Magnitude
+    return distToCenter <= Circle.Radius
+end
+
+local function V4()
+--V4:
+    local closestDist = math.huge
+    local closestPlr = nil
+    local circleCenter = Vector2.new(camera.ViewportSize.X / 2, camera.ViewportSize.Y / 2)
+    
+    for _, v in next, game.GetService(game, "Workspace").enemies.GetChildren(game.GetService(game, "Workspace").enemies) do
+        if game.FindFirstChild(v,"Humanoid") and v.Humanoid.Health > 0 then
+            local vector, onScreen = camera.worldToScreenPoint(camera, game.WaitForChild(v, "Head", math.huge).Position)
+            if isWithinFOVCircle(vector) then
+                local dist = (circleCenter - Vector2.new(vector.X, vector.Y)).Magnitude
+                if dist < closestDist and onScreen and not isBehindWall(v) then
+                    closestDist = dist
+                    closestPlr = v
+                end
+            end
+        end
+    end
+    
+    for _, v in next, game.GetService(game,"Workspace").BossFolder.GetChildren(game.GetService(game,"Workspace").BossFolder) do
+        if game.FindFirstChild(v,"Head") then
+            local vector, onScreen = camera.worldToScreenPoint(camera, game.WaitForChild(v, "Head", math.huge).Position)
+            if isWithinFOVCircle(vector) then
+                local dist = (circleCenter - Vector2.new(vector.X, vector.Y)).Magnitude
+                if dist < closestDist and onScreen and not isBehindWall(v) then
+                    closestDist = dist
+                    closestPlr = v
+                end
+            end
+        end
+    end
+    
+    return closestPlr
+end
+
+local function checkClosestEntity(version)
+if version == "V4" then
+	return V4()
+else
+	return "INVALID VERSION"
+end
+end
+
+_G._FOVrender = "V4" or V4()
+
+local namecall;
+namecall = hookmetamethod(game, "__namecall", function(Self, ...)
+	if not checkcaller() and tostring(getcallingscript()) == "GunController" and string.lower(getnamecallmethod()) == "findpartonraywithwhitelist" then
+		local args = {...}
+		local Tracking = checkClosestEntity(_G._FOVrender)
+		if Tracking and ConfirmSystem.Tracking == true then
+			if _G.wb_cheat == true then
+				wallbang(args[1].Origin,Tracking.Head,function(magicbullet)
+					args[1] = Ray.new(magicbullet,(magicbullet - Tracking.Head.Position).unit * 500)
+				end)
+			else
+			        args[1] = Ray.new(args[1].Origin,Tracking.Head.Position - args[1].Origin,Obfuscatedstr)
+			end
+		end
+		return namecall(Self, unpack(args))
+	end
+	return namecall(Self, ...)
+end)
+
+local bullet = {
+	Penetrate_1 = false,
+	penetrate_2 = false,
+	Reverse = false,
+	penetrate_3 = false,
+	penetrate_4 = false
+}
+
+local bulletSystemV1 = nil
+bulletSystemV1 = hookmetamethod(game, "__namecall", function(self, ...)
+  local Args = {...}
+    if getnamecallmethod() == "FindPartOnRayWithIgnoreList" and bullet.Penetrate_1 == true then
+	if bullet.Reverse == false then
+           table.insert(Args[2],workspace.map)
+	else
+	   table.insert(workspace.map,Args[2])
+	end
+    end
+    return bulletSystemV1(self, ...)
+end)
+
+local bulletSystemV2 = nil
+bulletSystemV2 = hookmetamethod(game, "__namecall", function(self, ...)
+  local Args = {...}
+    if getnamecallmethod() == "FindPartOnRayWithWhitelist" and bullet.Penetrate_2 == true then
+       if bullet.Reverse == false then
+           table.insert(Args[2],workspace.map)
+	else
+	   table.insert(workspace.map,Args[2])
+	end
+    end
+    return bulletSystemV2(self, ...)
+end)
+
+local nearesthead = targetFolders
+
+function silentaim()
+if _G._userGun == true and nearesthead:FindFirstChild("Head") then
+-- game:GetService("Workspace").CurrentCamera.CFrame = CFrame.new(game:GetService("Workspace").CurrentCamera.CFrame.p, getNearest().Head.Position)
+-- Player.Character.HumanoidRootPart.CFrame = (getNearest().HumanoidRootPart.CFrame * CFrame.new(0, groundDistance, 9))
+game:GetService("ReplicatedStorage")["forhackers"]:InvokeServer("hit",getEquippedWeapon(Player),getNearest()[_G._ZombieKillPart])
+else
+-- game:GetService("Workspace").CurrentCamera.CFrame = CFrame.new(game:GetService("Workspace").CurrentCamera.CFrame.p, getNearest().Head.Position)
+-- Player.Character.HumanoidRootPart.CFrame = (getNearest().HumanoidRootPart.CFrame * CFrame.new(0, groundDistance, 9))
+game.ReplicatedStorage.Gun:FireServer({["Normal"] = Vector3.new(0, 0, 0), ["Direction"] = getNearest()[_G._ZombieKillPart].Position, ["Name"] = getEquippedWeapon(Player), ["Hit"] = getNearest()[_G._ZombieKillPart], ["Origin"] = getNearest()[_G._ZombieKillPart].Position, ["Pos"] = getNearest()[_G._ZombieKillPart].Position, ["Damage"] = math.huge,})
+end
+return
+end
+
+function cameratrack()
+if _G._userGun == true and nearesthead then
+ game:GetService("Workspace").CurrentCamera.CFrame = CFrame.new(game:GetService("Workspace").CurrentCamera.CFrame.p, getNearest().Head.Position)
+-- Player.Character.HumanoidRootPart.CFrame = (getNearest().HumanoidRootPart.CFrame * CFrame.new(0, groundDistance, 9))
+-- game:GetService("ReplicatedStorage")["forhackers"]:InvokeServer("hit",getEquippedWeapon(Player),getNearest()[_G._ZombieKillPart])
+game:GetService'VirtualUser':CaptureController()
+game:GetService'VirtualUser':Button1Down(Vector2.new(501, 362))
+game:GetService'VirtualUser':Button1Up(Vector2.new(501, 362))
+else
+game:GetService("Workspace").CurrentCamera.CFrame = CFrame.new(game:GetService("Workspace").CurrentCamera.CFrame.p, getNearest().Head.Position)
+-- Player.Character.HumanoidRootPart.CFrame = (getNearest().HumanoidRootPart.CFrame * CFrame.new(0, groundDistance, 9))
+-- game.ReplicatedStorage.Gun:FireServer({["Normal"] = Vector3.new(0, 0, 0), ["Direction"] = getNearest()[_G._ZombieKillPart].Position, ["Name"] = getEquippedWeapon(Player), ["Hit"] = getNearest()[_G._ZombieKillPart], ["Origin"] = getNearest()[_G._ZombieKillPart].Position, ["Pos"] = getNearest()[_G._ZombieKillPart].Position,})
+game:GetService'VirtualUser':CaptureController()
+game:GetService'VirtualUser':Button1Down(Vector2.new(501, 362))
+game:GetService'VirtualUser':Button1Up(Vector2.new(501, 362))
+end
+return
+end
+
+Tabs.Tool:AddParagraph({
+        Title = "Gun Mods",
+        Content = " "
+    })
+
+local KillAuraRange = 10
+
+local Toggle = Tabs.Tool:AddToggle("SilentAim", {Title = "Silent Aim", Default = false })
+
+    Toggle:OnChanged(function(bool1)
+    ConfirmSystem.Tracking = bool1
+        BlacklistedPart()
+    end)
+
+    Options.SilentAim:SetValue(false)
+    
+local Toggle = Tabs.Tool:AddToggle("CameraAimbot", {Title = "Camera Track", Default = false })
+
+    Toggle:OnChanged(function(bool2)
+                _G._CameraTrack = bool2
+
+        repeat
+            wait()
+             spawn(cameratrack)
+        until not _G._CameraTrack == true
+    end)
+
+    Options.CameraAimbot:SetValue(false)
+    
+local Toggle = Tabs.Tool:AddToggle("AutoShoot", {Title = "Auto Shoot", Default = false })
+
+    Toggle:OnChanged(function(bool3)
+        _G._SilentAim = bool3
+
+        repeat
+            wait()
+             spawn(silentaim)
+        until not _G._SilentAim == true
+    end)
+
+    Options.AutoShoot:SetValue(false)
+    
+local Toggle = Tabs.Tool:AddToggle("BulletAura", {Title = "Bullet Aura (Lag)", Default = false })
+
+    Toggle:OnChanged(function(bool3)
+    ConfirmSystem.Damage = bool3
+    end)
+
+    Options.BulletAura:SetValue(false)
+    
+Tabs.Tool:AddParagraph({
+        Title = "Knife Mods",
+        Content = " "
+    })
+   
+ local KillAuraRange = 10
+local KnifeName = "Omega Scythe"
+
+local Input = Tabs.Tool:AddInput("KnifeName", {
+    Title = "Knife Name",
+    Default = "Omega Scythe",
+    Placeholder = "Please Put a Knife Name",
+    Numeric = false, -- Only allows numbers
+    Finished = false, -- Only calls callback when you press enter
+    Callback = function(Value)
+        KnifeName = tostring(Value) or "Omega Scythe"
+    end
+})
+
+local Toggle = Tabs.Tool:AddToggle("KillAura", {Title = "Kill Aura", Default = false })
+
+Toggle:OnChanged(function(bool)
+    _G._UserKill = bool
+    while wait(0.1) do
+        if _G._UserKill == false then break end
+        for _, targetFolder in ipairs(targetFolders) do
+            for _, value in pairs(targetFolder:GetDescendants()) do
+                if value:FindFirstChild("HumanoidRootPart") then
+                    pcall(function()
+                        if value.Name ~= game:GetService("Players").LocalPlayer.Name then
+                            local humanoidrootpart = value:FindFirstChild("HumanoidRootPart")
+                            local char = game:GetService("Players").LocalPlayer.Character
+                            if humanoidrootpart and char and char:FindFirstChild(KnifeName) then
+                                local distance = (char.HumanoidRootPart.Position - humanoidrootpart.Position).Magnitude
+                                if distance <= KillAuraRange then
+                                    KillZombies("melee", _G._ZombieKillPart)
+                                    firetouchinterest(humanoidrootpart, char:FindFirstChild(KnifeName).Handle, 1)                                  
+                                    firetouchinterest(humanoidrootpart, char:FindFirstChild(KnifeName).Handle, 0)
+                                end
+                            end
+                        end
+                    end)
+                end
+            end
+        end
+    end
+end)
+
+Options.KillAura:SetValue(false)
+
+local Slider = Tabs.Tool:AddSlider("KnifeRange", {
+    Title = "Kill Aura Range",
+    Description = "",
+    Default = 10,
+    Min = 0,
+    Max = 100,
+    Rounding = 1,
+    Callback = function(Value)
+        KillAuraRange = tonumber(Value) or 10
+    end
+})
+
+-- Settings
+
+Tabs.Settings:AddParagraph({
+        Title = "Save Config",
+        Content = "Save A Config"
+    })
+
+-- Save Manager
+SaveManager:SetLibrary(Fluent)
+InterfaceManager:SetLibrary(Fluent)
+
+SaveManager:SetIgnoreIndexes({})
+
+-- Save Folder
+InterfaceManager:SetFolder("UnknownTQHub")
+SaveManager:SetFolder("UnknownTQHub/TreasureQuest")
+
+InterfaceManager:BuildInterfaceSection(Tabs.Settings)
+SaveManager:BuildConfigSection(Tabs.Settings)
+
+Window:SelectTab(1)
+
+-- Auto Load Configuration
+SaveManager:LoadAutoloadConfig()
