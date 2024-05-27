@@ -1011,7 +1011,7 @@ Tabs.Tool:AddParagraph({
         Content = " "
     })
    
- local KillAuraRange = 10
+ local KillAuraRange = 25
 local KnifeName = "Omega Scythe"
 
 local Input = Tabs.Tool:AddInput("KnifeName", {
@@ -1057,18 +1057,6 @@ Toggle:OnChanged(function(bool)
 end)
 
 Options.KillAura:SetValue(false)
-
-local Slider = Tabs.Tool:AddSlider("KnifeRange", {
-    Title = "Kill Aura Range",
-    Description = "",
-    Default = 10,
-    Min = 0,
-    Max = 50,
-    Rounding = 1,
-    Callback = function(Value)
-        KillAuraRange = tonumber(Value) or 10
-    end
-})
 
 -- Settings
 
