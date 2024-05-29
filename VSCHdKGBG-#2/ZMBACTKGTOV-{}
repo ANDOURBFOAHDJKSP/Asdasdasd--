@@ -225,6 +225,20 @@ local Tabs = {
     Settings = Window:AddTab({ Title = "Settings", Icon = "settings" })
 }
 
+Fluent:Notify({
+        Title = "Made by Guesttester_1",
+        Content = "",
+        SubContent = "", -- Optional
+        Duration = 5 -- Set to nil to make the notification not disappear
+    })
+
+Fluent:Notify({
+        Title = "Fixed: Ur Bullet Shooting at the camera",
+        Content = "Improved: Kill Aura it brings the Zombies",
+        SubContent = "", -- Optional
+        Duration = 5 -- Set to nil to make the notification not disappear
+    })
+
 -- Farming
 
 Tabs.Farming:AddParagraph({
@@ -893,6 +907,7 @@ namecall = hookmetamethod(game, "__namecall", function(Self, ...)
 	return namecall(Self, ...)
 end)
 
+--[[
 local bullet = {
 	Penetrate_1 = false,
 	penetrate_2 = false,
@@ -926,6 +941,7 @@ bulletSystemV2 = hookmetamethod(game, "__namecall", function(self, ...)
     end
     return bulletSystemV2(self, ...)
 end)
+]]
 
 local nearesthead = targetFolders
 
@@ -975,7 +991,7 @@ local Toggle = Tabs.Tool:AddToggle("SilentAim", {Title = "Silent Aim", Default =
         BlacklistedPart()
     end)
 
-    Options.SilentAim:SetValue(false)
+--    Options.SilentAim:SetValue(false)
     
 local Toggle = Tabs.Tool:AddToggle("CameraAimbot", {Title = "Camera Track", Default = false })
 
@@ -984,7 +1000,7 @@ local Toggle = Tabs.Tool:AddToggle("CameraAimbot", {Title = "Camera Track", Defa
 
         repeat
             wait()
-             spawn(cameratrack)
+             cameratrack()
         until not _G._CameraTrack == true
     end)
 
@@ -997,7 +1013,7 @@ local Toggle = Tabs.Tool:AddToggle("AutoShoot", {Title = "Auto Shoot", Default =
 
         repeat
             wait()
-             spawn(silentaim)
+             silentaim()
         until not _G._SilentAim == true
     end)
 
@@ -1009,14 +1025,14 @@ local Toggle = Tabs.Tool:AddToggle("BulletAura", {Title = "Bullet Aura (Lag)", D
     ConfirmSystem.Damage = bool3
     end)
 
-    Options.BulletAura:SetValue(false)
+ --   Options.BulletAura:SetValue(false)
     
 Tabs.Tool:AddParagraph({
         Title = "Knife Mods",
         Content = " "
     })
    
- local KillAuraRange = 25
+ local KillAuraRange = 30
 local KnifeName = "Omega Scythe"
 
 local Input = Tabs.Tool:AddInput("KnifeName", {
@@ -1042,11 +1058,13 @@ Toggle:OnChanged(function(bool)
                     pcall(function()
                         if value.Name ~= game:GetService("Players").LocalPlayer.Name then
                             local humanoidrootpart = value:FindFirstChild("Head")
+                            local humanoidrootpart2 = value:FindFirstChild("HumanoidRootPart")
                             local char = game:GetService("Players").LocalPlayer.Character
                             if humanoidrootpart and char and char:FindFirstChild(KnifeName) then
                                 local distance = (char.HumanoidRootPart.Position - humanoidrootpart.Position).Magnitude
                                 if distance <= KillAuraRange then
                                     KillZombies("melee", _G._ZombieKillPart)
+                                    humanoidrootpart2.CFrame = CFrame.new(char.HumanoidRootPart.Position + Vector3.new(0, 8, 0))
                                 -- firetouchinterest(humanoidrootpart, char:FindFirstChild(KnifeName).Handle, 1)                                  
                                 --  firetouchinterest(humanoidrootpart, char:FindFirstChild(KnifeName).Handle, 0)
                                     firetouchinterest(char:FindFirstChild(KnifeName).Handle, humanoidrootpart, 1)                                  
@@ -1063,21 +1081,17 @@ end)
 
 Options.KillAura:SetValue(false)
 
---[[
-
 local Slider = Tabs.Tool:AddSlider("KnifeRange", {
     Title = "Kill Aura Range",
     Description = "",
-    Default = 10,
+    Default = 30,
     Min = 0,
-    Max = 50,
+    Max = 100,
     Rounding = 1,
     Callback = function(Value)
-        KillAuraRange = tonumber(Value) or 10
+        KillAuraRange = tonumber(Value) or 30
     end
 })
-
-]]
 
 -- Settings
 
@@ -1093,8 +1107,8 @@ InterfaceManager:SetLibrary(Fluent)
 SaveManager:SetIgnoreIndexes({})
 
 -- Save Folder
-InterfaceManager:SetFolder("UnknownTQHub")
-SaveManager:SetFolder("UnknownTQHub/TreasureQuest")
+InterfaceManager:SetFolder("UnknownHubXUniversal")
+SaveManager:SetFolder("UnknownHubXUniversal/ZombieAttack")
 
 InterfaceManager:BuildInterfaceSection(Tabs.Settings)
 SaveManager:BuildConfigSection(Tabs.Settings)
