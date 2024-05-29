@@ -3456,8 +3456,8 @@ InterfaceManager:SetLibrary(Fluent)
 SaveManager:SetIgnoreIndexes({})
 
 -- Save Folder
-InterfaceManager:SetFolder("UnknownTQHub")
-SaveManager:SetFolder("UnknownTQHub/TreasureQuest")
+InterfaceManager:SetFolder("UnknownHubXUniversal")
+SaveManager:SetFolder("UnknownHubXUniversal/TreasureQuest")
 
 InterfaceManager:BuildInterfaceSection(Tabs.Settings)
 SaveManager:BuildConfigSection(Tabs.Settings)
