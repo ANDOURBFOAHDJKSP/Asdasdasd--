@@ -1887,7 +1887,7 @@ SaveManager:SetIgnoreIndexes({})
 
 -- Save Folder
 InterfaceManager:SetFolder("UnknownHubXUniversal")
-SaveManager:SetFolder("UnknownHubXUniversal/TreasureQuest")
+SaveManager:SetFolder("UnknownHubXUniversal/TreasureQuest_Lobby")
 
 InterfaceManager:BuildInterfaceSection(Tabs.Settings)
 SaveManager:BuildConfigSection(Tabs.Settings)
