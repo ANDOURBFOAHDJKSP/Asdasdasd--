@@ -184,7 +184,7 @@ function AddTable(TableTrigger,LocalTrigger)
        
 
 local function getNearest()
-    local nearest, dist = nil, 999999999 -- Set a very large initial distance
+    local nearest, dist = nil, math.huge -- Set a very large initial distance
     for _, v in pairs(game.Workspace.BossFolder:GetDescendants()) do
         if v:FindFirstChild("Head") then
             local m = (Player.Character.Head.Position - v.Head.Position).magnitude
@@ -197,6 +197,29 @@ local function getNearest()
     for _, v in pairs(game.Workspace.enemies:GetDescendants()) do
         if v:FindFirstChild("Head") then
             local m = (Player.Character.Head.Position - v.Head.Position).magnitude
+            if m < dist then
+                dist = m
+                nearest = v
+            end
+        end
+    end
+    return nearest
+end
+
+local function getNearest2()
+    local nearest, dist = nil, math.huge -- Set a very large initial distance
+    for _, v in pairs(game.Workspace.BossFolder:GetDescendants()) do
+        if v:FindFirstChild("HumanoidRootPart") then
+            local m = (Player.Character.HumanoidRootPart.Position - v.HumanoidRootPart.Position).magnitude
+            if m < dist then
+                dist = m
+                nearest = v
+            end
+        end
+    end
+    for _, v in pairs(game.Workspace.enemies:GetDescendants()) do
+        if v:FindFirstChild("HumanoidRootPart") then
+            local m = (Player.Character.HumanoidRootPart.Position - v.HumanoidRootPart.Position).magnitude
             if m < dist then
                 dist = m
                 nearest = v
@@ -681,10 +704,10 @@ end)
    end,
 })
 
-local Label = Farming:CreateLabel("Zombie Mods")
+local Label = Zombie:CreateLabel("Zombie Mods")
 
-local mainsize = 10
-local HitboxSize = 8.5
+local mainsize = 7
+local HitboxSize = 3
 
 local BigHead = false
 
@@ -704,7 +727,7 @@ for _, targetFolder in ipairs(targetFolders) do
                 value.Head.Transparency = 0.7
                 value.Head.CanCollide = false
                 value.Head.Size = Vector3.new(mainsize, mainsize, mainsize)
-                value.Head.CFrame = value.Torso.CFrame * CFrame.new(0, mainsize/2, 0)
+                value.Head.CFrame = value.Torso.CFrame * CFrame.new(0, 1, 0)
                 end)
             end
         end
@@ -732,6 +755,7 @@ local globalTarget = nil
 local camera = workspace.CurrentCamera
 
 _G._ZombieKillPart = "Head"
+_G._ZombieKillPart2 = "HumanoidRootPart"
 
 function RayFromCamera()
 local ray = Ray.new(workspace.CurrentCamera.CFrame.p, workspace.CurrentCamera.CFrame.lookVector * 100)
@@ -790,6 +814,7 @@ if weapontype == "gun" then
 game:GetService("ReplicatedStorage").Gun:FireServer({["Normal"] = Vector3.new(0,0,0),["Direction"] = getNearest()[partaim].Position,["Name"] = getEquippedWeapon(game.Players.LocalPlayer),["Hit"] = getNearest()[partaim],["Origin"] = getNearest()[partaim].Position,["Pos"] = getNearest()[partaim].Position})
 elseif weapontype == "melee" then
 game:GetService("ReplicatedStorage")["forhackers"]:InvokeServer("hit",getEquippedWeapon(game.Players.LocalPlayer),getNearest()[partaim])
+game:GetService("ReplicatedStorage")["forhackers"]:InvokeServer("hit",getEquippedWeapon(game.Players.LocalPlayer),getNearest2()[partaim])
 else
 	return "INVALID WEAPON TYPE"
 end
@@ -1013,7 +1038,8 @@ local Toggle = Tool:CreateToggle({
                                 local distance = (char.HumanoidRootPart.Position - humanoidrootpart.Position).Magnitude
                                 if distance <= KillAuraRange then
                                     KillZombies("melee", _G._ZombieKillPart)
-                                    humanoidrootpart2.CFrame = CFrame.new(char.HumanoidRootPart.Position + Vector3.new(0, 8, 0))
+                                    KillZombies("melee", _G._ZombieKillPart2)
+                                    humanoidrootpart2.CFrame = char.HumanoidRootPart.CFrame * CFrame.new(0, 0, -9.3)
                                 -- firetouchinterest(humanoidrootpart, char:FindFirstChild(KnifeName).Handle, 1)                                  
                                 --  firetouchinterest(humanoidrootpart, char:FindFirstChild(KnifeName).Handle, 0)
                                     firetouchinterest(char:FindFirstChild(KnifeName).Handle, humanoidrootpart, 1)                                  
