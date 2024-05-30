@@ -1023,7 +1023,7 @@ local Toggle = Tool:CreateToggle({
    Flag = "KillAura", 
    Callback = function(bool)
     _G._UserKill = bool
-    while wait(0.1) do
+    while wait(000.0001) do
         if _G._UserKill == false then break end
         for _, targetFolder in ipairs(targetFolders) do
             for _, value in pairs(targetFolder:GetDescendants()) do
