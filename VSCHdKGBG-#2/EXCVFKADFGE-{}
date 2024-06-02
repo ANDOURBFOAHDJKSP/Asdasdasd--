@@ -1,0 +1,572 @@
+local Fluent = loadstring(game:HttpGet("https://github.com/dawid-scripts/Fluent/releases/latest/download/main.lua"))()
+local SaveManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/dawid-scripts/Fluent/master/Addons/SaveManager.lua"))()
+local InterfaceManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/Unknownproootest/Unknown-TreasureQuest/Alt/Test_FixMinimizeKey"))()
+
+local openshit = Instance.new("ScreenGui")
+local mainopen = Instance.new("TextButton")
+local mainopens = Instance.new("UICorner")
+local loki = Instance.new("ImageLabel")
+local posto = Instance.new("UIStroke")
+
+openshit.Name = "openshit"
+openshit.Parent = game:GetService("Players").LocalPlayer:WaitForChild("PlayerGui")
+openshit.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+openshit.ResetOnSpawn = false
+
+mainopen.Name = "mainopen"
+mainopen.Parent = openshit
+mainopen.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
+mainopen.Position = UDim2.new(0.101969875, 0, 0.110441767, 0)
+mainopen.Size = UDim2.new(0, 64, 0, 42)
+mainopen.Text = ""
+mainopen.Visible = true
+
+mainopens.Parent = mainopen
+ 
+loki.Name = "loki"
+loki.Parent = mainopen
+loki.BackgroundColor3 = Color3.fromRGB(224,224,224)
+loki.BackgroundTransparency = 1.000
+loki.Position = UDim2.new(-0.0529999994, 0, -0.244000003, 0)
+loki.Size = UDim2.new(0, 69, 0, 62)
+loki.Image = "rbxassetid://17339439921"
+ 
+posto.Name = "posto"
+posto.Parent = mainopen
+posto.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+posto.Color = Color3.fromRGB(224,224,224)
+posto.LineJoinMode = Enum.LineJoinMode.Round
+posto.Thickness = 1
+posto.Transparency = 0
+posto.Enabled = true
+posto.Archivable = true
+ 
+local UserInputService = game:GetService("UserInputService")
+local TweenService = game:GetService("TweenService")
+ 
+local function MakeDraggable(topbarobject, object)
+    local Dragging = nil
+    local DragInput = nil
+    local DragStart = nil
+    local StartPosition = nil
+    
+    local function Update(input)
+        local Delta = input.Position - DragStart
+        local pos = UDim2.new(StartPosition.X.Scale, StartPosition.X.Offset + Delta.X, StartPosition.Y.Scale, StartPosition.Y.Offset + Delta.Y)
+        local Tween = TweenService:Create(object, TweenInfo.new(0.15), {
+            Position = pos
+        })
+        Tween:Play()
+    end
+    
+    topbarobject.InputBegan:Connect(
+        function(input)
+            if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+                Dragging = true
+                DragStart = input.Position
+                StartPosition = object.Position
+                
+                input.Changed:Connect(
+                    function()
+                        if input.UserInputState == Enum.UserInputState.End then
+                            Dragging = false
+                        end
+                    end
+                )
+            end
+        end
+    )
+    
+    topbarobject.InputChanged:Connect(
+        function(input)
+            if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
+                DragInput = input
+            end
+        end
+    )
+    
+    UserInputService.InputChanged:Connect(
+        function(input)
+            if input == DragInput and Dragging then
+                Update(input)
+            end
+        end
+    )
+end
+
+MakeDraggable(mainopen, mainopen) -- Making the button draggable
+
+mainopen.MouseButton1Click:Connect(function()
+    game:GetService("VirtualInputManager"):SendKeyEvent(true, "LeftControl", false, game)
+    game:GetService("VirtualInputManager"):SendKeyEvent(false, "LeftControl", false, game)
+end)
+
+local Window = Fluent:CreateWindow({
+    Title = "Unknown Hub X Evade",
+    SubTitle = "V0.5 (Alpha) Made by Guesttester_1",
+    TabWidth = 160,
+    Size = UDim2.fromOffset(580, 460),
+    Acrylic = true, -- The blur may be detectable, setting this to false disables blur entirely
+    Theme = "Dark",
+    MinimizeKey = Enum.KeyCode.LeftControl -- Used when theres no MinimizeKeybind
+})
+
+Fluent:Notify({
+        Title = "Made by Guesttester_1!",
+        Content = "This is still Alpha Version and unfinished",
+        SubContent = "", -- Optional
+        Duration = 10 -- Set to nil to make the notification not disappear
+    })
+
+local Tabs = {
+    Main = Window:AddTab({ Title = "Main", Icon = "" }),
+    AutoFarm = Window:AddTab({ Title = "Auto Farms", Icon = "" }),
+    Misc = Window:AddTab({ Title = "Misc", Icon = "" }),
+    Settings = Window:AddTab({ Title = "Save Config", Icon = "rbxassetid://7734052335" })
+}
+
+local Options = Fluent.Options
+
+-- Main
+
+Tabs.Main:AddParagraph({
+        Title = "ESP",
+        Content = " "
+    })
+
+function Simple_Create(base, name, trackername, studs)
+    local bb = Instance.new("BillboardGui")
+    bb.Adornee = base
+    bb.ExtentsOffset = Vector3.new(0, 1, 0)
+    bb.AlwaysOnTop = true
+    bb.Size = UDim2.new(0, 6, 0, 6)
+    bb.StudsOffset = Vector3.new(0, 1, 0)
+    bb.Name = trackername
+    bb.Parent = game.CoreGui
+
+    local frame = Instance.new("Frame")
+    frame.ZIndex = 10
+    frame.BackgroundTransparency = 0.3
+    frame.Size = UDim2.new(3, 0, 3, 0)
+    frame.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
+    frame.Parent = bb
+
+    -- Add UICorner to make the frame circular
+    local uiCorner = Instance.new("UICorner")
+    uiCorner.CornerRadius = UDim.new(0.5, 0)
+    uiCorner.Parent = frame
+
+    local txtlbl = Instance.new("TextLabel")
+    txtlbl.ZIndex = 10
+    txtlbl.BackgroundTransparency = 1
+    txtlbl.Position = UDim2.new(0, 0, 0, -48)
+    txtlbl.Size = UDim2.new(1, 0, 10, 0)
+    txtlbl.Font = Enum.Font.GothamBold
+    txtlbl.Text = name
+    txtlbl.TextSize = 14    
+    txtlbl.TextStrokeTransparency = 0.5
+    txtlbl.TextColor3 = Color3.fromRGB(255, 0, 0)
+    txtlbl.Parent = bb
+    
+    local txtdistance = Instance.new("TextLabel")
+    txtdistance.ZIndex = 10
+    txtdistance.BackgroundTransparency = 1
+    txtdistance.Position = UDim2.new(0, 0, 0, -30)
+    txtdistance.Size = UDim2.new(1, 0, 10, 0)
+    txtdistance.Font = Enum.Font.GothamBold
+    txtdistance.TextSize = 14
+    txtdistance.TextStrokeTransparency = 0.5
+    txtdistance.TextColor3 = Color3.fromRGB(255, 255, 255)
+    txtdistance.Parent = bb
+    
+    local distance = math.floor((game.Players.LocalPlayer.Character.HumanoidRootPart.Position - base.Position).Magnitude)
+    
+    txtdistance.Text = distance.. " M"
+end
+
+function ClearESP(espname)
+	for _, v in pairs(game.CoreGui:GetChildren()) do
+		if v.Name == espname and v:isA("BillboardGui") then
+			v:Destroy()
+		end
+	end
+end
+
+local BotESP = false
+
+local Toggle = Tabs.Main:AddToggle("ESPBot", {Title = "ESP Bot", Default = false })
+
+    Toggle:OnChanged(function(State)
+        BotESP = State
+        
+        task.spawn(
+                function()
+			while task.wait() do
+				ClearESP('AI_Tracker')
+				if not BotESP then
+					break
+				end
+				pcall(function()
+					local GamePlayers = workspace.Game.Players
+					for i, v in pairs(GamePlayers:GetChildren()) do
+						if not game.Players:FindFirstChild(v.Name) then
+							Simple_Create(v.HumanoidRootPart, v.Name, "AI_Tracker")
+						end
+					end
+				end)
+			end
+	 end)
+ end)
+    
+local PlayerESP = false
+
+local Toggle = Tabs.Main:AddToggle("ESPPlayers", {Title = "ESP Players", Default = false })
+
+Toggle:OnChanged(function(State)
+    PlayerESP = State
+    
+    spawn(function()
+        while wait(0.2) do
+            pcall(function()
+                if PlayerESP then
+                    for _, player in pairs(game.Players:GetPlayers()) do
+                        if player ~= game.Players.LocalPlayer and player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
+                            local character = player.Character
+                            local humanoidRootPart = character.HumanoidRootPart
+
+                            if not humanoidRootPart:FindFirstChild("PlayerESP") then
+                                local BillboardGui = Instance.new("BillboardGui")
+                                local TextLabel = Instance.new("TextLabel")
+
+                                BillboardGui.Parent = humanoidRootPart
+                                BillboardGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+                                BillboardGui.Name = "PlayerESP"
+                                BillboardGui.AlwaysOnTop = true
+                                BillboardGui.LightInfluence = 1.000
+                                BillboardGui.Size = UDim2.new(0, 200, 0, 50)
+                                BillboardGui.StudsOffset = Vector3.new(0, 2.5, 0)
+                                BillboardGui.MaxDistance = 500
+
+                                TextLabel.Parent = BillboardGui
+                                TextLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+                                TextLabel.BackgroundTransparency = 1.000
+                                TextLabel.Size = UDim2.new(0, 200, 0, 50)
+                                TextLabel.TextScaled = false
+                                TextLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+                                TextLabel.Font = Enum.Font.GothamBold
+                                TextLabel.TextSize = 14
+                            end
+
+                            local distance = math.floor((game.Players.LocalPlayer.Character.HumanoidRootPart.Position - humanoidRootPart.Position).Magnitude)
+                            local labelText = player.Name .. " - " .. distance .. " M"
+
+                            local gamePlayer = workspace:WaitForChild("Game", 1337).Players:FindFirstChild(player.Name)
+                            if gamePlayer and gamePlayer:GetAttribute('Downed') then
+                                humanoidRootPart.PlayerESP.TextLabel.TextColor3 = Color3.fromRGB(255, 0, 0)
+                                labelText = labelText .. " (Downed)"
+                            else
+                                humanoidRootPart.PlayerESP.TextLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+                            end
+                            
+                            humanoidRootPart.PlayerESP.TextLabel.Text = labelText
+                        end
+                    end
+                else
+                    for _, player in pairs(game.Players:GetPlayers()) do
+                        if player.Character and player.Character:FindFirstChild("HumanoidRootPart") and player.Character.HumanoidRootPart:FindFirstChild("PlayerESP") then
+                            player.Character.HumanoidRootPart.PlayerESP:Destroy()
+                        end
+                    end
+                end
+            end)
+        end
+    end)
+end)
+
+Tabs.Main:AddParagraph({
+        Title = "Mods",
+        Content = " "
+    })
+    
+local AutoRespawn = false
+
+local Toggle = Tabs.Main:AddToggle("AutoRespawn", {Title = "Auto Respawn", Default = false })
+
+    Toggle:OnChanged(function(State)
+        AutoRespawn = State
+      while task.wait(1) and AutoRespawn do
+			if not AutoRespawn then
+				break
+			end
+			local char = game.Players.LocalPlayer.Character or game.Players.LocalPlayer.CharacterAdded:Wait()
+			local stats = char:WaitForChild("StatChanges", 3)
+			if stats == nil then
+				return
+			end
+			if stats:FindFirstChild("Speed") and stats:FindFirstChild("Speed"):FindFirstChild("Downed") then
+				game:GetService("ReplicatedStorage").Events.Respawn:FireServer()
+			end
+		end
+    end)
+    
+local FastAutoRespawn = false
+
+local Toggle = Tabs.Main:AddToggle("AutoRespawn", {Title = "Auto Quick Respawn", Default = false })
+
+    Toggle:OnChanged(function(State)
+        FastAutoRespawn = State
+      while wait(0.1) and FastAutoRespawn do
+			if not FastAutoRespawn then
+				break
+	  		end
+	  	game:GetService("ReplicatedStorage").Events.Respawn:FireServer()
+		end
+    end)
+    
+local AutoWhistleWhenDowned = false
+
+function autowistlefunction()
+    local ohString1 = "Whistle"
+    local ohBoolean2 = true
+     game:GetService("Players").LocalPlayer.PlayerScripts.Events.KeybindUsed:Fire(ohString1, ohBoolean2)
+   game:GetService("ReplicatedStorage").Events.Whistle:FireServer()
+end
+
+local Toggle = Tabs.Main:AddToggle("AutoRespawn", {Title = "Auto Whistle When Downed", Default = false })
+
+    Toggle:OnChanged(function(State)
+        AutoWhistleWhenDowned = State
+      while task.wait(5) and AutoWhistleWhenDowned do
+			if not AutoWhistleWhenDowned then
+				break
+			end
+			local char = game.Players.LocalPlayer.Character or game.Players.LocalPlayer.CharacterAdded:Wait()
+			local stats = char:WaitForChild("StatChanges", 3)
+			if stats == nil then
+				return
+			end
+			if stats:FindFirstChild("Speed") and stats:FindFirstChild("Speed"):FindFirstChild("Downed") then
+				autowistlefunction()
+			end
+		end
+    end)
+    
+local Revive_Mod = false
+    
+local Toggle = Tabs.Main:AddToggle("QuickRevive", {Title = "Quick Revive", Default = false })
+
+    Toggle:OnChanged(function(State)
+    Revive_Mod = State
+if Revive_Mod then
+workspace.Game.Settings:SetAttribute("ReviveTime", 1.75)
+		else
+workspace.Game.Settings:SetAttribute('ReviveTime', 3)
+		end        
+    end)
+    
+local NoCameraShake = false
+
+local Toggle = Tabs.Main:AddToggle("NoCamShake", {Title = "No Camera Shake", Default = false })
+
+    Toggle:OnChanged(function(State)
+    NoCameraShake = State
+while NoCameraShake and wait(0.1) do
+game.Players.LocalPlayer.PlayerScripts.CameraShake.Value = CFrame.new(0,0,0) * CFrame.new(0,0,0)
+		end        
+    end)
+ 
+
+Tabs.Main:AddParagraph({
+        Title = "Manual",
+        Content = " "
+    })
+
+Tabs.Main:AddButton({
+        Title = "Respawn Button",
+        Description = "",
+        Callback = function()
+        game:GetService("ReplicatedStorage").Events.Respawn:FireServer()
+        end
+    })
+    
+Tabs.Main:AddButton({
+        Title = "Open Leaderboard",
+        Description = "",
+        Callback = function()
+        game:GetService("VirtualInputManager"):SendKeyEvent(true, "Tab", false, game)
+        end
+    })
+
+-- AutoFarm
+
+Tabs.AutoFarm:AddParagraph({
+        Title = "Auto Farm",
+        Content = "Coming Soon!"
+    })
+
+-- Misc
+
+Tabs.Misc:AddParagraph({
+        Title = "Speed and Jump",
+        Content = " "
+    })
+
+local TSpeed = 1500
+local TJump = 4
+
+local Input = Tabs.Misc:AddInput("PlayerSpeed", {
+        Title = "Player Speed",
+        Default = "1500",
+        Placeholder = "Speed Number",
+        Numeric = false, -- Only allows numbers
+        Finished = false, -- Only calls callback when you press enter
+        Callback = function(Value)
+            TSpeed = tonumber(Value) or 1500
+        end
+    })
+    
+local Input = Tabs.Misc:AddInput("PlayerJump", {
+        Title = "Player Jump",
+        Default = "4",
+        Placeholder = "Speed Number",
+        Numeric = false, -- Only allows numbers
+        Finished = false, -- Only calls callback when you press enter
+        Callback = function(Value)
+            TJump = tonumber(Value) or 4
+        end
+    })
+    
+
+local old
+old = hookmetamethod(game,"__namecall",newcclosure(function(self,...)
+    local Args = {...}
+    local method = getnamecallmethod()
+    if tostring(self) == 'Communicator' and method == "InvokeServer" and Args[1] == "update" then
+        return TSpeed, TJump 
+    end
+    return old(self,...)
+end))
+
+Tabs.Misc:AddParagraph({
+        Title = "Bhop",
+        Content = " "
+    })
+    
+local Keybind = Tabs.Misc:AddKeybind("KeyBHOP", {
+        Title = "Keybind to BHOP",
+        Mode = "Toggle", -- Always, Toggle, Hold
+        Default = "B",
+        
+        Callback = function(Bool)
+            while Bool and wait(0.1) do
+               local humanoid = game.Players.LocalPlayer.Character:FindFirstChildOfClass("Humanoid")
+             if humanoid and humanoid.FloorMaterial ~= Enum.Material.Air and humanoid then
+               humanoid:ChangeState(Enum.HumanoidStateType.Jumping)
+               end
+           end
+        end,
+
+        ChangedCallback = function(New)
+            print("Keybind changed!", New)
+        end
+    })
+    
+Tabs.Misc:AddParagraph({
+        Title = "Mobile/Tablet Version",
+        Content = ""
+    })
+ 
+ local BHop = false
+local delay = 1
+
+local Players = game:GetService("Players")
+local LocalPlayer = Players.LocalPlayer
+local UserInputService = game:GetService("UserInputService")
+
+local BHop2 = false
+
+local function createtoggle()
+    -- Create ScreenGui
+    local screenGui = Instance.new("ScreenGui")
+    screenGui.Parent = game.CoreGui
+    screenGui.Name = "BHopToggle"
+
+    -- Create Frame
+    local frame = Instance.new("Frame")
+    frame.Size = UDim2.new(0, 200, 0, 50)
+    frame.Position = UDim2.new(1, -200, 0.5, -40)
+    frame.BackgroundColor3 = Color3.new(0.2, 0.2, 0.2)
+    frame.Parent = screenGui
+
+    -- Make frame draggable
+    frame.Active = true
+    frame.Draggable = true
+
+    -- Create Toggle Button
+    local toggleButton = Instance.new("TextButton")
+    toggleButton.Size = UDim2.new(1, 0, 1, 0)
+    toggleButton.BackgroundColor3 = Color3.new(0.3, 0.3, 0.3)
+    toggleButton.Text = "Auto Jump: OFF"
+    toggleButton.Parent = frame
+
+    -- Toggle Button Functionality
+    toggleButton.MouseButton1Click:Connect(function()
+        BHop2 = not BHop2
+        toggleButton.Text = BHop2 and "Auto Jump: ON" or "Auto Jump: OFF"
+    end)
+end
+
+-- Auto-Jump
+spawn(function()
+while true and wait(0.1) do
+    if BHop2 then
+        local humanoid = LocalPlayer.Character:FindFirstChildOfClass("Humanoid")
+        if humanoid and humanoid.FloorMaterial ~= Enum.Material.Air and humanoid then
+            humanoid:ChangeState(Enum.HumanoidStateType.Jumping)
+            end
+       end
+    end
+end)
+
+function destroytoggle()
+local target = game.CoreGui
+
+if target:FindFirstChild("BHopToggle") then
+target.BHopToggle:Destroy()
+end
+end
+ 
+local Toggle = Tabs.Misc:AddToggle("BHOPToggle", {Title = "BHOP Toggle", Default = false })
+
+    Toggle:OnChanged(function(State)
+ BHop = State
+if BHop then
+createtoggle()
+else
+destroytoggle()
+end
+end)
+
+-- Settings
+
+Tabs.Settings:AddParagraph({
+        Title = "Save Config",
+        Content = " "
+    })
+
+SaveManager:SetLibrary(Fluent)
+InterfaceManager:SetLibrary(Fluent)
+
+SaveManager:SetIgnoreIndexes({})
+
+-- Save Folder
+InterfaceManager:SetFolder("UnknownHubXUniversal")
+SaveManager:SetFolder("UnknownHubXUniversal/Evade")
+
+InterfaceManager:BuildInterfaceSection(Tabs.Settings)
+SaveManager:BuildConfigSection(Tabs.Settings)
+
+Window:SelectTab(1)
+
+-- Auto Load Configuration
+SaveManager:LoadAutoloadConfig()
