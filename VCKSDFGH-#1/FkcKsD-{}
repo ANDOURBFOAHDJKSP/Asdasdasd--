@@ -1913,7 +1913,7 @@ Tabs.Enemies:AddButton({
 local isUpdatingCamera = false
 
 
-if Player.Name == "Guilfordy_sagalol" or Player.Name == "Guesttester_1" or Player.Name == "Guilfordy_sagalol3" or Player.Name == "Peleeelallee" then
+-- if Player.Name == "Guilfordy_sagalol" or Player.Name == "Guesttester_1" or Player.Name == "Guilfordy_sagalol3" or Player.Name == "Peleeelallee" then
 
 Tabs.Enemies:AddParagraph({
         Title = "ABILITY AURA VERY OP!!!",
@@ -1983,7 +1983,7 @@ Tabs.Enemies:AddInput("Ability_Speed", {
     end
 })
 
-end
+-- end
 
 end
 
