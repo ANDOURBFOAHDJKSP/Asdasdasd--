@@ -20,7 +20,6 @@ mainopen.Position = UDim2.new(0.101969875, 0, 0.110441767, 0)
 mainopen.Size = UDim2.new(0, 64, 0, 42)
 mainopen.Text = ""
 mainopen.Visible = true
-
 mainopens.Parent = mainopen
  
 loki.Name = "loki"
@@ -103,7 +102,7 @@ end)
 
 local Window = Fluent:CreateWindow({
     Title = "Unknown Hub X Evade",
-    SubTitle = "V0.5 (Alpha) Made by Guesttester_1",
+    SubTitle = "V1 (Beta) Made by Guesttester_1",
     TabWidth = 160,
     Size = UDim2.fromOffset(580, 460),
     Acrylic = true, -- The blur may be detectable, setting this to false disables blur entirely
@@ -112,10 +111,17 @@ local Window = Fluent:CreateWindow({
 })
 
 Fluent:Notify({
-        Title = "Made by Guesttester_1!",
-        Content = "This is still Alpha Version and unfinished",
+        Title = "Made by Guesttester_1",
+        Content = "",
         SubContent = "", -- Optional
-        Duration = 10 -- Set to nil to make the notification not disappear
+        Duration = 1 -- Set to nil to make the notification not disappear
+    })
+    
+Fluent:Notify({
+        Title = "U can Now Dragging the BHOP, Fixed Keybind to BHOP not Disabling",
+        Content = "",
+        SubContent = "", -- Optional
+        Duration = 1 -- Set to nil to make the notification not disappear
     })
 
 local Tabs = {
@@ -192,6 +198,14 @@ function ClearESP(espname)
 	end
 end
 
+function nowaterdmg(t)
+	for i, v in next, t:GetChildren() do
+		if v.IsA(v, 'BasePart') then
+			v.CanTouch = false
+		end
+	end
+end
+
 local BotESP = false
 
 local Toggle = Tabs.Main:AddToggle("ESPBot", {Title = "ESP Bot", Default = false })
@@ -229,8 +243,16 @@ Toggle:OnChanged(function(State)
         while wait(0.2) do
             pcall(function()
                 if PlayerESP then
+                    local localPlayer = game.Players.LocalPlayer
+                    local localCharacter = localPlayer.Character
+                    local localHumanoidRootPart = localCharacter and localCharacter:FindFirstChild("HumanoidRootPart")
+                    
+                    if not localHumanoidRootPart then
+                        return
+                    end
+
                     for _, player in pairs(game.Players:GetPlayers()) do
-                        if player ~= game.Players.LocalPlayer and player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
+                        if player ~= localPlayer and player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
                             local character = player.Character
                             local humanoidRootPart = character.HumanoidRootPart
 
@@ -257,8 +279,8 @@ Toggle:OnChanged(function(State)
                                 TextLabel.TextSize = 14
                             end
 
-                            local distance = math.floor((game.Players.LocalPlayer.Character.HumanoidRootPart.Position - humanoidRootPart.Position).Magnitude)
-                            local labelText = player.Name .. " - " .. distance .. " M"
+                            local distance = math.floor((localHumanoidRootPart.Position - humanoidRootPart.Position).Magnitude)
+                            local labelText = string.format("%s - %d M", player.Name, distance)
 
                             local gamePlayer = workspace:WaitForChild("Game", 1337).Players:FindFirstChild(player.Name)
                             if gamePlayer and gamePlayer:GetAttribute('Downed') then
@@ -273,8 +295,12 @@ Toggle:OnChanged(function(State)
                     end
                 else
                     for _, player in pairs(game.Players:GetPlayers()) do
-                        if player.Character and player.Character:FindFirstChild("HumanoidRootPart") and player.Character.HumanoidRootPart:FindFirstChild("PlayerESP") then
-                            player.Character.HumanoidRootPart.PlayerESP:Destroy()
+                        if player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
+                            local humanoidRootPart = player.Character.HumanoidRootPart
+                            local esp = humanoidRootPart:FindFirstChild("PlayerESP")
+                            if esp then
+                                esp:Destroy()
+                            end
                         end
                     end
                 end
@@ -282,6 +308,8 @@ Toggle:OnChanged(function(State)
         end
     end)
 end)
+
+local ESPObject
 
 Tabs.Main:AddParagraph({
         Title = "Mods",
@@ -294,11 +322,11 @@ local Toggle = Tabs.Main:AddToggle("AutoRespawn", {Title = "Auto Respawn", Defau
 
     Toggle:OnChanged(function(State)
         AutoRespawn = State
-      while task.wait(1) and AutoRespawn do
+      while task.wait(0.1) and AutoRespawn do
 			if not AutoRespawn then
 				break
 			end
-			local char = game.Players.LocalPlayer.Character or game.Players.LocalPlayer.CharacterAdded:Wait()
+		 local char = game.Players.LocalPlayer.Character or game.Players.LocalPlayer.CharacterAdded:Wait()
 			local stats = char:WaitForChild("StatChanges", 3)
 			if stats == nil then
 				return
@@ -308,21 +336,7 @@ local Toggle = Tabs.Main:AddToggle("AutoRespawn", {Title = "Auto Respawn", Defau
 			end
 		end
     end)
-    
-local FastAutoRespawn = false
 
-local Toggle = Tabs.Main:AddToggle("AutoRespawn", {Title = "Auto Quick Respawn", Default = false })
-
-    Toggle:OnChanged(function(State)
-        FastAutoRespawn = State
-      while wait(0.1) and FastAutoRespawn do
-			if not FastAutoRespawn then
-				break
-	  		end
-	  	game:GetService("ReplicatedStorage").Events.Respawn:FireServer()
-		end
-    end)
-    
 local AutoWhistleWhenDowned = false
 
 function autowistlefunction()
@@ -375,6 +389,40 @@ game.Players.LocalPlayer.PlayerScripts.CameraShake.Value = CFrame.new(0,0,0) * C
 		end        
     end)
  
+local NoDamage = false
+
+function disabletouch()
+     nowaterdmg(game.Players.LocalPlayer.Character)
+end
+
+local Toggle = Tabs.Main:AddToggle("NoDmgtoWaterLavaIce", {Title = "No Damage Ice, Water, Lava", Default = false })
+
+    Toggle:OnChanged(function(State)
+    NoDamage = State
+while NoDamage and wait(0.1) do
+disabletouch()
+		end        
+    end)
+    
+function timernotify()
+Fluent:Notify({
+        Title = "Round will end in",
+        Content = game.Players.LocalPlayer.PlayerGui:WaitForChild("HUD").Center.Vote.Info.Read.Timer.Text,
+        SubContent = "", -- Optional
+        Duration = 1 -- Set to nil to make the notification not disappear
+    })
+end
+
+local TimerText = false
+
+local Toggle = Tabs.Main:AddToggle("TimerNotifier", {Title = "Timer Notifier", Default = false })
+
+    Toggle:OnChanged(function(State)
+    TimerText = State
+while TimerText and wait(1) do
+timernotify()
+		end        
+    end)
 
 Tabs.Main:AddParagraph({
         Title = "Manual",
@@ -401,7 +449,121 @@ Tabs.Main:AddButton({
 
 Tabs.AutoFarm:AddParagraph({
         Title = "Auto Farm",
-        Content = "Coming Soon!"
+        Content = "Recommend: Enable Quick Revive to Farm Money Faster"
+    })
+
+local FarmMoney = false
+local FarmTickets = false
+local AFKFarm = false
+local WorkspacePlayers = game:GetService("Workspace").Game.Players
+
+local GetDownedPlr = function()
+    for i,v in pairs(WorkspacePlayers:GetChildren()) do
+        if v:GetAttribute("Downed") then
+            return v
+        end
+    end
+end
+ 
+local revive = function()
+    local downedplr = GetDownedPlr()
+    if downedplr ~= nil and downedplr:FindFirstChild('HumanoidRootPart') then
+        task.spawn(function()
+            while task.wait() do
+                if game.Players.LocalPlayer.Character then
+                    game.Players.LocalPlayer.Character:FindFirstChild('HumanoidRootPart').CFrame = CFrame.new(downedplr:FindFirstChild('HumanoidRootPart').Position.X, downedplr:FindFirstChild('HumanoidRootPart').Position.Y + 3, downedplr:FindFirstChild('HumanoidRootPart').Position.Z)
+                    task.wait()
+                    game:GetService("ReplicatedStorage").Events.Revive.RevivePlayer:FireServer(tostring(downedplr), false)
+                    task.wait(4.5)
+                    game:GetService("ReplicatedStorage").Events.Revive.RevivePlayer:FireServer(tostring(downedplr), true)
+                    game:GetService("ReplicatedStorage").Events.Revive.RevivePlayer:FireServer(tostring(downedplr), true)
+                    game:GetService("ReplicatedStorage").Events.Revive.RevivePlayer:FireServer(tostring(downedplr), true)
+                    break
+                end
+            end
+        end)
+    end
+end
+
+task.spawn(function()
+    while task.wait() do
+        if FarmMoney then
+            if game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:GetAttribute("Downed") then
+                game:GetService("ReplicatedStorage").Events.Respawn:FireServer()
+                task.wait(3)
+            else
+                revive()
+                task.wait(1)
+            end
+        end
+        if FarmMoney == false and AFKFarm and game.Players.LocalPlayer.Character:FindFirstChild('HumanoidRootPart') ~= nil then
+            game.Players.LocalPlayer.Character:FindFirstChild('HumanoidRootPart').CFrame = CFrame.new(6007, 7005, 8005)
+        end
+    end
+end)
+
+local Toggle = Tabs.AutoFarm:AddToggle("AutoFarmMoney", {Title = "Auto Farm Money", Default = false })
+
+    Toggle:OnChanged(function(State)
+    FarmMoney = State
+    end)
+
+local Toggle = Tabs.AutoFarm:AddToggle("AutoFarmTickets", {Title = "Auto Farm Tickets", Default = false })
+
+    Toggle:OnChanged(function(State)
+    FarmTickets = State
+if FarmTickets then
+         part = Instance.new("Part", workspace)
+			part.Anchored = true
+			part.CFrame = CFrame.new(100, 496, 100)
+		end
+		while task.wait(0.5) and FarmTickets do
+			if not FarmTickets then
+				break
+			end
+			local char = game.Players.LocalPlayer.Character or game.Players.LocalPlayer.CharacterAdded:Wait()
+			local tickets = workspace.Game.Effects.Tickets
+			local hrp = char:WaitForChild("HumanoidRootPart", 3)
+			if hrp == nil then
+				return
+			end
+			hrp.CFrame = CFrame.new(100, 500, 100)
+			for i, v in next, tickets:GetDescendants() do
+				if v.IsA(v, "BasePart") and v.Name == "HumanoidRootPart" then
+					hrp.CFrame = CFrame.new(v.Position)
+				end
+			end
+		end
+    end)
+    
+local Toggle = Tabs.AutoFarm:AddToggle("AFKFarm", {Title = "AFK Farm", Default = false })
+
+    Toggle:OnChanged(function(State)
+    AFKFarm = State
+    end)
+
+Tabs.AutoFarm:AddParagraph({
+        Title = "Teleports",
+        Content = ""
+    })
+
+function tptoobjective()
+local hrp = game.Players.LocalPlayer.Character.HumanoidRootPart
+	if workspace.Game.Map.Parts:FindFirstChild("Objectives") then
+		for i, v in next, workspace.Game.Map.Parts.Objectives:GetChildren() do
+			if v.IsA(v, "Model") then
+				hrp.CFrame = CFrame.new(v:FindFirstChildWhichIsA("BasePart").Position)
+			end
+		end
+	end
+end
+
+Tabs.AutoFarm:AddButton({
+        Title = "Teleport to Objective",
+        Description = "",
+        Callback = function()
+        tptoobjective()
+        end
     })
 
 -- Misc
@@ -412,7 +574,7 @@ Tabs.Misc:AddParagraph({
     })
 
 local TSpeed = 1500
-local TJump = 4
+local TJump = 3
 
 local Input = Tabs.Misc:AddInput("PlayerSpeed", {
         Title = "Player Speed",
@@ -427,12 +589,12 @@ local Input = Tabs.Misc:AddInput("PlayerSpeed", {
     
 local Input = Tabs.Misc:AddInput("PlayerJump", {
         Title = "Player Jump",
-        Default = "4",
+        Default = "3",
         Placeholder = "Speed Number",
         Numeric = false, -- Only allows numbers
         Finished = false, -- Only calls callback when you press enter
         Callback = function(Value)
-            TJump = tonumber(Value) or 4
+            TJump = tonumber(Value) or 3
         end
     })
     
@@ -452,13 +614,16 @@ Tabs.Misc:AddParagraph({
         Content = " "
     })
     
+local BHopKey = false
+    
 local Keybind = Tabs.Misc:AddKeybind("KeyBHOP", {
         Title = "Keybind to BHOP",
         Mode = "Toggle", -- Always, Toggle, Hold
         Default = "B",
         
         Callback = function(Bool)
-            while Bool and wait(0.1) do
+        BHopKey = Bool
+            while BHopKey and wait(0.1) do
                local humanoid = game.Players.LocalPlayer.Character:FindFirstChildOfClass("Humanoid")
              if humanoid and humanoid.FloorMaterial ~= Enum.Material.Air and humanoid then
                humanoid:ChangeState(Enum.HumanoidStateType.Jumping)
@@ -476,7 +641,7 @@ Tabs.Misc:AddParagraph({
         Content = ""
     })
  
- local BHop = false
+  local BHop = false
 local delay = 1
 
 local Players = game:GetService("Players")
@@ -490,12 +655,14 @@ local function createtoggle()
     local screenGui = Instance.new("ScreenGui")
     screenGui.Parent = game.CoreGui
     screenGui.Name = "BHopToggle"
-
+    screenGui.ResetOnSpawn = false
+    
     -- Create Frame
     local frame = Instance.new("Frame")
     frame.Size = UDim2.new(0, 200, 0, 50)
     frame.Position = UDim2.new(1, -200, 0.5, -40)
     frame.BackgroundColor3 = Color3.new(0.2, 0.2, 0.2)
+    frame.BackgroundTransparency = 1
     frame.Parent = screenGui
 
     -- Make frame draggable
@@ -514,6 +681,8 @@ local function createtoggle()
         BHop2 = not BHop2
         toggleButton.Text = BHop2 and "Auto Jump: ON" or "Auto Jump: OFF"
     end)
+    
+    MakeDraggable(toggleButton, frame)
 end
 
 -- Auto-Jump
@@ -535,7 +704,7 @@ if target:FindFirstChild("BHopToggle") then
 target.BHopToggle:Destroy()
 end
 end
- 
+
 local Toggle = Tabs.Misc:AddToggle("BHOPToggle", {Title = "BHOP Toggle", Default = false })
 
     Toggle:OnChanged(function(State)
@@ -545,6 +714,39 @@ createtoggle()
 else
 destroytoggle()
 end
+end)
+
+Tabs.Misc:AddParagraph({
+        Title = "Modify Lightings",
+        Content = " "
+    })
+ 
+ local Lighting = game:GetService("Lighting")
+  local RemoveFog = false
+ 
+ local Toggle = Tabs.Misc:AddToggle("FullBright", {Title = "Full Bright", Default = false })
+
+    Toggle:OnChanged(function(State)
+ RemoveFog = State
+ if RemoveFog then
+            Lighting.Ambient = Color3.new(1, 1, 1)
+            Lighting.ColorShift_Bottom = Color3.new(1, 1, 1)
+            Lighting.ColorShift_Top = Color3.new(1, 1, 1)
+            Lighting.FogEnd = 100000
+            Lighting.FogStart = 0
+            Lighting.GlobalShadows = false
+            Lighting.ClockTime = 14
+            Lighting.Brightness = 2
+        else
+            Lighting.Ambient = Color3.new(0, 0, 0)
+            Lighting.ColorShift_Bottom = Color3.new(0, 0, 0)
+            Lighting.ColorShift_Top = Color3.new(0, 0, 0)
+            Lighting.FogEnd = {}
+            Lighting.FogStart = {}
+            Lighting.GlobalShadows = true
+            Lighting.ClockTime = {}
+            Lighting.Brightness = {}
+       end
 end)
 
 -- Settings
