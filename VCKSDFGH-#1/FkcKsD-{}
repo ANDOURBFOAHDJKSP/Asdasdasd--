@@ -441,8 +441,8 @@ if workspace:FindFirstChild("Dungeon") then
            local distance = (monster.HumanoidRootPart.Position - damage.Position).Magnitude
            
            if distance <= 500 then
-             -- monster:FindFirstChild("HumanoidRootPart").CFrame = CFrame.new(damage.position + Vector3.new(0, 0, 1.5))
-            -- monster:FindFirstChild("HumanoidRootPart").Position = damage.position + Vector3.new(0, 0, 1.5)
+               monster:FindFirstChild("HumanoidRootPart").CFrame = CFrame.new(damage.position + Vector3.new(0, 0, 1.5))
+               monster:FindFirstChild("HumanoidRootPart").Position = damage.position + Vector3.new(0, 0, 1.5)
                firetouchinterest(monster.HumanoidRootPart, damage, 0)
                firetouchinterest(monster.HumanoidRootPart, damage, 1)
                firetouchinterest(damage, monster.HumanoidRootPart, 0)
@@ -450,10 +450,6 @@ if workspace:FindFirstChild("Dungeon") then
             damage.Size = Vector3.new(UwUSizeX, UwUSizeY, UwUSizeZ)
             damage.Transparency = UwUTrans
             wait(0.3)
-            
-            if monster:FindFirstChild("HumanoidRootPart") then
-            damage.CFrame = CFrame.new(monster.HumanoidRootPart.Position)
-            end
           
           if not damage:FindFirstChildWhichIsA("TouchTransmitter") then
           damage.CFrame = CFrame.new(monster.HumanoidRootPart.Position)
@@ -1420,6 +1416,20 @@ Toggle:OnChanged(function(isEnabled)
         spawn(AutoQuestLeave)
     until AutoQuestLeaving == false
 end)
+
+local Toggle = Tabs.Main:AddToggle("AutoLeaveWhenProgressionQuestisComplete", {Title = "Auto-Leave When Progression is Complete (TEST)", Default = false })
+
+Toggle:OnChanged(function(isEnabled)
+    AutoQuestLeaving2 = isEnabled
+    if AutoQuestLeaving2 then
+    Fluent:Notify({
+        Title = "🗿🗿🗿",
+        Content = "Get Trolled!",
+        SubContent = " ", -- Optional
+        Duration = 10 -- Set to nil to make the notification not disappear
+    })
+  end
+end)
     
 Tabs.Main:AddParagraph({
         Title = "Auto Claim",
@@ -1913,7 +1923,7 @@ Tabs.Enemies:AddButton({
 local isUpdatingCamera = false
 
 
--- if Player.Name == "Guilfordy_sagalol" or Player.Name == "Guesttester_1" or Player.Name == "Guilfordy_sagalol3" or Player.Name == "Peleeelallee" then
+if Player.Name == "Guilfordy_sagalol" or Player.Name == "Guesttester_1" or Player.Name == "Guilfordy_sagalol3" or Player.Name == "Peleeelallee" then
 
 Tabs.Enemies:AddParagraph({
         Title = "ABILITY AURA VERY OP!!!",
@@ -1983,7 +1993,7 @@ Tabs.Enemies:AddInput("Ability_Speed", {
     end
 })
 
--- end
+end
 
 end
 
