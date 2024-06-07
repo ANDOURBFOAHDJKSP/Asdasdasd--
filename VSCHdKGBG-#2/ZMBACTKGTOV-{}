@@ -168,7 +168,7 @@ function AddTable(TableTrigger,LocalTrigger)
        
 
 local function getNearest()
-    local nearest, dist = nil, 999999999 -- Set a very large initial distance
+    local nearest, dist = nil, math.huge -- Set a very large initial distance
     for _, v in pairs(game.Workspace.BossFolder:GetDescendants()) do
         if v:FindFirstChild("Head") then
             local m = (Player.Character.Head.Position - v.Head.Position).magnitude
@@ -741,9 +741,44 @@ local Slider = Tabs.Zombie:AddSlider("Hitboxzombie", {
 
 -- Tool
 
+local globalTarget = nil
 local camera = workspace.CurrentCamera
 
 _G._ZombieKillPart = "Head"
+_G._ZombieKillPart2 = "HumanoidRootPart"
+
+function RayFromCamera()
+local ray = Ray.new(workspace.CurrentCamera.CFrame.p, workspace.CurrentCamera.CFrame.lookVector * 100)
+
+local ignoreList = {Player.Character} -- Daftar objek yang akan diabaikan saat raycasting
+
+local hit, position = workspace:FindPartOnRayWithIgnoreList(ray, ignoreList)
+
+if hit then
+    return "Object name: " .. tostring(hit.Name) .. "\nSurface normal at hit point: nil\nObject found at position: \n" .. tostring(position)
+end
+end
+
+function RayFromHead()
+local ray = Ray.new(Player.Character.Head.Position, Player.Character.Head.CFrame.lookVector * 100)
+local ignoreList = {Player.Character} -- Kita tidak ingin ray mengenai karakter pemain itu sendiri
+
+local hit, position = workspace:FindPartOnRayWithIgnoreList(ray, ignoreList)
+
+if hit then
+    return "Object name: " .. tostring(hit.Name) .. "\nSurface normal at hit point: nil\nObject found at position: \n" .. tostring(position)
+    --highlightPart(hit)
+end
+end
+
+local function wallbang(pos,vic,func)
+    local workspace = game:GetService("Workspace")
+    local ray = Ray.new(pos,(pos - vic.Position).unit * 500)
+    local hitPart,hitPosition = workspace:FindPartOnRayWithIgnoreList(ray,workspace["map"],true,true)
+    if hitPart then
+        func(hitPosition)
+    end
+end
 
 local function isBehindWall(player)
     local ray = Ray.new(camera.CFrame.Position, player.Head.Position - camera.CFrame.Position)
@@ -770,6 +805,7 @@ if weapontype == "gun" then
 game:GetService("ReplicatedStorage").Gun:FireServer({["Normal"] = Vector3.new(0,0,0),["Direction"] = getNearest()[partaim].Position,["Name"] = getEquippedWeapon(game.Players.LocalPlayer),["Hit"] = getNearest()[partaim],["Origin"] = getNearest()[partaim].Position,["Pos"] = getNearest()[partaim].Position})
 elseif weapontype == "melee" then
 game:GetService("ReplicatedStorage")["forhackers"]:InvokeServer("hit",getEquippedWeapon(game.Players.LocalPlayer),getNearest()[partaim])
+game:GetService("ReplicatedStorage")["forhackers"]:InvokeServer("hit",getEquippedWeapon(game.Players.LocalPlayer),getNearest2()[partaim])
 else
 	return "INVALID WEAPON TYPE"
 end
@@ -783,10 +819,12 @@ for _,Thing in pairs(game:GetService("ReplicatedStorage").Guns:GetChildren()) do
  end
 end
 
+local KnifeName = "Omega Scythe"
 
 local ConfirmSystem = {
 	Damage = false,
 	Tracking = false,
+	Throwing = false,
 	Wallbang = false
 }
 
@@ -805,9 +843,10 @@ gmt.__namecall = newcclosure(function(self, ...)
                       Args[1]["Pos"] = getNearest()[_G._ZombieKillPart].Position
 		    return self.FireServer(self, unpack(Args))
 		--end
-	        elseif tostring(self) == "forhackers" and tostring(method) == "InvokeServer" and ConfirmSystem.Damage == true then
-		      Args[2] = getEquippedWeapon(Player)
+	        elseif tostring(self) == "forhackers" and tostring(method) == "InvokeServer" and ConfirmSystem.Throwing == true then
+		      Args[2] = KnifeName
 		      Args[3] = getNearest()[_G._ZombieKillPart]
+	          Args[3] = getNearest()[_G._ZombieKillPart2]
 		    return self.InvokeServer(self, unpack(Args))
                 end
                 return oldNamecall(self, ...)
@@ -830,7 +869,7 @@ end
 local Circle = Drawing.new("Circle")
 Circle.Color = Color3.fromRGB(22, 13, 56)
 Circle.Thickness = 1
-Circle.Radius = 500
+Circle.Radius = 100
 Circle.Visible = false
 Circle.NumSides = 2000
 Circle.Filled = false
@@ -862,7 +901,7 @@ local function V4()
         end
     end
     
-    for _, v in next, game.GetService(game,"Workspace").BossFolder.GetChildren(game.GetService(game,"Workspace").BossFolder) do
+    for _, v in next, game.GetService(game,"Workspace").BossFolder.GetChildren(game.GetService(game, "Workspace").BossFolder) do
         if game.FindFirstChild(v,"Head") then
             local vector, onScreen = camera.worldToScreenPoint(camera, game.WaitForChild(v, "Head", math.huge).Position)
             if isWithinFOVCircle(vector) then
@@ -907,42 +946,6 @@ namecall = hookmetamethod(game, "__namecall", function(Self, ...)
 	return namecall(Self, ...)
 end)
 
---[[
-local bullet = {
-	Penetrate_1 = false,
-	penetrate_2 = false,
-	Reverse = false,
-	penetrate_3 = false,
-	penetrate_4 = false
-}
-
-local bulletSystemV1 = nil
-bulletSystemV1 = hookmetamethod(game, "__namecall", function(self, ...)
-  local Args = {...}
-    if getnamecallmethod() == "FindPartOnRayWithIgnoreList" and bullet.Penetrate_1 == true then
-	if bullet.Reverse == false then
-           table.insert(Args[2],workspace.map)
-	else
-	   table.insert(workspace.map,Args[2])
-	end
-    end
-    return bulletSystemV1(self, ...)
-end)
-
-local bulletSystemV2 = nil
-bulletSystemV2 = hookmetamethod(game, "__namecall", function(self, ...)
-  local Args = {...}
-    if getnamecallmethod() == "FindPartOnRayWithWhitelist" and bullet.Penetrate_2 == true then
-       if bullet.Reverse == false then
-           table.insert(Args[2],workspace.map)
-	else
-	   table.insert(workspace.map,Args[2])
-	end
-    end
-    return bulletSystemV2(self, ...)
-end)
-]]
-
 local nearesthead = targetFolders
 
 function silentaim()
@@ -955,7 +958,6 @@ else
 -- Player.Character.HumanoidRootPart.CFrame = (getNearest().HumanoidRootPart.CFrame * CFrame.new(0, groundDistance, 9))
 game.ReplicatedStorage.Gun:FireServer({["Normal"] = Vector3.new(0, 0, 0), ["Direction"] = getNearest()[_G._ZombieKillPart].Position, ["Name"] = getEquippedWeapon(Player), ["Hit"] = getNearest()[_G._ZombieKillPart], ["Origin"] = getNearest()[_G._ZombieKillPart].Position, ["Pos"] = getNearest()[_G._ZombieKillPart].Position, ["Damage"] = math.huge,})
 end
-return
 end
 
 function cameratrack()
@@ -988,6 +990,7 @@ local Toggle = Tabs.Tool:AddToggle("SilentAim", {Title = "Silent Aim", Default =
 
     Toggle:OnChanged(function(bool1)
     ConfirmSystem.Tracking = bool1
+    Circle.Visible = bool1
         BlacklistedPart()
     end)
 
@@ -1005,6 +1008,31 @@ local Toggle = Tabs.Tool:AddToggle("CameraAimbot", {Title = "Camera Track", Defa
     end)
 
     Options.CameraAimbot:SetValue(false)
+ 
+ local bullet = {
+	Penetrate_1 = false,
+	Reverse = false
+}
+ 
+local Toggle = Tabs.Tool:AddToggle("WallBang", {Title = "Wallbang (Farming Only)", Default = false })
+
+    Toggle:OnChanged(function(State)
+        bullet.Penetrate_1 = State
+local bulletSystemV1 = nil
+bulletSystemV1 = hookmetamethod(game, "__namecall", function(self, ...)
+  local Args = {...}
+    if getnamecallmethod() == "FindPartOnRayWithIgnoreList" and bullet.Penetrate_1 == true then
+  	if bullet.Reverse == false then
+           table.insert(Args[2],workspace.map)
+     	else
+	         table.insert(workspace.map,Args[2])
+         	end
+          end
+       return bulletSystemV1(self, ...)
+    end)
+end)
+
+    Options.AutoShoot:SetValue(false)
     
 local Toggle = Tabs.Tool:AddToggle("AutoShoot", {Title = "Auto Shoot", Default = false })
 
@@ -1032,7 +1060,7 @@ Tabs.Tool:AddParagraph({
         Content = " "
     })
    
- local KillAuraRange = 30
+local KillAuraRange = 30
 local KnifeName = "Omega Scythe"
 
 local Input = Tabs.Tool:AddInput("KnifeName", {
@@ -1049,8 +1077,9 @@ local Input = Tabs.Tool:AddInput("KnifeName", {
 local Toggle = Tabs.Tool:AddToggle("KillAura", {Title = "Kill Aura", Default = false })
 
 Toggle:OnChanged(function(bool)
+    ConfirmSystem.Throwing = bool
     _G._UserKill = bool
-    while wait(0.1) do
+    while wait(000.0001) do
         if _G._UserKill == false then break end
         for _, targetFolder in ipairs(targetFolders) do
             for _, value in pairs(targetFolder:GetDescendants()) do
@@ -1059,12 +1088,14 @@ Toggle:OnChanged(function(bool)
                         if value.Name ~= game:GetService("Players").LocalPlayer.Name then
                             local humanoidrootpart = value:FindFirstChild("Head")
                             local humanoidrootpart2 = value:FindFirstChild("HumanoidRootPart")
+                            local zombiehealth = value:FindFirstChild("Humanoid")
                             local char = game:GetService("Players").LocalPlayer.Character
                             if humanoidrootpart and char and char:FindFirstChild(KnifeName) then
                                 local distance = (char.HumanoidRootPart.Position - humanoidrootpart.Position).Magnitude
                                 if distance <= KillAuraRange then
                                     KillZombies("melee", _G._ZombieKillPart)
-                                    humanoidrootpart2.CFrame = CFrame.new(char.HumanoidRootPart.Position + Vector3.new(0, 8, 0))
+                                    KillZombies("melee", _G._ZombieKillPart2)
+                                    humanoidrootpart2.CFrame = char.HumanoidRootPart.CFrame * CFrame.new(0, 0, -9.3)
                                 -- firetouchinterest(humanoidrootpart, char:FindFirstChild(KnifeName).Handle, 1)                                  
                                 --  firetouchinterest(humanoidrootpart, char:FindFirstChild(KnifeName).Handle, 0)
                                     firetouchinterest(char:FindFirstChild(KnifeName).Handle, humanoidrootpart, 1)                                  
@@ -1092,6 +1123,47 @@ local Slider = Tabs.Tool:AddSlider("KnifeRange", {
         KillAuraRange = tonumber(Value) or 30
     end
 })
+
+Tabs.Tool:AddParagraph({
+        Title = "Pet Mods",
+        Content = " "
+    })
+
+local Orbs = false
+
+function getNearestBullets()
+    for _, targetFolder in ipairs(targetFolders) do
+        for _, enemy in ipairs(targetFolder:GetDescendants()) do
+            local enemyRootPart = enemy:FindFirstChild("HumanoidRootPart")
+            if enemyRootPart then                
+                local targetPosition = enemyRootPart.Position + Vector3.new(0, 1, 0)
+ 
+                for _, v in pairs(workspace:GetChildren()) do
+                    if v.Name == "Part" and v:IsA("BasePart") and v:FindFirstChildWhichIsA("TouchTransmitter") then
+                        v.Size = Vector3.new(10, 5, 10)
+                        firetouchinterest(enemyRootPart, v, 1)
+                        firetouchinterest(enemyRootPart, v, 0)                    
+                        -- Tween the part to the target position
+                        game:GetService("TweenService"):Create(v, TweenInfo.new(0.2), {Position = targetPosition}):Play()
+                        
+                        -- Tween the part to the target CFrame
+                        game:GetService("TweenService"):Create(v, TweenInfo.new(0.2), {CFrame = CFrame.new(targetPosition)}):Play()
+                    end
+                end
+            end
+        end
+    end
+end
+
+local Toggle = Tabs.Tool:AddToggle("OrbsAura", {Title = "Orbs Aura", Default = false })
+
+Toggle:OnChanged(function(bool)
+Orbs = bool
+	while wait() do
+	if Orbs == false then break end
+		getNearestBullets()
+	end
+end)
 
 -- Settings
 
