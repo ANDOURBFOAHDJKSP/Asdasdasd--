@@ -1167,7 +1167,7 @@ Circle.Color = Color3.fromRGB(22, 13, 56)
 Circle.Thickness = 1
 Circle.Radius = 100
 Circle.Visible = false
-Circle.NumSides = 2000
+Circle.NumSides = 1000
 Circle.Filled = false
 Circle.Transparency = 1
 Circle.Position = Vector2.new(camera.ViewportSize.X / 2, camera.ViewportSize.Y / 2)
@@ -1328,7 +1328,7 @@ bulletSystemV1 = hookmetamethod(game, "__namecall", function(self, ...)
     end)
 end)
 
-    Options.AutoShoot:SetValue(false)
+    Options.WallBang:SetValue(false)
     
 local Toggle = Tabs.Tool:AddToggle("AutoShoot", {Title = "Auto Shoot", Default = false })
 
