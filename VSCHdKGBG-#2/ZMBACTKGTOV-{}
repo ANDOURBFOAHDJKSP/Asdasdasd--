@@ -206,7 +206,7 @@ local SaveManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/d
 local InterfaceManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/dawid-scripts/Fluent/master/Addons/InterfaceManager.lua"))()
 
 local Window = Fluent:CreateWindow({
-    Title = "Unknown Hub X Zombie Attack V2",
+    Title = "Unknown Hub X Zombie Attack V2.2",
     SubTitle = "Made by Guesttester_1",
     TabWidth = 160,
     Size = UDim2.fromOffset(580, 460),
@@ -220,6 +220,7 @@ local Options = Fluent.Options
 --Fluent provides Lucide Icons https://lucide.dev/icons/ for the tabs, icons are optional
 local Tabs = {
     Farming = Window:AddTab({ Title = "Farming", Icon = " " }),
+    Misc = Window:AddTab({ Title = "Misc", Icon = " " }),
     Zombie = Window:AddTab({ Title = "Zombie Mods", Icon = " " }),
     Tool = Window:AddTab({ Title = "Tool Mods", Icon = " " }),
     Settings = Window:AddTab({ Title = "Settings", Icon = "settings" })
@@ -262,25 +263,22 @@ local near = getNearest()
 
 local groundDistance = 12
 
-function farmzombie()
+game:GetService("RunService").RenderStepped:Connect(function()
 if _G._tp_farm == true then
-if _G._userGun == true and near then
+if _G._tp_farm == false then game:GetService("RunService").Stepped:Disconnect() end
+if _G._userGun == true then
 -- game:GetService("Workspace").CurrentCamera.CFrame = CFrame.new(game:GetService("Workspace").CurrentCamera.CFrame.p, getNearest().Head.Position)
-Player.Character.HumanoidRootPart.CFrame = (getNearest().HumanoidRootPart.CFrame * CFrame.new(0, groundDistance, 10))
+Player.Character.HumanoidRootPart.CFrame = (getNearest().HumanoidRootPart.CFrame * CFrame.new(0, groundDistance, 9))
 game:GetService("ReplicatedStorage")["forhackers"]:InvokeServer("hit",getEquippedWeapon(Player),getNearest()[_G._ZombieKillPart])
 else
 -- game:GetService("Workspace").CurrentCamera.CFrame = CFrame.new(game:GetService("Workspace").CurrentCamera.CFrame.p, getNearest().Head.Position)
-Player.Character.HumanoidRootPart.CFrame = (getNearest().HumanoidRootPart.CFrame * CFrame.new(0, groundDistance, 10))
+Player.Character.HumanoidRootPart.CFrame = (getNearest().HumanoidRootPart.CFrame * CFrame.new(0, groundDistance, 9))
 game.ReplicatedStorage.Gun:FireServer({["Normal"] = Vector3.new(0, 0, 0), ["Direction"] = getNearest()[_G._ZombieKillPart].Position, ["Name"] = getEquippedWeapon(Player), ["Hit"] = getNearest()[_G._ZombieKillPart], ["Origin"] = getNearest()[_G._ZombieKillPart].Position, ["Pos"] = getNearest()[_G._ZombieKillPart].Position,})
+RunService.RenderStepped:Wait()
 end
 end
-end
-
-repeat
-wait(.2)
-spawn(farmzombie)
-until not _G._tp_farm == true
-    end)
+end)
+end)
     
 local AutoCollectSystemIndic2 = false
 
@@ -448,11 +446,58 @@ end
 end)
  
 Tabs.Farming:AddParagraph({
-        Title = "Farming Settings",
+        Title = "Auto Crates",
+        Content = " "
+    })
+    
+local SelectedCrate = "Basic #1"
+
+local Dropdown = Tabs.Main:AddDropdown("SelectedCrate", {
+        Title = "Select Crate",
+        Values = {"Basic #1","Basic #2","Basic #3","Uncommon","Rare","Legendary"},
+        Multi = false,
+        Default = 1,
+    })
+
+
+    Dropdown:OnChanged(function(list)
+        SelectedCrate = list
+    end)
+    
+local Toggle = Tabs.Misc:AddToggle("AutoBuyCrate", {Title = "Auto Buy Crates", Default = false })
+
+    Toggle:OnChanged(function(bool)
+    OpenCrates = bool
+	while wait(0.1) and OpenCrates do
+		if OpenCrates == false then break end
+         game:GetService("ReplicatedStorage")["RemoteEventContainer"]["CommunicationF"]:InvokeServer("unbox_box",SelectedCrate)
+        end
+    end)
+
+-- Misc
+Tabs.Misc:AddParagraph({
+        Title = "Farm Settings",
         Content = " "
     })
 
-local Toggle = Tabs.Farming:AddToggle("AntiAfk", {Title = "Anti-AFK", Default = false })
+local Slider = Tabs.Farming:AddSlider("GroundDistance", {
+        Title = "Ground Distance",
+        Description = "",
+        Default = 12,
+        Min = 0,
+        Max = 30,
+        Rounding = 1,
+        Callback = function(Value)
+            groundDistance = tonumber(Value) or 12
+        end
+    })
+
+Tabs.Misc:AddParagraph({
+        Title = "Character",
+        Content = " "
+    })
+
+local Toggle = Tabs.Misc:AddToggle("AntiAfk", {Title = "Anti-AFK", Default = false })
 
     Toggle:OnChanged(function()
 local vu = game:GetService("VirtualUser")
@@ -467,7 +512,7 @@ repeat wait() until game:IsLoaded()
 
 Options.AntiAfk:SetValue(true)
 
-local Input = Tabs.Farming:AddInput("Walkspeed", {
+local Input = Tabs.Misc:AddInput("Walkspeed", {
         Title = "Walk Speed",
         Default = 16,
         Placeholder = "Placeholder",
@@ -478,7 +523,7 @@ game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = WS
         end
     })
     
-local Input = Tabs.Farming:AddInput("Jumppower", {
+local Input = Tabs.Misc:AddInput("Jumppower", {
         Title = "Jump Power",
         Default = 50,
         Placeholder = "Placeholder",
@@ -488,16 +533,267 @@ local Input = Tabs.Farming:AddInput("Jumppower", {
 game.Players.LocalPlayer.Character.Humanoid.JumpPower = JP
         end
     })
+    
+Tabs.Misc:AddParagraph({
+        Title = "Visuals",
+        Content = " "
+    })
+    
+local Destroying = false
+local Toggle = Tabs.Misc:AddToggle("DestroyMap", {Title = "Destroy Map (Makes the Bullets to shoot zombies)", Default = false })
 
-local Slider = Tabs.Farming:AddSlider("GroundDistance", {
-        Title = "Ground Distance",
-        Description = "",
-        Default = 12,
-        Min = 0,
-        Max = 30,
-        Rounding = 1,
-        Callback = function(Value)
-            groundDistance = tonumber(Value) or 12
+    Toggle:OnChanged(function(bool)
+    Destroying = bool
+if Destroying then
+    local map = game:GetService("Workspace"):FindFirstChild("map")
+if not map then
+    warn("Map not found in Workspace")
+    return
+end
+
+-- Function to clone the map
+local function cloneMap(originalMap)
+    local mapClone = originalMap:Clone()
+    mapClone.Parent = nil -- Keep the clone hidden
+    return mapClone
+end
+
+-- Function to clear the map
+local function clearMap(map)
+    for i, v in pairs(map:GetChildren()) do
+        v:Destroy()
+    end
+end
+
+-- Function to restore the map
+local function restoreMap(mapClone)
+    mapClone.Parent = game:GetService("Workspace")
+end
+
+-- Main logic
+local mapClone = cloneMap(map)
+    -- Clear the map
+    clearMap(map)
+    
+  if not Destroying then
+    restoreMap(mapClone)
+       end
+    end
+end)
+
+Tabs.Misc:AddParagraph({
+        Title = "Fps Cap",
+        Content = ""
+    })
+
+local Vav = "500"
+    
+local Input = Tabs.Misc:AddInput("Input", {
+        Title = "Fps Cap",
+        Default = Vav,
+        Placeholder = "Placeholder",
+        Numeric = false, -- Only allows numbers
+        Finished = false, -- Only calls callback when you press enter
+        Callback = function(Fpscap)
+     Vav =  tonumber(Fpscap) or 500
+setfpscap(Vav)
+        end
+    })
+    
+setfpscap(500)
+
+Tabs.Misc:AddParagraph({
+        Title = "Anti Lag",
+        Content = ""
+    })
+
+local Lag1 = false
+
+local Toggle = Tabs.Misc:AddToggle("Anti_Lag1", {Title = "Anti Lag 1", Default = false })
+
+    Toggle:OnChanged(function(Value1)
+        Lag1 = Value1
+repeat
+if Lag1 then
+for _, v in pairs(Workspace:GetDescendants()) do
+    if v:IsA("BasePart") and not v.Parent:FindFirstChild("Humanoid") then
+        v.Material = Enum.Material.SmoothPlastic
+        if v:IsA("Texture") then
+            v:Destroy()
+        end
+    end
+end
+wait(1)
+end
+until not Lag1 == true
+    end)
+
+Options.Anti_Lag1:SetValue(false)
+
+local Toggle = Tabs.Misc:AddToggle("Anti_Lag2", {Title = "Anti Lag 2", Default = false })
+
+    Toggle:OnChanged(function(Value3)
+        if Value3 then
+        local decalsyeeted = true -- Leaving this on makes games look shitty but the fps goes up by at least 20.
+local g = game
+local w = g.Workspace
+local l = g.Lighting
+local t = w.Terrain
+t.WaterWaveSize = 0
+t.WaterWaveSpeed = 0
+t.WaterReflectance = 0
+t.WaterTransparency = 0
+l.GlobalShadows = false
+l.FogEnd = 9e9
+l.Brightness = 0
+settings().Rendering.QualityLevel = "Level01"
+wait(1)
+for i,v in pairs(g:GetDescendants()) do
+    if v:IsA("Part") or v:IsA("Union") or v:IsA("MeshPart") then
+        v.Material = "Plastic"
+v.Reflectance = 0
+elseif v:IsA("Decal") and decalsyeeted then 
+v.Transparency = 1
+elseif v:IsA("ParticleEmitter") or v:IsA("Trail") then 
+v.Lifetime = NumberRange.new(0)
+    end
+end
+end
+    end)
+
+Options.Anti_Lag2:SetValue(false)
+
+local Toggle = Tabs.Misc:AddToggle("Anti_Lag3", {Title = "Anti Lag 3", Default = false })
+
+    Toggle:OnChanged(function(Value4)
+        if Value4 then
+        local decalsyeeted = true 
+local g = game
+local w = g.Workspace
+local l = g.Lighting
+local t = w.Terrain
+sethiddenproperty(l,"Technology",2)
+sethiddenproperty(t,"Decoration",false)
+t.WaterWaveSize = 0
+t.WaterWaveSpeed = 0
+t.WaterReflectance = 0
+t.WaterTransparency = 0
+l.GlobalShadows = 0
+l.FogEnd = 9e9
+l.Brightness = 0
+settings().Rendering.QualityLevel = "Level01"
+for i, v in pairs(w:GetDescendants()) do
+    if v:IsA("BasePart") and not v:IsA("MeshPart") then
+        v.Material = "Plastic"
+        v.Reflectance = 0
+    elseif (v:IsA("Decal") or v:IsA("Texture")) and decalsyeeted then
+        v.Transparency = 1
+    elseif v:IsA("ParticleEmitter") or v:IsA("Trail") then
+        v.Lifetime = NumberRange.new(0)
+    elseif v:IsA("Explosion") then
+        v.BlastPressure = 1
+        v.BlastRadius = 1
+    elseif v:IsA("Fire") or v:IsA("SpotLight") or v:IsA("Smoke") or v:IsA("Sparkles") then
+        v.Enabled = false
+    elseif v:IsA("MeshPart") and decalsyeeted then
+        v.Material = "Plastic"
+        v.Reflectance = 0
+        v.TextureID = 10385902758728957
+    elseif v:IsA("SpecialMesh") and decalsyeeted  then
+        v.TextureId=0
+    elseif v:IsA("ShirtGraphic") and decalsyeeted then
+        v.Graphic=0
+    elseif (v:IsA("Shirt") or v:IsA("Pants")) and decalsyeeted then
+        v[v.ClassName.."Template"]=0
+    end
+end
+for i = 1,#l:GetChildren() do
+    e=l:GetChildren()[i]
+    if e:IsA("BlurEffect") or e:IsA("SunRaysEffect") or e:IsA("ColorCorrectionEffect") or e:IsA("BloomEffect") or e:IsA("DepthOfFieldEffect") then
+        e.Enabled = false
+    end
+end
+w.DescendantAdded:Connect(function(v)
+    wait(1)--prevent errors and shit
+   if v:IsA("BasePart") and not v:IsA("MeshPart") then
+        v.Material = "Plastic"
+        v.Reflectance = 0
+    elseif v:IsA("Decal") or v:IsA("Texture") and decalsyeeted then
+        v.Transparency = 1
+    elseif v:IsA("ParticleEmitter") or v:IsA("Trail") then
+        v.Lifetime = NumberRange.new(0)
+    elseif v:IsA("Explosion") then
+        v.BlastPressure = 1
+        v.BlastRadius = 1
+    elseif v:IsA("Fire") or v:IsA("SpotLight") or v:IsA("Smoke") or v:IsA("Sparkles") then
+        v.Enabled = false
+    elseif v:IsA("MeshPart") and decalsyeeted then
+        v.Material = "Plastic"
+        v.Reflectance = 0
+        v.TextureID = 10385902758728957
+    elseif v:IsA("SpecialMesh") and decalsyeeted then
+        v.TextureId=0
+    elseif v:IsA("ShirtGraphic") and decalsyeeted then
+        v.ShirtGraphic=0
+    elseif (v:IsA("Shirt") or v:IsA("Pants")) and decalsyeeted then
+        v[v.ClassName.."Template"]=0
+                 end
+             end)
+         end
+    end)
+
+Options.Anti_Lag3:SetValue(false)
+
+function DestroySky()
+game.Lighting:SetMinutesAfterMidnight(1)
+
+-- Get the Lighting service
+local Lighting = game:GetService("Lighting")
+
+-- Set the skybox color to black
+Lighting.OutdoorAmbient = Color3.new(0, 0, 0)
+Lighting.Ambient = Color3.new(0, 0, 0)
+Lighting.FogColor = Color3.new(0, 0, 0)
+
+local decalid = "rbxasset://textures/Sky/BlackSkyBoxTexture.png"
+local sky = Instance.new("Sky", game.Lighting)
+    sky.SkyboxBk = decalid
+    sky.SkyboxDn = decalid
+    sky.SkyboxFt = decalid
+    sky.SkyboxLf = decalid
+    sky.SkyboxRt = decalid
+    sky.SkyboxUp = decalid
+end
+
+local Destroy5 = false
+
+local Toggle = Tabs.Misc:AddToggle("Destroy_Sky", {Title = "Dark Sky Mode", Default = false })
+
+    Toggle:OnChanged(function(DV5)
+Destroy5 = DV5
+repeat 
+if Destroy5 then
+DestroySky()
+wait(1)
+end
+until not Destroy5 == true
+    end)
+
+Options.Destroy_Sky:SetValue(false)
+
+Tabs.Misc:AddButton({
+        Title = "White Screen (ON)",
+        Description = " ",
+        Callback = function()
+game:GetService("RunService"):Set3dRenderingEnabled(false)
+        end
+    })
+
+Tabs.Misc:AddButton({
+        Title = "White Screen (OFF)",
+        Description = " ",
+        Callback = function()
+game:GetService("RunService"):Set3dRenderingEnabled(true)
         end
     })
 
