@@ -452,7 +452,7 @@ Tabs.Farming:AddParagraph({
     
 local SelectedCrate = "Basic #1"
 
-local Dropdown = Tabs.Main:AddDropdown("SelectedCrate", {
+local Dropdown = Tabs.Farming:AddDropdown("SelectedCrate", {
         Title = "Select Crate",
         Values = {"Basic #1","Basic #2","Basic #3","Uncommon","Rare","Legendary"},
         Multi = false,
@@ -464,7 +464,7 @@ local Dropdown = Tabs.Main:AddDropdown("SelectedCrate", {
         SelectedCrate = list
     end)
     
-local Toggle = Tabs.Misc:AddToggle("AutoBuyCrate", {Title = "Auto Buy Crates", Default = false })
+local Toggle = Tabs.Farming:AddToggle("AutoBuyCrate", {Title = "Auto Buy Crates", Default = false })
 
     Toggle:OnChanged(function(bool)
     OpenCrates = bool
