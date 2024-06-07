@@ -437,19 +437,20 @@ if workspace:FindFirstChild("Dungeon") then
             local monsterRootPart = monster.HumanoidRootPart
         
         for _, damage in ipairs(game:GetService("Workspace").Ignore:GetDescendants()) do
-           if damage.Name == Skill or damage.Name == Skill1 or damage:FindFirstChildWhichIsA("TouchTransmitter") then
+           if damage.Name == Skill or damage.Name == Skill1 and damage:FindFirstChildWhichIsA("TouchTransmitter") then
            local distance = (monster.HumanoidRootPart.Position - damage.Position).Magnitude
            
            if distance <= 500 then
+           if monster and monster:FindFirstChild("HumanoidRootPart") then
                monster:FindFirstChild("HumanoidRootPart").CFrame = CFrame.new(damage.position + Vector3.new(0, 0, 1.5))
                monster:FindFirstChild("HumanoidRootPart").Position = damage.position + Vector3.new(0, 0, 1.5)
+               end
                firetouchinterest(monster.HumanoidRootPart, damage, 0)
                firetouchinterest(monster.HumanoidRootPart, damage, 1)
                firetouchinterest(damage, monster.HumanoidRootPart, 0)
                firetouchinterest(damage, monster.HumanoidRootPart, 1)
             damage.Size = Vector3.new(UwUSizeX, UwUSizeY, UwUSizeZ)
             damage.Transparency = UwUTrans
-            wait(0.3)
           
           if not damage:FindFirstChildWhichIsA("TouchTransmitter") then
           damage.CFrame = CFrame.new(monster.HumanoidRootPart.Position)
@@ -459,7 +460,6 @@ if workspace:FindFirstChild("Dungeon") then
        end
   end
 end  
-            wait(0.1)
             
               end
           end
@@ -568,11 +568,7 @@ function Tween(table, callback)
     local movementSpeed = 0
 
     if SlowTween then
-        if distance < 1 then
-            movementSpeed = 70
-        elseif distance < 10 then
-            movementSpeed = 50
-        elseif distance < 150 then
+        if distance < 150 then
             movementSpeed = 20
         elseif distance < 200 then
             movementSpeed = 25
@@ -588,11 +584,7 @@ function Tween(table, callback)
     end
 
     if NormalTween then
-        if distance < 1 then
-            movementSpeed = 70
-        elseif distance < 10 then
-            movementSpeed = 55
-        elseif distance < 150 then
+        if distance < 150 then
             movementSpeed = 30
         elseif distance < 200 then
             movementSpeed = 35
@@ -608,11 +600,7 @@ function Tween(table, callback)
     end
 
     if FastTween then
-        if distance < 1 then
-            movementSpeed = 70
-        elseif distance < 10 then
-            movementSpeed = 70
-        elseif distance < 150 then
+        if distance < 150 then
             movementSpeed = 40
         elseif distance < 200 then
             movementSpeed = 45
@@ -628,11 +616,7 @@ function Tween(table, callback)
     end
 
     if MaliciousTween then
-        if distance < 1 then
-            movementSpeed = 100
-        elseif distance < 10 then
-            movementSpeed = 80
-        elseif distance < 150 then
+        if distance < 150 then
             movementSpeed = 50
         elseif distance < 200 then
             movementSpeed = 55
@@ -758,11 +742,15 @@ game:GetService("Workspace"):FindFirstChild("Map")
 print("-- Unknown TQ Hub 4/5: Checking Exploit Support...")
 
 if not require then
-    return game.Players.LocalPlayer:Kick("Your Exploit doesn't support")
+    return game.Players.LocalPlayer:Kick("Your Exploit doesn't support: require(path)")
 end
 
 if not firetouchinterest then
-    return game.Players.LocalPlayer:Kick("Your Exploit doesn't support")
+    return game.Players.LocalPlayer:Kick("Your Exploit doesn't support: firetouchinterest()")
+end
+
+if not setfpscap then
+    return game.Players.LocalPlayer:Kick("Your Exploit doesn't support: setfpscap()")
 end
 
 print("-- Unknown TQ Hub 5/5: Loaded, Pls Wait for Few Seconds...")
@@ -777,7 +765,7 @@ local InterfaceManager = loadstring(game:HttpGet("https://raw.githubusercontent.
 local Options = Fluent.Options
 
 Fluent:Notify({
-        Title = "Made by Unknownproooolucky and Guesttester_1",
+        Title = "Made by Unknownproooolucky and guesttester_1",
         Content = " ",
         SubContent = " ", -- Optional
         Duration = 5 -- Set to nil to make the notification not disappear
@@ -871,9 +859,12 @@ for i, v in pairs(Workspace:GetChildren()) do
        if v:FindFirstChild("FinishRoom", true) and v:FindFirstChild("FinishRoom", true):FindFirstChild("Hitbox", true) then
        firetouchinterest(Player.Character:FindFirstChild("HumanoidRootPart", true),v:FindFirstChild("FinishRoom",true):FindFirstChild("Hitbox",true):FindFirstChild("Part",true),0)
        firetouchinterest(Player.Character:FindFirstChild("HumanoidRootPart", true),v:FindFirstChild("FinishRoom",true):FindFirstChild("Hitbox",true):FindFirstChild("Part",true),1)
+       Tween({
+            targetPart = rooms.FinishRoom.Hitbox.Part
+        })
              end
         end 
-    end 
+    end
 end
 
 local InstantKilltg = false
@@ -910,56 +901,6 @@ end
 end)
 
 Options.AutoKillMobsWizard:SetValue(false)
-
-Tabs.Main:AddParagraph({
-        Title = "Auto Collects",
-        Content = " "
-    })
-
-local Toggle2 = Tabs.Main:AddToggle("AutoChest", {Title = "Auto Collect Chest", Default = false })
-
-Toggle2:OnChanged(function(State)
-    Settings.Treasure = State
-    spawn(function()
-        while wait(0.1) and Settings.Treasure do 
-            pcall(function()
-                for i, v in pairs(Workspace:GetDescendants()) do
-                    if v.Name == "Chest"  then
-                        firetouchinterest(Player.Character:FindFirstChild("HumanoidRootPart",true),v:FindFirstChild("Hitbox"),0)
-                        firetouchinterest(Player.Character:FindFirstChild("HumanoidRootPart",true),v:FindFirstChild("Hitbox"),1)
-                    end 
-                end 
-            end)
-        end 
-    end)
-end)
-
-Options.AutoChest:SetValue(false)
-
-local Toggle3 = Tabs.Main:AddToggle("AutoMedkits", {Title = "Auto Collect Medkits", Default = false })
-
-Toggle3:OnChanged(function(State)
-    Settings.Med = State
-    spawn(function()
-    while wait(0.1) and Settings.Med do
-    if questslot1 == "Medkits" or questslot2 == "Medkits" then
-    Player.Character.Humanoid.Health = 100
-    end
-        pcall(function()
-            for i,v in pairs(Workspace.Ignore:GetChildren()) do
-                if v.Name == "Medkit" and v:FindFirstChildWhichIsA("TouchTransmitter",true) then
-                    if Player.Character.Humanoid.Health < Player.Character.Humanoid.MaxHealth then
-                        firetouchinterest(Player.Character:FindFirstChild("HumanoidRootPart",true), v, 0)
-                        firetouchinterest(Player.Character:FindFirstChild("HumanoidRootPart",true), v, 1)
-                      end 
-                  end 
-              end
-           end)
-       end 
-    end)
-end)
-
-Options.AutoMedkits:SetValue(false)
 
 end
 
@@ -1024,14 +965,57 @@ end)
 
 Options.WaveDefenseFarm:SetValue(false)
 
+end
+
 Tabs.Main:AddParagraph({
         Title = "Auto Collects",
         Content = " "
     })
-    
-local questrequest = require(game:GetService("Players").LocalPlayer.PlayerScripts.Shared.Modules.Pages.Quests)
-local questslot1 = questrequest["_quest_slots"][1]["_quest_info"].Name 
-local questslot2 = questrequest["_quest_slots"][2]["_quest_info"].Name
+if isLobby or isMainDungeon or isEventDungeon then
+local Toggle2 = Tabs.Main:AddToggle("AutoChest", {Title = "Auto Collect Chest", Default = false })
+
+Toggle2:OnChanged(function(State)
+    Settings.Treasure = State
+    spawn(function()
+        while wait(0.1) and Settings.Treasure do 
+            pcall(function()
+                for i, v in pairs(Workspace:GetDescendants()) do
+                    if v.Name == "Chest"  then
+                        firetouchinterest(Player.Character:FindFirstChild("HumanoidRootPart",true),v:FindFirstChild("Hitbox"),0)
+                        firetouchinterest(Player.Character:FindFirstChild("HumanoidRootPart",true),v:FindFirstChild("Hitbox"),1)
+                    end 
+                end 
+            end)
+        end 
+    end)
+end)
+
+Options.AutoChest:SetValue(false)
+
+local Toggle3 = Tabs.Main:AddToggle("AutoMedkits", {Title = "Auto Collect Medkits", Default = false })
+
+Toggle3:OnChanged(function(State)
+    Settings.Med = State
+    spawn(function()
+    while wait(0.1) and Settings.Med do
+    if questslot1 == "Medkits" or questslot2 == "Medkits" then
+    Player.Character.Humanoid.Health = 100
+    end
+        pcall(function()
+            for i,v in pairs(Workspace.Ignore:GetChildren()) do
+                if v.Name == "Medkit" and v:FindFirstChildWhichIsA("TouchTransmitter",true) then
+                    if Player.Character.Humanoid.Health < Player.Character.Humanoid.MaxHealth then
+                        firetouchinterest(Player.Character:FindFirstChild("HumanoidRootPart",true), v, 0)
+                        firetouchinterest(Player.Character:FindFirstChild("HumanoidRootPart",true), v, 1)
+                      end 
+                  end 
+              end
+           end)
+       end 
+    end)
+end)
+
+elseif isWaveDefense then
 
 local Toggle3 = Tabs.Main:AddToggle("AutoMedkits", {Title = "Auto Collect Medkits", Default = false })
 
@@ -1059,7 +1043,8 @@ end)
 Options.AutoMedkits:SetValue(false)
 
 end
-   
+ 
+--[[
 Tabs.Main:AddParagraph({
         Title = "Farming Events",
         Content = " "
@@ -1229,6 +1214,7 @@ Toggle:OnChanged(function(Tswx)
         end
     end
 end)
+]]
 
 function tpToShrine()
     local player, cha, plr, hum = getPlayer()
@@ -1939,9 +1925,10 @@ Toggle:OnChanged(function(isToggled)
 
     while isToggleActive do
         AllKill3()
-        wait(0.3)
+        wait(0.1)
     end
 end)
+
 
 Tabs.Enemies:AddInput("Ability_X", {
     Title = "Ability Size X",
@@ -1980,16 +1967,6 @@ Tabs.Enemies:AddInput("Ability_Trans", {
     Numeric = true,
     Callback = function(abt)
         UwUTrans = tonumber(abt) or 0.7
-    end
-})
-
-Tabs.Enemies:AddInput("Ability_Speed", {
-    Title = "Ability Speed",
-    Default = "1",
-    Placeholder = "Placeholder",
-    Numeric = true,
-    Callback = function(abs)
-        powerspeed = tonumber(abs) or 1
     end
 })
 
@@ -2291,16 +2268,6 @@ Tabs.Enemies:AddInput("Ability_Trans", {
     Numeric = true,
     Callback = function(abt)
         UwUTrans = tonumber(abt) or 0.7
-    end
-})
-
-Tabs.Enemies:AddInput("Ability_Speed", {
-    Title = "Ability Speed",
-    Default = "1",
-    Placeholder = "Placeholder",
-    Numeric = true,
-    Callback = function(abs)
-        powerspeed = tonumber(abs) or 1
     end
 })
     
