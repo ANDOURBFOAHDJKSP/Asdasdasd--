@@ -859,11 +859,16 @@ for i, v in pairs(Workspace:GetChildren()) do
        if v:FindFirstChild("FinishRoom", true) and v:FindFirstChild("FinishRoom", true):FindFirstChild("Hitbox", true) then
        firetouchinterest(Player.Character:FindFirstChild("HumanoidRootPart", true),v:FindFirstChild("FinishRoom",true):FindFirstChild("Hitbox",true):FindFirstChild("Part",true),0)
        firetouchinterest(Player.Character:FindFirstChild("HumanoidRootPart", true),v:FindFirstChild("FinishRoom",true):FindFirstChild("Hitbox",true):FindFirstChild("Part",true),1)
-       Tween({
-            targetPart = rooms.FinishRoom.Hitbox.Part
-        })
              end
         end 
+    end
+
+local dungeon, rooms, enemies, shrines = getDungeon()
+
+    if rooms:FindFirstChild("FinishRoom") and rooms.FinishRoom:FindFirstChild("Hitbox") then
+        Tween({
+            targetPart = rooms.FinishRoom.Hitbox.Part
+        })
     end
 end
 
