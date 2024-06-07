@@ -539,46 +539,33 @@ Tabs.Misc:AddParagraph({
         Content = " "
     })
     
-local Destroying = false
+local map = game:GetService("Workspace").map
+    
+function destroymap()
+local ClonedMap = map:Clone()
+ClonedMap.Parent = nil
+wait(1)
+map:Destroy()
+end
+
+function restoremap()
+ClonedMap.Parent = game.Workspace
+end
+    
+local DestroyingMap = false
 local Toggle = Tabs.Misc:AddToggle("DestroyMap", {Title = "Destroy Map (Makes the Bullets to shoot zombies)", Default = false })
 
     Toggle:OnChanged(function(bool)
-    Destroying = bool
-if Destroying then
-    local map = game:GetService("Workspace"):FindFirstChild("map")
-if not map then
-    warn("Map not found in Workspace")
-    return
-end
-
--- Function to clone the map
-local function cloneMap(originalMap)
-    local mapClone = originalMap:Clone()
-    mapClone.Parent = nil -- Keep the clone hidden
-    return mapClone
-end
-
--- Function to clear the map
-local function clearMap(map)
-    for i, v in pairs(map:GetChildren()) do
-        v:Destroy()
-    end
-end
-
--- Function to restore the map
-local function restoreMap(mapClone)
-    mapClone.Parent = game:GetService("Workspace")
-end
-
--- Main logic
-local mapClone = cloneMap(map)
-    -- Clear the map
-    clearMap(map)
-    
-  if not Destroying then
-    restoreMap(mapClone)
+    DestroyingMap = bool
+spawn(function()
+while wait(0.1) do
+if DestroyingMap then
+destroymap()
+else
+restoremap()
+        end
        end
-    end
+    end)
 end)
 
 Tabs.Misc:AddParagraph({
@@ -1197,9 +1184,9 @@ local function V4()
         end
     end
     
-    for _, v in next, game.GetService(game,"Workspace").BossFolder.GetChildren(game.GetService(game, "Workspace").BossFolder) do
-        if game.FindFirstChild(v,"Head") then
-            local vector, onScreen = camera.worldToScreenPoint(camera, game.WaitForChild(v, "Head", math.huge).Position)
+    for _, v in next, game.GetService(game,"Workspace").BossFolder.GetDescendants(game.GetService(game, "Workspace").BossFolder) do
+        if game.FindFirstChild(v,"HumanoidRootPart") then
+            local vector, onScreen = camera.worldToScreenPoint(camera, game.WaitForChild(v, "HumanoidRootPart", math.huge).Position)
             if isWithinFOVCircle(vector) then
                 local dist = (circleCenter - Vector2.new(vector.X, vector.Y)).Magnitude
                 if dist < closestDist and onScreen and not isBehindWall(v) then
@@ -1281,6 +1268,9 @@ Tabs.Tool:AddParagraph({
     })
 
 local KillAuraRange = 10
+local fixtest = false
+
+Circle.Filled = fixtest
 
 local Toggle = Tabs.Tool:AddToggle("SilentAim", {Title = "Silent Aim", Default = false })
 
@@ -1459,6 +1449,10 @@ Orbs = bool
 	if Orbs == false then break end
 		getNearestBullets()
 	end
+end)
+
+RunService.RenderStepped:Connect(function()
+Circle.Color = Color3.fromRGB(math.floor(((math.sin(workspace.DistributedGameTime/2)/2)+0.5)*255),math.floor(((math.sin(workspace.DistributedGameTime)/2)+0.5)*255),math.floor(((math.sin(workspace.DistributedGameTime*1.5)/2)+0.5)*255))
 end)
 
 -- Settings
