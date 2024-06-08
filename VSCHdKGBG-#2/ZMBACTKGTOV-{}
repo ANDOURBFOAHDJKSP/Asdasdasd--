@@ -279,7 +279,91 @@ end
 end
 end)
 end)
-    
+ 
+ local player = game.Players.LocalPlayer
+local character = player.Character or player.CharacterAdded:Wait()
+local humanoid = character:WaitForChild("Humanoid")
+local rootPart = character:WaitForChild("HumanoidRootPart")
+
+local block = nil -- Define block variable
+
+local function createBlock()
+    block = Instance.new("Part")
+    block.Size = Vector3.new(2, 1.95, 2) -- Adjust size as needed
+    block.Color = Color3.fromRGB(255, 0, 0) -- Adjust color as needed
+    block.Anchored = true
+    block.CanCollide = true
+    block.Parent = game.Workspace
+    block.Name = "KillPlatform"
+
+    local function updatePosition()
+        if humanoid and rootPart then
+            block.Position = rootPart.Position - Vector3.new(0, humanoid.HipHeight + 3.975, 0)
+        end
+    end
+
+    updatePosition()
+
+    local RunService = game:GetService("RunService")
+    RunService.Heartbeat:Connect(function()
+        updatePosition()
+        RunService.RenderStepped:Wait()
+    end)
+end
+
+local function destroyBlock()
+    if block then
+        block:Destroy()
+        block = nil
+    end
+end
+
+local function toggleBlock(value)
+    if value then
+        createBlock()
+    else
+        destroyBlock()
+    end
+end
+
+local function onCharacterDeath()
+    if humanoid.Health == 0 then
+        destroyBlock()
+    end
+end
+
+player.CharacterAdded:Connect(function(char)
+    character = char
+    humanoid = char:WaitForChild("Humanoid")
+    rootPart = char:WaitForChild("HumanoidRootPart")
+    if KillPlatform then
+        createBlock()
+    end
+end)
+
+game.Players.PlayerRemoving:Connect(function()
+    destroyBlock()
+end)
+
+ local KillPlatform = false
+ 
+ local Toggle = Tabs.Farming:AddToggle("KillPlatform", {Title = "Kill Platform", Default = false })
+ 
+ Toggle:OnChanged(function(value)
+ KillPlatform = value
+ toggleBlock(value)
+if KillPlatform then
+ game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(game.Players.LocalPlayer.Character.HumanoidRootPart.Position.X, game.Players.LocalPlayer.Character.HumanoidRootPart.Position.Y + 135, game.Players.LocalPlayer.Character.HumanoidRootPart.Position.Z)
+ game.Players.LocalPlayer.Character:WaitForChild("Humanoid"):ChangeState(11)
+ Fluent:Notify({
+        Title = "Requirement: Enable Destroy Map and Auto Shoot also Bullet Aura",
+        Content = "",
+        SubContent = "", -- Optional
+        Duration = 5 -- Set to nil to make the notification not disappear
+    })
+ end
+ end)
+ 
 local AutoCollectSystemIndic2 = false
 
 local Toggle = Tabs.Farming:AddToggle("CollectPowers", {Title = "Auto Collect Power Ups", Default = false })
@@ -541,17 +625,6 @@ Tabs.Misc:AddParagraph({
     
 local map = game:GetService("Workspace").map
     
-function destroymap()
-local ClonedMap = map:Clone()
-ClonedMap.Parent = nil
-wait(1)
-map:Destroy()
-end
-
-function restoremap()
-ClonedMap.Parent = game.Workspace
-end
-    
 local DestroyingMap = false
 local Toggle = Tabs.Misc:AddToggle("DestroyMap", {Title = "Destroy Map (Makes the Bullets to shoot zombies)", Default = false })
 
@@ -560,9 +633,14 @@ local Toggle = Tabs.Misc:AddToggle("DestroyMap", {Title = "Destroy Map (Makes th
 spawn(function()
 while wait(0.1) do
 if DestroyingMap then
-destroymap()
+for i,v in pairs(game:GetService("Workspace").map:GetChildren()) do
+local clonepart = v:Clone()
+clonepart.Parent = nil
+    wait(0.1)
+    v:Destroy()
+end
 else
-restoremap()
+ clonepart.Parent = game.Workspace.map
         end
        end
     end)
@@ -1289,7 +1367,7 @@ local Toggle = Tabs.Tool:AddToggle("CameraAimbot", {Title = "Camera Track", Defa
 
         repeat
             wait()
-             cameratrack()
+             spawn(cameratrack)
         until not _G._CameraTrack == true
     end)
 
@@ -1327,7 +1405,7 @@ local Toggle = Tabs.Tool:AddToggle("AutoShoot", {Title = "Auto Shoot", Default =
 
         repeat
             wait()
-             silentaim()
+             spawn(silentaim)
         until not _G._SilentAim == true
     end)
 
