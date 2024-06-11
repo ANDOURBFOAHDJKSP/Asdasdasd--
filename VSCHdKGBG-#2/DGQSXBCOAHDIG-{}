@@ -1,0 +1,523 @@
+local OrionLib = loadstring(game:HttpGet(('https://raw.githubusercontent.com/thanhdat4461/OrionMoblie/main/source')))()
+
+local Window = OrionLib:MakeWindow({Name = "Unknown Hub X DQ (ALPHA)", HidePremium = false, SaveConfig = false, ConfigFolder = "OrionTest"})
+
+local Tab = Window:MakeTab({
+	Name = "Auto Farms",
+	Icon = "rbxassetid://4483345998",
+	PremiumOnly = false
+})
+
+local plr = game:GetService("Players").LocalPlayer
+
+local targetFolders = {
+game:GetService("Workspace").dungeon, 
+game:GetService("Workspace").enemies
+}
+
+AntiKick = true -- Re-Execute if you change it
+
+local Anti
+Anti = hookmetamethod(game, "__namecall", function(self, ...)
+        if self == plr and getnamecallmethod():lower() == "kick" and AntiKick then
+            return warn("[ANTI-KICK] Client Tried To Call Kick Function On LocalPlayer")
+        end
+        return Anti(self, ...)
+    end)
+
+local AutoFarm = false
+
+-- Tween Archored
+
+
+local Chr = game.Players.LocalPlayer.Character
+local Hrt = Chr:WaitForChild("HumanoidRootPart")
+
+function tweenarchor() -- u can remove it also the end function
+BVT = Instance.new("BodyVelocity")
+BVT.Name = "Tween_Anchor"
+BVT.Velocity = Vector3.new(0, 0, 0)
+BVT.Parent = Hrt
+end
+
+function tweenunarchor()
+    local bvt = Hrt:FindFirstChild("Tween_Anchor")
+    if bvt then
+        bvt:Destroy()
+    end
+end
+
+local TweenService = game:GetService("TweenService")
+
+function GetClosestEnemy()
+    local TargetDistance = math.huge
+    local Target = nil
+
+for _, targetFolder in ipairs(targetFolders) do
+    for _, v in pairs(targetFolderGetDescendants()) do
+        if v:FindFirstChild("HumanoidRootPart") and v:FindFirstChild("Humanoid") then
+            local humanoid = v:FindFirstChildOfClass("Humanoid")
+            if humanoid and humanoid.Health >= 0 then
+                local mag = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.HumanoidRootPart.Position).Magnitude
+                if mag <= TargetDistance then
+                    TargetDistance = mag
+                    Target = v
+                end
+            end
+        end
+    end
+end
+
+    return Target
+end
+
+-- Bypass Anti Cheat
+
+function BypassChar()
+    local TargetDistance = 5
+    local Target = nil
+
+for _, targetFolder in ipairs(targetFolders) do
+    for _, v in pairs(targetFolder:GetDescendants()) do
+        if v:FindFirstChild("HumanoidRootPart") and v:FindFirstChild("Humanoid") then
+            local humanoid = v:FindFirstChildOfClass("Humanoid")
+            if humanoid and humanoid.Health >= 0 then
+                local mag = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.HumanoidRootPart.Position).Magnitude
+                if mag <= 16 then
+                    setfflag("S2PhysicsSenderRate", "0")
+                    Target = v
+                elseif mag >= 13 then
+                     setfflag("S2PhysicsSenderRate", "15")
+                    Target = v
+                end
+            end
+        end
+    end
+end
+
+    return Target
+end
+
+local tween = function(A, B, C)
+    if A and B and C then
+        local x, z = 5, 2.3
+        return TweenService:Create(A, TweenInfo.new((B.Position + Vector3.new(x, 0, z) - A.Position).Magnitude / C, Enum.EasingStyle.Linear), {CFrame = CFrame.new(B.Position + Vector3.new(x, 0, z))}):Play()
+    end
+end
+
+Tab:AddToggle({
+    Name = "Auto Farm",
+    Default = false,
+    Callback = function(Value)
+        AutoFarm = Value
+spawn(function()
+            while task.wait(0.1) do
+                if AutoFarm then
+                  BypassChar()
+                else
+                   setfflag("S2PhysicsSenderRate", "15")
+                    break
+                end
+            end
+     end)
+ 
+spawn(function()
+            while task.wait(3) do
+                if AutoFarm then
+                    local closestEnemy = GetClosestEnemy()
+                    if closestEnemy then
+                   -- setfflag("S2PhysicsSenderRate", "15")
+                        tween(game.Players.LocalPlayer.Character.HumanoidRootPart, closestEnemy.HumanoidRootPart, 28)
+                    end
+                else
+                    break
+                end
+            end
+     end)
+end
+})
+
+local Section = Tab:AddSection({
+	Name = "Bring Mobs"
+})
+
+local BringRange = 30
+local ZPos = 5
+local bringingenemy = false
+
+Tab:AddToggle({
+    Name = "Bring Enemy",
+    Default = false,
+    Callback = function(Value)
+        bringingenemy = Value
+
+        spawn(function()  -- Run the loop in a separate thread
+            while wait(0.1) and bringingenemy do
+            for _, targetFolder in ipairs(targetFolders) do
+                for _, v in pairs(targetFolder:GetDescendants()) do
+                    if v:FindFirstChild("HumanoidRootPart") and v:FindFirstChild("Humanoid") then
+                        local Char = game.Players.LocalPlayer.Character.HumanoidRootPart
+                        local distances = (Char.Position - v:FindFirstChild("HumanoidRootPart").Position).Magnitude
+                        if distances <= BringRange then
+                            v.HumanoidRootPart.CFrame = Char.CFrame * CFrame.new(0, 0, ZPos)
+                            v.HumanoidRootPart.Anchored = true
+                        else
+                            v.HumanoidRootPart.Anchored = false
+                        end
+                    end
+                end
+            end
+        end
+
+            -- Ensure enemies are unanchored when toggling off
+            if not bringingenemy then
+            for _, targetFolder in ipairs(targetFolders) do
+                for _, v in pairs(targetFolder:GetDescendants()) do
+                    if v:FindFirstChild("HumanoidRootPart") and v:FindFirstChild("Humanoid") then
+                        v.HumanoidRootPart.Anchored = false
+                        end
+                    end
+                end
+            end
+        end)
+    end
+})
+
+Tab:AddTextbox({
+	Name = "Bring Enemy Distance",
+	Default = "30",
+	TextDisappear = false,
+	Callback = function(Dis)
+		distanced = Dis
+	end	  
+})
+
+Tab:AddTextbox({
+	Name = "Test Z Positioning",
+	Default = "5",
+	TextDisappear = false,
+	Callback = function(Z)
+		ZPos = Z
+	end	  
+})
+
+local Tab = Window:MakeTab({
+	Name = "Settings",
+	Icon = "rbxassetid://4483345998",
+	PremiumOnly = false
+})
+
+local Section = Tab:AddSection({
+	Name = "Auto Mechanics"
+})
+
+local AutoSwing = false
+
+function swing()
+    if AutoSwing then
+        local character = game.Players.LocalPlayer.Character
+        if character then
+            for _, v in pairs(character:GetChildren()) do
+                if v:IsA("Accessory") and v:FindFirstChild("swing") then
+                    v:WaitForChild("swing"):FireServer()
+                end
+            end
+        end
+    end
+end
+
+Tab:AddToggle({
+    Name = "Auto Swing",
+    Default = false,
+    Callback = function(Value)
+        AutoSwing = Value
+        while AutoSwing and wait(0.1) do
+            swing()
+            wait(0.1)
+        end
+    end
+})
+
+local AutoSkill = false
+
+local function autoSkill()
+    if AutoSkill then
+    local TargetDistance = 12
+    local Target = nil
+
+    for _, v in pairs(game:GetService("Workspace").dungeon:GetDescendants()) do
+        if v:FindFirstChild("HumanoidRootPart") and v:FindFirstChild("Humanoid") then
+            local humanoid = v:FindFirstChildOfClass("Humanoid")
+            if humanoid and humanoid.Health >= 0 then
+                local mag = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.HumanoidRootPart.Position).Magnitude
+                if mag < TargetDistance then
+             game:GetService("VirtualInputManager"):SendKeyEvent(true, "Q", false, game)
+             game:GetService("VirtualInputManager"):SendKeyEvent(true, "E", false, game)
+                    Target = v
+                end
+            end
+        end
+    end
+
+    return Target
+    end
+end
+
+Tab:AddToggle({
+    Name = "Auto Spell (KEY)",
+    Default = false,
+    Callback = function(Value)
+        AutoSkill = Value
+        while AutoSkill and wait(0.1) do
+            autoSkill()
+            wait(0.1)
+        end
+    end
+})
+
+
+
+local Section = Tab:AddSection({
+	Name = "Character"
+})
+
+Tab:AddTextbox({
+	Name = "Walkspeed",
+	Default = "16",
+	TextDisappear = false,
+	Callback = function(WS)
+		game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = WS
+	end	  
+})
+
+Tab:AddTextbox({
+	Name = "JumpPower",
+	Default = "50",
+	TextDisappear = false,
+	Callback = function(JP)
+game.Players.LocalPlayer.Character.Humanoid.JumpPower = JP
+	end	  
+})
+
+Tab:AddToggle({
+	Name = "Infinite Air Jump",
+	Default = false,
+	Callback = function(State)
+InfiniteJumpEnabled = State
+local Player = game:GetService("Players").LocalPlayer
+game:GetService("UserInputService").JumpRequest:Connect(function()
+     if InfiniteJumpEnabled then
+         Player.Character:WaitForChild("Humanoid"):ChangeState("Jumping")
+     end
+end)
+  end    
+})
+
+local XC = false  -- Default noclip state
+
+local function Noclip()
+pcall(function()
+    wait(0.1)
+      for i, v in pairs(game:GetService("Workspace"):GetDescendants()) do
+              if v:IsA("BasePart") then
+                  v.CanCollide = false
+             end
+        end
+    end)
+end
+
+-- Create the toggle
+local tab = Tab:AddToggle({
+    Name = "Noclip",
+    Default = false,
+    Callback = function(State)
+        XC = State
+ while XC and wait(0.1) do
+ Noclip()
+ end
+    end
+})
+
+local LowGravity = false  -- Default low gravity state
+
+local function ToggleLowGravity()
+    if LowGravity then
+        game.Workspace.Gravity = 15
+    else
+        game.Workspace.Gravity = 196.2  
+    end
+end
+
+Tab:AddToggle({
+    Name = "Low Gravity (For AFK Auto-farm)",
+    Default = false,
+    Callback = function(State)
+        LowGravity = State
+        ToggleLowGravity()  -- Toggle low gravity when the state changes
+    end
+})
+
+-- Initial toggle state
+ToggleLowGravity()
+
+local RunService = game:GetService("RunService")
+
+local FLYING = false
+local velocityHandlerName = "VelocityHandler"  -- Replace with your actual handler names
+local gyroHandlerName = "GyroHandler"
+local mfly1, mfly2
+local currentCharacter
+local player = game.Players.LocalPlayer
+
+local function getRoot(character)
+    return character:FindFirstChild("HumanoidRootPart") or character:FindFirstChild("Torso")
+end
+
+local function unmobilefly(player)
+    pcall(function()
+        FLYING = false
+        local character = player.Character
+        if character then
+            local root = getRoot(character)
+            if root then
+                local velocityHandler = root:FindFirstChild(velocityHandlerName)
+                local gyroHandler = root:FindFirstChild(gyroHandlerName)
+
+                if velocityHandler then
+                    velocityHandler:Destroy()
+                end
+
+                if gyroHandler then
+                    gyroHandler:Destroy()
+                end
+
+                local humanoid = character:FindFirstChildWhichIsA("Humanoid")
+                if humanoid then
+                    humanoid.PlatformStand = false
+                end
+            end
+        end
+
+        if mfly1 then
+            mfly1:Disconnect()
+        end
+
+        if mfly2 then
+            mfly2:Disconnect()
+        end
+    end)
+end
+
+local flySpeed = 3  -- Adjust this value to your preferred fly speed
+
+local function mobilefly(player, vfly)
+    unmobilefly(player)
+    FLYING = true
+
+    local character = player.Character
+    local root = getRoot(character)
+
+    if character and root then
+        local camera = workspace.CurrentCamera
+        local v3none = Vector3.new()
+        local v3zero = Vector3.new(0, 0, 0)
+        local v3inf = Vector3.new(9e9, 9e9, 9e9)
+
+        local controlModule = require(player.PlayerScripts:WaitForChild("PlayerModule"):WaitForChild("ControlModule"))
+        local bv = Instance.new("BodyVelocity")
+        bv.Name = velocityHandlerName
+        bv.Parent = root
+        bv.MaxForce = v3zero
+        bv.Velocity = v3zero
+
+        local bg = Instance.new("BodyGyro")
+        bg.Name = gyroHandlerName
+        bg.Parent = root
+        bg.MaxTorque = v3inf
+        bg.P = 1000
+        bg.D = 20
+
+        mfly1 = player.CharacterAdded:Connect(function()
+            unmobilefly(player)
+            currentCharacter = player.Character
+            mobilefly(player, vfly)
+        end)
+
+        mfly2 = RunService.RenderStepped:Connect(function()
+            root = getRoot(player.Character)
+            camera = workspace.CurrentCamera
+            if player.Character:FindFirstChildWhichIsA("Humanoid") and root and root:FindFirstChild(velocityHandlerName) and root:FindFirstChild(gyroHandlerName) then
+                local humanoid = player.Character:FindFirstChildWhichIsA("Humanoid")
+                local VelocityHandler = root:FindFirstChild(velocityHandlerName)
+                local GyroHandler = root:FindFirstChild(gyroHandlerName)
+
+                if VelocityHandler and GyroHandler then
+                    VelocityHandler.MaxForce = v3inf
+                    GyroHandler.MaxTorque = v3inf
+
+                    if not vfly and humanoid then
+                        humanoid.PlatformStand = true
+                    end
+
+                    GyroHandler.CFrame = camera.CoordinateFrame
+                    VelocityHandler.Velocity = v3none
+
+                    local direction = controlModule:GetMoveVector()
+                    if direction.X ~= 0 or direction.Z ~= 0 then
+                        local moveVector = Vector3.new(direction.X, 0, direction.Z).unit
+                        local rightVector = camera.CFrame.RightVector
+                        local forwardVector = camera.CFrame.LookVector
+
+                        -- Adjusted this line to invert the direction when moving vertically
+                        local flyDirection = (rightVector * moveVector.X - forwardVector * moveVector.Z).unit
+
+                        VelocityHandler.Velocity = flyDirection * (flySpeed * 20)
+                        RunService.RenderStepped:wait()
+                    end
+                end
+            end
+        end)
+    end
+end
+
+local function toggleFly(player, toggleValue)
+    if toggleValue then
+        mobilefly(player, true)
+    else
+        unmobilefly(player)
+    end
+end
+
+-- Your loop structure
+_G.loops = false
+
+local function flyLoop()
+    while wait(2) do
+        if _G.loops then
+            local player = game.Players.LocalPlayer
+            if player and player.Character then
+                mobilefly(player, true)
+            end
+        end
+    end
+end
+
+-- Assuming 'Tab' is defined somewhere in your code.
+Tab:AddToggle({
+    Name = "Fly-Lock",
+    Default = false,
+    Save = true,
+    Flag = "Fly_Lock",
+    Callback = function(Value)
+        _G.loops = Value
+        if not Value then
+            local player = game.Players.LocalPlayer
+            if player and player.Character then
+                unmobilefly(player)
+            end
+        end
+    end
+})
+
+-- Start the loop
+spawn(flyLoop)
