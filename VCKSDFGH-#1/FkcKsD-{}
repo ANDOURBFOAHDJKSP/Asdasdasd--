@@ -777,6 +777,13 @@ Fluent:Notify({
         SubContent = " ", -- Optional
         Duration = 10 -- Set to nil to make the notification not disappear
     })
+
+Fluent:Notify({
+        Title = "GUESTV2_TESTER Message",
+        Content = "Delayed Update :/",
+        SubContent = "WHY ROBLOX UPDATE!", -- Optional
+        Duration = 10 -- Set to nil to make the notification not disappear
+    })
     
 local Window = Fluent:CreateWindow({
     Title = "Unknown Hub X TQ ",
