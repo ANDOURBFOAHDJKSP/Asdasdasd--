@@ -97,6 +97,7 @@ mainopen.MouseButton1Click:Connect(function()
     game:GetService("VirtualInputManager"):SendKeyEvent(false, "LeftControl", false, game)
 end)
 
+local untilloaded = false
 local player = game:GetService("Players").LocalPlayer
 local RunService = game:GetService("RunService")
 
@@ -124,6 +125,10 @@ RunService.RenderStepped:Connect(function()
     local currentTime = tick()
     local deltaTime = currentTime - lastUpdateTime
     frameCount = frameCount + 1
+    
+    if frameCount == 1 and untilloaded == true then
+       game.Players.LocalPlayer:Kick("Device Saver: CRASH DETECTED")
+    end
 
     if deltaTime >= 1 then
         local fps = math.round(frameCount / deltaTime)
@@ -143,9 +148,9 @@ end)
 print("HWID FOUND!")
 
 print("-- Fast Main Loader V3")
-print("-- Unknown TQ Hub 1/5: Checking Game...")
+print("-- Unknown Hub X 1/5: Checking Game...")
 
-print("-- Unknown TQ Hub 2/5: Getting Service...")
+print("-- Unknown Hub X 2/5: Getting Service...")
 
 -- Test literally
 local request = http_request or request or HttpPost
@@ -164,11 +169,12 @@ local TweenService = game:GetService("TweenService")
 local Workspace = game:GetService("Workspace")
 local HttpService = game:GetService("HttpService")
 local Player = Players.LocalPlayer
+local UsernameTester = {"Guilfordy_sagalol", "Peleeelallee", "guesttester_1", "guesttester1_alt", "Guilfordy_sagalol3", "Unknownproooolucky", "GuestV2_tester"}
 local InventoryController = require(game:GetService("Players").LocalPlayer.PlayerScripts:WaitForChild("Shared"):WaitForChild("Client"):WaitForChild("InventoryController"))
 
-print("-- Unknown TQ Hub 3/5: Bypassing Random Name...")
+print("-- Unknown Hub X 3/5: Bypassing Random Name...")
 
-print("-- Unknown TQ Hub 3.5/5: Bypassing... *DumbExploiterController* ")
+print("-- Unknown Hub X 3.5/5: Bypassing... *DumbExploiterController* ")
 
 -- Valuable Servers
 local isWaveDefense
@@ -328,31 +334,35 @@ function getNearestAttack()
     return nearestAttack, closestDistance
 end
 
-local Skill = 
-              {"Fireball", "Tsunami", "Freeze", "Heal", "HealBlast",
-               "Shockwave", "LaserBeam", "LightningStrike",
-               "Sandstorm", "Earthquake", "IceSpikes", "PolarVortex",
-               "TeamHeal", "RainbowBlast", "PumpkinBlast", "Random",
-               "Camouflage", "Tumble", "Flurry", "Boomerang",
-               "ShockArrows", "ShocFlameArrowskwave", "BoomArows",
-               "FrostArrows", "WeaponThrow", "WaveBlast",
-               "InfernoWave", "SpikeField", "Berserk", "Pulsefire",
-               "Cyclone", "BlackHole", "QuickSlash", "MeteorShower",
-               "MeteorBlast", "Stomp"}
+local Skill = {
+"Fireball", "Tsunami", "Freeze", "Heal", "HealBlast",
+"Shockwave", "LaserBeam", "LightningStrike",
+"Sandstorm", "Earthquake", "IceSpikes", "PolarVortex",
+"TeamHeal", "RainbowBlast", "PumpkinBlast", "Random",
+"Camouflage", "Tumble", "Flurry", "Boomerang",
+"ShockArrows", "ShocFlameArrowskwave", "BoomArows",
+"FrostArrows", "WeaponThrow", "WaveBlast",
+"InfernoWave", "SpikeField", "Berserk", "Pulsefire",
+"Cyclone", "BlackHole", "QuickSlash", "MeteorShower",
+"MeteorBlast", "Stomp"
+}
 
-local Skill1 = 
-               {"Fireball", "Tsunami", "Freeze", "Heal", "HealBlast",
-                "Shockwave", "LaserBeam", "LightningStrike",
-                "Sandstorm", "Earthquake", "IceSpikes", "PolarVortex",
-                "TeamHeal", "RainbowBlast", "PumpkinBlast", "Random",
-                "Camouflage", "Tumble", "Flurry", "Boomerang",
-                "ShockArrows", "ShocFlameArrowskwave", "BoomArows",
-                "FrostArrows", "WeaponThrow", "WaveBlast",
-                "InfernoWave", "SpikeField", "Berserk", "Pulsefire",
-                "Cyclone", "BlackHole", "QuickSlash", "MeteorShower",
-                "MeteorBlast", "Stomp", "Bullet"}
-  
-function killAuraFast(monster)
+local Skill1 = {
+"Fireball", "Tsunami", "Freeze", "Heal", "HealBlast",
+"Shockwave", "LaserBeam", "LightningStrike",
+"Sandstorm", "Earthquake", "IceSpikes", "PolarVortex",
+"TeamHeal", "RainbowBlast", "PumpkinBlast", "Random",
+"Camouflage", "Tumble", "Flurry", "Boomerang",
+"ShockArrows", "ShocFlameArrowskwave", "BoomArows",
+"FrostArrows", "WeaponThrow", "WaveBlast",
+"InfernoWave", "SpikeField", "Berserk", "Pulsefire",
+"Cyclone", "BlackHole", "QuickSlash", "MeteorShower",
+"MeteorBlast", "Stomp", "Bullet"
+}
+
+local killaurarange = 250
+
+function killAuraLow(monster)
 if workspace:FindFirstChild("Dungeon") then
    for _, monster in pairs(workspace.Dungeon:GetDescendants()) do
     if monster:FindFirstChild("HumanoidRootPart") then
@@ -363,7 +373,7 @@ if workspace:FindFirstChild("Dungeon") then
            if damage.Name == Skill or damage.Name == Skill1 or damage:FindFirstChildWhichIsA("TouchTransmitter") then
            local distance = (damage.Position - monster.HumanoidRootPart.Position).Magnitude
            
-           if distance <= 500 then
+           if distance <= killaurarange then
                -- monster:FindFirstChild("HumanoidRootPart").CFrame = CFrame.new(damage.position + Vector3.new(0, 0, 1.5))
             -- monster:FindFirstChild("HumanoidRootPart").Position = damage.position + Vector3.new(0, 0, 1.5)
                firetouchinterest(monster.HumanoidRootPart, damage, 0)
@@ -387,49 +397,7 @@ end
      end
 end
 
-function killAuraFast2(monster)
-if workspace:FindFirstChild("Dungeon") then
-   for _, monster in pairs(workspace.Dungeon:GetDescendants()) do
-    if monster:IsA("Model") and monster:FindFirstChild("HumanoidRootPart") then
-        if monster.Name ~= game.Players.LocalPlayer.Name then
-            local monsterRootPart = monster.HumanoidRootPart
-        
-        for _, damage in ipairs(game:GetService("Workspace").Ignore:GetDescendants()) do
-           if damage.Name == Skill or damage.Name == Skill1 or damage:FindFirstChildWhichIsA("TouchTransmitter") then
-           local distance = (monster.HumanoidRootPart.Position - damage.Position).Magnitude
-           
-           if distance <= 500 then
-             -- monster:FindFirstChild("HumanoidRootPart").CFrame = CFrame.new(damage.position + Vector3.new(0, 0, 1.5))
-            -- monster:FindFirstChild("HumanoidRootPart").Position = damage.position + Vector3.new(0, 0, 1.5)
-               firetouchinterest(monster.HumanoidRootPart, damage, 0)
-               firetouchinterest(monster.HumanoidRootPart, damage, 1)
-               firetouchinterest(damage, monster.HumanoidRootPart, 0)
-               firetouchinterest(damage, monster.HumanoidRootPart, 1)
-           -- damage.Size = Vector3.new(25, 10, 25)
-          
-          if not damage:FindFirstChildWhichIsA("TouchTransmitter") then
-          warn("your ability is Teleport Mode")
-          damage.CFrame = CFrame.new(monster.HumanoidRootPart.Position)
-          end
-            
-              end
-         end
-    end
-end
-            
-              end
-          end
-     end
-end
-
-local UwUSizeX = 10
-local UwUSizeY = 10
-local UwUSizeZ = 10
-local UwUTrans = 1
-local time = 0.5
-local powerspeed = 0.5
-
-function AbilityAura(monster)
+function killAuraMedium(monster)
 if workspace:FindFirstChild("Dungeon") then
    for _, monster in pairs(workspace.Dungeon:GetDescendants()) do
     if monster:FindFirstChild("HumanoidRootPart") then
@@ -437,53 +405,92 @@ if workspace:FindFirstChild("Dungeon") then
             local monsterRootPart = monster.HumanoidRootPart
         
         for _, damage in ipairs(game:GetService("Workspace").Ignore:GetDescendants()) do
-           if damage.Name == Skill or damage.Name == Skill1 and damage:FindFirstChildWhichIsA("TouchTransmitter") then
-           local distance = (monster.HumanoidRootPart.Position - damage.Position).Magnitude
+           if damage.Name == Skill or damage.Name == Skill1 or damage:FindFirstChildWhichIsA("TouchTransmitter") then
+           local distance = (damage.Position - monster.HumanoidRootPart.Position).Magnitude
            
-           if distance <= 500 then
-           if monster and monster:FindFirstChild("HumanoidRootPart") then
-               monster:FindFirstChild("HumanoidRootPart").CFrame = CFrame.new(damage.position + Vector3.new(0, 0, 1.5))
-               monster:FindFirstChild("HumanoidRootPart").Position = damage.position + Vector3.new(0, 0, 1.5)
-               end
-               firetouchinterest(monster.HumanoidRootPart, damage, 0)
-               firetouchinterest(monster.HumanoidRootPart, damage, 1)
-               firetouchinterest(damage, monster.HumanoidRootPart, 0)
-               firetouchinterest(damage, monster.HumanoidRootPart, 1)
-            damage.Size = Vector3.new(UwUSizeX, UwUSizeY, UwUSizeZ)
-            damage.Transparency = UwUTrans
+           if distance <= killaurarange then
+               game:GetService("TweenService"):Create(damage, TweenInfo.new(0.3), {CFrame =  CFrame.new(monster.HumanoidRootPart.Position)}):Play()
+               game:GetService("TweenService"):Create(damage, TweenInfo.new(0.3), {Position =  monster.HumanoidRootPart.Position}):Play()
           
-          if not damage:FindFirstChildWhichIsA("TouchTransmitter") then
-          damage.CFrame = CFrame.new(monster.HumanoidRootPart.Position)
-          end
-            
-            end
-       end
-  end
-end  
+              end
+           end
+       wait(0.2)
+     end
+end
             
               end
           end
      end
 end
 
+local NewSize = 250
+
+local powerspeed = 1000
+
+function killAuraHigh(monster)
+   for _, monster in pairs(workspace.Dungeon:GetDescendants()) do
+    if monster:FindFirstChild("HumanoidRootPart") then
+        if monster.Name ~= game.Players.LocalPlayer.Name then
+            local monsterRootPart = monster.HumanoidRootPart
+        
+        for _, damage in ipairs(game:GetService("Workspace").Ignore:GetDescendants()) do
+        -- if damage.ClassName ~= "Model" then
+        --     pcall(function()
+        --         damage.Transparency = 1
+        --         damage.CFrame = CFrame.new(monster.HumanoidRootPart.Position)
+        --         -- damage.Position = Vector3.new(monster.HumanoidRootPart.Position)
+        --     end)
+        -- end
+        pcall(function()
+                 if damage.ClassName ~= "BasePart" and damage.ClassName ~= "Model" and damage.ClassName ~= "Explosion" then
+                 --       damage.CFrame = CFrame.new(monster.HumanoidRootPart.Position)
+                 --     damage.Position = monster.HumanoidRootPart.Position
+                    damage.Size = Vector3.new(NewSize, 10, NewSize)
+                    damage.CanCollide = false
+                    game:GetService("TweenService"):Create(damage, TweenInfo.new(powerspeed), {CFrame =  CFrame.new(monster.HumanoidRootPart.Position)}):Play()
+                    game:GetService("TweenService"):Create(damage, TweenInfo.new(powerspeed), {Position =  monster.HumanoidRootPart.Position}):Play()
+              end
+                    if damage:FindFirstChild("Hitbox") then
+                       damage.Hitbox.Transparency = 1
+               --     damage.Hitbox.Size = Vector3.new(NewSize, 1, NewSize)
+               --        damage.CFrame = CFrame.new(monster.HumanoidRootPart.Position)
+               --       damage.Position = monster.HumanoidRootPart.Position
+                      game:GetService("TweenService"):Create(damage.Hitbox, TweenInfo.new(powerspeed), {CFrame =  CFrame.new(monster.HumanoidRootPart.Position)}):Play()
+                  game:GetService("TweenService"):Create(damage.Hitbox, TweenInfo.new(powerspeed), {Position =  monster.HumanoidRootPart.Position}):Play()
+                    end
+                end)
+            end
+       end
+            
+            wait(0.2)
+              end
+       end
+end
+
 local function AllKill()
-killAuraFast(monster)
+killAuraLow(monster)
 getNearestAttack()
-killAuraFast(monster)
- killAuraFast(monster)
+killAuraLow(monster)
+killAuraLow(monster)
 end
 
 local function AllKill2()
-    killAuraFast2(monster)
+    killAuraHigh(monster)
     getNearestAttack()
-    killAuraFast2(monster)
-    killAuraFast2(monster)
+    killAuraHigh(monster)
+    killAuraHigh(monster)
     RunService.RenderStepped:Wait()
 end
 
 local function AllKill3()
-AbilityAura(monster)
+    killAuraMedium(monster)
+    getNearestAttack()
+    killAuraMedium(monster)
+    killAuraMedium(monster)
+    RunService.RenderStepped:Wait()
 end
+
+
 
 local h = require(ReplicatedStorage.Shared.Modules.DungeonLibrary)
 
@@ -723,6 +730,24 @@ local Script = require(Player.PlayerScripts.Shared.Client.CombatController)
 local ScriptFunction = Script.BasicAttack
 local ScriptFunction2 = Script.UseAbility
 
+
+function fireBasicAttack()
+Script["_basic_attack_cooldown"] = -1
+ScriptFunction(Script)
+end
+
+function FastAttack()
+Script["_basic_attack_cooldown"] = -1
+Script["_ability_cooldown"] = -1
+game:GetService("Players").LocalPlayer.PlayerScripts.Shared.Client.CombatController:WaitForChild("BasicAttack"):FireServer(Vector3.new(0, 0, 0), -1)
+game:GetService("Players").LocalPlayer.PlayerScripts.Shared.Client.CombatController:WaitForChild("UseAbility"):FireServer(Vector3.new(0, 0, 0), 1, -1)
+end
+
+function fireUseAbility()
+Script["_ability_cooldown"] = -1
+ScriptFunction2(Script, GetClosestt().PrimaryPart.Position)
+end
+
 -- Valuable from autoleave
 local cha = game:GetService('Players').LocalPlayer.Character
 local mainFrame = game:GetService("Players")[cha.Name].PlayerGui:WaitForChild("MainGui"):WaitForChild("MainFrame")
@@ -739,21 +764,33 @@ end
 
 game:GetService("Workspace"):FindFirstChild("Map")
 
-print("-- Unknown TQ Hub 4/5: Checking Exploit Support...")
+print("-- Unknown Hub X 4/5: Checking Exploit Support...")
 
 if not require then
     return game.Players.LocalPlayer:Kick("Your Exploit doesn't support: require(path)")
+else
+print("Supported require()")
 end
 
-if not firetouchinterest then
+if not firetouchinterest  then
     return game.Players.LocalPlayer:Kick("Your Exploit doesn't support: firetouchinterest()")
+else
+print("Supported firetouchinterest()")
 end
 
-if not setfpscap then
+if not setfpscap or setfpscap(500) then
     return game.Players.LocalPlayer:Kick("Your Exploit doesn't support: setfpscap()")
+else
+print("Supported setfpscap()")
 end
 
-print("-- Unknown TQ Hub 5/5: Loaded, Pls Wait for Few Seconds...")
+if not setfflag then
+    return game.Players.LocalPlayer:Kick("Your Exploit doesn't support: setfflag()")
+else
+print("Supported setfflag()")
+end
+
+print("-- Unknown Hub X 5/5: Loaded, Pls Wait for Few Seconds...")
 
 wait(0.2)
 
@@ -777,17 +814,10 @@ Fluent:Notify({
         SubContent = " ", -- Optional
         Duration = 10 -- Set to nil to make the notification not disappear
     })
-
-Fluent:Notify({
-        Title = "GUESTV2_TESTER Message",
-        Content = "Delayed Update :/",
-        SubContent = "WHY ROBLOX UPDATE!", -- Optional
-        Duration = 10 -- Set to nil to make the notification not disappear
-    })
     
 local Window = Fluent:CreateWindow({
     Title = "Unknown Hub X TQ ",
-    SubTitle = "V4.7 (Dungeon) (REMAKE LOADER) discord.gg/d2a3KkTD6r",
+    SubTitle = "V4.9 (Dungeon) discord.gg/d2a3KkTD6r",
     TabWidth = 160,
     Size = UDim2.fromOffset(580, 460),
     Acrylic = true, -- The blur may be detectable, setting this to false disables blur entirely
@@ -820,10 +850,9 @@ Toggle1:OnChanged(function(State)
     Settings.H = State
     game:GetService("RunService").RenderStepped:Connect(function()
         pcall(function()
-            if Settings.H then
+            if Settings.H then                
                 ScriptFunction(Script)
                 ScriptFunction2(Script, GetClosestt().PrimaryPart.Position)
-                Noclip(Player.Character:WaitForChild("Humanoid"))
                 RunService.RenderStepped:Wait()
             end
         end)
@@ -890,10 +919,9 @@ Toggle4:OnChanged(function(vaf)
     game:GetService("RunService").RenderStepped:Connect(function()
         if InstantKilltg then
             pcall(function()
-                -- Assuming ScriptFunction, ScriptFunction2, GetClosestt, Noclip, and RunService are defined elsewhere
                 ScriptFunction(Script)
                 ScriptFunction2(Script, GetClosestt().PrimaryPart.Position)
-                Noclip(Player.Character:WaitForChild("Humanoid"))
+                RunService.RenderStepped:Wait()
             end)
         end
     end)
@@ -908,6 +936,7 @@ local part = Instance.new("Part", workspace.Characters)
 end
  
     while InstantKilltg and wait(0.2) do
+        
         InstantKill()
     end
 end)
@@ -940,10 +969,55 @@ Tween({
            end
       end        
  end
+ 
+ function WaveDefenseWar()
+ local player, cha, plr, hum = getPlayer()
+ local TargetDistance = math.huge
+if workspace:FindFirstChild("Dungeon") then
+        for index, value in pairs(workspace.Dungeon:GetDescendants()) do
+            if value:IsA("Model") and value:FindFirstChild("HumanoidRootPart") then
+            local distance = (value.HumanoidRootPart.Position - plr.Position).Magnitude
+            
+ if value.HumanoidRootPart and distance < TargetDistance then
+Tween({
+	targetPart = value.HumanoidRootPart,
+	newCFrame = CFrame.new(x, y, z)
+})
+                   end
+               end
+           end
+      end        
+ end
+ 
+ local FarmWaveDefense1 = false
 
-local InstantKilltg2 = false
+local Toggle = Tabs.Main:AddToggle("WaveDefenseWarrior", {Title = "Auto Kill Mobs (Warrior)", Default = false })
 
-local Toggle3 = Tabs.Main:AddToggle("WaveDefenseFarm", {Title = "Wave Defense Farm", Default = false })
+Toggle:OnChanged(function(State)
+    FarmWaveDefense1 = State
+    game:GetService("RunService").RenderStepped:Connect(function()
+        pcall(function()
+            if FarmWaveDefense1 then
+                ScriptFunction(Script)
+                ScriptFunction2(Script, GetClosestt().PrimaryPart.Position)
+                RunService.RenderStepped:Wait()
+            end
+        end)
+    end)
+    spawn(function()
+        while wait(0.1) and FarmWaveDefense1 do 
+            pcall(function()
+            
+                ReplicatedStorage.Shared.Remotes.Data.ClaimPrizes:FireServer()
+                WaveDefenseWar()
+            end)
+        end
+    end)
+ end)
+ 
+ local InstantKilltg2 = false
+
+local Toggle3 = Tabs.Main:AddToggle("WaveDefenseWizard", {Title = "Auto Kill Mobs (Wizard)", Default = false })
 
 Toggle3:OnChanged(function(Value1)
     InstantKilltg2 = Value1
@@ -955,7 +1029,7 @@ Toggle3:OnChanged(function(Value1)
                 -- Assuming ScriptFunction, ScriptFunction2, GetClosestt, Noclip, and RunService are defined elsewhere
                 ScriptFunction(Script)
                 ScriptFunction2(Script, GetClosestt().PrimaryPart.Position)
-                Noclip(Player.Character:WaitForChild("Humanoid"))
+                RunService.RenderStepped:Wait()
             end)
         end
     end)
@@ -970,12 +1044,13 @@ local part = Instance.new("Part", workspace.Characters)
 end
  
     while InstantKilltg2 and wait(0.2) do
+    
         InstantKill2()
     end
 end)
 
 
-Options.WaveDefenseFarm:SetValue(false)
+Options.WaveDefenseWizard:SetValue(false)
 
 end
 
@@ -1071,13 +1146,14 @@ Toggle1:OnChanged(function(State)
             if Settings.Re then
                 ScriptFunction(Script)
                 ScriptFunction2(Script, GetClosestt().PrimaryPart.Position)
-                Noclip(Player.Character:WaitForChild("Humanoid"))
+                RunService.RenderStepped:Wait()
             end
         end)
     end)
     spawn(function()
         while wait() and Settings.Re do 
             pcall(function()
+            
                 ReplicatedStorage.Shared.Remotes.Data.ClaimPrizes:FireServer()
                 for i, v in pairs(Workspace:GetChildren()) do
                     if v:FindFirstChild("FinishRoom", true) and v:FindFirstChild("FinishRoom", true):FindFirstChild("Hitbox", true) then
@@ -1154,7 +1230,7 @@ game:GetService("RunService").RenderStepped:Connect(function()
             if WizardEventFarm then
                 ScriptFunction(Script)
                 ScriptFunction2(Script, GetClosestt().PrimaryPart.Position)
-                Noclip(Player.Character:WaitForChild("Humanoid"))
+                RunService.RenderStepped:Wait()
             end
         end)
     end)  
@@ -1382,51 +1458,62 @@ end
 ]]
 
 function AutoQuestLeave()
-    local coreGui = game:GetService("CoreGui")
-    local robloxGui = coreGui.RobloxGui
-    local notificationFrame = robloxGui.NotificationFrame
-    
-    -- Get descendants of NotificationFrame
-    local descendants = notificationFrame:GetDescendants()
-    
-    -- Target Descendants: Notification.NotificationImage == rbxassetid
-    for _, descendant in ipairs(descendants) do
-        if descendant.Name == "Notification" then
-            local notificationImage = descendant:FindFirstChild("NotificationImage")
-            if notificationImage and notificationImage.Image == "rbxassetid://3200915096" then
-                print("Quest Complete!")
-                wait(0.3)
-                print("firing remote...")
-                wait(0.1)
-                game.ReplicatedStorage.Dungeon.Remotes.BackToLobby:FireServer() 
-            end
-        end
+    local QuestText = readfile("UnknownHubXUniversal/TreasureQuest/AutoQuestConfig.txt")
+        
+        local coreGui = game:GetService("CoreGui")
+        local robloxGui = coreGui.RobloxGui
+        local notificationFrame = robloxGui.NotificationFrame
+
+            local descendants = notificationFrame:GetDescendants()
+            
+            if QuestText == "NormalQuest" then
+                -- Check for NormalQuest notification
+                for _, descendant in ipairs(descendants) do
+                    if descendant.Name == "Notification" then
+                        local notificationImage = descendant:FindFirstChild("NotificationImage")
+                        if notificationImage and notificationImage.Image == "rbxassetid://3200915096" then
+                            print("Normal Quest Complete!")
+                            wait(0.3)
+                            print("firing remote...")
+                            wait(0.1)
+                            game.ReplicatedStorage.Dungeon.Remotes.BackToLobby:FireServer() 
+                        end
+                    end
+                end
+            elseif QuestText == "ComboQuest" then
+                -- Check for ComboQuest notification
+                local notificationCount = 0
+                for _, descendant in ipairs(descendants) do
+                    if descendant.Name == "Notification" then
+                        local notificationImage = descendant:FindFirstChild("NotificationImage")
+                        if notificationImage and notificationImage.Image == "rbxassetid://3200915096" then
+                            notificationCount = notificationCount + 1
+                        end
+                    end
+                end
+                if notificationCount >= 2 then
+                    print("Combo Quest Complete!")
+                    wait(0.3)
+                    print("firing remote...")
+                    wait(0.1)
+                    game.ReplicatedStorage.Dungeon.Remotes.BackToLobby:FireServer() 
+                end
+            else
+          print("Unknown File Type: " .. tostring(QuestText))
     end
 end
 
 
-local Toggle = Tabs.Main:AddToggle("AutoLeaveWhenQuestComplete", {Title = "Auto-Leave When Quest is Completed", Default = false })
+local Toggle = Tabs.Main:AddToggle("AutoLeaveWhenProgressionQuestisComplete", {Title = "Auto-Leave When Quest Completed", Default = false })
 
 Toggle:OnChanged(function(isEnabled)
     AutoQuestLeaving = isEnabled
     repeat
-    wait(2)
+    if AutoQuestLeaving then
+      wait(2)
         spawn(AutoQuestLeave)
+        end
     until AutoQuestLeaving == false
-end)
-
-local Toggle = Tabs.Main:AddToggle("AutoLeaveWhenProgressionQuestisComplete", {Title = "Auto-Leave When Progression is Complete (TEST)", Default = false })
-
-Toggle:OnChanged(function(isEnabled)
-    AutoQuestLeaving2 = isEnabled
-    if AutoQuestLeaving2 then
-    Fluent:Notify({
-        Title = "🗿🗿🗿",
-        Content = "Get Trolled!",
-        SubContent = " ", -- Optional
-        Duration = 10 -- Set to nil to make the notification not disappear
-    })
-  end
 end)
     
 Tabs.Main:AddParagraph({
@@ -1571,7 +1658,7 @@ local RunService = game:GetService("RunService")
 local xhx, yhx, zhx, txx = 1, 1, 1, 0.5
 local hitboxTest = false
 local lastUpdateTime = 0
-local updateInterval = 1  -- Set the interval in seconds
+local updateInterval = 2  -- Set the interval in seconds
 
 local function enableHitbox(monsterRootPart)
    monsterRootPart.Size = Vector3.new(xhx, yhx, zhx)
@@ -1664,24 +1751,80 @@ local InputTransparency = Tabs.Enemies:AddInput("InputTransparency", {
      })
 
 Tabs.Enemies:AddParagraph({
-        Title = "More Things",
-        Content = " "
+        Title = "Ability Mods",
+        Content = "Disable the Toggle when you Changing the types"
+    })
+    
+local SelectedHigh = false
+local SelectedMedium = false
+local SelectedLow = false
+
+    local Dropdown = Tabs.Enemies:AddDropdown("KillAuraTypes", {
+        Title = "Kill Aura Type",
+        Values = {"Low", "Medium", "High"},
+        Multi = false,
+        Default = 1,
     })
 
-AuraSecond = 1
-
-local Toggle = Tabs.Enemies:AddToggle("KillAuraOptimized", {Title = "Kill Aura (Optimized)", Default = false })
+    Dropdown:OnChanged(function(Value)
+    if Value == "Low" then
+        SelectedLow = Value
+        SelectedMedium = false
+        SelectedHigh = false
+ elseif Value == "High" then
+        SelectedHigh = Value
+        SelectedMedium = false
+        SelectedLow = false
+ elseif Value == "Medium" then
+        SelectedMedium = Value
+        SelectedLow = false
+        SelectedHigh = false
+    end
+end)
+    
+local Toggle = Tabs.Enemies:AddToggle("KillAura", {Title = "Kill Aura Toggle", Default = false })
 local isToggleActive = false
 
 Toggle:OnChanged(function(isToggled)
     isToggleActive = isToggled
 
-    while isToggleActive and wait(000000.000001) do
+    while isToggleActive and wait(0.01) do
+    if not isToggleActive then break end
+    if SelectedLow then
          AllKill()
+         end
+    if SelectedHigh then
+        AllKill2()
+      end
+   if SelectedMedium then
+        AllKill3()
+        end
     end
 end)
 
-Options.KillAuraOptimized:SetValue(false)
+Options.KillAura:SetValue(false)
+
+local Slider = Tabs.Enemies:AddSlider("KillAuraRange", {
+        Title = "Kill Aura Range",
+        Description = "",
+        Default = 250,
+        Min = 1,
+        Max = 500,
+        Rounding = 1,
+        Callback = function(Value)
+ if SelectedLow then
+    killaurarange = tonumber(Value) or 250
+end
+if SelectedHigh then
+   NewSize = tonumber(Value) or 250
+end
+        end
+    })
+
+Tabs.Enemies:AddParagraph({
+        Title = "Enemy Mods",
+        Content = " "
+    })
 
 spawn(function()
     while wait(1) do
@@ -1919,71 +2062,7 @@ Tabs.Enemies:AddButton({
 
 -- Initialize the variable to control the loop
 local isUpdatingCamera = false
-
-
-if Player.Name == "Guilfordy_sagalol" or Player.Name == "guesttester_1" or Player.Name == "Guilfordy_sagalol3" or Player.Name == "Peleeelallee" then
-
-Tabs.Enemies:AddParagraph({
-        Title = "ABILITY AURA VERY OP!!!",
-        Content = " "
-    })
-
-local isToggleActive = false
-
-local Toggle = Tabs.Enemies:AddToggle("Ability_Aura", { Title = "Ability Aura Toggle", Default = false })
-
-Toggle:OnChanged(function(isToggled)
-    isToggleActive = isToggled
-
-    while isToggleActive do
-        AllKill3()
-        wait(0.1)
-    end
-end)
-
-
-Tabs.Enemies:AddInput("Ability_X", {
-    Title = "Ability Size X",
-    Default = "10",
-    Placeholder = "Placeholder",
-    Numeric = true,
-    Callback = function(abx)
-        UwUSizeX = tonumber(abx) or 10
-    end
-})
-
-Tabs.Enemies:AddInput("Ability_Y", {
-    Title = "Ability Size Y",
-    Default = "10",
-    Placeholder = "Placeholder",
-    Numeric = true,
-    Callback = function(aby)
-        UwUSizeY = tonumber(aby) or 10
-    end
-})
-
-Tabs.Enemies:AddInput("Ability_Z", {
-    Title = "Ability Size Z",
-    Default = "10",
-    Placeholder = "Placeholder",
-    Numeric = true,
-    Callback = function(abz)
-        UwUSizeZ = tonumber(abz) or 10
-    end
-})
-
-Tabs.Enemies:AddInput("Ability_Trans", {
-    Title = "Ability Transparency",
-    Default = "0.7",
-    Placeholder = "Placeholder",
-    Numeric = true,
-    Callback = function(abt)
-        UwUTrans = tonumber(abt) or 0.7
-    end
-})
-
-end
-
+    
 end
 
 if isWaveDefense then
@@ -1996,7 +2075,7 @@ Tabs.Enemies:AddParagraph({
 local xhx, yhx, zhx, txx = 1, 1, 1, 0.5
 local hitboxTest = false
 local lastUpdateTime = 0
-local updateInterval = 1  -- Set the interval in seconds
+local updateInterval = 2
 
 local function enableHitbox()
     for _, value in pairs(workspace.Dungeon:GetDescendants()) do
@@ -2097,22 +2176,80 @@ local InputTransparency = Tabs.Enemies:AddInput("InputTransparency", {
 AuraSecond = 1
 
 Tabs.Enemies:AddParagraph({
-        Title = "More Things",
-        Content = " "
+        Title = "Ability Mods",
+        Content = "Disable the Toggle when you Changing the types"
+    })
+    
+local SelectedHigh = false
+local SelectedMedium = false
+local SelectedLow = false
+
+    local Dropdown = Tabs.Enemies:AddDropdown("KillAuraTypes", {
+        Title = "Kill Aura Type",
+        Values = {"Low", "Medium", "High"},
+        Multi = false,
+        Default = 1,
     })
 
-local Toggle = Tabs.Enemies:AddToggle("KillAuraOptimized", {Title = "Kill Aura (Optimized)", Default = false })
+    Dropdown:OnChanged(function(Value)
+    if Value == "Low" then
+        SelectedLow = Value
+        SelectedMedium = false
+        SelectedHigh = false
+ elseif Value == "High" then
+        SelectedHigh = Value
+        SelectedMedium = false
+        SelectedLow = false
+ elseif Value == "Medium" then
+        SelectedMedium = Value
+        SelectedLow = false
+        SelectedHigh = false
+    end
+end)
+    
+local Toggle = Tabs.Enemies:AddToggle("KillAura", {Title = "Kill Aura Toggle", Default = false })
 local isToggleActive = false
 
 Toggle:OnChanged(function(isToggled)
     isToggleActive = isToggled
 
-      while isToggleActive and wait(000000.000001) do
+    while isToggleActive and wait(0.08) do
+    if not isToggleActive then break end
+    if SelectedLow then
          AllKill()
+         end
+    if SelectedHigh then
+        AllKill2()
+      end
+   if SelectedMedium then
+        AllKill3()
+        end
     end
 end)
 
-Options.KillAuraOptimized:SetValue(false)
+Options.KillAura:SetValue(false)
+
+local Slider = Tabs.Enemies:AddSlider("KillAuraRange", {
+        Title = "Kill Aura Range",
+        Description = "",
+        Default = 250,
+        Min = 1,
+        Max = 500,
+        Rounding = 1,
+        Callback = function(Value)
+ if SelectedLow then
+    killaurarange = tonumber(Value) or 250
+end
+if SelectedHigh then
+   NewSize = tonumber(Value) or 250
+end
+        end
+    })
+
+Tabs.Enemies:AddParagraph({
+        Title = "Enemy Mods",
+        Content = " "
+    })
 
 spawn(function()
     while wait(1) do
@@ -2223,71 +2360,52 @@ end)
 
 Options.ArchorMobs:SetValue(false)
 
-if Player.Name == "Guilfordy_sagalol" or Player.Name == "guesttester_1" or Player.Name == "Guilfordy_sagalol3" or Player.Name == "Peleeelallee" then
-
-Tabs.Enemies:AddParagraph({
-        Title = "ABILITY AURA VERY OP!!!",
-        Content = " "
-    })
-    
-local isToggleActive = false
-
-local Toggle = Tabs.Enemies:AddToggle("Ability_Aura", { Title = "Ability Aura Toggle", Default = false })
-
-Toggle:OnChanged(function(isToggled)
-    isToggleActive = isToggled
-
-    while isToggleActive do
-        AllKill3()
-        wait(1)
-    end
-end)
-
-Tabs.Enemies:AddInput("Ability_X", {
-    Title = "Ability Size X",
-    Default = "10",
-    Placeholder = "Placeholder",
-    Numeric = true,
-    Callback = function(abx)
-        UwUSizeX = tonumber(abx) or 10
-    end
-})
-
-Tabs.Enemies:AddInput("Ability_Y", {
-    Title = "Ability Size Y",
-    Default = "10",
-    Placeholder = "Placeholder",
-    Numeric = true,
-    Callback = function(aby)
-        UwUSizeY = tonumber(aby) or 10
-    end
-})
-
-Tabs.Enemies:AddInput("Ability_Z", {
-    Title = "Ability Size Z",
-    Default = "10",
-    Placeholder = "Placeholder",
-    Numeric = true,
-    Callback = function(abz)
-        UwUSizeZ = tonumber(abz) or 10
-    end
-})
-
-Tabs.Enemies:AddInput("Ability_Trans", {
-    Title = "Ability Transparency",
-    Default = "0.7",
-    Placeholder = "Placeholder",
-    Numeric = true,
-    Callback = function(abt)
-        UwUTrans = tonumber(abt) or 0.7
-    end
-})
-    
-end
-
 end
 
 -- Character
+
+Tabs.Character:AddParagraph({
+        Title = "Humanoid",
+        Content = " "
+    })
+
+local Input = Tabs.Character:AddInput("Input", {
+        Title = "WalkSpeed",
+        Default = "26",
+        Placeholder = "Placeholder",
+        Numeric = false, -- Only allows numbers
+        Finished = false, -- Only calls callback when you press enter
+        Callback = function(WS)
+game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = WS
+        end
+    })
+    
+    Tabs.Character:AddButton({
+        Title = "Reset Walkspeed",
+        Description = " ",
+        Callback = function()
+game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = 18
+        end
+    })
+    
+local Input = Tabs.Character:AddInput("Input", {
+        Title = "Jump Height",
+        Default = "50",
+        Placeholder = "Placeholder",
+        Numeric = false, -- Only allows numbers
+        Finished = false, -- Only calls callback when you press enter
+        Callback = function(JP)
+game.Players.LocalPlayer.Character.Humanoid.JumpPower = JP
+        end
+    })
+
+Tabs.Character:AddButton({
+        Title = "Reset JumpHeight",
+        Description = " ",
+        Callback = function()
+game.Players.LocalPlayer.Character.Humanoid.JumpPower = 50
+        end
+    })
 
 Tabs.Character:AddParagraph({
         Title = "Toggles",
@@ -2332,27 +2450,24 @@ local Toggle = Tabs.Character:AddToggle("Noclip", {Title = "Noclip", Default = f
 local NoClipx = false
 
 local function Noclip()
-    game:GetService('RunService').RenderStepped:Connect(function()
-        if NoClipx then
             pcall(function()
                 for i, v in pairs(game.Players.LocalPlayer.Character:GetDescendants()) do
                     if v:IsA("BasePart") then
                         v.CanCollide = false
-                        RunService.RenderStepped:Wait()
-                    end
-                end
-            end)
-        end
-    end)
+                 end
+            end
+      end)
 end
 
     Toggle:OnChanged(function(State)
 NoClipx = State
+repeat
+   Noclip()
+       wait(0.1)
+       until not NoClipx == true
     end)
 
 Options.Noclip:SetValue(false)
-
-Noclip()
 
 local FLYING = false
 local velocityHandlerName = "VelocityHandler"
@@ -2384,7 +2499,7 @@ local function unmobilefly(player)
 
                 local humanoid = character:FindFirstChildWhichIsA("Humanoid")
                 if humanoid then
-                    humanoid.PlatformStand = false
+                    humanoid.PlatformStand = true
                 end
             end
         end
@@ -2518,7 +2633,7 @@ local FlySpeedInput = Tabs.Character:AddInput("FlySpeedInput", {
 spawn(flyLoop)
 
 Tabs.Character:AddParagraph({
-        Title = "Mods",
+        Title = "Weapon Mods",
         Content = " "
     })
 
@@ -2560,43 +2675,35 @@ Combatctrl["_roll_cooldown"] = -1
 end
 end)
 
-local Input = Tabs.Character:AddInput("Input", {
-        Title = "WalkSpeed",
-        Default = "26",
-        Placeholder = "Placeholder",
-        Numeric = false, -- Only allows numbers
-        Finished = false, -- Only calls callback when you press enter
-        Callback = function(WS)
-game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = WS
-        end
-    })
-    
-    Tabs.Character:AddButton({
-        Title = "Reset Walkspeed",
-        Description = " ",
-        Callback = function()
-game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = 18
-        end
-    })
-    
-local Input = Tabs.Character:AddInput("Input", {
-        Title = "Jump Height",
-        Default = "50",
-        Placeholder = "Placeholder",
-        Numeric = false, -- Only allows numbers
-        Finished = false, -- Only calls callback when you press enter
-        Callback = function(JP)
-game.Players.LocalPlayer.Character.Humanoid.JumpPower = JP
-        end
-    })
+local FastAttackXD = false
 
-Tabs.Character:AddButton({
-        Title = "Reset JumpHeight",
-        Description = " ",
-        Callback = function()
-game.Players.LocalPlayer.Character.Humanoid.JumpPower = 50
+local Toggle = Tabs.Character:AddToggle("DebounceAttack", {Title = "Debounce Attack (TESTING)", Default = false })
+
+ Toggle:OnChanged(function(uhh)
+ FastAttackXD = uhh
+ 
+if FastAttackXD and not Player.Name == UsernameTester then
+wait(60)
+game:GetService("Players").LocalPlayer:Kick("Are u trying to use the debounce attack ಠ⁠_⁠ಠ")
+ end
+ 
+ game:GetService("RunService").RenderStepped:Connect(function()
+    pcall(function()
+      if FastAttackXD then                
+        fireBasicAttack()
+        fireUseAbility()
+       RunService.RenderStepped:Wait()
         end
-    })
+    end)
+end)
+ 
+repeat
+ if FastAttackXD then
+ wait(0.1)
+FastAttack()
+ end
+until not FastAttackXD == true
+end)
 
 -- FarmSettings
 
@@ -3461,4 +3568,5 @@ print("Changed SimulationRaduis")
 game:GetService("RunService").RenderStepped:Connect(function()
     sethiddenproperty(game:GetService("Players").LocalPlayer, 'SimulationRadius', math.huge)
     sethiddenproperty(game:GetService("Players").LocalPlayer, 'MaximumSimulationRadius', math.huge)
+    RunService.RenderStepped:Wait()
 end)
