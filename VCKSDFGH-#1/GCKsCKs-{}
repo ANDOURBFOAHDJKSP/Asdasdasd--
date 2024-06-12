@@ -112,11 +112,11 @@ getgenv().Get =
 print("Gui: Fluent Library")
 
 print("-- Fast Loader V2")
-print("-- Unknown TQ Hub 1/5: Checking Game...")
+print("-- Unknown Hub X 1/5: Checking Game...")
 
 wait(0.2)
 
-print("-- Unknown TQ Hub 2/5: Getting Service...")
+print("-- Unknown Hub X 2/5: Getting Service...")
 
 -- Test literally
 local request = http_request or request or HttpPost
@@ -137,9 +137,9 @@ local HttpService = Get.HttpService
 local Player = Players.LocalPlayer
 local InventoryController = require(game:GetService("Players").LocalPlayer.PlayerScripts:WaitForChild("Shared"):WaitForChild("Client"):WaitForChild("InventoryController"))
 
-print("-- Unknown TQ Hub 3/5: Bypassing Random Name...")
+print("-- Unknown Hub X 3/5: Bypassing Random Name...")
 
-print("-- Unknown TQ Hub 3.5/5: Bypassing... *DumbExploiterController* ")
+print("-- Unknown Hub X 3.5/5: Bypassing... *DumbExploiterController* ")
 
 -- Valuable Servers
 local isWaveDefense
@@ -257,19 +257,35 @@ end
 
 game:GetService("Workspace"):FindFirstChild("Map")
 
-print("-- Unknown TQ Hub 4/5: Checking Exploit Support...")
+print("-- Unknown Hub X 4/5: Checking Exploit Support...")
 
 wait(0.1)
 
 if not require then
-    return game.Players.LocalPlayer:Kick("Your Exploit doesn't support")
+    return game.Players.LocalPlayer:Kick("Your Exploit doesn't support: require(path)")
+else
+print("Supported require()")
 end
 
-if not firetouchinterest then
-    return game.Players.LocalPlayer:Kick("Your Exploit doesn't support")
+if not firetouchinterest  then
+    return game.Players.LocalPlayer:Kick("Your Exploit doesn't support: firetouchinterest()")
+else
+print("Supported firetouchinterest()")
 end
 
-print("-- Unknown TQ Hub 5/5: Loaded, Pls Wait for Few Seconds...")
+if not setfpscap or setfpscap(500) then
+    return game.Players.LocalPlayer:Kick("Your Exploit doesn't support: setfpscap()")
+else
+print("Supported setfpscap()")
+end
+
+if not setfflag then
+    return game.Players.LocalPlayer:Kick("Your Exploit doesn't support: setfflag()")
+else
+print("Supported setfflag()")
+end
+
+print("-- Unknown Hub X 5/5: Loaded, Pls Wait for Few Seconds...")
 
 wait(0.1)
 
@@ -333,262 +349,321 @@ game:GetService("ReplicatedStorage").Lobby.Remotes.StartGame:FireServer()
 end
 
 function AutoQuest_1()
-writefile("UnknownTQHub/AutoQuestConfig.txt", "NormalQuest")
+writefile("UnknownHubXUniversal/TreasureQuest/AutoQuestConfig.txt", "NormalQuest")
 if questslot1 == "Wave Defense Bosses" or questslot1 == "Wave Defense Dungeon" or questslot1 == "Wave Defense Waves" or questslot1 == "Wave Defense Dungeon Monster Kills" then
 game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Wave Defense", "Wave Defense", "Classic", "Solo", 1);
+writefile("UnknownHubXUniversal/TreasureQuest/AutoQuestConfig.txt", "NormalQuest")
 end
 
 if questslot1 == "Ancient Jungle Bosses" or questslot1 == "Ancient Jungle Dungeon" or questslot1 == "Ancient Jungle Dungeon Monster Kills" then
 game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Ancient Jungle", QuestDiffculty, "Endless", "Solo", 1);
+writefile("UnknownHubXUniversal/TreasureQuest/AutoQuestConfig.txt", "NormalQuest")
 end
 
 if questslot1 == "Coral Kingdom Bosses" or questslot1 == "Coral Kingdom Dungeon" or questslot1 == "Coral Kingdom Dungeon Monster Kills" then
 game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Coral Kingdom", QuestDiffculty, "Endless", "Solo", 1);
+writefile("UnknownHubXUniversal/TreasureQuest/AutoQuestConfig.txt", "NormalQuest")
 end
 
 if questslot1 == "Sacred Sands Bosses" or questslot1 == "Sacred Sands Dungeon" or questslot1 == "Sacred Sands Dungeon Monster Kills" then
 game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Sacred Sands", QuestDiffculty, "Endless", "Solo", 1);
+writefile("UnknownHubXUniversal/TreasureQuest/AutoQuestConfig.txt", "NormalQuest")
 end
 
 if questslot1 == "Candy Land Bosses" or questslot1 == "Candy Land Dungeon" or questslot1 == "Candy Land Dungeon Monster Kills" then
 game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Candy Land", QuestDiffculty, "Endless", "Solo", 1);
+writefile("UnknownHubXUniversal/TreasureQuest/AutoQuestConfig.txt", "NormalQuest")
 end
 
 if questslot1 == "Sinister Sewers Bosses" or questslot1 == "Sinister Sewers Dungeon" or questslot1 == "Sinister Sewers Dungeon Monster Kills" then
 game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Sinister Sewers", QuestDiffculty, "Endless", "Solo", 1);
+writefile("UnknownHubXUniversal/TreasureQuest/AutoQuestConfig.txt", "NormalQuest")
 end
 
 if questslot1 == "Magical Mushrooms Bosses" or questslot1 == "Magical Mushrooms Dungeon" or questslot1 == "Magical Mushrooms Dungeon Monster Kills" then
 game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Magical Mushrooms", QuestDiffculty, "Endless", "Solo", 1);
+writefile("UnknownHubXUniversal/TreasureQuest/AutoQuestConfig.txt", "NormalQuest")
 end
 
 if questslot1 == "Space Base Bosses" or questslot1 == "Space Base Dungeon" or questslot1 == "Space Base Dungeon Monster Kills" then
 game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Space Base", QuestDiffculty, "Endless", "Solo", 1);
+writefile("UnknownHubXUniversal/TreasureQuest/AutoQuestConfig.txt", "NormalQuest")
 end
 
 if questslot1 == "Daring Dojo Bosses" or questslot1 == "Daring Dojo Dungeon" or questslot1 == "Daring Dojo Dungeon Monster Kills" then
 game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Daring Dojo", QuestDiffculty, "Endless", "Solo", 1);
+writefile("UnknownHubXUniversal/TreasureQuest/AutoQuestConfig.txt", "NormalQuest")
 end
 
 if questslot1 == "Ice Palace Bosses" or questslot1 == "Ice Palace Dungeon" or questslot1 == "Ice Palace Dungeon Monster Kills" then
 game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Ice Palace", QuestDiffculty, "Endless", "Solo", 1);
+writefile("UnknownHubXUniversal/TreasureQuest/AutoQuestConfig.txt", "NormalQuest")
 end
 
 if questslot1 == "Cryptic Castle Bosses" or questslot1 == "Cryptic Castle Dungeon" or questslot1 == "Cryptic Castle Dungeon Monster Kills" then
 game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Cryptic Castle", QuestDiffculty, "Endless", "Solo", 1);
+writefile("UnknownHubXUniversal/TreasureQuest/AutoQuestConfig.txt", "NormalQuest")
 end
 
 if questslot1 == "Fiery Fortress Bosses" or questslot1 == "Fiery Fortress Dungeon" or questslot1 == "Fiery Fortress Dungeon Monster Kills" then
 game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Fiery Fortress", QuestDiffculty, "Endless", "Solo", 1);
+writefile("UnknownHubXUniversal/TreasureQuest/AutoQuestConfig.txt", "NormalQuest")
 end
 
 if questslot1 == "Crystal Cave Bosses" or questslot1 == "Crystal Cave Dungeon" or questslot1 == "Crystal Cave Dungeon Monster Kills" then
 game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Crystal Cave", QuestDiffculty, "Endless", "Solo", 1);
+writefile("UnknownHubXUniversal/TreasureQuest/AutoQuestConfig.txt", "NormalQuest")
 end
 
 if questslot1 == "Missing Map Bosses" or questslot1 == "Missing Map Dungeon" or questslot1 == "Missing Map Dungeon Monster Kills" then
 game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Missing Map", QuestDiffculty, "Endless", "Solo", 1);
+writefile("UnknownHubXUniversal/TreasureQuest/AutoQuestConfig.txt", "NormalQuest")
 end
 
 if questslot1 == "Brightest Beach Bosses" or questslot1 == "Brightest Beach Dungeon" or questslot1 == "Brightest Beach Dungeon Monster Kills" then
 game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Brightest Beach", QuestDiffculty, "Endless", "Solo", 1);
+writefile("UnknownHubXUniversal/TreasureQuest/AutoQuestConfig.txt", "NormalQuest")
 end
 
 if questslot1 == "Santa's Workshop Bosses" or questslot1 == "Santa's Workshop Dungeon" or questslot1 == "Santa's Workshop Dungeon Monster Kills" then
 game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Santa's Workshop", QuestDiffculty, "Endless", "Solo", 1);
+writefile("UnknownHubXUniversal/TreasureQuest/AutoQuestConfig.txt", "NormalQuest")
 end
 
 if questslot1 == "Frenzy Factory Bosses" or questslot1 == "Frenzy Factory Dungeon" or questslot1 == "Frenzy Factory Dungeon Monster Kills" then
 game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Frenzy Factory", QuestDiffculty, "Endless", "Solo", 1);
+writefile("UnknownHubXUniversal/TreasureQuest/AutoQuestConfig.txt", "NormalQuest")
 end
 
 if questslot1 == "Poison Prison Bosses" or questslot1 == "Poison Prison Dungeon" or questslot1 == "Poison Prison Dungeon Monster Kills" then
 game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Poison Prison", QuestDiffculty, "Endless", "Solo", 1);
+writefile("UnknownHubXUniversal/TreasureQuest/AutoQuestConfig.txt", "NormalQuest")
 end
 
 if questslot1 == "Spookiest Mansion Bosses" or questslot1 == "Spookiest Mansion Dungeon" or questslot1 == "Spookiest Mansion Dungeon Monster Kills" then
 game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Spookiest Mansion", QuestDiffculty, "Endless", "Solo", 1);
+writefile("UnknownHubXUniversal/TreasureQuest/AutoQuestConfig.txt", "NormalQuest")
 end
 
 if questslot1 == "Smog Sanctum Bosses" or questslot1 == "Smog Sanctum Dungeon" or questslot1 == "Smog Sanctum Dungeon Monster Kills" then
 game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Smog Sanctum", QuestDiffculty, "Endless", "Solo", 1);
+writefile("UnknownHubXUniversal/TreasureQuest/AutoQuestConfig.txt", "NormalQuest")
 end
 
 if questslot1 == "Daily Dungeon Bosses" or questslot1 == "Daily Dungeon Dungeon" or questslot1 == "Daily Dungeon Dungeon Monster Kills" then
 game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Daily Dungeon", QuestDiffculty, "Endless", "Solo", 1);
+writefile("UnknownHubXUniversal/TreasureQuest/AutoQuestConfig.txt", "NormalQuest")
 end
 
 if questslot1 == "Danger Depths Bosses" or questslot1 == "Danger Depths Dungeon" or questslot1 == "Danger Depths Dungeon Monster Kills" then
 game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Danger Depths", QuestDiffculty, "Endless", "Solo", 1);
+writefile("UnknownHubXUniversal/TreasureQuest/AutoQuestConfig.txt", "NormalQuest")
 end
 
 if questslot2 == "Wave Defense Bosses" or questslot2 == "Wave Defense Dungeon" or questslot2 == "Wave Defense Waves" or questslot2 == "Wave Defense Dungeon Monster Kills" then
 game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Wave Defense", "Wave Defense", "Classic", "Solo", 1);
+writefile("UnknownHubXUniversal/TreasureQuest/AutoQuestConfig.txt", "NormalQuest")
 end
 
 if questslot2 == "Danger Depths Bosses" or questslot2 == "Danger Depths Dungeon" or questslot2 == "Danger Depths Waves" or questslot2 == "Danger Depths Dungeon Monster Kills" then
 game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Danger Depths", "Danger Depths", "Classic", "Solo", 1);
+writefile("UnknownHubXUniversal/TreasureQuest/AutoQuestConfig.txt", "NormalQuest")
 end
 
 if questslot2 == "Ancient Jungle Bosses" or questslot2 == "Ancient Jungle Dungeon" or questslot2 == "Ancient Jungle Dungeon Monster Kills" then
 game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Ancient Jungle", QuestDiffculty, "Endless", "Solo", 1);
+writefile("UnknownHubXUniversal/TreasureQuest/AutoQuestConfig.txt", "NormalQuest")
 end
 
 if questslot2 == "Coral Kingdom Bosses" or questslot2 == "Coral Kingdom Dungeon" or questslot2 == "Coral Kingdom Dungeon Monster Kills" then
 game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Coral Kingdom", QuestDiffculty, "Endless", "Solo", 1);
+writefile("UnknownHubXUniversal/TreasureQuest/AutoQuestConfig.txt", "NormalQuest")
 end
 
 if questslot2 == "Sacred Sands Bosses" or questslot2 == "Sacred Sands Dungeon" or questslot2 == "Sacred Sands Dungeon Monster Kills" then
 game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Sacred Sands", QuestDiffculty, "Endless", "Solo", 1);
+writefile("UnknownHubXUniversal/TreasureQuest/AutoQuestConfig.txt", "NormalQuest")
 end
 
 if questslot2 == "Candy Land Bosses" or questslot2 == "Candy Land Dungeon" or questslot2 == "Candy Land Dungeon Monster Kills" then
 game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Candy Land", QuestDiffculty, "Endless", "Solo", 1);
+writefile("UnknownHubXUniversal/TreasureQuest/AutoQuestConfig.txt", "NormalQuest")
 end
 
 if questslot2 == "Sinister Sewers Bosses" or questslot2 == "Sinister Sewers Dungeon" or questslot2 == "Sinister Sewers Dungeon Monster Kills" then
 game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Sinister Sewers", QuestDiffculty, "Endless", "Solo", 1);
+writefile("UnknownHubXUniversal/TreasureQuest/AutoQuestConfig.txt", "NormalQuest")
 end
 
 if questslot2 == "Magical Mushrooms Bosses" or questslot2 == "Magical Mushrooms Dungeon" or questslot2 == "Magical Mushrooms Dungeon Monster Kills" then
 game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Magical Mushrooms", QuestDiffculty, "Endless", "Solo", 1);
+writefile("UnknownHubXUniversal/TreasureQuest/AutoQuestConfig.txt", "NormalQuest")
 end
 
 if questslot2 == "Space Base Bosses" or questslot2 == "Space Base Dungeon" or questslot2 == "Space Base Dungeon Monster Kills" then
 game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Space Base", QuestDiffculty, "Endless", "Solo", 1);
+writefile("UnknownHubXUniversal/TreasureQuest/AutoQuestConfig.txt", "NormalQuest")
 end
 
 if questslot2 == "Daring Dojo Bosses" or questslot2 == "Daring Dojo Dungeon" or questslot2 == "Daring Dojo Dungeon Monster Kills" then
 game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Daring Dojo", QuestDiffculty, "Endless", "Solo", 1);
+writefile("UnknownHubXUniversal/TreasureQuest/AutoQuestConfig.txt", "NormalQuest")
 end
 
 if questslot2 == "Ice Palace Bosses" or questslot2 == "Ice Palace Dungeon" or questslot2 == "Ice Palace Dungeon Monster Kills" then
 game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Ice Palace", QuestDiffculty, "Endless", "Solo", 1);
+writefile("UnknownHubXUniversal/TreasureQuest/AutoQuestConfig.txt", "NormalQuest")
 end
 
 if questslot2 == "Cryptic Castle Bosses" or questslot2 == "Cryptic Castle Dungeon" or questslot2 == "Cryptic Castle Dungeon Monster Kills" then
 game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Cryptic Castle", QuestDiffculty, "Endless", "Solo", 1);
+writefile("UnknownHubXUniversal/TreasureQuest/AutoQuestConfig.txt", "NormalQuest")
 end
 
 if questslot2 == "Fiery Fortress Bosses" or questslot2 == "Fiery Fortress Dungeon" or questslot2 == "Fiery Fortress Dungeon Monster Kills" then
 game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Fiery Fortress", QuestDiffculty, "Endless", "Solo", 1);
+writefile("UnknownHubXUniversal/TreasureQuest/AutoQuestConfig.txt", "NormalQuest")
 end
 
 if questslot2 == "Crystal Cave Bosses" or questslot2 == "Crystal Cave Dungeon" or questslot2 == "Crystal Cave Dungeon Monster Kills" then
 game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Crystal Cave", QuestDiffculty, "Endless", "Solo", 1);
+writefile("UnknownHubXUniversal/TreasureQuest/AutoQuestConfig.txt", "NormalQuest")
 end
 
 if questslot2 == "Missing Map Bosses" or questslot2 == "Missing Map Dungeon" or questslot2 == "Missing Map Dungeon Monster Kills" then
 game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Missing Map", QuestDiffculty, "Endless", "Solo", 1);
+writefile("UnknownHubXUniversal/TreasureQuest/AutoQuestConfig.txt", "NormalQuest")
 end
 
 if questslot2 == "Brightest Beach Bosses" or questslot2 == "Brightest Beach Dungeon" or questslot2 == "Brightest Beach Dungeon Monster Kills" then
 game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Brightest Beach", QuestDiffculty, "Endless", "Solo", 1);
+writefile("UnknownHubXUniversal/TreasureQuest/AutoQuestConfig.txt", "NormalQuest")
 end
 
 if questslot2 == "Santa's Workshop Bosses" or questslot2 == "Santa's Workshop Dungeon" or questslot2 == "Santa's Workshop Dungeon Monster Kills" then
 game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Santa's Workshop", QuestDiffculty, "Endless", "Solo", 1);
+writefile("UnknownHubXUniversal/TreasureQuest/AutoQuestConfig.txt", "NormalQuest")
 end
 
 if questslot2 == "Frenzy Factory Bosses" or questslot2 == "Frenzy Factory Dungeon" or questslot2 == "Frenzy Factory Dungeon Monster Kills" then
 game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Frenzy Factory", QuestDiffculty, "Endless", "Solo", 1);
+writefile("UnknownHubXUniversal/TreasureQuest/AutoQuestConfig.txt", "NormalQuest")
 end
 
 if questslot2 == "Poison Prison Bosses" or questslot2 == "Poison Prison Dungeon" or questslot2 == "Poison Prison Dungeon Monster Kills" then
 game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Poison Prison", QuestDiffculty, "Endless", "Solo", 1);
+writefile("UnknownHubXUniversal/TreasureQuest/AutoQuestConfig.txt", "NormalQuest")
 end
 
 if questslot2 == "Spookiest Mansion Bosses" or questslot2 == "Spookiest Mansion Dungeon" or questslot2 == "Spookiest Mansion Dungeon Monster Kills" then
 game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Spookiest Mansion", QuestDiffculty, "Endless", "Solo", 1);
+writefile("UnknownHubXUniversal/TreasureQuest/AutoQuestConfig.txt", "NormalQuest")
 end
 
 if questslot2 == "Smog Sanctum Bosses" or questslot2 == "Smog Sanctum Dungeon" or questslot2 == "Smog Sanctum Dungeon Monster Kills" then
 game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Smog Sanctum", QuestDiffculty, "Endless", "Solo", 1);
+writefile("UnknownHubXUniversal/TreasureQuest/AutoQuestConfig.txt", "NormalQuest")
 end
 
 if questslot2 == "Daily Dungeon Bosses" or questslot2 == "Daily Dungeon Dungeon" or questslot2 == "Daily Dungeon Dungeon Monster Kills" then
 game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Daily Dungeon", QuestDiffculty, "Endless", "Solo", 1);
+writefile("UnknownHubXUniversal/TreasureQuest/AutoQuestConfig.txt", "NormalQuest")
 end
 
 end
 
 function AutoQuest_2()
 
-writefile("UnknownTQHub/AutoQuestConfig.txt", "NormalQuest")
-
 if questslot1 == "Sweetie" or questslot1 == "Horseman" or questslot1 == "Obsidian" or questslot1 == "Blaze" or questslot1 == "Peppermint" or questslot1 == "Overlord" or questslot1 == "Star Guardian" or questslot1 == "Frost" or questslot1 == "Miniboss Master" or questslot1 == "Brute" or questslot1 == "Voltage" or questslot1 == "Greenback" or questslot1 == "Witch" or questslot1 == "Reaper" then
 game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Ancient Jungle", QuestDiffculty, "Minibosses", "Solo", 1);
+writefile("UnknownHubXUniversal/TreasureQuest/AutoQuestConfig.txt", "NormalQuest")
 end
 
 if questslot1 == "Sweetie Miniboss Kills" or questslot1 == "Horseman Miniboss Kills" or questslot1 == "Obsidian Miniboss Kills" or questslot1 == "Blaze Miniboss Kills" or questslot1 == "Peppermint Miniboss Kills" or questslot1 == "Overlord Miniboss Kills" or questslot1 == "Star Guardian Miniboss Kills" or questslot1 == "Frost Miniboss Kills" or questslot1 == "Miniboss Master" or questslot1 == "Brute Miniboss Kills" or questslot1 == "Voltage Miniboss Kills" or questslot1 == "Greenback Miniboss Kills" or questslot1 == "Witch Miniboss Kills" or questslot1 == "Reaper Miniboss Kills" or questslot1 == "Miniboss Kills" or questslot1 == "Miniboss Master" then
 game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Ancient Jungle", QuestDiffculty, "Minibosses", "Solo", 1);
+writefile("UnknownHubXUniversal/TreasureQuest/AutoQuestConfig.txt", "NormalQuest")
 end
 
 if questslot2 == "Sweetie Miniboss Kills" or questslot2 == "Horseman Miniboss Kills" or questslot2 == "Obsidian Miniboss Kills" or questslot2 == "Blaze Miniboss Kills" or questslot2 == "Peppermint Miniboss Kills" or questslot2 == "Overlord Miniboss Kills" or questslot2 == "Star Guardian Miniboss Kills" or questslot2 == "Frost Miniboss Kills" or questslot2 == "Miniboss Master" or questslot2 == "Brute Miniboss Kills" or questslot2 == "Voltage Miniboss Kills" or questslot2 == "Greenback Miniboss Kills" or questslot2 == "Witch Miniboss Kills" or questslot2 == "Reaper Miniboss Kills" or questslot2 == "Miniboss Kills" or questslot2 == "Miniboss Master" then
 game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Ancient Jungle", QuestDiffculty, "Minibosses", "Solo", 1);
+writefile("UnknownHubXUniversal/TreasureQuest/AutoQuestConfig.txt", "NormalQuest")
 end
 
 if questslot1 == "Mission Impossible" or questslot2 == "Mission Impossible" then
 game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Ancient Jungle", "Impossible", "Uncapped", "Solo", 1);
+writefile("UnknownHubXUniversal/TreasureQuest/AutoQuestConfig.txt", "NormalQuest")
 end
 
 if questslot1 == "Flawless" or questslot2 == "Flawless" then
 game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Ancient Jungle", "Easy", "Uncapped", "Solo", 1);
+writefile("UnknownHubXUniversal/TreasureQuest/AutoQuestConfig.txt", "NormalQuest")
 end
 
 if questslot1 == "Level Up" or questslot2 == "Level Up" then
+writefile("UnknownHubXUniversal/TreasureQuest/AutoQuestConfig.txt", "NormalQuest")
 createsquad()
 wait(5)
 startsquad()
 end
 
 if questslot1 == "Treasure Chests" or questslot2 == "Treasure Chests" then
+writefile("UnknownHubXUniversal/TreasureQuest/AutoQuestConfig.txt", "NormalQuest")
 game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Ancient Jungle", QuestDiffculty, "Endless", "Solo", 1);
 end
 
 if questslot1 == "Complete Dungeon" or questslot2 == "Complete Dungeon" then
+writefile("UnknownHubXUniversal/TreasureQuest/AutoQuestConfig.txt", "NormalQuest")
 game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Ancient Jungle", QuestDiffculty, "Endless", "Solo", 1);
 end
 
 if questslot1 == "Elite Boss Kills" or questslot2 == "Elite Boss Kills" then
+writefile("UnknownHubXUniversal/TreasureQuest/AutoQuestConfig.txt", "NormalQuest")
 game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Ancient Jungle", QuestDiffculty, "Endless", "Solo", 1);
 end
 
 if questslot1 == "Boss Kills" or questslot2 == "Boss Kills" then
+writefile("UnknownHubXUniversal/TreasureQuest/AutoQuestConfig.txt", "NormalQuest")
 game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Ancient Jungle", QuestDiffculty, "Endless", "Solo", 1);
 end
 
 if questslot1 == "Use Ability" or questslot1 == "Monster Kills" or questslot2 == "Use Ability" or questslot2 == "Monster Kills" then
+writefile("UnknownHubXUniversal/TreasureQuest/AutoQuestConfig.txt", "NormalQuest")
 game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Ancient Jungle", QuestDiffculty, "Endless", "Solo", 1);
 end
 
 if questslot1 == "Daily Monster Kills" or questslot2 == "Daily Monster Kills" then
+writefile("UnknownHubXUniversal/TreasureQuest/AutoQuestConfig.txt", "NormalQuest")
 game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Ancient Jungle", QuestDiffculty, "Endless", "Solo", 1);
 end
 
 if questslot1 == "Medkits" or questslot2 == "Medkits" then
+writefile("UnknownHubXUniversal/TreasureQuest/AutoQuestConfig.txt", "NormalQuest")
 game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Ancient Jungle", QuestDiffculty, "Endless", "Solo", 1);
 end
 
 if SecretShop_1 then
 if questslot1 == "Not So Secret" or questslot1 == "Secret Shopper" then
+writefile("UnknownHubXUniversal/TreasureQuest/AutoQuestConfig.txt", "NormalQuest")
 game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Coral Kingdom", QuestDiffculty, "Endless", "Solo", 1);
 end
 end
 
 if SecretShop_2 then
 if questslot1 == "Not So Secret" or questslot1 == "Secret Shopper" then
+writefile("UnknownHubXUniversal/TreasureQuest/AutoQuestConfig.txt", "NormalQuest")
 game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Daring Dojo", QuestDiffculty, "Endless", "Solo", 1);
 end
 end
 
 if SecretShop_3 then
 if questslot1 == "Not So Secret" or questslot1 == "Secret Shopper" then
+writefile("UnknownHubXUniversal/TreasureQuest/AutoQuestConfig.txt", "NormalQuest")
 game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Fiery Fortress", QuestDiffculty, "Endless", "Solo", 1);
 end
 end
 
 if questslot1 == "Ranged Monster Kills" then
+writefile("UnknownHubXUniversal/TreasureQuest/AutoQuestConfig.txt", "NormalQuest")
 game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Ancient Jungle", QuestDiffculty, "Endless", "Solo", 1);
 end
 
@@ -607,20 +682,79 @@ end
 
 if Playtime_2 then
 if questslot1 == "Playtime" or questslot2 == "Playtime" then
+writefile("UnknownHubXUniversal/TreasureQuest/AutoQuestConfig.txt", "NormalQuest")
 createsquad()
 wait(3)
 startsquad()
 end
 end
 
+if questslot1 == "Shopper" or questslot2 == "Shopper" then
+    local DailyShop = require(game:GetService("Players").LocalPlayer.PlayerScripts.Shared.Modules.Pages.DailyShop.Equipment)
+    local GetNumbers = {""}
+
+    for i = 1, 100 do
+        table.insert(GetNumbers, i)
+    end
+
+    for _, index in pairs(GetNumbers) do
+        -- Check for notification
+        local coreGui = game:GetService("CoreGui")
+        local robloxGui = coreGui:FindFirstChild("RobloxGui")
+        local notificationFrame = robloxGui and robloxGui:FindFirstChild("NotificationFrame")
+
+        if notificationFrame then
+            local descendants = notificationFrame:GetDescendants()
+            local notificationFound = false
+            
+            for _, descendant in ipairs(descendants) do
+                if descendant.Name == "Notification" then
+                    local notificationImage = descendant:FindFirstChild("NotificationImage")
+                    if notificationImage and notificationImage.Image == "rbxassetid://3200915096" then
+                        notificationFound = true
+                        print("Notification detected, stopping script.")
+                        break
+                    end
+                end
+            end
+            
+            if notificationFound then
+                break
+            end
+        end
+
+        -- Proceed with item purchase if no notification is found
+        local item = DailyShop["_item_slots"][index]
+        if item and item.ItemData then
+            local id = item.ItemData.ItemID
+            local rarity = item.DatabaseInfo.Rarity
+
+            print("Attempting to buy item with ID:", id)
+
+            local ShopBuy = {
+                [1] = "id"
+            }
+            
+        if rarity == "Common" or rarity == "Rare" or rarity "Legendary" then
+            ShopBuy[1] = id
+       end
+     
+            wait(2)
+
+            game:GetService("ReplicatedStorage").Lobby.Remotes.BuyEquipment:FireServer(unpack(ShopBuy))
+        else
+            print("No item found at index:", index)
+        end
+    end
+end
+
 end
 
 function AutoQuestCombo()
 
-writefile("UnknownTQHub/AutoQuestConfig.txt", "ComboQuest")
-
 if questslot1 == "Sweetie Miniboss Kills" or questslot1 == "Horseman Miniboss Kills" or questslot1 == "Obsidian Miniboss Kills" or questslot1 == "Blaze Miniboss Kills" or questslot1 == "Peppermint Miniboss Kills" or questslot1 == "Overlord Miniboss Kills" or questslot1 == "Star Guardian Miniboss Kills" or questslot1 == "Frost Miniboss Kills" or questslot1 == "Miniboss Master" or questslot1 == "Brute Miniboss Kills" or questslot1 == "Voltage Miniboss Kills" or questslot1 == "Greenback Miniboss Kills" or questslot1 == "Witch Miniboss Kills" or questslot1 == "Reaper Miniboss Kills" or questslot1 == "Miniboss Kills" or questslot1 == "Miniboss Master" then
 if questslot2 == "Sweetie Miniboss Kills" or questslot2 == "Horseman Miniboss Kills" or questslot2 == "Obsidian Miniboss Kills" or questslot2 == "Blaze Miniboss Kills" or questslot2 == "Peppermint Miniboss Kills" or questslot2 == "Overlord Miniboss Kills" or questslot2 == "Star Guardian Miniboss Kills" or questslot2 == "Frost Miniboss Kills" or questslot2 == "Miniboss Master" or questslot2 == "Brute Miniboss Kills" or questslot2 == "Voltage Miniboss Kills" or questslot2 == "Greenback Miniboss Kills" or questslot2 == "Witch Miniboss Kills" or questslot2 == "Reaper Miniboss Kills" or questslot1 == "Miniboss Kills" or questslot2 == "Miniboss Master" then
+writefile("UnknownHubXUniversal/TreasureQuest/AutoQuestConfig.txt", "ComboQuest")
 game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Ancient Jungle", QuestDiffculty, "Minibosses", "Solo", 1);
 end
 end
@@ -628,486 +762,567 @@ end
 if questslot2 == "Ancient Jungle Bosses" or questslot2 == "Ancient Jungle Dungeon" or questslot2 == "Ancient Jungle Dungeon Monster Kills" then
 if questslot1 == "Sweetie Miniboss Kills" or questslot1 == "Horseman Miniboss Kills" or questslot1 == "Obsidian Miniboss Kills" or questslot1 == "Blaze Miniboss Kills" or questslot1 == "Peppermint Miniboss Kills" or questslot1 == "Overlord Miniboss Kills" or questslot1 == "Star Guardian Miniboss Kills" or questslot1 == "Frost Miniboss Kills" or questslot1 == "Miniboss Master" or questslot1 == "Brute Miniboss Kills" or questslot1 == "Voltage Miniboss Kills" or questslot1 == "Greenback Miniboss Kills" or questslot1 == "Witch Miniboss Kills" or questslot1 == "Reaper Miniboss Kills" or questslot1 == "Miniboss Kills" or questslot1 == "Miniboss Master" then
 game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Ancient Jungle", QuestDiffculty, "Minibosses", "Solo", 1);
+writefile("UnknownHubXUniversal/TreasureQuest/AutoQuestConfig.txt", "ComboQuest")
 end
 end
 
 if questslot2 == "Danger Depths Bosses" or questslot2 == "Danger Depths Dungeon" or questslot2 == "Danger Depths Dungeon Monster Kills" then
 if questslot1 == "Sweetie Miniboss Kills" or questslot1 == "Horseman Miniboss Kills" or questslot1 == "Obsidian Miniboss Kills" or questslot1 == "Blaze Miniboss Kills" or questslot1 == "Peppermint Miniboss Kills" or questslot1 == "Overlord Miniboss Kills" or questslot1 == "Star Guardian Miniboss Kills" or questslot1 == "Frost Miniboss Kills" or questslot1 == "Miniboss Master" or questslot1 == "Brute Miniboss Kills" or questslot1 == "Voltage Miniboss Kills" or questslot1 == "Greenback Miniboss Kills" or questslot1 == "Witch Miniboss Kills" or questslot1 == "Reaper Miniboss Kills" or questslot1 == "Miniboss Kills" or questslot1 == "Miniboss Master" then
 game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Danger Depths", QuestDiffculty, "Minibosses", "Solo", 1);
+writefile("UnknownHubXUniversal/TreasureQuest/AutoQuestConfig.txt", "ComboQuest")
 end
 end
 
 if questslot2 == "Sacred Sands Bosses" or questslot2 == "Sacred Sands Dungeon" or questslot2 == "Sacred Sands Dungeon Monster Kills" then
 if questslot1 == "Sweetie Miniboss Kills" or questslot1 == "Horseman Miniboss Kills" or questslot1 == "Obsidian Miniboss Kills" or questslot1 == "Blaze Miniboss Kills" or questslot1 == "Peppermint Miniboss Kills" or questslot1 == "Overlord Miniboss Kills" or questslot1 == "Star Guardian Miniboss Kills" or questslot1 == "Frost Miniboss Kills" or questslot1 == "Miniboss Master" or questslot1 == "Brute Miniboss Kills" or questslot1 == "Voltage Miniboss Kills" or questslot1 == "Greenback Miniboss Kills" or questslot1 == "Witch Miniboss Kills" or questslot1 == "Reaper Miniboss Kills" or questslot1 == "Miniboss Kills" or questslot1 == "Miniboss Master" then
 game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Sacred Sands", QuestDiffculty, "Minibosses", "Solo", 1);
+writefile("UnknownHubXUniversal/TreasureQuest/AutoQuestConfig.txt", "ComboQuest")
 end
 end
 
 if questslot2 == "Coral Kingdom Bosses" or questslot2 == "Coral Kingdom Dungeon" or questslot2 == "Coral Kingdom Dungeon Monster Kills" then
 if questslot1 == "Sweetie Miniboss Kills" or questslot1 == "Horseman Miniboss Kills" or questslot1 == "Obsidian Miniboss Kills" or questslot1 == "Blaze Miniboss Kills" or questslot1 == "Peppermint Miniboss Kills" or questslot1 == "Overlord Miniboss Kills" or questslot1 == "Star Guardian Miniboss Kills" or questslot1 == "Frost Miniboss Kills" or questslot1 == "Miniboss Master" or questslot1 == "Brute Miniboss Kills" or questslot1 == "Voltage Miniboss Kills" or questslot1 == "Greenback Miniboss Kills" or questslot1 == "Witch Miniboss Kills" or questslot1 == "Reaper Miniboss Kills" or questslot1 == "Miniboss Kills" or questslot1 == "Miniboss Master" then
 game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Coral Kingdom", QuestDiffculty, "Minibosses", "Solo", 1);
+writefile("UnknownHubXUniversal/TreasureQuest/AutoQuestConfig.txt", "ComboQuest")
 end
 end
 
 if questslot2 == "Candy Land Bosses" or questslot2 == "Candy Land Dungeon" or questslot2 == "Candy Land Dungeon Monster Kills" then
 if questslot1 == "Sweetie Miniboss Kills" or questslot1 == "Horseman Miniboss Kills" or questslot1 == "Obsidian Miniboss Kills" or questslot1 == "Blaze Miniboss Kills" or questslot1 == "Peppermint Miniboss Kills" or questslot1 == "Overlord Miniboss Kills" or questslot1 == "Star Guardian Miniboss Kills" or questslot1 == "Frost Miniboss Kills" or questslot1 == "Miniboss Master" or questslot1 == "Brute Miniboss Kills" or questslot1 == "Voltage Miniboss Kills" or questslot1 == "Greenback Miniboss Kills" or questslot1 == "Witch Miniboss Kills" or questslot1 == "Reaper Miniboss Kills" or questslot1 == "Miniboss Kills" or questslot1 == "Miniboss Master" then
 game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Candy Land", QuestDiffculty, "Minibosses", "Solo", 1);
+writefile("UnknownHubXUniversal/TreasureQuest/AutoQuestConfig.txt", "ComboQuest")
 end
 end
 
 if questslot2 == "Crystal Cave Bosses" or questslot2 == "Crystal Cave Dungeon" or questslot2 == "Crystal Cave Dungeon Monster Kills" then
 if questslot1 == "Sweetie Miniboss Kills" or questslot1 == "Horseman Miniboss Kills" or questslot1 == "Obsidian Miniboss Kills" or questslot1 == "Blaze Miniboss Kills" or questslot1 == "Peppermint Miniboss Kills" or questslot1 == "Overlord Miniboss Kills" or questslot1 == "Star Guardian Miniboss Kills" or questslot1 == "Frost Miniboss Kills" or questslot1 == "Miniboss Master" or questslot1 == "Brute Miniboss Kills" or questslot1 == "Voltage Miniboss Kills" or questslot1 == "Greenback Miniboss Kills" or questslot1 == "Witch Miniboss Kills" or questslot1 == "Reaper Miniboss Kills" or questslot1 == "Miniboss Kills" or questslot1 == "Miniboss Master" then
 game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Crystal Cave", QuestDiffculty, "Minibosses", "Solo", 1);
+writefile("UnknownHubXUniversal/TreasureQuest/AutoQuestConfig.txt", "ComboQuest")
 end
 end
 
 if questslot2 == "Sinister Sewers Bosses" or questslot2 == "Sinister Sewers Dungeon" or questslot2 == "Sinister Sewers Dungeon Monster Kills" then
 if questslot1 == "Sweetie Miniboss Kills" or questslot1 == "Horseman Miniboss Kills" or questslot1 == "Obsidian Miniboss Kills" or questslot1 == "Blaze Miniboss Kills" or questslot1 == "Peppermint Miniboss Kills" or questslot1 == "Overlord Miniboss Kills" or questslot1 == "Star Guardian Miniboss Kills" or questslot1 == "Frost Miniboss Kills" or questslot1 == "Miniboss Master" or questslot1 == "Brute Miniboss Kills" or questslot1 == "Voltage Miniboss Kills" or questslot1 == "Greenback Miniboss Kills" or questslot1 == "Witch Miniboss Kills" or questslot1 == "Reaper Miniboss Kills" or questslot1 == "Miniboss Kills" or questslot1 == "Miniboss Master" then
 game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Sinister Sewers", QuestDiffculty, "Minibosses", "Solo", 1);
+writefile("UnknownHubXUniversal/TreasureQuest/AutoQuestConfig.txt", "ComboQuest")
 end
 end
 
 if questslot2 == "Magical Mushrooms Bosses" or questslot2 == "Magical Mushrooms Dungeon" or questslot2 == "Magical Mushrooms Dungeon Monster Kills" then
 if questslot1 == "Sweetie Miniboss Kills" or questslot1 == "Horseman Miniboss Kills" or questslot1 == "Obsidian Miniboss Kills" or questslot1 == "Blaze Miniboss Kills" or questslot1 == "Peppermint Miniboss Kills" or questslot1 == "Overlord Miniboss Kills" or questslot1 == "Star Guardian Miniboss Kills" or questslot1 == "Frost Miniboss Kills" or questslot1 == "Miniboss Master" or questslot1 == "Brute Miniboss Kills" or questslot1 == "Voltage Miniboss Kills" or questslot1 == "Greenback Miniboss Kills" or questslot1 == "Witch Miniboss Kills" or questslot1 == "Reaper Miniboss Kills" or questslot1 == "Miniboss Kills" or questslot1 == "Miniboss Master" then
 game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Magical Mushrooms", QuestDiffculty, "Minibosses", "Solo", 1);
+writefile("UnknownHubXUniversal/TreasureQuest/AutoQuestConfig.txt", "ComboQuest")
 end
 end
 
 if questslot2 == "Space Base Bosses" or questslot2 == "Space Base Dungeon" or questslot2 == "Space Base Dungeon Monster Kills" then
 if questslot1 == "Sweetie Miniboss Kills" or questslot1 == "Horseman Miniboss Kills" or questslot1 == "Obsidian Miniboss Kills" or questslot1 == "Blaze Miniboss Kills" or questslot1 == "Peppermint Miniboss Kills" or questslot1 == "Overlord Miniboss Kills" or questslot1 == "Star Guardian Miniboss Kills" or questslot1 == "Frost Miniboss Kills" or questslot1 == "Miniboss Master" or questslot1 == "Brute Miniboss Kills" or questslot1 == "Voltage Miniboss Kills" or questslot1 == "Greenback Miniboss Kills" or questslot1 == "Witch Miniboss Kills" or questslot1 == "Reaper Miniboss Kills" or questslot1 == "Miniboss Kills" or questslot1 == "Miniboss Master" then
 game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Space Base", QuestDiffculty, "Minibosses", "Solo", 1);
+writefile("UnknownHubXUniversal/TreasureQuest/AutoQuestConfig.txt", "ComboQuest")
 end
 end
 
 if questslot2 == "Ice Palace Bosses" or questslot2 == "Ice Palace Dungeon" or questslot2 == "Ice Palace Dungeon Monster Kills" then
 if questslot1 == "Sweetie Miniboss Kills" or questslot1 == "Horseman Miniboss Kills" or questslot1 == "Obsidian Miniboss Kills" or questslot1 == "Blaze Miniboss Kills" or questslot1 == "Peppermint Miniboss Kills" or questslot1 == "Overlord Miniboss Kills" or questslot1 == "Star Guardian Miniboss Kills" or questslot1 == "Frost Miniboss Kills" or questslot1 == "Miniboss Master" or questslot1 == "Brute Miniboss Kills" or questslot1 == "Voltage Miniboss Kills" or questslot1 == "Greenback Miniboss Kills" or questslot1 == "Witch Miniboss Kills" or questslot1 == "Reaper Miniboss Kills" or questslot1 == "Miniboss Kills" or questslot1 == "Miniboss Master" then
 game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Ice Palace", QuestDiffculty, "Minibosses", "Solo", 1);
+writefile("UnknownHubXUniversal/TreasureQuest/AutoQuestConfig.txt", "ComboQuest")
 end
 end
 
 if questslot2 == "Daring Dojo Bosses" or questslot2 == "Daring Dojo Dungeon" or questslot2 == "Daring Dojo Dungeon Monster Kills" then
 if questslot1 == "Sweetie Miniboss Kills" or questslot1 == "Horseman Miniboss Kills" or questslot1 == "Obsidian Miniboss Kills" or questslot1 == "Blaze Miniboss Kills" or questslot1 == "Peppermint Miniboss Kills" or questslot1 == "Overlord Miniboss Kills" or questslot1 == "Star Guardian Miniboss Kills" or questslot1 == "Frost Miniboss Kills" or questslot1 == "Miniboss Master" or questslot1 == "Brute Miniboss Kills" or questslot1 == "Voltage Miniboss Kills" or questslot1 == "Greenback Miniboss Kills" or questslot1 == "Witch Miniboss Kills" or questslot1 == "Reaper Miniboss Kills" or questslot1 == "Miniboss Kills" or questslot1 == "Miniboss Master" then
 game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Daring Dojo", QuestDiffculty, "Minibosses", "Solo", 1);
+writefile("UnknownHubXUniversal/TreasureQuest/AutoQuestConfig.txt", "ComboQuest")
 end
 end
 
 if questslot2 == "Cryptic Castle Bosses" or questslot2 == "Cryptic Castle Dungeon" or questslot2 == "Cryptic Castle Dungeon Monster Kills" then
 if questslot1 == "Sweetie Miniboss Kills" or questslot1 == "Horseman Miniboss Kills" or questslot1 == "Obsidian Miniboss Kills" or questslot1 == "Blaze Miniboss Kills" or questslot1 == "Peppermint Miniboss Kills" or questslot1 == "Overlord Miniboss Kills" or questslot1 == "Star Guardian Miniboss Kills" or questslot1 == "Frost Miniboss Kills" or questslot1 == "Miniboss Master" or questslot1 == "Brute Miniboss Kills" or questslot1 == "Voltage Miniboss Kills" or questslot1 == "Greenback Miniboss Kills" or questslot1 == "Witch Miniboss Kills" or questslot1 == "Reaper Miniboss Kills" or questslot1 == "Miniboss Kills" or questslot1 == "Miniboss Master" then
 game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Cryptic Castle", QuestDiffculty, "Minibosses", "Solo", 1);
+writefile("UnknownHubXUniversal/TreasureQuest/AutoQuestConfig.txt", "ComboQuest")
 end
 end
 
 if questslot2 == "Missing Map Bosses" or questslot2 == "Missing Map Dungeon" or questslot2 == "Missing Map Dungeon Monster Kills" then
 if questslot1 == "Sweetie Miniboss Kills" or questslot1 == "Horseman Miniboss Kills" or questslot1 == "Obsidian Miniboss Kills" or questslot1 == "Blaze Miniboss Kills" or questslot1 == "Peppermint Miniboss Kills" or questslot1 == "Overlord Miniboss Kills" or questslot1 == "Star Guardian Miniboss Kills" or questslot1 == "Frost Miniboss Kills" or questslot1 == "Miniboss Master" or questslot1 == "Brute Miniboss Kills" or questslot1 == "Voltage Miniboss Kills" or questslot1 == "Greenback Miniboss Kills" or questslot1 == "Witch Miniboss Kills" or questslot1 == "Reaper Miniboss Kills" or questslot1 == "Miniboss Kills" or questslot1 == "Miniboss Master" then
 game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Missing Map", QuestDiffculty, "Minibosses", "Solo", 1);
+writefile("UnknownHubXUniversal/TreasureQuest/AutoQuestConfig.txt", "ComboQuest")
 end
 end
 
 if questslot2 == "Smog Sanctum Bosses" or questslot2 == "Smog Sanctum Dungeon" or questslot2 == "Smog Sanctum Dungeon Monster Kills" then
 if questslot1 == "Sweetie Miniboss Kills" or questslot1 == "Horseman Miniboss Kills" or questslot1 == "Obsidian Miniboss Kills" or questslot1 == "Blaze Miniboss Kills" or questslot1 == "Peppermint Miniboss Kills" or questslot1 == "Overlord Miniboss Kills" or questslot1 == "Star Guardian Miniboss Kills" or questslot1 == "Frost Miniboss Kills" or questslot1 == "Miniboss Master" or questslot1 == "Brute Miniboss Kills" or questslot1 == "Voltage Miniboss Kills" or questslot1 == "Greenback Miniboss Kills" or questslot1 == "Witch Miniboss Kills" or questslot1 == "Reaper Miniboss Kills" or questslot1 == "Miniboss Kills" or questslot1 == "Miniboss Master" then
 game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Smog Sanctum", QuestDiffculty, "Minibosses", "Solo", 1);
+writefile("UnknownHubXUniversal/TreasureQuest/AutoQuestConfig.txt", "ComboQuest")
 end
 end
 
 if questslot2 == "Santa's Workshop Bosses" or questslot2 == "Santa's Workshop Dungeon" or questslot2 == "Santa's Workshop Dungeon Monster Kills" then
 if questslot1 == "Sweetie Miniboss Kills" or questslot1 == "Horseman Miniboss Kills" or questslot1 == "Obsidian Miniboss Kills" or questslot1 == "Blaze Miniboss Kills" or questslot1 == "Peppermint Miniboss Kills" or questslot1 == "Overlord Miniboss Kills" or questslot1 == "Star Guardian Miniboss Kills" or questslot1 == "Frost Miniboss Kills" or questslot1 == "Miniboss Master" or questslot1 == "Brute Miniboss Kills" or questslot1 == "Voltage Miniboss Kills" or questslot1 == "Greenback Miniboss Kills" or questslot1 == "Witch Miniboss Kills" or questslot1 == "Reaper Miniboss Kills" or questslot1 == "Miniboss Kills" or questslot1 == "Miniboss Master" then
 game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Santa's Workshop", QuestDiffculty, "Minibosses", "Solo", 1);
+writefile("UnknownHubXUniversal/TreasureQuest/AutoQuestConfig.txt", "ComboQuest")
 end
 end
 
 if questslot2 == "Frenzy Factory Bosses" or questslot2 == "Frenzy Factory Dungeon" or questslot2 == "Frenzy Factory Dungeon Monster Kills" then
 if questslot1 == "Sweetie Miniboss Kills" or questslot1 == "Horseman Miniboss Kills" or questslot1 == "Obsidian Miniboss Kills" or questslot1 == "Blaze Miniboss Kills" or questslot1 == "Peppermint Miniboss Kills" or questslot1 == "Overlord Miniboss Kills" or questslot1 == "Star Guardian Miniboss Kills" or questslot1 == "Frost Miniboss Kills" or questslot1 == "Miniboss Master" or questslot1 == "Brute Miniboss Kills" or questslot1 == "Voltage Miniboss Kills" or questslot1 == "Greenback Miniboss Kills" or questslot1 == "Witch Miniboss Kills" or questslot1 == "Reaper Miniboss Kills" or questslot1 == "Miniboss Kills" or questslot1 == "Miniboss Master" then
 game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Frenzy Factory", QuestDiffculty, "Minibosses", "Solo", 1);
+writefile("UnknownHubXUniversal/TreasureQuest/AutoQuestConfig.txt", "ComboQuest")
 end
 end
 
 if questslot2 == "Fiery Fortress Bosses" or questslot2 == "Fiery Fortress Dungeon" or questslot2 == "Fiery Fortress Dungeon Monster Kills" then
 if questslot1 == "Sweetie Miniboss Kills" or questslot1 == "Horseman Miniboss Kills" or questslot1 == "Obsidian Miniboss Kills" or questslot1 == "Blaze Miniboss Kills" or questslot1 == "Peppermint Miniboss Kills" or questslot1 == "Overlord Miniboss Kills" or questslot1 == "Star Guardian Miniboss Kills" or questslot1 == "Frost Miniboss Kills" or questslot1 == "Miniboss Master" or questslot1 == "Brute Miniboss Kills" or questslot1 == "Voltage Miniboss Kills" or questslot1 == "Greenback Miniboss Kills" or questslot1 == "Witch Miniboss Kills" or questslot1 == "Reaper Miniboss Kills" or questslot1 == "Miniboss Kills" or questslot1 == "Miniboss Master" then
 game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Fiery Fortress", QuestDiffculty, "Minibosses", "Solo", 1);
+writefile("UnknownHubXUniversal/TreasureQuest/AutoQuestConfig.txt", "ComboQuest")
 end
 end
 
 if questslot2 == "Poison Prison Bosses" or questslot2 == "Poison Prison Dungeon" or questslot2 == "Poison Prison Dungeon Monster Kills" then
 if questslot1 == "Sweetie Miniboss Kills" or questslot1 == "Horseman Miniboss Kills" or questslot1 == "Obsidian Miniboss Kills" or questslot1 == "Blaze Miniboss Kills" or questslot1 == "Peppermint Miniboss Kills" or questslot1 == "Overlord Miniboss Kills" or questslot1 == "Star Guardian Miniboss Kills" or questslot1 == "Frost Miniboss Kills" or questslot1 == "Miniboss Master" or questslot1 == "Brute Miniboss Kills" or questslot1 == "Voltage Miniboss Kills" or questslot1 == "Greenback Miniboss Kills" or questslot1 == "Witch Miniboss Kills" or questslot1 == "Reaper Miniboss Kills" or questslot1 == "Miniboss Kills" or questslot1 == "Miniboss Master" then
 game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Poison Prison", QuestDiffculty, "Minibosses", "Solo", 1);
+writefile("UnknownHubXUniversal/TreasureQuest/AutoQuestConfig.txt", "ComboQuest")
 end
 end
 
 if questslot2 == "Spookiest Mansion Bosses" or questslot2 == "Spookiest Mansion Dungeon" or questslot2 == "Spookiest Mansion Dungeon Monster Kills" then
 if questslot1 == "Sweetie Miniboss Kills" or questslot1 == "Horseman Miniboss Kills" or questslot1 == "Obsidian Miniboss Kills" or questslot1 == "Blaze Miniboss Kills" or questslot1 == "Peppermint Miniboss Kills" or questslot1 == "Overlord Miniboss Kills" or questslot1 == "Star Guardian Miniboss Kills" or questslot1 == "Frost Miniboss Kills" or questslot1 == "Miniboss Master" or questslot1 == "Brute Miniboss Kills" or questslot1 == "Voltage Miniboss Kills" or questslot1 == "Greenback Miniboss Kills" or questslot1 == "Witch Miniboss Kills" or questslot1 == "Reaper Miniboss Kills" or questslot1 == "Miniboss Kills" or questslot1 == "Miniboss Master" then
 game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Spookiest Mansion", QuestDiffculty, "Minibosses", "Solo", 1);
+writefile("UnknownHubXUniversal/TreasureQuest/AutoQuestConfig.txt", "ComboQuest")
 end
 end
 
 if questslot2 == "Brightest Beach Bosses" or questslot2 == "Brightest Beach Dungeon" or questslot2 == "Brightest Beach Dungeon Monster Kills" then
 if questslot1 == "Sweetie Miniboss Kills" or questslot1 == "Horseman Miniboss Kills" or questslot1 == "Obsidian Miniboss Kills" or questslot1 == "Blaze Miniboss Kills" or questslot1 == "Peppermint Miniboss Kills" or questslot1 == "Overlord Miniboss Kills" or questslot1 == "Star Guardian Miniboss Kills" or questslot1 == "Frost Miniboss Kills" or questslot1 == "Miniboss Master" or questslot1 == "Brute Miniboss Kills" or questslot1 == "Voltage Miniboss Kills" or questslot1 == "Greenback Miniboss Kills" or questslot1 == "Witch Miniboss Kills" or questslot1 == "Reaper Miniboss Kills" or questslot1 == "Miniboss Kills" or questslot1 == "Miniboss Master" then
 game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Brightest Beach", QuestDiffculty, "Minibosses", "Solo", 1);
+writefile("UnknownHubXUniversal/TreasureQuest/AutoQuestConfig.txt", "ComboQuest")
 end
 end
 
 if questslot1 == "Ancient Jungle Bosses" or questslot1 == "Ancient Jungle Dungeon" or questslot1 == "Ancient Jungle Dungeon Monster Kills" then
 if questslot2 == "Sweetie Miniboss Kills" or questslot2 == "Horseman Miniboss Kills" or questslot2 == "Obsidian Miniboss Kills" or questslot2 == "Blaze Miniboss Kills" or questslot2 == "Peppermint Miniboss Kills" or questslot2 == "Overlord Miniboss Kills" or questslot2 == "Star Guardian Miniboss Kills" or questslot2 == "Frost Miniboss Kills" or questslot2 == "Miniboss Master" or questslot2 == "Brute Miniboss Kills" or questslot2 == "Voltage Miniboss Kills" or questslot2 == "Greenback Miniboss Kills" or questslot2 == "Witch Miniboss Kills" or questslot2 == "Reaper Miniboss Kills" or questslot2 == "Miniboss Kills" or questslot2 == "Miniboss Master" then
 game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Ancient Jungle", QuestDiffculty, "Minibosses", "Solo", 1);
+writefile("UnknownHubXUniversal/TreasureQuest/AutoQuestConfig.txt", "ComboQuest")
 end
 end
 
 if questslot1 == "Danger Depths Bosses" or questslot1 == "Danger Depths Dungeon" or questslot1 == "Danger Depths Dungeon Monster Kills" then
 if questslot2 == "Sweetie Miniboss Kills" or questslot2 == "Horseman Miniboss Kills" or questslot2 == "Obsidian Miniboss Kills" or questslot2 == "Blaze Miniboss Kills" or questslot2 == "Peppermint Miniboss Kills" or questslot2 == "Overlord Miniboss Kills" or questslot2 == "Star Guardian Miniboss Kills" or questslot2 == "Frost Miniboss Kills" or questslot2 == "Miniboss Master" or questslot2 == "Brute Miniboss Kills" or questslot2 == "Voltage Miniboss Kills" or questslot2 == "Greenback Miniboss Kills" or questslot2 == "Witch Miniboss Kills" or questslot2 == "Reaper Miniboss Kills" or questslot2 == "Miniboss Kills" or questslot2 == "Miniboss Master" then
 game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Danger Depths", QuestDiffculty, "Minibosses", "Solo", 1);
+writefile("UnknownHubXUniversal/TreasureQuest/AutoQuestConfig.txt", "ComboQuest")
 end
 end
 
 if questslot1 == "Sacred Sands Bosses" or questslot1 == "Sacred Sands Dungeon" or questslot1 == "Sacred Sands Dungeon Monster Kills" then
 if questslot2 == "Sweetie Miniboss Kills" or questslot2 == "Horseman Miniboss Kills" or questslot2 == "Obsidian Miniboss Kills" or questslot2 == "Blaze Miniboss Kills" or questslot2 == "Peppermint Miniboss Kills" or questslot2 == "Overlord Miniboss Kills" or questslot2 == "Star Guardian Miniboss Kills" or questslot2 == "Frost Miniboss Kills" or questslot2 == "Miniboss Master" or questslot2 == "Brute Miniboss Kills" or questslot2 == "Voltage Miniboss Kills" or questslot2 == "Greenback Miniboss Kills" or questslot2 == "Witch Miniboss Kills" or questslot2 == "Reaper Miniboss Kills" or questslot2 == "Miniboss Kills" or questslot2 == "Miniboss Master" then
 game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Sacred Sands", QuestDiffculty, "Minibosses", "Solo", 1);
+writefile("UnknownHubXUniversal/TreasureQuest/AutoQuestConfig.txt", "ComboQuest")
 end
 end
 
 if questslot1 == "Coral Kingdom Bosses" or questslot1 == "Coral Kingdom Dungeon" or questslot1 == "Coral Kingdom Dungeon Monster Kills" then
 if questslot2 == "Sweetie Miniboss Kills" or questslot2 == "Horseman Miniboss Kills" or questslot2 == "Obsidian Miniboss Kills" or questslot2 == "Blaze Miniboss Kills" or questslot2 == "Peppermint Miniboss Kills" or questslot2 == "Overlord Miniboss Kills" or questslot2 == "Star Guardian Miniboss Kills" or questslot2 == "Frost Miniboss Kills" or questslot2 == "Miniboss Master" or questslot2 == "Brute Miniboss Kills" or questslot2 == "Voltage Miniboss Kills" or questslot2 == "Greenback Miniboss Kills" or questslot2 == "Witch Miniboss Kills" or questslot2 == "Reaper Miniboss Kills" or questslot2 == "Miniboss Kills" or questslot2 == "Miniboss Master" then
 game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Coral Kingdom", QuestDiffculty, "Minibosses", "Solo", 1);
+writefile("UnknownHubXUniversal/TreasureQuest/AutoQuestConfig.txt", "ComboQuest")
 end
 end
 
 if questslot1 == "Candy Land Bosses" or questslot1 == "Candy Land Dungeon" or questslot1 == "Candy Land Dungeon Monster Kills" then
 if questslot2 == "Sweetie Miniboss Kills" or questslot2 == "Horseman Miniboss Kills" or questslot2 == "Obsidian Miniboss Kills" or questslot2 == "Blaze Miniboss Kills" or questslot2 == "Peppermint Miniboss Kills" or questslot2 == "Overlord Miniboss Kills" or questslot2 == "Star Guardian Miniboss Kills" or questslot2 == "Frost Miniboss Kills" or questslot2 == "Miniboss Master" or questslot2 == "Brute Miniboss Kills" or questslot2 == "Voltage Miniboss Kills" or questslot2 == "Greenback Miniboss Kills" or questslot2 == "Witch Miniboss Kills" or questslot2 == "Reaper Miniboss Kills" or questslot2 == "Miniboss Kills" or questslot2 == "Miniboss Master" then
 game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Candy Land", QuestDiffculty, "Minibosses", "Solo", 1);
+writefile("UnknownHubXUniversal/TreasureQuest/AutoQuestConfig.txt", "ComboQuest")
 end
 end
 
 if questslot1 == "Crystal Cave Bosses" or questslot1 == "Crystal Cave Dungeon" or questslot1 == "Crystal Cave Dungeon Monster Kills" then
 if questslot2 == "Sweetie Miniboss Kills" or questslot2 == "Horseman Miniboss Kills" or questslot2 == "Obsidian Miniboss Kills" or questslot2 == "Blaze Miniboss Kills" or questslot2 == "Peppermint Miniboss Kills" or questslot2 == "Overlord Miniboss Kills" or questslot2 == "Star Guardian Miniboss Kills" or questslot2 == "Frost Miniboss Kills" or questslot2 == "Miniboss Master" or questslot2 == "Brute Miniboss Kills" or questslot2 == "Voltage Miniboss Kills" or questslot2 == "Greenback Miniboss Kills" or questslot2 == "Witch Miniboss Kills" or questslot2 == "Reaper Miniboss Kills" or questslot2 == "Miniboss Kills" or questslot2 == "Miniboss Master" then
 game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Crystal Cave", QuestDiffculty, "Minibosses", "Solo", 1);
+writefile("UnknownHubXUniversal/TreasureQuest/AutoQuestConfig.txt", "ComboQuest")
 end
 end
 
 if questslot1 == "Sinister Sewers Bosses" or questslot1 == "Sinister Sewers Dungeon" or questslot1 == "Sinister Sewers Dungeon Monster Kills" then
 if questslot2 == "Sweetie Miniboss Kills" or questslot2 == "Horseman Miniboss Kills" or questslot2 == "Obsidian Miniboss Kills" or questslot2 == "Blaze Miniboss Kills" or questslot2 == "Peppermint Miniboss Kills" or questslot2 == "Overlord Miniboss Kills" or questslot2 == "Star Guardian Miniboss Kills" or questslot2 == "Frost Miniboss Kills" or questslot2 == "Miniboss Master" or questslot2 == "Brute Miniboss Kills" or questslot2 == "Voltage Miniboss Kills" or questslot2 == "Greenback Miniboss Kills" or questslot2 == "Witch Miniboss Kills" or questslot2 == "Reaper Miniboss Kills" or questslot2 == "Miniboss Kills" or questslot2 == "Miniboss Master" then
 game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Sinister Sewers", QuestDiffculty, "Minibosses", "Solo", 1);
+writefile("UnknownHubXUniversal/TreasureQuest/AutoQuestConfig.txt", "ComboQuest")
 end
 end
 
 if questslot1 == "Magical Mushrooms Bosses" or questslot1 == "Magical Mushrooms Dungeon" or questslot1 == "Magical Mushrooms Dungeon Monster Kills" then
 if questslot2 == "Sweetie Miniboss Kills" or questslot2 == "Horseman Miniboss Kills" or questslot2 == "Obsidian Miniboss Kills" or questslot2 == "Blaze Miniboss Kills" or questslot2 == "Peppermint Miniboss Kills" or questslot2 == "Overlord Miniboss Kills" or questslot2 == "Star Guardian Miniboss Kills" or questslot2 == "Frost Miniboss Kills" or questslot2 == "Miniboss Master" or questslot2 == "Brute Miniboss Kills" or questslot2 == "Voltage Miniboss Kills" or questslot2 == "Greenback Miniboss Kills" or questslot2 == "Witch Miniboss Kills" or questslot2 == "Reaper Miniboss Kills" or questslot2 == "Miniboss Kills" or questslot2 == "Miniboss Master" then
 game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Magical Mushrooms", QuestDiffculty, "Minibosses", "Solo", 1);
+writefile("UnknownHubXUniversal/TreasureQuest/AutoQuestConfig.txt", "ComboQuest")
 end
 end
 
 if questslot1 == "Missing Map Bosses" or questslot1 == "Missing Map Dungeon" or questslot1 == "Missing Map Dungeon Monster Kills" then
 if questslot2 == "Sweetie Miniboss Kills" or questslot2 == "Horseman Miniboss Kills" or questslot2 == "Obsidian Miniboss Kills" or questslot2 == "Blaze Miniboss Kills" or questslot2 == "Peppermint Miniboss Kills" or questslot2 == "Overlord Miniboss Kills" or questslot2 == "Star Guardian Miniboss Kills" or questslot2 == "Frost Miniboss Kills" or questslot2 == "Miniboss Master" or questslot2 == "Brute Miniboss Kills" or questslot2 == "Voltage Miniboss Kills" or questslot2 == "Greenback Miniboss Kills" or questslot2 == "Witch Miniboss Kills" or questslot2 == "Reaper Miniboss Kills" or questslot2 == "Miniboss Kills" or questslot2 == "Miniboss Master" then
 game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Missing Map", QuestDiffculty, "Minibosses", "Solo", 1);
+writefile("UnknownHubXUniversal/TreasureQuest/AutoQuestConfig.txt", "ComboQuest")
 end
 end
 
 if questslot1 == "Ice Palace Bosses" or questslot1 == "Ice Palace Dungeon" or questslot1 == "Ice Palace Dungeon Monster Kills" then
 if questslot2 == "Sweetie Miniboss Kills" or questslot2 == "Horseman Miniboss Kills" or questslot2 == "Obsidian Miniboss Kills" or questslot2 == "Blaze Miniboss Kills" or questslot2 == "Peppermint Miniboss Kills" or questslot2 == "Overlord Miniboss Kills" or questslot2 == "Star Guardian Miniboss Kills" or questslot2 == "Frost Miniboss Kills" or questslot2 == "Miniboss Master" or questslot2 == "Brute Miniboss Kills" or questslot2 == "Voltage Miniboss Kills" or questslot2 == "Greenback Miniboss Kills" or questslot2 == "Witch Miniboss Kills" or questslot2 == "Reaper Miniboss Kills" or questslot2 == "Miniboss Kills" or questslot2 == "Miniboss Master" then
 game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Ice Palace", QuestDiffculty, "Minibosses", "Solo", 1);
+writefile("UnknownHubXUniversal/TreasureQuest/AutoQuestConfig.txt", "ComboQuest")
 end
 end
 
 if questslot1 == "Daring Dojo Bosses" or questslot1 == "Daring Dojo Dungeon" or questslot1 == "Daring Dojo Dungeon Monster Kills" then
 if questslot2 == "Sweetie Miniboss Kills" or questslot2 == "Horseman Miniboss Kills" or questslot2 == "Obsidian Miniboss Kills" or questslot2 == "Blaze Miniboss Kills" or questslot2 == "Peppermint Miniboss Kills" or questslot2 == "Overlord Miniboss Kills" or questslot2 == "Star Guardian Miniboss Kills" or questslot2 == "Frost Miniboss Kills" or questslot2 == "Miniboss Master" or questslot2 == "Brute Miniboss Kills" or questslot2 == "Voltage Miniboss Kills" or questslot2 == "Greenback Miniboss Kills" or questslot2 == "Witch Miniboss Kills" or questslot2 == "Reaper Miniboss Kills" or questslot2 == "Miniboss Kills" or questslot2 == "Miniboss Master" then
 game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Daring Dojo", QuestDiffculty, "Minibosses", "Solo", 1);
+writefile("UnknownHubXUniversal/TreasureQuest/AutoQuestConfig.txt", "ComboQuest")
 end
 end
 
 if questslot1 == "Cryptic Castle Bosses" or questslot1 == "Cryptic Castle Dungeon" or questslot1 == "Cryptic Castle Dungeon Monster Kills" then
 if questslot2 == "Sweetie Miniboss Kills" or questslot2 == "Horseman Miniboss Kills" or questslot2 == "Obsidian Miniboss Kills" or questslot2 == "Blaze Miniboss Kills" or questslot2 == "Peppermint Miniboss Kills" or questslot2 == "Overlord Miniboss Kills" or questslot2 == "Star Guardian Miniboss Kills" or questslot2 == "Frost Miniboss Kills" or questslot2 == "Miniboss Master" or questslot2 == "Brute Miniboss Kills" or questslot2 == "Voltage Miniboss Kills" or questslot2 == "Greenback Miniboss Kills" or questslot2 == "Witch Miniboss Kills" or questslot2 == "Reaper Miniboss Kills" or questslot2 == "Miniboss Kills" or questslot2 == "Miniboss Master" then
 game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Cryptic Castle", QuestDiffculty, "Minibosses", "Solo", 1);
+writefile("UnknownHubXUniversal/TreasureQuest/AutoQuestConfig.txt", "ComboQuest")
 end
 end
 
 if questslot1 == "Space Base Bosses" or questslot1 == "Space Base Dungeon" or questslot1 == "Space Base Dungeon Monster Kills" then
 if questslot2 == "Sweetie Miniboss Kills" or questslot2 == "Horseman Miniboss Kills" or questslot2 == "Obsidian Miniboss Kills" or questslot2 == "Blaze Miniboss Kills" or questslot2 == "Peppermint Miniboss Kills" or questslot2 == "Overlord Miniboss Kills" or questslot2 == "Star Guardian Miniboss Kills" or questslot2 == "Frost Miniboss Kills" or questslot2 == "Miniboss Master" or questslot2 == "Brute Miniboss Kills" or questslot2 == "Voltage Miniboss Kills" or questslot2 == "Greenback Miniboss Kills" or questslot2 == "Witch Miniboss Kills" or questslot2 == "Reaper Miniboss Kills" or questslot2 == "Miniboss Kills" or questslot2 == "Miniboss Master" then
 game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Space Base", QuestDiffculty, "Minibosses", "Solo", 1);
+writefile("UnknownHubXUniversal/TreasureQuest/AutoQuestConfig.txt", "ComboQuest")
 end
 end
 
 if questslot1 == "Smog Sanctum Bosses" or questslot1 == "Smog Sanctum Dungeon" or questslot1 == "Smog Sanctum Dungeon Monster Kills" then
 if questslot2 == "Sweetie Miniboss Kills" or questslot2 == "Horseman Miniboss Kills" or questslot2 == "Obsidian Miniboss Kills" or questslot2 == "Blaze Miniboss Kills" or questslot2 == "Peppermint Miniboss Kills" or questslot2 == "Overlord Miniboss Kills" or questslot2 == "Star Guardian Miniboss Kills" or questslot2 == "Frost Miniboss Kills" or questslot2 == "Miniboss Master" or questslot2 == "Brute Miniboss Kills" or questslot2 == "Voltage Miniboss Kills" or questslot2 == "Greenback Miniboss Kills" or questslot2 == "Witch Miniboss Kills" or questslot2 == "Reaper Miniboss Kills" or questslot2 == "Miniboss Kills" or questslot2 == "Miniboss Master" then
 game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Smog Sanctum", QuestDiffculty, "Minibosses", "Solo", 1);
+writefile("UnknownHubXUniversal/TreasureQuest/AutoQuestConfig.txt", "ComboQuest")
 end
 end
 
 if questslot1 == "Santa's Workshop Bosses" or questslot1 == "Santa's Workshop Dungeon" or questslot1 == "Santa's Workshop Dungeon Monster Kills" then
 if questslot2 == "Sweetie Miniboss Kills" or questslot2 == "Horseman Miniboss Kills" or questslot2 == "Obsidian Miniboss Kills" or questslot2 == "Blaze Miniboss Kills" or questslot2 == "Peppermint Miniboss Kills" or questslot2 == "Overlord Miniboss Kills" or questslot2 == "Star Guardian Miniboss Kills" or questslot2 == "Frost Miniboss Kills" or questslot2 == "Miniboss Master" or questslot2 == "Brute Miniboss Kills" or questslot2 == "Voltage Miniboss Kills" or questslot2 == "Greenback Miniboss Kills" or questslot2 == "Witch Miniboss Kills" or questslot2 == "Reaper Miniboss Kills" or questslot2 == "Miniboss Kills" or questslot2 == "Miniboss Master" then
 game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Santa's Workshop", QuestDiffculty, "Minibosses", "Solo", 1);
+writefile("UnknownHubXUniversal/TreasureQuest/AutoQuestConfig.txt", "ComboQuest")
 end
 end
 
 if questslot1 == "Frenzy Factory Bosses" or questslot1 == "Frenzy Factory Dungeon" or questslot1 == "Frenzy Factory Dungeon Monster Kills" then
 if questslot2 == "Sweetie Miniboss Kills" or questslot2 == "Horseman Miniboss Kills" or questslot2 == "Obsidian Miniboss Kills" or questslot2 == "Blaze Miniboss Kills" or questslot2 == "Peppermint Miniboss Kills" or questslot2 == "Overlord Miniboss Kills" or questslot2 == "Star Guardian Miniboss Kills" or questslot2 == "Frost Miniboss Kills" or questslot2 == "Miniboss Master" or questslot2 == "Brute Miniboss Kills" or questslot2 == "Voltage Miniboss Kills" or questslot2 == "Greenback Miniboss Kills" or questslot2 == "Witch Miniboss Kills" or questslot2 == "Reaper Miniboss Kills" or questslot2 == "Miniboss Kills" or questslot2 == "Miniboss Master" then
 game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Frenzy Factory", QuestDiffculty, "Minibosses", "Solo", 1);
+writefile("UnknownHubXUniversal/TreasureQuest/AutoQuestConfig.txt", "ComboQuest")
 end
 end
 
 if questslot1 == "Fiery Fortress Bosses" or questslot1 == "Fiery Fortress Dungeon" or questslot1 == "Fiery Fortress Dungeon Monster Kills" then
 if questslot2 == "Sweetie Miniboss Kills" or questslot2 == "Horseman Miniboss Kills" or questslot2 == "Obsidian Miniboss Kills" or questslot2 == "Blaze Miniboss Kills" or questslot2 == "Peppermint Miniboss Kills" or questslot2 == "Overlord Miniboss Kills" or questslot2 == "Star Guardian Miniboss Kills" or questslot2 == "Frost Miniboss Kills" or questslot2 == "Miniboss Master" or questslot2 == "Brute Miniboss Kills" or questslot2 == "Voltage Miniboss Kills" or questslot2 == "Greenback Miniboss Kills" or questslot2 == "Witch Miniboss Kills" or questslot2 == "Reaper Miniboss Kills" or questslot2 == "Miniboss Kills" or questslot2 == "Miniboss Master" then
 game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Fiery Fortress", QuestDiffculty, "Minibosses", "Solo", 1);
+writefile("UnknownHubXUniversal/TreasureQuest/AutoQuestConfig.txt", "ComboQuest")
 end
 end
 
 if questslot1 == "Poison Prison Bosses" or questslot1 == "Poison Prison Dungeon" or questslot1 == "Poison Prison Dungeon Monster Kills" then
 if questslot2 == "Sweetie Miniboss Kills" or questslot2 == "Horseman Miniboss Kills" or questslot2 == "Obsidian Miniboss Kills" or questslot2 == "Blaze Miniboss Kills" or questslot2 == "Peppermint Miniboss Kills" or questslot2 == "Overlord Miniboss Kills" or questslot2 == "Star Guardian Miniboss Kills" or questslot2 == "Frost Miniboss Kills" or questslot2 == "Miniboss Master" or questslot2 == "Brute Miniboss Kills" or questslot2 == "Voltage Miniboss Kills" or questslot2 == "Greenback Miniboss Kills" or questslot2 == "Witch Miniboss Kills" or questslot2 == "Reaper Miniboss Kills" or questslot2 == "Miniboss Kills" or questslot2 == "Miniboss Master" then
 game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Poison Prison", QuestDiffculty, "Minibosses", "Solo", 1);
+writefile("UnknownHubXUniversal/TreasureQuest/AutoQuestConfig.txt", "ComboQuest")
 end
 end
 
 if questslot1 == "Spookiest Mansion Bosses" or questslot1 == "Spookiest Mansion Dungeon" or questslot1 == "Spookiest Mansion Dungeon Monster Kills" then
 if questslot2 == "Sweetie Miniboss Kills" or questslot2 == "Horseman Miniboss Kills" or questslot2 == "Obsidian Miniboss Kills" or questslot2 == "Blaze Miniboss Kills" or questslot2 == "Peppermint Miniboss Kills" or questslot2 == "Overlord Miniboss Kills" or questslot2 == "Star Guardian Miniboss Kills" or questslot2 == "Frost Miniboss Kills" or questslot2 == "Miniboss Master" or questslot2 == "Brute Miniboss Kills" or questslot2 == "Voltage Miniboss Kills" or questslot2 == "Greenback Miniboss Kills" or questslot2 == "Witch Miniboss Kills" or questslot2 == "Reaper Miniboss Kills" or questslot2 == "Miniboss Kills" or questslot2 == "Miniboss Master" then
 game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Spookiest Mansion", QuestDiffculty, "Minibosses", "Solo", 1);
+writefile("UnknownHubXUniversal/TreasureQuest/AutoQuestConfig.txt", "ComboQuest")
 end
 end
 
 if questslot1 == "Brightest Beach Bosses" or questslot1 == "Brightest Beach Dungeon" or questslot1 == "Brightest Beach Dungeon Monster Kills" then
 if questslot2 == "Sweetie Miniboss Kills" or questslot2 == "Horseman Miniboss Kills" or questslot2 == "Obsidian Miniboss Kills" or questslot2 == "Blaze Miniboss Kills" or questslot2 == "Peppermint Miniboss Kills" or questslot2 == "Overlord Miniboss Kills" or questslot2 == "Star Guardian Miniboss Kills" or questslot2 == "Frost Miniboss Kills" or questslot2 == "Miniboss Master" or questslot2 == "Brute Miniboss Kills" or questslot2 == "Voltage Miniboss Kills" or questslot2 == "Greenback Miniboss Kills" or questslot2 == "Witch Miniboss Kills" or questslot2 == "Reaper Miniboss Kills" or questslot2 == "Miniboss Kills" or questslot2 == "Miniboss Master" then
 game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Brightest Beach", QuestDiffculty, "Minibosses", "Solo", 1);
+writefile("UnknownHubXUniversal/TreasureQuest/AutoQuestConfig.txt", "ComboQuest")
 end
 end
 
 if questslot1 == "Medkits" or questslot1 == "Treasure Chests" or questslot1 == "Use Ability" or questslot1 == "Monster Kills" or questslot1 == "Complete Dungeon" or questslot1 == "Elite Boss Kills" or questslot1 == "Level Up" or questslot1 == "Boss Kills" or questslot1 == "Ranged Monster Kills" then
 if questslot2 == "Sweetie Miniboss Kills" or questslot2 == "Horseman Miniboss Kills" or questslot2 == "Obsidian Miniboss Kills" or questslot2 == "Blaze Miniboss Kills" or questslot2 == "Peppermint Miniboss Kills" or questslot2 == "Overlord Miniboss Kills" or questslot2 == "Star Guardian Miniboss Kills" or questslot2 == "Frost Miniboss Kills" or questslot2 == "Miniboss Master" or questslot2 == "Brute Miniboss Kills" or questslot2 == "Voltage Miniboss Kills" or questslot2 == "Greenback Miniboss Kills" or questslot2 == "Witch Miniboss Kills" or questslot2 == "Reaper Miniboss Kills" or questslot1 == "Miniboss Kills" then
 game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Ancient Jungle", QuestDiffculty, "Minibosses", "Solo", 1);
+writefile("UnknownHubXUniversal/TreasureQuest/AutoQuestConfig.txt", "ComboQuest")
 end
 end
 
 if questslot2 == "Ancient Jungle Bosses" or questslot2 == "Ancient Jungle Dungeon" or questslot2 == "Ancient Jungle Dungeon Monster Kills" then
 if questslot1 == "Medkits" or questslot1 == "Treasure Chests" or questslot1 == "Use Ability" or questslot1 == "Monster Kills" or questslot1 == "Complete Dungeon" or questslot1 == "Elite Boss Kills" or questslot1 == "Level Up" or questslot1 == "Boss Kills" or questslot1 == "Ranged Monster Kills" then
 game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Ancient Jungle", QuestDiffculty, "Endless", "Solo", 1);
+writefile("UnknownHubXUniversal/TreasureQuest/AutoQuestConfig.txt", "ComboQuest")
 end
 end
 
 if questslot2 == "Danger Depths Bosses" or questslot2 == "Danger Depths Dungeon" or questslot2 == "Danger Depths Dungeon Monster Kills" then
 if questslot1 == "Medkits" or questslot1 == "Treasure Chests" or questslot1 == "Use Ability" or questslot1 == "Monster Kills" or questslot1 == "Complete Dungeon" or questslot1 == "Elite Boss Kills" or questslot1 == "Level Up" or questslot1 == "Boss Kills" or questslot1 == "Ranged Monster Kills" then
 game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Danger Depths", QuestDiffculty, "Endless", "Solo", 1);
+writefile("UnknownHubXUniversal/TreasureQuest/AutoQuestConfig.txt", "ComboQuest")
 end
 end
 
 if questslot2 == "Sacred Sands Bosses" or questslot2 == "Sacred Sands Dungeon" or questslot2 == "Sacred Sands Dungeon Monster Kills" then
 if questslot1 == "Medkits" or questslot1 == "Treasure Chests" or questslot1 == "Use Ability" or questslot1 == "Monster Kills" or questslot1 == "Complete Dungeon" or questslot1 == "Elite Boss Kills" or questslot1 == "Level Up" or questslot1 == "Boss Kills" or questslot1 == "Ranged Monster Kills" then
 game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Sacred Sands", QuestDiffculty, "Endless", "Solo", 1);
+writefile("UnknownHubXUniversal/TreasureQuest/AutoQuestConfig.txt", "ComboQuest")
 end
 end
 
 if questslot2 == "Coral Kingdom Bosses" or questslot2 == "Coral Kingdom Dungeon" or questslot2 == "Coral Kingdom Dungeon Monster Kills" then
 if questslot1 == "Medkits" or questslot1 == "Treasure Chests" or questslot1 == "Use Ability" or questslot1 == "Monster Kills" or questslot1 == "Complete Dungeon" or questslot1 == "Elite Boss Kills" or questslot1 == "Level Up" or questslot1 == "Boss Kills" or questslot1 == "Ranged Monster Kills" then
 game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Coral Kingdom", QuestDiffculty, "Endless", "Solo", 1);
+writefile("UnknownHubXUniversal/TreasureQuest/AutoQuestConfig.txt", "ComboQuest")
 end
 end
 
 if questslot2 == "Candy Land Bosses" or questslot2 == "Candy Land Dungeon" or questslot2 == "Candy Land Dungeon Monster Kills" then
 if questslot1 == "Medkits" or questslot1 == "Treasure Chests" or questslot1 == "Use Ability" or questslot1 == "Monster Kills" or questslot1 == "Complete Dungeon" or questslot1 == "Elite Boss Kills" or questslot1 == "Level Up" or questslot1 == "Boss Kills" or questslot1 == "Ranged Monster Kills" then
 game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Candy Land", QuestDiffculty, "Endless", "Solo", 1);
+writefile("UnknownHubXUniversal/TreasureQuest/AutoQuestConfig.txt", "ComboQuest")
 end
 end
 
 if questslot2 == "Crystal Cave Bosses" or questslot2 == "Crystal Cave Dungeon" or questslot2 == "Crystal Cave Dungeon Monster Kills" then
 if questslot1 == "Medkits" or questslot1 == "Treasure Chests" or questslot1 == "Use Ability" or questslot1 == "Monster Kills" or questslot1 == "Complete Dungeon" or questslot1 == "Elite Boss Kills" or questslot1 == "Level Up" or questslot1 == "Boss Kills" or questslot1 == "Ranged Monster Kills" then
 game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Crystal Cave", QuestDiffculty, "Endless", "Solo", 1);
+writefile("UnknownHubXUniversal/TreasureQuest/AutoQuestConfig.txt", "ComboQuest")
 end
 end
 
 if questslot2 == "Sinister Sewers Bosses" or questslot2 == "Sinister Sewers Dungeon" or questslot2 == "Sinister Sewers Dungeon Monster Kills" then
 if questslot1 == "Medkits" or questslot1 == "Treasure Chests" or questslot1 == "Use Ability" or questslot1 == "Monster Kills" or questslot1 == "Complete Dungeon" or questslot1 == "Elite Boss Kills" or questslot1 == "Level Up" or questslot1 == "Boss Kills" or questslot1 == "Ranged Monster Kills" then
 game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Sinister Sewers", QuestDiffculty, "Endless", "Solo", 1);
+writefile("UnknownHubXUniversal/TreasureQuest/AutoQuestConfig.txt", "ComboQuest")
 end
 end
 
 if questslot2 == "Magical Mushrooms Bosses" or questslot2 == "Magical Mushrooms Dungeon" or questslot2 == "Magical Mushrooms Dungeon Monster Kills" then
 if questslot1 == "Medkits" or questslot1 == "Treasure Chests" or questslot1 == "Use Ability" or questslot1 == "Monster Kills" or questslot1 == "Complete Dungeon" or questslot1 == "Elite Boss Kills" or questslot1 == "Level Up" or questslot1 == "Boss Kills" or questslot1 == "Ranged Monster Kills" then
 game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Magical Mushrooms", QuestDiffculty, "Endless", "Solo", 1);
+writefile("UnknownHubXUniversal/TreasureQuest/AutoQuestConfig.txt", "ComboQuest")
 end
 end
 
 if questslot2 == "Missing Map Bosses" or questslot2 == "Missing Map Dungeon" or questslot2 == "Missing Map Dungeon Monster Kills" then
 if questslot1 == "Medkits" or questslot1 == "Treasure Chests" or questslot1 == "Use Ability" or questslot1 == "Monster Kills" or questslot1 == "Complete Dungeon" or questslot1 == "Elite Boss Kills" or questslot1 == "Level Up" or questslot1 == "Boss Kills" or questslot1 == "Ranged Monster Kills" then
 game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Missing Map", QuestDiffculty, "Endless", "Solo", 1);
+writefile("UnknownHubXUniversal/TreasureQuest/AutoQuestConfig.txt", "ComboQuest")
 end
 end
 
 if questslot2 == "Ice Palace Bosses" or questslot2 == "Ice Palace Dungeon" or questslot2 == "Ice Palace Dungeon Monster Kills" then
 if questslot1 == "Medkits" or questslot1 == "Treasure Chests" or questslot1 == "Use Ability" or questslot1 == "Monster Kills" or questslot1 == "Complete Dungeon" or questslot1 == "Elite Boss Kills" or questslot1 == "Level Up" or questslot1 == "Boss Kills" or questslot1 == "Ranged Monster Kills" then
 game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Ice Palace", QuestDiffculty, "Endless", "Solo", 1);
+writefile("UnknownHubXUniversal/TreasureQuest/AutoQuestConfig.txt", "ComboQuest")
 end
 end
 
 if questslot2 == "Daring Dojo Bosses" or questslot2 == "Daring Dojo Dungeon" or questslot2 == "Daring Dojo Dungeon Monster Kills" then
 if questslot1 == "Medkits" or questslot1 == "Treasure Chests" or questslot1 == "Use Ability" or questslot1 == "Monster Kills" or questslot1 == "Complete Dungeon" or questslot1 == "Elite Boss Kills" or questslot1 == "Level Up" or questslot1 == "Boss Kills" or questslot1 == "Ranged Monster Kills" then
 game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Daring Dojo", QuestDiffculty, "Endless", "Solo", 1);
+writefile("UnknownHubXUniversal/TreasureQuest/AutoQuestConfig.txt", "ComboQuest")
 end
 end
 
 if questslot2 == "Cryptic Castle Bosses" or questslot2 == "Cryptic Castle Dungeon" or questslot2 == "Cryptic Castle Dungeon Monster Kills" then
 if questslot1 == "Medkits" or questslot1 == "Treasure Chests" or questslot1 == "Use Ability" or questslot1 == "Monster Kills" or questslot1 == "Complete Dungeon" or questslot1 == "Elite Boss Kills" or questslot1 == "Level Up" or questslot1 == "Boss Kills" or questslot1 == "Ranged Monster Kills" then
 game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Cryptic Castle", QuestDiffculty, "Endless", "Solo", 1);
+writefile("UnknownHubXUniversal/TreasureQuest/AutoQuestConfig.txt", "ComboQuest")
 end
 end
 
 if questslot2 == "Space Base Bosses" or questslot2 == "Space Base Dungeon" or questslot2 == "Space Base Dungeon Monster Kills" then
 if questslot1 == "Medkits" or questslot1 == "Treasure Chests" or questslot1 == "Use Ability" or questslot1 == "Monster Kills" or questslot1 == "Complete Dungeon" or questslot1 == "Elite Boss Kills" or questslot1 == "Level Up" or questslot1 == "Boss Kills" or questslot1 == "Ranged Monster Kills" then
 game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Space Base", QuestDiffculty, "Endless", "Solo", 1);
+writefile("UnknownHubXUniversal/TreasureQuest/AutoQuestConfig.txt", "ComboQuest")
 end
 end
 
 if questslot2 == "Smog Sanctum Bosses" or questslot2 == "Smog Sanctum Dungeon" or questslot2 == "Smog Sanctum Dungeon Monster Kills" then
 if questslot1 == "Medkits" or questslot1 == "Treasure Chests" or questslot1 == "Use Ability" or questslot1 == "Monster Kills" or questslot1 == "Complete Dungeon" or questslot1 == "Elite Boss Kills" or questslot1 == "Level Up" or questslot1 == "Boss Kills" or questslot1 == "Ranged Monster Kills" then
 game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Smog Sanctum", QuestDiffculty, "Endless", "Solo", 1);
+writefile("UnknownHubXUniversal/TreasureQuest/AutoQuestConfig.txt", "ComboQuest")
 end
 end
 
 if questslot2 == "Santa's Workshop Bosses" or questslot2 == "Santa's Workshop Dungeon" or questslot2 == "Santa's Workshop Dungeon Monster Kills" then
 if questslot1 == "Medkits" or questslot1 == "Treasure Chests" or questslot1 == "Use Ability" or questslot1 == "Monster Kills" or questslot1 == "Complete Dungeon" or questslot1 == "Elite Boss Kills" or questslot1 == "Level Up" or questslot1 == "Boss Kills" or questslot1 == "Ranged Monster Kills" then
 game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Santa's Workshop", QuestDiffculty, "Endless", "Solo", 1);
+writefile("UnknownHubXUniversal/TreasureQuest/AutoQuestConfig.txt", "ComboQuest")
 end
 end
 
 if questslot2 == "Frenzy Factory Bosses" or questslot2 == "Frenzy Factory Dungeon" or questslot2 == "Frenzy Factory Dungeon Monster Kills" then
 if questslot1 == "Medkits" or questslot1 == "Treasure Chests" or questslot1 == "Use Ability" or questslot1 == "Monster Kills" or questslot1 == "Complete Dungeon" or questslot1 == "Elite Boss Kills" or questslot1 == "Level Up" or questslot1 == "Boss Kills" or questslot1 == "Ranged Monster Kills" then
 game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Frenzy Factory", QuestDiffculty, "Endless", "Solo", 1);
+writefile("UnknownHubXUniversal/TreasureQuest/AutoQuestConfig.txt", "ComboQuest")
 end
 end
 
 if questslot2 == "Fiery Fortress Bosses" or questslot2 == "Fiery Fortress Dungeon" or questslot2 == "Fiery Fortress Dungeon Monster Kills" then
 if questslot1 == "Medkits" or questslot1 == "Treasure Chests" or questslot1 == "Use Ability" or questslot1 == "Monster Kills" or questslot1 == "Complete Dungeon" or questslot1 == "Elite Boss Kills" or questslot1 == "Level Up" or questslot1 == "Boss Kills" or questslot1 == "Ranged Monster Kills" then
 game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Fiery Fortress", QuestDiffculty, "Endless", "Solo", 1);
+writefile("UnknownHubXUniversal/TreasureQuest/AutoQuestConfig.txt", "ComboQuest")
 end
 end
 
 if questslot2 == "Poison Prison Bosses" or questslot2 == "Poison Prison Dungeon" or questslot2 == "Poison Prison Dungeon Monster Kills" then
 if questslot1 == "Medkits" or questslot1 == "Treasure Chests" or questslot1 == "Use Ability" or questslot1 == "Monster Kills" or questslot1 == "Complete Dungeon" or questslot1 == "Elite Boss Kills" or questslot1 == "Level Up" or questslot1 == "Boss Kills" or questslot1 == "Ranged Monster Kills" then
 game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Poison Prison", QuestDiffculty, "Endless", "Solo", 1);
+writefile("UnknownHubXUniversal/TreasureQuest/AutoQuestConfig.txt", "ComboQuest")
 end
 end
 
 if questslot2 == "Spookiest Mansion Bosses" or questslot2 == "Spookiest Mansion Dungeon" or questslot2 == "Spookiest Mansion Dungeon Monster Kills" then
 if questslot1 == "Medkits" or questslot1 == "Treasure Chests" or questslot1 == "Use Ability" or questslot1 == "Monster Kills" or questslot1 == "Complete Dungeon" or questslot1 == "Elite Boss Kills" or questslot1 == "Level Up" or questslot1 == "Boss Kills" or questslot1 == "Ranged Monster Kills" then
 game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Spookiest Mansion", QuestDiffculty, "Endless", "Solo", 1);
+writefile("UnknownHubXUniversal/TreasureQuest/AutoQuestConfig.txt", "ComboQuest")
 end
 end
 
 if questslot2 == "Brightest Beach Bosses" or questslot2 == "Brightest Beach Dungeon" or questslot2 == "Brightest Beach Dungeon Monster Kills" then
 if questslot1 == "Medkits" or questslot1 == "Treasure Chests" or questslot1 == "Use Ability" or questslot1 == "Monster Kills" or questslot1 == "Complete Dungeon" or questslot1 == "Elite Boss Kills" or questslot1 == "Level Up" or questslot1 == "Boss Kills" or questslot1 == "Ranged Monster Kills" then
 game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Brightest Beach", QuestDiffculty, "Endless", "Solo", 1);
+writefile("UnknownHubXUniversal/TreasureQuest/AutoQuestConfig.txt", "ComboQuest")
 end
 end
 
 if questslot1 == "Ancient Jungle Bosses" or questslot1 == "Ancient Jungle Dungeon" or questslot1 == "Ancient Jungle Dungeon Monster Kills" then
 if questslot2 == "Medkits" or questslot2 == "Treasure Chests" or questslot2 == "Use Ability" or questslot2 == "Monster Kills" or questslot2 == "Complete Dungeon" or questslot2 == "Elite Boss Kills" or questslot2 == "Level Up" or questslot2 == "Boss Kills" or questslot2 == "Ranged Monster Kills" then
 game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Ancient Jungle", QuestDiffculty, "Endless", "Solo", 1);
+writefile("UnknownHubXUniversal/TreasureQuest/AutoQuestConfig.txt", "ComboQuest")
 end
 end
 
 if questslot1 == "Danger Depths Bosses" or questslot1 == "Danger Depths Dungeon" or questslot1 == "Danger Depths Dungeon Monster Kills" then
 if questslot2 == "Medkits" or questslot2 == "Treasure Chests" or questslot2 == "Use Ability" or questslot2 == "Monster Kills" or questslot2 == "Complete Dungeon" or questslot2 == "Elite Boss Kills" or questslot2 == "Level Up" or questslot2 == "Boss Kills" or questslot2 == "Ranged Monster Kills" then
 game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Danger Depths", QuestDiffculty, "Endless", "Solo", 1);
+writefile("UnknownHubXUniversal/TreasureQuest/AutoQuestConfig.txt", "ComboQuest")
 end
 end
 
 if questslot1 == "Sacred Sands Bosses" or questslot1 == "Sacred Sands Dungeon" or questslot1 == "Sacred Sands Dungeon Monster Kills" then
 if questslot2 == "Medkits" or questslot2 == "Treasure Chests" or questslot2 == "Use Ability" or questslot2 == "Monster Kills" or questslot2 == "Complete Dungeon" or questslot2 == "Elite Boss Kills" or questslot2 == "Level Up" or questslot2 == "Boss Kills" or questslot2 == "Ranged Monster Kills" then
 game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Sacred Sands", QuestDiffculty, "Endless", "Solo", 1);
+writefile("UnknownHubXUniversal/TreasureQuest/AutoQuestConfig.txt", "ComboQuest")
 end
 end
 
 if questslot1 == "Coral Kingdom Bosses" or questslot1 == "Coral Kingdom Dungeon" or questslot1 == "Coral Kingdom Dungeon Monster Kills" then
 if questslot2 == "Medkits" or questslot2 == "Treasure Chests" or questslot2 == "Use Ability" or questslot2 == "Monster Kills" or questslot2 == "Complete Dungeon" or questslot2 == "Elite Boss Kills" or questslot2 == "Level Up" or questslot2 == "Boss Kills" or questslot2 == "Ranged Monster Kills" then
 game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Coral Kingdom", QuestDiffculty, "Endless", "Solo", 1);
+writefile("UnknownHubXUniversal/TreasureQuest/AutoQuestConfig.txt", "ComboQuest")
 end
 end
 
 if questslot1 == "Candy Land Bosses" or questslot1 == "Candy Land Dungeon" or questslot1 == "Candy Land Dungeon Monster Kills" then
 if questslot2 == "Medkits" or questslot2 == "Treasure Chests" or questslot2 == "Use Ability" or questslot2 == "Monster Kills" or questslot2 == "Complete Dungeon" or questslot2 == "Elite Boss Kills" or questslot2 == "Level Up" or questslot2 == "Boss Kills" or questslot2 == "Ranged Monster Kills" then
 game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Candy Land", QuestDiffculty, "Endless", "Solo", 1);
+writefile("UnknownHubXUniversal/TreasureQuest/AutoQuestConfig.txt", "ComboQuest")
 end
 end
 
 if questslot1 == "Crystal Cave Bosses" or questslot1 == "Crystal Cave Dungeon" or questslot1 == "Crystal Cave Dungeon Monster Kills" then
 if questslot2 == "Medkits" or questslot2 == "Treasure Chests" or questslot2 == "Use Ability" or questslot2 == "Monster Kills" or questslot2 == "Complete Dungeon" or questslot2 == "Elite Boss Kills" or questslot2 == "Level Up" or questslot2 == "Boss Kills" or questslot2 == "Ranged Monster Kills" then
 game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Crystal Cave", QuestDiffculty, "Endless", "Solo", 1);
+writefile("UnknownHubXUniversal/TreasureQuest/AutoQuestConfig.txt", "ComboQuest")
 end
 end
 
 if questslot1 == "Sinister Sewers Bosses" or questslot1 == "Sinister Sewers Dungeon" or questslot1 == "Sinister Sewers Dungeon Monster Kills" then
 if questslot2 == "Medkits" or questslot2 == "Treasure Chests" or questslot2 == "Use Ability" or questslot2 == "Monster Kills" or questslot2 == "Complete Dungeon" or questslot2 == "Elite Boss Kills" or questslot2 == "Level Up" or questslot2 == "Boss Kills" or questslot2 == "Ranged Monster Kills" then
 game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Sinister Sewers", QuestDiffculty, "Endless", "Solo", 1);
+writefile("UnknownHubXUniversal/TreasureQuest/AutoQuestConfig.txt", "ComboQuest")
 end
 end
 
 if questslot1 == "Magical Mushrooms Bosses" or questslot1 == "Magical Mushrooms Dungeon" or questslot1 == "Magical Mushrooms Dungeon Monster Kills" then
 if questslot2 == "Medkits" or questslot2 == "Treasure Chests" or questslot2 == "Use Ability" or questslot2 == "Monster Kills" or questslot2 == "Complete Dungeon" or questslot2 == "Elite Boss Kills" or questslot2 == "Level Up" or questslot2 == "Boss Kills" or questslot2 == "Ranged Monster Kills" then
 game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Magical Mushrooms", QuestDiffculty, "Endless", "Solo", 1);
+writefile("UnknownHubXUniversal/TreasureQuest/AutoQuestConfig.txt", "ComboQuest")
 end
 end
 
 if questslot1 == "Missing Map Bosses" or questslot1 == "Missing Map Dungeon" or questslot1 == "Missing Map Dungeon Monster Kills" then
 if questslot2 == "Medkits" or questslot2 == "Treasure Chests" or questslot2 == "Use Ability" or questslot2 == "Monster Kills" or questslot2 == "Complete Dungeon" or questslot2 == "Elite Boss Kills" or questslot2 == "Level Up" or questslot2 == "Boss Kills" or questslot2 == "Ranged Monster Kills" then
 game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Missing Map", QuestDiffculty, "Endless", "Solo", 1);
+writefile("UnknownHubXUniversal/TreasureQuest/AutoQuestConfig.txt", "ComboQuest")
 end
 end
 
 if questslot1 == "Ice Palace Bosses" or questslot1 == "Ice Palace Dungeon" or questslot1 == "Ice Palace Dungeon Monster Kills" then
 if questslot2 == "Medkits" or questslot2 == "Treasure Chests" or questslot2 == "Use Ability" or questslot2 == "Monster Kills" or questslot2 == "Complete Dungeon" or questslot2 == "Elite Boss Kills" or questslot2 == "Level Up" or questslot2 == "Boss Kills" or questslot2 == "Ranged Monster Kills" then
 game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Ice Palace", QuestDiffculty, "Endless", "Solo", 1);
+writefile("UnknownHubXUniversal/TreasureQuest/AutoQuestConfig.txt", "ComboQuest")
 end
 end
 
 if questslot1 == "Daring Dojo Bosses" or questslot1 == "Daring Dojo Dungeon" or questslot1 == "Daring Dojo Dungeon Monster Kills" then
 if questslot2 == "Medkits" or questslot2 == "Treasure Chests" or questslot2 == "Use Ability" or questslot2 == "Monster Kills" or questslot2 == "Complete Dungeon" or questslot2 == "Elite Boss Kills" or questslot2 == "Level Up" or questslot2 == "Boss Kills" or questslot2 == "Ranged Monster Kills" then
 game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Daring Dojo", QuestDiffculty, "Endless", "Solo", 1);
+writefile("UnknownHubXUniversal/TreasureQuest/AutoQuestConfig.txt", "ComboQuest")
 end
 end
 
 if questslot1 == "Cryptic Castle Bosses" or questslot1 == "Cryptic Castle Dungeon" or questslot1 == "Cryptic Castle Dungeon Monster Kills" then
 if questslot2 == "Medkits" or questslot2 == "Treasure Chests" or questslot2 == "Use Ability" or questslot2 == "Monster Kills" or questslot2 == "Complete Dungeon" or questslot2 == "Elite Boss Kills" or questslot2 == "Level Up" or questslot2 == "Boss Kills" or questslot2 == "Ranged Monster Kills" then
 game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Cryptic Castle", QuestDiffculty, "Endless", "Solo", 1);
+writefile("UnknownHubXUniversal/TreasureQuest/AutoQuestConfig.txt", "ComboQuest")
 end
 end
 
 if questslot1 == "Space Base Bosses" or questslot1 == "Space Base Dungeon" or questslot1 == "Space Base Dungeon Monster Kills" then
 if questslot2 == "Medkits" or questslot2 == "Treasure Chests" or questslot2 == "Use Ability" or questslot2 == "Monster Kills" or questslot2 == "Complete Dungeon" or questslot2 == "Elite Boss Kills" or questslot2 == "Level Up" or questslot2 == "Boss Kills" or questslot2 == "Ranged Monster Kills" then
 game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Space Base", QuestDiffculty, "Endless", "Solo", 1);
+writefile("UnknownHubXUniversal/TreasureQuest/AutoQuestConfig.txt", "ComboQuest")
 end
 end
 
 if questslot1 == "Smog Sanctum Bosses" or questslot1 == "Smog Sanctum Dungeon" or questslot1 == "Smog Sanctum Dungeon Monster Kills" then
 if questslot2 == "Medkits" or questslot2 == "Treasure Chests" or questslot2 == "Use Ability" or questslot2 == "Monster Kills" or questslot2 == "Complete Dungeon" or questslot2 == "Elite Boss Kills" or questslot2 == "Level Up" or questslot2 == "Boss Kills" or questslot2 == "Ranged Monster Kills" then
 game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Smog Sanctum", QuestDiffculty, "Endless", "Solo", 1);
+writefile("UnknownHubXUniversal/TreasureQuest/AutoQuestConfig.txt", "ComboQuest")
 end
 end
 
 if questslot1 == "Santa's Workshop Bosses" or questslot1 == "Santa's Workshop Dungeon" or questslot1 == "Santa's Workshop Dungeon Monster Kills" then
 if questslot2 == "Medkits" or questslot2 == "Treasure Chests" or questslot2 == "Use Ability" or questslot2 == "Monster Kills" or questslot2 == "Complete Dungeon" or questslot2 == "Elite Boss Kills" or questslot2 == "Level Up" or questslot2 == "Boss Kills" or questslot2 == "Ranged Monster Kills" then
 game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Santa's Workshop", QuestDiffculty, "Endless", "Solo", 1);
+writefile("UnknownHubXUniversal/TreasureQuest/AutoQuestConfig.txt", "ComboQuest")
 end
 end
 
 if questslot1 == "Frenzy Factory Bosses" or questslot1 == "Frenzy Factory Dungeon" or questslot1 == "Frenzy Factory Dungeon Monster Kills" then
 if questslot2 == "Medkits" or questslot2 == "Treasure Chests" or questslot2 == "Use Ability" or questslot2 == "Monster Kills" or questslot2 == "Complete Dungeon" or questslot2 == "Elite Boss Kills" or questslot2 == "Level Up" or questslot2 == "Boss Kills" or questslot2 == "Ranged Monster Kills" then
 game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Frenzy Factory", QuestDiffculty, "Endless", "Solo", 1);
+writefile("UnknownHubXUniversal/TreasureQuest/AutoQuestConfig.txt", "ComboQuest")
 end
 end
 
 if questslot1 == "Fiery Fortress Bosses" or questslot1 == "Fiery Fortress Dungeon" or questslot1 == "Fiery Fortress Dungeon Monster Kills" then
 if questslot2 == "Medkits" or questslot2 == "Treasure Chests" or questslot2 == "Use Ability" or questslot2 == "Monster Kills" or questslot2 == "Complete Dungeon" or questslot2 == "Elite Boss Kills" or questslot2 == "Level Up" or questslot2 == "Boss Kills" or questslot2 == "Ranged Monster Kills" then
 game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Fiery Fortress", QuestDiffculty, "Endless", "Solo", 1);
+writefile("UnknownHubXUniversal/TreasureQuest/AutoQuestConfig.txt", "ComboQuest")
 end
 end
 
 if questslot1 == "Poison Prison Bosses" or questslot1 == "Poison Prison Dungeon" or questslot1 == "Poison Prison Dungeon Monster Kills" then
 if questslot2 == "Medkits" or questslot2 == "Treasure Chests" or questslot2 == "Use Ability" or questslot2 == "Monster Kills" or questslot2 == "Complete Dungeon" or questslot2 == "Elite Boss Kills" or questslot2 == "Level Up" or questslot2 == "Boss Kills" or questslot2 == "Ranged Monster Kills" then
 game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Poison Prison", QuestDiffculty, "Endless", "Solo", 1);
+writefile("UnknownHubXUniversal/TreasureQuest/AutoQuestConfig.txt", "ComboQuest")
 end
 end
 
 if questslot1 == "Spookiest Mansion Bosses" or questslot1 == "Spookiest Mansion Dungeon" or questslot1 == "Spookiest Mansion Dungeon Monster Kills" then
 if questslot2 == "Medkits" or questslot2 == "Treasure Chests" or questslot2 == "Use Ability" or questslot2 == "Monster Kills" or questslot2 == "Complete Dungeon" or questslot2 == "Elite Boss Kills" or questslot2 == "Level Up" or questslot2 == "Boss Kills" or questslot2 == "Ranged Monster Kills" then
 game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Spookiest Mansion", QuestDiffculty, "Endless", "Solo", 1);
+writefile("UnknownHubXUniversal/TreasureQuest/AutoQuestConfig.txt", "ComboQuest")
 end
 end
 
 if questslot1 == "Brightest Beach Bosses" or questslot1 == "Brightest Beach Dungeon" or questslot1 == "Brightest Beach Dungeon Monster Kills" then
 if questslot2 == "Medkits" or questslot2 == "Treasure Chests" or questslot2 == "Use Ability" or questslot2 == "Monster Kills" or questslot2 == "Complete Dungeon" or questslot2 == "Elite Boss Kills" or questslot2 == "Level Up" or questslot2 == "Boss Kills" or questslot2 == "Ranged Monster Kills" then
 game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Brightest Beach", QuestDiffculty, "Endless", "Solo", 1);
+writefile("UnknownHubXUniversal/TreasureQuest/AutoQuestConfig.txt", "ComboQuest")
 end
 end
 
@@ -1146,7 +1361,7 @@ Fluent:Notify({
     
 local Window = Fluent:CreateWindow({
     Title = "Unknown Hub X TQ ",
-    SubTitle = "V4.7 (Lobby) (REMAKE LOADER) discord.gg/d2a3KkTD6r",
+    SubTitle = "V4.9 (Lobby) discord.gg/d2a3KkTD6r",
     TabWidth = 160,
     Size = UDim2.fromOffset(580, 460),
     Acrylic = true, -- The blur may be detectable, setting this to false disables blur entirely
@@ -1613,7 +1828,7 @@ end)
 -- Quest
 
 Tabs.Quest:AddParagraph({
-        Title = "Auto Quest (BETA)",
+        Title = "Auto Quest",
         Content = " "
     })
 
@@ -1624,25 +1839,27 @@ local Toggle = Tabs.Quest:AddToggle("AutoQuest", {Title = "Auto Quest", Default 
 
     Toggle:OnChanged(function(QuestValue)
     AutoQuestToggle = QuestValue
-   while AutoQuestToggle and wait(1) do
+ while AutoQuestToggle and wait(5) do
+ if not AutoQuestToggle then break end
  if skipquest then
  skipmissingquest()
  end
- if not playtime_3 then
+ if not playtime_3 == true then
  AutoQuestCombo()
+ wait(3)
  StartAutoQuest2()
-wait(3)
+wait(5)
  AutoQuest_2()
  wait(0.1)
  AutoQuest_1()
  wait(0.1)
 StartAutoQuest()
 end
-if playtime_3 == true then
+if playtime_3 then
 print("Auto Quest While Playtime Mode")
 AutoQuest_2()
-wait(0.5)
 AutoQuest_1()
+wait(3)
 StartAutoQuest()
  end
  end
@@ -1672,9 +1889,19 @@ local Dropdown = Tabs.Quest:AddDropdown("PlaytimeMode", {
     })
  
 Dropdown:OnChanged(function(Value2)
+if Value2 == "AFK Lobby Mode" then
         Playtime_1 = Value2
+        Playtime_2 = false
+        Playtime_3 = false
+ elseif Value2 == "Custom Farm Mode" then
+        Playtime_1 = false
 		Playtime_2 = Value2
-		Playtime_3 = Value2
+		Playtime_3 = false
+elseif Value2 == "Auto Quest While Playtime" then
+		Playtime_1 = false
+		Playtime_2 = false
+		Playtime_3 = Value2       
+		end
     end)
     
 Tabs.Quest:AddParagraph({
@@ -1690,24 +1917,19 @@ local Dropdown = Tabs.Quest:AddDropdown("SecretShopMode", {
     })
  
 Dropdown:OnChanged(function(Value)
+if Value == "Coral Kingdom" then
         SecretShop_1 = Value
-		SecretShop_2 = Value
-		SecretShop_3 = Value
-    end)
-    
-local Dropdown = Tabs.Quest:AddDropdown("ShopRarity", {
-        Title = "Auto Buy Shop Quest (WIP)",
-        Values = {"Common", "Rare", "Legendary", "Mythical", "Ultimate"},
-        Multi = false,
-        Default = 1,
-    })
- 
-Dropdown:OnChanged(function(RaritySelected)
-        ShopCommon = RaritySelected
-		ShopRare = RaritySelected
-		ShopLegendary = RaritySelected
-		ShopMythic = RaritySelected
-		ShopUltimate = RaritySelected
+        SecretShop_2 = false
+        SecretShop_3 = false
+elseif Value == "Daring Dojo" then
+		SecretShop_1 = false
+        SecretShop_2 = Value
+        SecretShop_3 = false
+elseif Value == "Fiery Fortress" then
+		SecretShop_1 = false
+        SecretShop_2 = false
+        SecretShop_3 = Value
+		end
     end)
 
 Tabs.Quest:AddParagraph({
@@ -1715,17 +1937,14 @@ Tabs.Quest:AddParagraph({
         Content = " "
     })
 
+local skipquest = false
+
 local AutoSkip = Tabs.Quest:AddToggle("AutoSkipQuest", {Title = "Auto Skip When Missing Quest", Default = false })
 
 AutoSkip:OnChanged(function(Value)
     skipquest = Value
 end)
 
-Tabs.Quest:AddParagraph({
-        Title = "Releasing in June 12!",
-        Content = "WIP :( (yep)"
-    })
-    
 -- Teleports
 
 Tabs.Teleports:AddButton({
@@ -1887,7 +2106,7 @@ SaveManager:SetIgnoreIndexes({})
 
 -- Save Folder
 InterfaceManager:SetFolder("UnknownHubXUniversal")
-SaveManager:SetFolder("UnknownHubXUniversal/TreasureQuest_Lobby")
+SaveManager:SetFolder("UnknownHubXUniversal/TreasureQuest")
 
 InterfaceManager:BuildInterfaceSection(Tabs.Settings)
 SaveManager:BuildConfigSection(Tabs.Settings)
