@@ -1354,7 +1354,7 @@ local Toggle = Tabs.Tool:AddToggle("SilentAim", {Title = "Silent Aim", Default =
 
     Toggle:OnChanged(function(bool1)
     ConfirmSystem.Tracking = bool1
-    Circle.Visible = bool1
+    Circle.Visible = false
         BlacklistedPart()
     end)
 
