@@ -2499,7 +2499,7 @@ local function unmobilefly(player)
 
                 local humanoid = character:FindFirstChildWhichIsA("Humanoid")
                 if humanoid then
-                    humanoid.PlatformStand = true
+                    humanoid.PlatformStand = false
                 end
             end
         end
