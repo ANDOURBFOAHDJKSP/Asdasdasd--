@@ -1,0 +1,270 @@
+local library = loadstring(game:HttpGet("https://raw.githubusercontent.com/bloodball/-back-ups-for-libs/main/turtle"))()
+
+local OwO = library:Window("Zombie Uprising")
+
+OwO:Label("(BYPASSED LOL)", Color3.fromRGB(127, 143, 166))
+
+--[[
+local HeadZombies = false
+local HeadSize = 5
+local ShowHead = false
+
+OwO:Toggle("Big Head", false, function(bool)
+HeadZombies = bool
+while HeadZombies and wait(0.2) do
+    for i, v in pairs(game:GetService("Workspace").Zombies:GetDescendants()) do
+        local head = v:FindFirstChild("Head")
+        local humanoidRootPart = v:FindFirstChild("HumanoidRootPart")
+
+        -- Check if a duplicated head already exists
+        local cloneExists = false
+        for _, part in pairs(v:GetChildren()) do
+            if part:IsA("BasePart") and part:FindFirstChild("IsClone") then
+                cloneExists = true
+                break
+            end
+        end
+        
+        if head and humanoidRootPart and not cloneExists then
+            local BypassKick = head:Clone()
+            BypassKick.Name = "Head"
+            BypassKick.Size = Vector3.new(HeadSize, HeadSize, HeadSize)
+            BypassKick.OriginalSize.Value = Vector3.new(HeadSize, HeadSize, HeadSize)
+            
+            -- Add a tag to identify the cloned head
+            local isClone = Instance.new("BoolValue")
+            isClone.Name = "IsClone"
+            isClone.Parent = BypassKick
+            
+            BypassKick.Parent = v
+            head:Destroy()
+        end
+    end
+end
+end)
+
+OwO:Slider("Head Size",1,7,5, function(value)
+   HeadSize = tonumber(value) or 5
+end)
+]]
+
+--[[
+
+local HitboxExpander = false
+local SizeHitbox = 5
+local ShowHitbox = false
+
+OwO:Toggle("Hitbox Expander", false, function(bool)
+    HitboxExpander = bool
+    while HitboxExpander and wait(0.1) do
+        local player = game.Players.LocalPlayer
+        local charpart = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
+        
+        if charpart then
+            for i, v in pairs(game:GetService("Workspace").Zombies:GetChildren()) do
+                local zombieRootPart = v:FindFirstChild("HumanoidRootPart")
+                local zombieHumanoid = v:FindFirstChild("Humanoid")
+                
+                local clone = nil
+                for _, part in pairs(v:GetChildren()) do
+                    if part:IsA("BasePart") and part:FindFirstChild("IsClone") then
+                        clone = part
+                        break
+                    end
+                end
+                
+                if zombieRootPart then
+                        if not clone then
+                            local BypassCFrameKick = zombieRootPart:Clone()
+                            BypassCFrameKick.Transparency = 0.7
+                            BypassCFrameKick.Anchored = true
+                            BypassCFrameKick.Name = "HumanoidRootPart"
+                            BypassCFrameKick.OriginalSize.Value = Vector3.new(SizeHitbox, SizeHitbox, SizeHitbox)
+                            BypassCFrameKick.Size = Vector3.new(SizeHitbox, SizeHitbox, SizeHitbox)
+                            
+                            local isClone = Instance.new("BoolValue")
+                            isClone.Name = "IsClone"
+                            isClone.Parent = BypassCFrameKick
+                            
+                            BypassCFrameKick.Parent = v
+                            clone = BypassCFrameKick
+                        end
+                     clone.Position = v.UpperTorso.Position
+                    if ShowHitbox then
+                       clone.Transparency = 0.7
+                   else
+                       clone.Transparency = 1
+                   end
+                end
+            end
+        end
+    end
+end)
+
+OwO:Toggle("Show Hitbox", false, function(bool2)
+ShowHitbox = bool2
+end)
+
+OwO:Slider("Hitbox Size", 1, 100, 5, function(value)
+    SizeHitbox = tonumber(value) or 5
+end)
+]]
+
+local KillAura = false
+local KillAura2 = false
+local DistanceToBring = 25
+local ShowKillAura = false
+
+-- Distances Position
+local DistanceX = 25
+local DistanceY = 2
+local DistanceZ = 25
+
+OwO:Toggle("Kill Aura", false, function(bool)
+    KillAura = bool
+    while KillAura and wait(0.1) do
+        local player = game.Players.LocalPlayer
+        local charpart = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
+        
+        if charpart then
+            for i, v in pairs(game:GetService("Workspace").Zombies:GetChildren()) do
+                local zombieRootPart = v:FindFirstChild("HumanoidRootPart")
+                local zombieHumanoid = v:FindFirstChild("Humanoid")
+                
+                local clone = nil
+                for _, part in pairs(v:GetChildren()) do
+                    if part:IsA("BasePart") and part:FindFirstChild("IsClone") then
+                        clone = part
+                        break
+                    end
+                end
+                
+                if zombieRootPart then
+                    local distance = (charpart.Position - zombieRootPart.Position).Magnitude
+                    local distanceX = math.abs(charpart.Position.X - zombieRootPart.Position.X)
+                    local distanceY = math.abs(charpart.Position.Y - zombieRootPart.Position.Y)
+                    local distanceZ = math.abs(charpart.Position.Z - zombieRootPart.Position.Z)
+                    
+                    if distance <= DistanceToBring and distanceX <= DistanceX and distanceY <= DistanceY and distanceZ <= DistanceZ then
+                        if not clone then
+                            local BypassCFrameKick = zombieRootPart:Clone()
+                            BypassCFrameKick.Anchored = true
+                            BypassCFrameKick.Name = "HumanoidRootPart"
+                            BypassCFrameKick.OriginalSize.Value = Vector3.new(3, 3, 3)
+                            BypassCFrameKick.Size = Vector3.new(3, 3, 3)             
+                            
+                            local isClone = Instance.new("BoolValue")
+                            isClone.Name = "IsClone"
+                            isClone.Parent = BypassCFrameKick
+                            
+                            BypassCFrameKick.Parent = v
+                            clone = BypassCFrameKick
+                        end
+                        local offset = charpart.CFrame:VectorToWorldSpace(Vector3.new(0, 0, -6))
+                        clone.Position = charpart.Position + offset
+                            if ShowKillAura then
+                             clone.Transparency = 0.7
+                          else
+                             clone.Transparency = 1
+                        end
+                    end
+                end
+            end
+        end
+    end
+end)
+
+OwO:Toggle("Kill Aura (Headshot)", false, function(bool3)
+    KillAura2 = bool3
+    while KillAura2 and wait(0.1) do
+        local player = game.Players.LocalPlayer
+        local charpart = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
+        
+        if charpart then
+            for i, v in pairs(game:GetService("Workspace").Zombies:GetChildren()) do
+                local zombieRootPart = v:FindFirstChild("Head")
+                local zombieHumanoid = v:FindFirstChild("Humanoid")
+                
+                local clone = nil
+                for _, part in pairs(v:GetChildren()) do
+                    if part:IsA("BasePart") and part:FindFirstChild("IsClone") then
+                        clone = part
+                        break
+                    end
+                end
+                
+                if zombieRootPart then
+                    local distance = (charpart.Position - zombieRootPart.Position).Magnitude
+                    local distanceX = math.abs(charpart.Position.X - zombieRootPart.Position.X)
+                    local distanceY = math.abs(charpart.Position.Y - zombieRootPart.Position.Y)
+                    local distanceZ = math.abs(charpart.Position.Z - zombieRootPart.Position.Z)
+                    
+                    if distance <= DistanceToBring and distanceX <= DistanceX and distanceY <= DistanceY and distanceZ <= DistanceZ then
+                        if not clone then
+                            local BypassCFrameKick = zombieRootPart:Clone()
+                            BypassCFrameKick.Anchored = true
+                            BypassCFrameKick.Name = "HumanoidRootPart"
+                            BypassCFrameKick.OriginalSize.Value = Vector3.new(3, 3, 3)
+                            BypassCFrameKick.Size = Vector3.new(3, 3, 3)             
+                            
+                            local isClone = Instance.new("BoolValue")
+                            isClone.Name = "IsClone"
+                            isClone.Parent = BypassCFrameKick
+                            
+                            BypassCFrameKick.Parent = v
+                            clone = BypassCFrameKick
+                        end
+                        local offset = charpart.CFrame:VectorToWorldSpace(Vector3.new(0, 0, -6))
+                        clone.Position = charpart.Position + offset
+                            if ShowKillAura then
+                             clone.Transparency = 0.7
+                          else
+                             clone.Transparency = 1
+                        end
+                    end
+                end
+            end
+        end
+    end
+end)
+
+OwO:Toggle("Show Kill Aura", false, function(bool2)
+ShowKillAura = bool2
+end)
+
+OwO:Slider("Kill Aura Distance", 1, 100, 25, function(value)
+    DistanceToBring = tonumber(value) or 25
+    DistanceX = tonumber(value) or 25
+    DistanceZ = tonumber(value) or 25
+end)
+
+OwO:Label("Gun Mods", Color3.fromRGB(127, 143, 166))
+
+OwO:Button("Fast Fire", function()
+local spread1 = {
+  Increase = 0,
+  Decrease = 0,
+  Max = 0,
+  Min = 0
+}
+
+local rec = {
+  Tilt = { 0, 0 },
+  Side = { 0, 0 },
+  Vertical = { 0, 0 },
+  Back = { 0, 0 },
+  Aimed = 0,
+  FirstShot = 0
+}
+
+for i,v in pairs(getgc(true)) do
+   if type(v) == 'table' and rawget(v, 'magsize') then
+       v.magsize = math.huge
+       v.storedammo = math.huge
+       v.rpm = math.huge
+       v.spread = spread1
+       v.recoil = rec
+       v.mode = "Auto"
+   end
+end
+end)
