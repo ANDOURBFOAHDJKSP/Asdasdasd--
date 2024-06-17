@@ -5,6 +5,7 @@ local OwO = library:Window("Zombie Uprising")
 OwO:Label("(BYPASSED LOL)", Color3.fromRGB(127, 143, 166))
 
 --[[
+
 local HeadZombies = false
 local HeadSize = 5
 local ShowHead = false
@@ -27,9 +28,10 @@ while HeadZombies and wait(0.2) do
         
         if head and humanoidRootPart and not cloneExists then
             local BypassKick = head:Clone()
-            BypassKick.Name = "Head"
-            BypassKick.Size = Vector3.new(HeadSize, HeadSize, HeadSize)
+            BypassKick.Name = "HumanoidRootPart"
             BypassKick.OriginalSize.Value = Vector3.new(HeadSize, HeadSize, HeadSize)
+            BypassKick.Size = Vector3.new(HeadSize, HeadSize, HeadSize)
+            BypassKick.Position = humanoidRootPart.Position + Vector3.new(0, 2, 0)
             
             -- Add a tag to identify the cloned head
             local isClone = Instance.new("BoolValue")
@@ -37,7 +39,7 @@ while HeadZombies and wait(0.2) do
             isClone.Parent = BypassKick
             
             BypassKick.Parent = v
-            head:Destroy()
+     --     head:Destroy()
         end
     end
 end
@@ -174,60 +176,6 @@ OwO:Toggle("Kill Aura", false, function(bool)
     end
 end)
 
-OwO:Toggle("Kill Aura (Headshot)", false, function(bool3)
-    KillAura2 = bool3
-    while KillAura2 and wait(0.1) do
-        local player = game.Players.LocalPlayer
-        local charpart = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
-        
-        if charpart then
-            for i, v in pairs(game:GetService("Workspace").Zombies:GetChildren()) do
-                local zombieRootPart = v:FindFirstChild("Head")
-                local zombieHumanoid = v:FindFirstChild("Humanoid")
-                
-                local clone = nil
-                for _, part in pairs(v:GetChildren()) do
-                    if part:IsA("BasePart") and part:FindFirstChild("IsClone") then
-                        clone = part
-                        break
-                    end
-                end
-                
-                if zombieRootPart then
-                    local distance = (charpart.Position - zombieRootPart.Position).Magnitude
-                    local distanceX = math.abs(charpart.Position.X - zombieRootPart.Position.X)
-                    local distanceY = math.abs(charpart.Position.Y - zombieRootPart.Position.Y)
-                    local distanceZ = math.abs(charpart.Position.Z - zombieRootPart.Position.Z)
-                    
-                    if distance <= DistanceToBring and distanceX <= DistanceX and distanceY <= DistanceY and distanceZ <= DistanceZ then
-                        if not clone then
-                            local BypassCFrameKick = zombieRootPart:Clone()
-                            BypassCFrameKick.Anchored = true
-                            BypassCFrameKick.Name = "HumanoidRootPart"
-                            BypassCFrameKick.OriginalSize.Value = Vector3.new(3, 3, 3)
-                            BypassCFrameKick.Size = Vector3.new(3, 3, 3)             
-                            
-                            local isClone = Instance.new("BoolValue")
-                            isClone.Name = "IsClone"
-                            isClone.Parent = BypassCFrameKick
-                            
-                            BypassCFrameKick.Parent = v
-                            clone = BypassCFrameKick
-                        end
-                        local offset = charpart.CFrame:VectorToWorldSpace(Vector3.new(0, 0, -6))
-                        clone.Position = charpart.Position + offset
-                            if ShowKillAura then
-                             clone.Transparency = 0.7
-                          else
-                             clone.Transparency = 1
-                        end
-                    end
-                end
-            end
-        end
-    end
-end)
-
 OwO:Toggle("Show Kill Aura", false, function(bool2)
 ShowKillAura = bool2
 end)
@@ -240,7 +188,12 @@ end)
 
 OwO:Label("Gun Mods", Color3.fromRGB(127, 143, 166))
 
-OwO:Button("Fast Fire", function()
+local fastfire = false
+local MaxDmg = false
+local NoReloader= false
+
+OwO:Toggle("Fast Fire", false, function(bool7)
+fastfire = bool7
 local spread1 = {
   Increase = 0,
   Decrease = 0,
@@ -257,6 +210,9 @@ local rec = {
   FirstShot = 0
 }
 
+repeat
+if fastfire then
+wait(1)
 for i,v in pairs(getgc(true)) do
    if type(v) == 'table' and rawget(v, 'magsize') then
        v.magsize = math.huge
@@ -267,4 +223,74 @@ for i,v in pairs(getgc(true)) do
        v.mode = "Auto"
    end
 end
+end
+until fastfire == false
+end)
+
+OwO:Toggle("Max Damage", false, function(damn)
+MaxDmg = damn
+repeat
+if MaxDmg then
+wait(1)
+for i,v in pairs(getgc(true)) do
+   if type(v) == 'table' and rawget(v, 'magsize') then
+     v.damage[1][1] = 99999999
+     v.damage[1][2] = 99999999
+     v.damage[2][1] = 99999999
+     v.damage[2][2] = 99999999
+     v.damage[3] = 99999999
+     end
+   end
+   end
+until MaxDmg == false
+end)
+
+OwO:Toggle("No Reloading", false, function(noice)
+NoReloader = noice
+repeat
+if NoReloader then
+wait(1)
+for i,v in pairs(getgc(true)) do
+   if type(v) == 'table' and rawget(v, 'magsize') then
+     v.reloadanim[1][6] = -9999999
+     v.reloadanim[2][6] = -9999999
+     v.reloadanim[3][6] = -9999999
+     v.reloadanim[3][8] = -9999999
+     v.reloadanim[4][6] = -9999999
+     v.reloadanim[5][6] = -9999999
+     v.reloadanim[6][6] = -9999999
+     v.reloadanim[7][6] = -9999999
+     v.reloadanim[8][6] = -9999999
+     v.reloadanim[8][8] = -9999999
+     v.reloadanim[9][6] = -9999999
+     v.reloadanim[10][6] = -9999999
+     v.reloadanim[11][6] = -9999999
+     v.reloadanim[12][6] = -9999999
+     v.reloadanim[12][8] = -9999999
+     v.reloadanim[13][6] = -9999999
+     v.reloadanim[14][6] = -9999999
+     v.reloadanim[15][6] = -9999999
+       end
+     end
+   end
+until NoReloader == false
+end)
+
+OwO:Label("Auto Collection", Color3.fromRGB(127, 143, 166))
+
+local AutoCollectPowerUps = false
+
+OwO:Toggle("Power Ups", false, function(bool4)
+AutoCollectPowerUps = bool4
+while AutoCollectPowerUps and wait(1) do
+       if game:GetService("Workspace").Ignore:FindFirstChild("PowerUps") then
+                for i,v in pairs(game:GetService("Workspace").Ignore.PowerUps:GetChildren()) do
+                    v.CFrame = CFrame.new(game.Players.LocalPlayer.Character.HumanoidRootPart.Position)
+                    v.Position = game.Players.LocalPlayer.Character.HumanoidRootPart.Position
+                  -- firetouchinterest(game.Players.LocalPlayer.Character.HumanoidRootPart, v, 0)
+                 --   task.wait(0.1)
+               --     firetouchinterest(game.Players.LocalPlayer.Character.HumanoidRootPart, v, 1)
+                end
+            end
+       end
 end)
