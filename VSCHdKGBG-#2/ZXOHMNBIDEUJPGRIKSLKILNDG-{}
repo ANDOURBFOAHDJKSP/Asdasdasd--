@@ -176,9 +176,11 @@ OwO:Toggle("Kill Aura", false, function(bool)
     end
 end)
 
+--[[
 OwO:Toggle("Show Kill Aura", false, function(bool2)
 ShowKillAura = bool2
 end)
+]]
 
 OwO:Slider("Kill Aura Distance", 1, 100, 25, function(value)
     DistanceToBring = tonumber(value) or 25
@@ -294,3 +296,25 @@ while AutoCollectPowerUps and wait(1) do
             end
        end
 end)
+
+game.StarterGui:SetCore("SendNotification", {
+            Title = "Uhh?",
+            Text = "What are u doing here?",
+            Duration = 10
+        })
+
+wait(3)
+
+game.StarterGui:SetCore("SendNotification", {
+            Title = "U cannot use this script because its still unfinished",
+            Text = "this script will be disabling in 9 hours",
+            Duration = 10
+        })
+
+wait(3)
+
+game.StarterGui:SetCore("SendNotification", {
+            Title = "Message by Unknownproooolucky",
+            Text = "",
+            Duration = 10
+        })
