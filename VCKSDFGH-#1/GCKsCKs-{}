@@ -1358,6 +1358,13 @@ Fluent:Notify({
         SubContent = "", -- Optional
         Duration = 10 -- Set to nil to make the notification not disappear
     })
+
+Fluent:Notify({
+        Title = "Guesttester_1 Message",
+        Content = "Hey, Everyone ive been busy for 3 days so i decided to stop making scripts and i need a rest, see ya in 2 months :)",
+        SubContent = "Unknownproooolucky and Idk_Roblox Will Working in this script", -- Optional
+        Duration = 10 -- Set to nil to make the notification not disappear
+    })
     
 local Window = Fluent:CreateWindow({
     Title = "Unknown Hub X TQ ",
