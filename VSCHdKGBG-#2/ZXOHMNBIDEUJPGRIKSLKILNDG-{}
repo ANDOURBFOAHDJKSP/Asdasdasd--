@@ -2,9 +2,17 @@ local library = loadstring(game:HttpGet("https://raw.githubusercontent.com/blood
 
 local OwO = library:Window("Zombie Uprising")
 
-OwO:Label("(BYPASSED LOL)", Color3.fromRGB(127, 143, 166))
+OwO:Label("Zombie Mods", Color3.fromRGB(127, 143, 166))
 
---[[
+-- Bypass Anti Cheat
+local OldNameCall = nil
+OldNameCall = hookmetamethod(game, "__namecall", function(self, ...)
+    local Args = {...}
+        if Args[1] == "K" then
+            return nil
+        end
+    return OldNameCall(self, unpack(Args))
+end)
 
 local HeadZombies = false
 local HeadSize = 5
@@ -13,42 +21,20 @@ local ShowHead = false
 OwO:Toggle("Big Head", false, function(bool)
 HeadZombies = bool
 while HeadZombies and wait(0.2) do
-    for i, v in pairs(game:GetService("Workspace").Zombies:GetDescendants()) do
-        local head = v:FindFirstChild("Head")
-        local humanoidRootPart = v:FindFirstChild("HumanoidRootPart")
-
-        -- Check if a duplicated head already exists
-        local cloneExists = false
-        for _, part in pairs(v:GetChildren()) do
-            if part:IsA("BasePart") and part:FindFirstChild("IsClone") then
-                cloneExists = true
-                break
-            end
-        end
-        
-        if head and humanoidRootPart and not cloneExists then
-            local BypassKick = head:Clone()
-            BypassKick.Name = "HumanoidRootPart"
-            BypassKick.OriginalSize.Value = Vector3.new(HeadSize, HeadSize, HeadSize)
-            BypassKick.Size = Vector3.new(HeadSize, HeadSize, HeadSize)
-            BypassKick.Position = humanoidRootPart.Position + Vector3.new(0, 2, 0)
-            
-            -- Add a tag to identify the cloned head
-            local isClone = Instance.new("BoolValue")
-            isClone.Name = "IsClone"
-            isClone.Parent = BypassKick
-            
-            BypassKick.Parent = v
-     --     head:Destroy()
-        end
-    end
+for i,v in next, game:GetService('Workspace').Zombies:GetChildren() do
+pcall(function()
+ v:FindFirstChild("Head").Size = Vector3.new(HeadSize, HeadSize, HeadSize)
+-- v.HumanoidRootPart.BrickColor = BrickColor.new("Really blue")
+-- v.HumanoidRootPart.Material = "Neon"
+-- v.HumanoidRootPart.CanCollide = false
+end)
+end
 end
 end)
 
 OwO:Slider("Head Size",1,7,5, function(value)
-   HeadSize = tonumber(value) or 5
+   HeadSize = value
 end)
-]]
 
 --[[
 
@@ -58,49 +44,24 @@ local ShowHitbox = false
 
 OwO:Toggle("Hitbox Expander", false, function(bool)
     HitboxExpander = bool
-    while HitboxExpander and wait(0.1) do
-        local player = game.Players.LocalPlayer
-        local charpart = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
-        
-        if charpart then
-            for i, v in pairs(game:GetService("Workspace").Zombies:GetChildren()) do
-                local zombieRootPart = v:FindFirstChild("HumanoidRootPart")
-                local zombieHumanoid = v:FindFirstChild("Humanoid")
-                
-                local clone = nil
-                for _, part in pairs(v:GetChildren()) do
-                    if part:IsA("BasePart") and part:FindFirstChild("IsClone") then
-                        clone = part
-                        break
-                    end
-                end
-                
-                if zombieRootPart then
-                        if not clone then
-                            local BypassCFrameKick = zombieRootPart:Clone()
-                            BypassCFrameKick.Transparency = 0.7
-                            BypassCFrameKick.Anchored = true
-                            BypassCFrameKick.Name = "HumanoidRootPart"
-                            BypassCFrameKick.OriginalSize.Value = Vector3.new(SizeHitbox, SizeHitbox, SizeHitbox)
-                            BypassCFrameKick.Size = Vector3.new(SizeHitbox, SizeHitbox, SizeHitbox)
-                            
-                            local isClone = Instance.new("BoolValue")
-                            isClone.Name = "IsClone"
-                            isClone.Parent = BypassCFrameKick
-                            
-                            BypassCFrameKick.Parent = v
-                            clone = BypassCFrameKick
-                        end
-                     clone.Position = v.UpperTorso.Position
-                    if ShowHitbox then
-                       clone.Transparency = 0.7
-                   else
-                       clone.Transparency = 1
-                   end
-                end
-            end
-        end
-    end
+ 
+ while HitboxExpander and wait(0.1) do
+ for i,v in next, game:GetService('Workspace').Zombies:GetChildren() do
+pcall(function()
+ v.HumanoidRootPart.Size = Vector3.new(SizeHitbox, SizeHitbox, SizeHitbox)
+-- v.HumanoidRootPart.BrickColor = BrickColor.new("Really blue")
+-- v.HumanoidRootPart.Material = "Neon"
+-- v.HumanoidRootPart.CanCollide = false
+end)
+
+if ShowHitbox then
+v.HumanoidRootPart.Transparency = 0.7
+else
+v.HumanoidRootPart.Transparency = 1
+end
+
+end
+ end
 end)
 
 OwO:Toggle("Show Hitbox", false, function(bool2)
@@ -112,19 +73,19 @@ OwO:Slider("Hitbox Size", 1, 100, 5, function(value)
 end)
 ]]
 
-local KillAura = false
-local KillAura2 = false
+local HitPart = false
+local HitPartType = "HumanoidRootPart"
 local DistanceToBring = 25
-local ShowKillAura = false
+local ShowHitPart = false
 
 -- Distances Position
 local DistanceX = 25
 local DistanceY = 2
 local DistanceZ = 25
 
-OwO:Toggle("Kill Aura", false, function(bool)
-    KillAura = bool
-    while KillAura and wait(0.1) do
+OwO:Toggle("Bring HitPart", false, function(bool)
+    HitPart = bool
+    while HitPart and wait(0.1) do
         local player = game.Players.LocalPlayer
         local charpart = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
         
@@ -151,7 +112,7 @@ OwO:Toggle("Kill Aura", false, function(bool)
                         if not clone then
                             local BypassCFrameKick = zombieRootPart:Clone()
                             BypassCFrameKick.Anchored = true
-                            BypassCFrameKick.Name = "HumanoidRootPart"
+                            BypassCFrameKick.Name = HitPartType
                             BypassCFrameKick.OriginalSize.Value = Vector3.new(3, 3, 3)
                             BypassCFrameKick.Size = Vector3.new(3, 3, 3)             
                             
@@ -164,7 +125,8 @@ OwO:Toggle("Kill Aura", false, function(bool)
                         end
                         local offset = charpart.CFrame:VectorToWorldSpace(Vector3.new(0, 0, -6))
                         clone.Position = charpart.Position + offset
-                            if ShowKillAura then
+                        clone.Name = HitPartType
+                            if ShowHitPart then
                              clone.Transparency = 0.7
                           else
                              clone.Transparency = 1
@@ -176,13 +138,15 @@ OwO:Toggle("Kill Aura", false, function(bool)
     end
 end)
 
---[[
-OwO:Toggle("Show Kill Aura", false, function(bool2)
-ShowKillAura = bool2
+OwO:Toggle("Show HitPart", false, function(bool2)
+ShowHitPart = bool2
 end)
-]]
 
-OwO:Slider("Kill Aura Distance", 1, 100, 25, function(value)
+local dropdown = OwO:Dropdown("HitPart Type", {"Head", "HumanoidRootPart", "UpperTorso"}, function(name)
+   HitPartType = tostring(name)
+end)
+
+OwO:Slider("Bring HitPart Distance", 1, 100, 25, function(value)
     DistanceToBring = tonumber(value) or 25
     DistanceX = tonumber(value) or 25
     DistanceZ = tonumber(value) or 25
@@ -193,9 +157,51 @@ OwO:Label("Gun Mods", Color3.fromRGB(127, 143, 166))
 local fastfire = false
 local MaxDmg = false
 local NoReloader= false
+local SilentAim = false
+
+OwO:Toggle("Silent Aim", false, function(OhValue)
+SilentAim = OhValue
+local uis = game:GetService("UserInputService")
+local cam = game:GetService("Workspace").CurrentCamera
+local ts = game:GetService("TweenService")
+local plr = game:GetService("Players").LocalPlayer
+local zombies = game:GetService("Workspace").Zombies
+ 
+local function getClosestSilent()
+    local closestDist = math.huge
+    local closestPlr = nil
+    for _, v in next, zombies.GetChildren(zombies) do
+        if game.FindFirstChild(v, "Humanoid") and v.Humanoid.Health > 0 then
+            local vector, onScreen = cam.worldToScreenPoint(cam, game.WaitForChild(v, "Head", math.huge).Position)
+            local dist = (Vector2.new(uis.GetMouseLocation(uis).X, uis.GetMouseLocation(uis).Y) - Vector2.new(vector.X, vector.Y)).Magnitude
+            if dist < closestDist and onScreen then
+                closestDist = dist
+                closestPlr = v
+            end
+        end
+    end
+    return closestPlr
+end
+ 
+local namecall;
+namecall = hookmetamethod(game, "__namecall", function(Self, ...)
+    if not checkcaller() and tostring(getcallingscript()) == "Framework" and SilentAim and string.lower(getnamecallmethod()) == "findpartonraywithignorelist" then
+        local args = {...}
+        local closest = getClosestSilent()
+        if closest then
+            local origin = args[1].Origin
+            args[1] = Ray.new(origin, closest.Head.Position - origin)
+        end
+        return namecall(Self, unpack(args))
+    end
+    return namecall(Self, ...)
+end)
+end)
 
 OwO:Toggle("Fast Fire", false, function(bool7)
 fastfire = bool7
+repeat
+wait(10)
 local spread1 = {
   Increase = 0,
   Decrease = 0,
@@ -212,9 +218,6 @@ local rec = {
   FirstShot = 0
 }
 
-repeat
-if fastfire then
-wait(1)
 for i,v in pairs(getgc(true)) do
    if type(v) == 'table' and rawget(v, 'magsize') then
        v.magsize = math.huge
@@ -225,62 +228,53 @@ for i,v in pairs(getgc(true)) do
        v.mode = "Auto"
    end
 end
-end
 until fastfire == false
 end)
 
 OwO:Toggle("Max Damage", false, function(damn)
 MaxDmg = damn
 repeat
-if MaxDmg then
-wait(1)
+wait(10)
+pcall(function() 
 for i,v in pairs(getgc(true)) do
    if type(v) == 'table' and rawget(v, 'magsize') then
-     v.damage[1][1] = 99999999
-     v.damage[1][2] = 99999999
-     v.damage[2][1] = 99999999
-     v.damage[2][2] = 99999999
-     v.damage[3] = 99999999
+     v.damage[1][1] = 9999
+     v.damage[1][2] = 9999
+     v.damage[2][1] = 9999
+     v.damage[2][2] = 9999
      end
    end
-   end
+end)
 until MaxDmg == false
 end)
 
 OwO:Toggle("No Reloading", false, function(noice)
 NoReloader = noice
-repeat
-if NoReloader then
-wait(1)
-for i,v in pairs(getgc(true)) do
-   if type(v) == 'table' and rawget(v, 'magsize') then
-     v.reloadanim[1][6] = -9999999
-     v.reloadanim[2][6] = -9999999
-     v.reloadanim[3][6] = -9999999
-     v.reloadanim[3][8] = -9999999
-     v.reloadanim[4][6] = -9999999
-     v.reloadanim[5][6] = -9999999
-     v.reloadanim[6][6] = -9999999
-     v.reloadanim[7][6] = -9999999
-     v.reloadanim[8][6] = -9999999
-     v.reloadanim[8][8] = -9999999
-     v.reloadanim[9][6] = -9999999
-     v.reloadanim[10][6] = -9999999
-     v.reloadanim[11][6] = -9999999
-     v.reloadanim[12][6] = -9999999
-     v.reloadanim[12][8] = -9999999
-     v.reloadanim[13][6] = -9999999
-     v.reloadanim[14][6] = -9999999
-     v.reloadanim[15][6] = -9999999
-       end
-     end
-   end
-until NoReloader == false
+    repeat
+    wait(10)
+        pcall(function()
+            for i,v in pairs(getgc(true)) do
+                if type(v) == 'table' and rawget(v, 'magsize') then
+                    for j = 1, 15 do
+                        if v.reloadanim[j] and v.reloadanim[j][6] then
+                            v.reloadanim[j][6] = 0
+                        end
+                        if j == 6 or j == 8 then
+                            if v.reloadanim[j] and v.reloadanim[j][8] then
+                                v.reloadanim[j][8] = 0
+                            end
+                        end
+                    end
+                end
+            end
+        end)
+    until NoReloader == false
 end)
 
 OwO:Label("Auto Collection", Color3.fromRGB(127, 143, 166))
 
 local AutoCollectPowerUps = false
+local AutoCollectRewards = false
 
 OwO:Toggle("Power Ups", false, function(bool4)
 AutoCollectPowerUps = bool4
@@ -296,25 +290,3 @@ while AutoCollectPowerUps and wait(1) do
             end
        end
 end)
-
-game.StarterGui:SetCore("SendNotification", {
-            Title = "Uhh?",
-            Text = "What are u doing here?",
-            Duration = 10
-        })
-
-wait(3)
-
-game.StarterGui:SetCore("SendNotification", {
-            Title = "U cannot use this script because its still unfinished",
-            Text = "this script will be disabling in 9 hours",
-            Duration = 10
-        })
-
-wait(3)
-
-game.StarterGui:SetCore("SendNotification", {
-            Title = "Message by Unknownproooolucky",
-            Text = "",
-            Duration = 10
-        })
