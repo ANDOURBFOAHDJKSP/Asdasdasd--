@@ -294,9 +294,9 @@ wait(0.1)
 char.Humanoid:Destroy()
 humanoid.Parent = char
 
-local ForceField = Instance.new("ForceField")
-ForceField.Parent = char
-ForceField.Visible = true
+local f = Instance.new("ForceField")
+f.Parent = char
+f.Visible = true
 end)
 
 Lol:Slider("Walk-Speed",1,100,16, function(Speed)
