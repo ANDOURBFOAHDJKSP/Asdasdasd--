@@ -1,6 +1,7 @@
 local library = loadstring(game:HttpGet("https://raw.githubusercontent.com/bloodball/-back-ups-for-libs/main/turtle"))()
 
-local OwO = library:Window("Zombie Uprising")
+local OwO = library:Window("Main")
+local Lol = library:Window("LocalPlayer")
 
 OwO:Label("Zombie Mods", Color3.fromRGB(127, 143, 166))
 
@@ -14,6 +15,7 @@ OldNameCall = hookmetamethod(game, "__namecall", function(self, ...)
     return OldNameCall(self, unpack(Args))
 end)
 
+--[[
 local HeadZombies = false
 local HeadSize = 5
 local ShowHead = false
@@ -35,9 +37,9 @@ end)
 OwO:Slider("Head Size",1,7,5, function(value)
    HeadSize = value
 end)
+]]
 
 --[[
-
 local HitboxExpander = false
 local SizeHitbox = 5
 local ShowHitbox = false
@@ -71,6 +73,7 @@ end)
 OwO:Slider("Hitbox Size", 1, 100, 5, function(value)
     SizeHitbox = tonumber(value) or 5
 end)
+
 ]]
 
 local HitPart = false
@@ -157,45 +160,34 @@ OwO:Label("Gun Mods", Color3.fromRGB(127, 143, 166))
 local fastfire = false
 local MaxDmg = false
 local NoReloader= false
-local SilentAim = false
+local fastswinging = false
 
-OwO:Toggle("Silent Aim", false, function(OhValue)
-SilentAim = OhValue
-local uis = game:GetService("UserInputService")
-local cam = game:GetService("Workspace").CurrentCamera
-local ts = game:GetService("TweenService")
-local plr = game:GetService("Players").LocalPlayer
-local zombies = game:GetService("Workspace").Zombies
- 
-local function getClosestSilent()
-    local closestDist = math.huge
-    local closestPlr = nil
-    for _, v in next, zombies.GetChildren(zombies) do
-        if game.FindFirstChild(v, "Humanoid") and v.Humanoid.Health > 0 then
-            local vector, onScreen = cam.worldToScreenPoint(cam, game.WaitForChild(v, "Head", math.huge).Position)
-            local dist = (Vector2.new(uis.GetMouseLocation(uis).X, uis.GetMouseLocation(uis).Y) - Vector2.new(vector.X, vector.Y)).Magnitude
-            if dist < closestDist and onScreen then
-                closestDist = dist
-                closestPlr = v
-            end
-        end
-    end
-    return closestPlr
+OwO:Toggle("Fast Swinging", false, function(OhValue)
+fastswinging = OhValue
+repeat
+wait(10)
+for i,v in pairs(getgc(true)) do
+   if type(v) == 'table' and rawget(v, 'swinganims') then
+v.swinganims[1][1][6] = 0
+v.swinganims[1][2][6] = 0
+v.swinganims[1][3][6] = 0
+v.swinganims[1][4][6] = 0
+v.swinganims[2][1][6] = 0
+v.swinganims[2][2][6] = 0
+v.swinganims[2][3][6] = 0
+v.swinganims[2][4][6] = 0
+v.swinganims[3][1][6] = 0
+v.swinganims[3][2][6] = 0
+v.swinganims[3][3][6] = 0
+v.swinganims[3][4][6] = 0
+v.swinganims[4][1][6] = 0
+v.swinganims[4][2][6] = 0
+v.swinganims[4][3][6] = 0
+v.swinganims[4][4][6] = 0
+v.range = 999999999
 end
- 
-local namecall;
-namecall = hookmetamethod(game, "__namecall", function(Self, ...)
-    if not checkcaller() and tostring(getcallingscript()) == "Framework" and SilentAim and string.lower(getnamecallmethod()) == "findpartonraywithignorelist" then
-        local args = {...}
-        local closest = getClosestSilent()
-        if closest then
-            local origin = args[1].Origin
-            args[1] = Ray.new(origin, closest.Head.Position - origin)
-        end
-        return namecall(Self, unpack(args))
-    end
-    return namecall(Self, ...)
-end)
+end
+until fastswinging == false
 end)
 
 OwO:Toggle("Fast Fire", false, function(bool7)
@@ -233,6 +225,7 @@ end)
 
 OwO:Toggle("Max Damage", false, function(damn)
 MaxDmg = damn
+
 repeat
 wait(10)
 pcall(function() 
@@ -289,4 +282,27 @@ while AutoCollectPowerUps and wait(1) do
                 end
             end
        end
+end)
+
+-- Lol
+
+Lol:Button("God Mode", function()
+local char = game.Players.LocalPlayer.Character
+local humanoid = char.Humanoid:Clone()
+humanoid.Parent = nil
+wait(0.1)
+char.Humanoid:Destroy()
+humanoid.Parent = char
+
+local ForceField = Instance.new("ForceField")
+ForceField.Parent = char
+ForceField.Visible = true
+end)
+
+Lol:Slider("Walk-Speed",1,100,16, function(Speed)
+   game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = tonumber(Speed)
+end)
+
+Lol:Slider("Jump-Power",1,100,50, function(Jump)
+   game.Players.LocalPlayer.Character.Humanoid.JumpPower = tonumber(Jump)
 end)
