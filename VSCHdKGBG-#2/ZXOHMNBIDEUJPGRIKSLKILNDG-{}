@@ -20,16 +20,6 @@ end
 
 OwO:Label("Zombie Mods", Color3.fromRGB(127, 143, 166))
 
--- Bypass Anti Cheat
-local OldNameCall = nil
-OldNameCall = hookmetamethod(game, "__namecall", function(self, ...)
-    local Args = {...}
-        if Args[1] == "K" then
-            return nil
-        end
-    return OldNameCall(self, unpack(Args))
-end)
-
 --[[
 local HeadZombies = false
 local HeadSize = 5
@@ -263,25 +253,10 @@ end)
 
 OwO:Toggle("No Reloading", false, function(noice)
 NoReloader = noice
-    repeat
-    wait(10)
-        pcall(function()
-            for i,v in pairs(getgc(true)) do
-                if type(v) == 'table' and rawget(v, 'reloadanim') then
-                    for j = 1, 15 do
-                        if v.reloadanim[j] and v.reloadanim[j][6] then
-                            v.reloadanim[j][6] = 0
-                        end
-                        if j == 6 or j == 8 then
-                            if v.reloadanim[j] and v.reloadanim[j][8] then
-                                v.reloadanim[j][8] = 0
-                            end
-                        end
-                    end
-                end
-            end
-        end)
-    until NoReloader == false
+
+while NoReloader and wait(0.1) do
+game:GetService("ReplicatedStorage").RemoteEvent:FireServer("Reloaded", "3")
+end
 end)
 
 OwO:Label("Auto Collection", Color3.fromRGB(127, 143, 166))
@@ -438,3 +413,22 @@ Lol:Slider("Jump-Power",1,100,50, function(Jump)
    game.Players.LocalPlayer.Character.Humanoid.JumpPower = tonumber(Jump)
    game.Players.LocalPlayer.Character.Humanoid:SetAttribute("DefaultJumpPower", tonumber(Jump))
 end)
+
+--[[
+(Only Available for Hitbox Expander)
+
+-- Bypass Anti Cheat V2
+local a = getrawmetatable(game)
+local b = a.__namecall
+setreadonly(a, false)
+
+a.__namecall = newcclosure(function(self, ...)
+    local Args = {...}
+    if tostring(self) == "RemoteEvent" then
+        if Args[1] == "K" then
+            return nil
+        end
+    end
+    return b(self, unpack(Args))
+end)
+]]
