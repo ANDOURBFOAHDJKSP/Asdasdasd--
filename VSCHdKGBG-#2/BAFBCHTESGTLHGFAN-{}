@@ -1,0 +1,481 @@
+--Troubleshoot Orion Library Gui
+
+local OrionLib = loadstring(game:HttpGet(('https://raw.githubusercontent.com/thanhdat4461/OrionMoblie/main/source')))()
+
+-- StarterGui
+
+local Window = OrionLib:MakeWindow({Name = "BF Auto Farm Chest", IntroText = "BF Auto Farm Chest ", HidePremium = true, SaveConfig = false, ConfigFolder = "Blxsb2"})
+
+local Tab = Window:MakeTab({
+	Name = "Main",
+	Icon = "rbxassetid://4483345998",
+	PremiumOnly = false
+})
+
+local Section = Tab:AddSection({
+	Name = "Made by Guesttester_1"
+})
+
+local Section = Tab:AddSection({
+	Name = "This is Support Private Server :)"
+})
+
+-- Get necessary services
+local TweenService = game:GetService("TweenService")
+local Players = game:GetService("Players")
+
+-- Reference to the character
+local player = Players.LocalPlayer
+local character = player.Character or player.CharacterAdded:Wait()
+local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
+
+-- Function to find all chests by name pattern
+local function findAllChestParts(pattern)
+    local chests = {}
+    for _, descendant in pairs(game.Workspace:GetDescendants()) do
+        if descendant:IsA("BasePart") and descendant.Name:match(pattern) then
+            table.insert(chests, descendant)
+        end
+    end
+    return chests
+end
+
+-- Function to teleport to the nearest chest
+local function teleportToNearestChest(chestParts)
+    if #chestParts > 0 then
+        local closestChest = chestParts[1]
+        local closestDistance = (chestParts[1].Position - humanoidRootPart.Position).Magnitude
+
+        -- Find the nearest chest
+        for _, chestPart in ipairs(chestParts) do
+            local distance = (chestPart.Position - humanoidRootPart.Position).Magnitude
+            if distance < closestDistance then
+                closestChest = chestPart
+                closestDistance = distance
+            end
+        end
+
+        -- Teleport to the nearest chest
+        local function TP2(destination)
+            local Distance = (destination.Position - humanoidRootPart.Position).Magnitude
+
+            local Speed = 365 -- Default speed for larger distances
+            if Distance < 150 then
+                Speed = 20000
+            elseif Distance < 200 then
+                Speed = 5000
+            elseif Distance < 300 then
+                Speed = 1030
+            elseif Distance < 500 then
+                Speed = 725
+            elseif Distance < 1000 then
+                Speed = 365
+            elseif Distance < 1000 then 
+                Speed = 365   
+            end
+
+            -- Teleport using TweenService
+            local teleportTween = TweenService:Create(
+                humanoidRootPart,
+                TweenInfo.new(Distance / Speed, Enum.EasingStyle.Linear),
+                {CFrame = destination}
+            )
+            teleportTween:Play()
+            teleportTween.Completed:Wait()
+        end
+
+        TP2(closestChest.CFrame)
+    end
+end
+
+-- Example: Toggle for Tween Chest Farm
+local AutoChestFarm = false
+local teleportTween
+
+local function EnableTP()
+    local chestPattern = "^Chest%d+$" -- Matches Chest1, Chest2, Chest3, etc.
+    while AutoChestFarm do
+        local chestParts = findAllChestParts(chestPattern)
+        teleportToNearestChest(chestParts)
+        wait(1) -- Adjust the wait time as needed
+    end
+end
+
+local function DisableTP()
+    if teleportTween and teleportTween.PlaybackState == Enum.PlaybackState.Playing then
+        teleportTween:Cancel()
+        teleportTween:Destroy()
+    end
+end
+
+local function ToggleTPChest(TwCh)
+    AutoChestFarm = TwCh
+    if AutoChestFarm then
+        EnableTP()
+    else
+        DisableTP()
+    end
+end
+
+-- Handle character respawn
+player.CharacterAdded:Connect(function(newCharacter)
+    character = newCharacter
+    humanoidRootPart = newCharacter:WaitForChild("HumanoidRootPart")
+end)
+
+-- Handle character removal (when the character dies)
+player.CharacterRemoving:Connect(function()
+    character = nil
+    humanoidRootPart = nil
+end)
+
+-- Add toggle to a UI library, replace with your actual library
+Tab:AddToggle({
+    Name = "Chest Farm",
+    Default = false,
+    Callback = function(TwCh)
+        ToggleTPChest(TwCh)
+    end    
+})
+
+local Players = game:GetService("Players")
+local RunService = game:GetService("RunService")
+
+local AutoChestFarm2 = false
+local CooldownTime = 2  -- Adjust the cooldown time in seconds
+local LastTeleportTime = 0
+local Debounce = false
+
+local chestPattern = "^Chest%d+$"
+
+local function findAllChestParts(pattern)
+    local chests = {}
+    for _, descendant in pairs(game.Workspace:GetDescendants()) do
+        if descendant:IsA("BasePart") and descendant.Name:match(pattern) then
+            table.insert(chests, descendant)
+        end
+    end
+    return chests
+end
+
+local function TPToNearestChest()
+    local currentTime = tick()
+    
+    -- Check if cooldown time has elapsed and the debounce is not active
+    if currentTime - LastTeleportTime >= CooldownTime and not Debounce then
+        local chestParts = findAllChestParts(chestPattern)
+        if #chestParts > 0 then
+            local closestChest = chestParts[1]
+            local closestDistance = math.huge
+
+            -- Find the nearest chest
+            for _, chestPart in ipairs(chestParts) do
+                local distance = (chestPart.Position - Players.LocalPlayer.Character.HumanoidRootPart.Position).Magnitude
+                if distance < closestDistance then
+                    closestChest = chestPart
+                    closestDistance = distance
+                end
+            end
+
+            -- Teleport instantly to the nearest chest
+            Players.LocalPlayer.Character:SetPrimaryPartCFrame(closestChest.CFrame)
+
+            -- Update the last teleport time
+            LastTeleportTime = currentTime
+
+            -- Set debounce to prevent rapid toggling
+            Debounce = true
+            wait(1)  -- Adjust the debounce duration as needed
+            Debounce = false
+        end
+    end
+end
+
+local function ToggleTPChest(TwCh)
+    AutoChestFarm2 = TwCh
+    if AutoChestFarm2 then
+        TPToNearestChest()
+    end
+end
+
+Tab:AddToggle({
+    Name = "Instant TP to Chest (Risk) ",
+    Default = false,
+    Callback = function(TwCh)
+        ToggleTPChest(TwCh)
+    end
+})
+
+RunService.RenderStepped:Connect(function()
+    if AutoChestFarm2 then
+        TPToNearestChest()
+    end
+end)
+
+--[[
+
+local Section = Tab:AddSection({
+	Name = "Auto Kill Cursed Enemies"
+})
+
+Tab:AddToggle({
+	Name = "Auto Click",
+	Default = false,
+	Callback = function(Value)
+		_G.click = Value
+	end    
+})
+
+spawn(function()
+    game:GetService("RunService").RenderStepped:Connect(function()
+        if _G.click then
+             pcall(function()
+                game:GetService'VirtualUser':CaptureController()
+			    game:GetService'VirtualUser':Button1Down(Vector2.new(0,1,0,1))
+            end)
+        end
+    end)
+end)
+
+Tab:AddToggle({
+	Name = "Fast Attack",
+	Default = false,
+	Callback = function(Value)
+		_G.FastAttack = Value
+	end    
+})
+
+-- [[ Fast Attack Fixed / Shadow Hub / Dont edit , or ur will be messed up! ]]
+
+-- [[ Properties ]]
+
+require(game.ReplicatedStorage.Util.CameraShaker):Stop()
+
+xShadowFastAttackx = require(game:GetService("Players").LocalPlayer.PlayerScripts.CombatFramework)
+
+xShadowx = debug.getupvalues(xShadowFastAttackx)[2]
+
+spawn(function()
+    game:GetService("RunService").RenderStepped:Connect(function()
+        if _G.FastAttack then
+            if typeof(xShadowx) == "table" then
+                pcall(function()
+                    xShadowx.activeController.timeToNextAttack = (math.huge^math.huge^math.huge)
+                    xShadowx.activeController.timeToNextAttack = 0
+                    xShadowx.activeController.hitboxMagnitude = 200
+                    xShadowx.activeController.active = false
+                    xShadowx.activeController.timeToNextBlock = 0
+                    xShadowx.activeController.focusStart = 0
+                    xShadowx.activeController.increment = 4
+                    xShadowx.activeController.blocking = false
+                    xShadowx.activeController.attacking = false
+                    xShadowx.activeController.humanoid.AutoRotate = 50
+                end)
+            end
+        end
+    end)
+end)
+
+
+]]
+
+local Section = Tab:AddSection({
+	Name = "Chest Farm Needs"
+})
+
+local XC = false  -- Default noclip state
+
+local function Noclip()
+    game:GetService('RunService').Stepped:Connect(function()
+        if XC then
+            pcall(function()
+                for i, v in pairs(game.Players.LocalPlayer.Character:GetChildren()) do
+                    if v:IsA("BasePart") then
+                        v.CanCollide = false
+                    end
+                end
+            end)
+        end
+    end)
+end
+
+-- Create the toggle
+local tab = Tab:AddToggle({
+    Name = "Noclip (Slow Collect Chest) ",
+    Default = false,
+    Callback = function(State)
+        XC = State
+    end
+})
+
+-- Start or stop noclip based on the initial toggle state
+Noclip()
+
+local FLYING = false
+local velocityHandlerName = "VelocityHandler"
+local gyroHandlerName = "GyroHandler"
+local mfly1, mfly2
+local currentCharacter
+
+local function getRoot(character)
+    return character:FindFirstChild("HumanoidRootPart") or character:FindFirstChild("Torso")
+end
+
+local function unmobilefly(player)
+    pcall(function()
+        FLYING = false
+        local character = player.Character
+        if character then
+            local root = getRoot(character)
+            if root then
+                local velocityHandler = root:FindFirstChild(velocityHandlerName)
+                local gyroHandler = root:FindFirstChild(gyroHandlerName)
+
+                if velocityHandler then
+                    velocityHandler:Destroy()
+                end
+
+                if gyroHandler then
+                    gyroHandler:Destroy()
+                end
+
+                local humanoid = character:FindFirstChildWhichIsA("Humanoid")
+                if humanoid then
+                    humanoid.PlatformStand = false
+                end
+            end
+        end
+
+        if mfly1 then
+            mfly1:Disconnect()
+        end
+
+        if mfly2 then
+            mfly2:Disconnect()
+        end
+    end)
+end
+
+local function mobilefly(player, vfly)
+    unmobilefly(player)
+    FLYING = true
+
+    local character = player.Character
+    local root = getRoot(character)
+
+    if character and root then
+        local camera = workspace.CurrentCamera
+        local v3none = Vector3.new()
+        local v3zero = Vector3.new(0, 0, 0)
+        local v3inf = Vector3.new(9e9, 9e9, 9e9)
+
+        local controlModule = require(player.PlayerScripts:WaitForChild("PlayerModule"):WaitForChild("ControlModule"))
+        local bv = Instance.new("BodyVelocity")
+        bv.Name = velocityHandlerName
+        bv.Parent = root
+        bv.MaxForce = v3zero
+        bv.Velocity = v3zero
+
+        local bg = Instance.new("BodyGyro")
+        bg.Name = gyroHandlerName
+        bg.Parent = root
+        bg.MaxTorque = v3inf
+        bg.P = 1000
+        bg.D = 20
+
+        mfly1 = player.CharacterAdded:Connect(function()
+            unmobilefly(player)
+            currentCharacter = player.Character
+            mobilefly(player, vfly)
+        end)
+
+        mfly2 = RunService.RenderStepped:Connect(function()
+            root = getRoot(player.Character)
+            camera = workspace.CurrentCamera
+            if player.Character:FindFirstChildWhichIsA("Humanoid") and root and root:FindFirstChild(velocityHandlerName) and root:FindFirstChild(gyroHandlerName) then
+                local humanoid = player.Character:FindFirstChildWhichIsA("Humanoid")
+                local VelocityHandler = root:FindFirstChild(velocityHandlerName)
+                local GyroHandler = root:FindFirstChild(gyroHandlerName)
+
+                if VelocityHandler and GyroHandler then
+                    VelocityHandler.MaxForce = v3inf
+                    GyroHandler.MaxTorque = v3inf
+
+                    if not vfly and humanoid then
+                        humanoid.PlatformStand = false
+                    end
+
+                    GyroHandler.CFrame = camera.CoordinateFrame
+                    VelocityHandler.Velocity = v3none
+
+                    local direction = controlModule:GetMoveVector()
+                    if direction.X ~= 0 or direction.Z ~= 0 then
+                        local moveVector = Vector3.new(direction.X, 0, direction.Z).unit
+                        local rightVector = camera.CFrame.RightVector
+                        local forwardVector = camera.CFrame.LookVector
+
+                        local flyDirection = (rightVector * moveVector.X - forwardVector * moveVector.Z).unit
+
+                        VelocityHandler.Velocity = flyDirection * (_G.flySpeed * 20)
+                    end
+                end
+            end
+        end)
+    end
+end
+
+local function toggleFly(player, toggleValue)
+    _G.loops = toggleValue
+    if toggleValue then
+        mobilefly(player, true)
+    else
+        unmobilefly(player)
+    end
+end
+
+-- Your loop structure
+_G.loops = false
+
+local function flyLoop()
+    while wait(10) do
+        if _G.loops then
+            local player = game.Players.LocalPlayer
+            if player and player.Character then
+                -- Avoid repeatedly calling mobilefly in the loop
+                if not FLYING then
+                    mobilefly(player, true)
+                end
+            end
+        end
+    end
+end
+
+Tab:AddToggle({
+    Name = "Fly Toggle",
+    Default = false,
+    Callback = function(Value)
+        local player = game.Players.LocalPlayer
+        toggleFly(player, Value)
+    end    
+})
+
+_G.flySpeed = 5  -- Default fly speed
+
+Tab:AddButton({
+	Name = "Auto Jump",
+	Callback = function()
+ _G.Dash = true
+while wait(2) do
+if _G.Dash == true then
+game:GetService('VirtualInputManager'):SendKeyEvent(true, "Space", false, game)
+end
+end
+end    
+})
+
+Tab:AddButton({
+	Name = "Disable Auto Jump",
+	Callback = function()
+ _G.Dash = false
+  	end    
+})
