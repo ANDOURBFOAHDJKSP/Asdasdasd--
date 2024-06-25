@@ -1,310 +1,42 @@
-local library = loadstring(game:HttpGet("https://raw.githubusercontent.com/bloodball/-back-ups-for-libs/main/turtle"))()
+local openshit = Instance.new("ScreenGui")
+local mainopen = Instance.new("TextButton")
+local mainopens = Instance.new("UICorner")
+local loki = Instance.new("ImageLabel")
+local posto = Instance.new("UIStroke")
 
-local OwO = library:Window("Main")
-local Lol = library:Window("LocalPlayer")
+openshit.Name = "openshit"
+openshit.Parent = game:GetService("Players").LocalPlayer:WaitForChild("PlayerGui")
+openshit.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+openshit.ResetOnSpawn = false
 
-local wait = task.wait
-local spawn = task.spawn
-local Players = game:GetService("Players")
-local Player = game:GetService("Players").LocalPlayer
-local RunService = game:GetService("RunService")
-local UserInputService = game:GetService("UserInputService")
-local HttpService = game:GetService("HttpService")
-local Workspace = game:GetService("Workspace")
-local CoreGui = game:GetService("CoreGui")
-local VirtualInputManager = game:GetService('VirtualInputManager')
-local TeleportService = game:GetService("TeleportService")
-for i,v in pairs(getconnections(Player.Idled)) do
-    v:Disable()
-end 
+mainopen.Name = "mainopen"
+mainopen.Parent = openshit
+mainopen.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
+mainopen.Position = UDim2.new(0.101969875, 0, 0.110441767, 0)
+mainopen.Size = UDim2.new(0, 64, 0, 42)
+mainopen.Text = " "
+mainopen.Visible = true
 
-OwO:Label("Zombie Mods", Color3.fromRGB(127, 143, 166))
-
---[[
-local HeadZombies = false
-local HeadSize = 5
-local ShowHead = false
-
-OwO:Toggle("Big Head", false, function(bool)
-HeadZombies = bool
-while HeadZombies and wait(0.2) do
-for i,v in next, game:GetService('Workspace').Zombies:GetChildren() do
-pcall(function()
- v:FindFirstChild("Head").Size = Vector3.new(HeadSize, HeadSize, HeadSize)
--- v.HumanoidRootPart.BrickColor = BrickColor.new("Really blue")
--- v.HumanoidRootPart.Material = "Neon"
--- v.HumanoidRootPart.CanCollide = false
-end)
-end
-end
-end)
-
-OwO:Slider("Head Size",1,7,5, function(value)
-   HeadSize = value
-end)
-]]
-
---[[
-local HitboxExpander = false
-local SizeHitbox = 5
-local ShowHitbox = false
-
-OwO:Toggle("Hitbox Expander", false, function(bool)
-    HitboxExpander = bool
+mainopens.Parent = mainopen
  
- while HitboxExpander and wait(0.1) do
- for i,v in next, game:GetService('Workspace').Zombies:GetChildren() do
-pcall(function()
- v.HumanoidRootPart.Size = Vector3.new(SizeHitbox, SizeHitbox, SizeHitbox)
--- v.HumanoidRootPart.BrickColor = BrickColor.new("Really blue")
--- v.HumanoidRootPart.Material = "Neon"
--- v.HumanoidRootPart.CanCollide = false
-end)
-
-if ShowHitbox then
-v.HumanoidRootPart.Transparency = 0.7
-else
-v.HumanoidRootPart.Transparency = 1
-end
-
-end
- end
-end)
-
-OwO:Toggle("Show Hitbox", false, function(bool2)
-ShowHitbox = bool2
-end)
-
-OwO:Slider("Hitbox Size", 1, 100, 5, function(value)
-    SizeHitbox = tonumber(value) or 5
-end)
-
-]]
-
-local HitPart = false
-local HitPartType = "HumanoidRootPart"
-local DistanceToBring = 25
-local ShowHitPart = false
-
--- Distances Position
-local DistanceX = 25
-local DistanceY = 3
-local DistanceZ = 25
-
-OwO:Toggle("Bring HitPart", false, function(bool)
-    HitPart = bool
-    while HitPart and wait(0.1) do
-        local player = game.Players.LocalPlayer
-        local charpart = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
-        
-        if charpart then
-            for i, v in pairs(game:GetService("Workspace").Zombies:GetChildren()) do
-                local zombieRootPart = v:FindFirstChild("HumanoidRootPart")
-                local zombieHumanoid = v:FindFirstChild("Humanoid")
-                
-                local clone = nil
-                for _, part in pairs(v:GetChildren()) do
-                    if part:IsA("BasePart") and part:FindFirstChild("IsClone") then
-                        clone = part
-                        break
-                    end
-                end
-                
-                if zombieRootPart then
-                    local distance = (charpart.Position - zombieRootPart.Position).Magnitude
-                    local distanceX = math.abs(charpart.Position.X - zombieRootPart.Position.X)
-                    local distanceY = math.abs(charpart.Position.Y - zombieRootPart.Position.Y)
-                    local distanceZ = math.abs(charpart.Position.Z - zombieRootPart.Position.Z)
-                    
-                    if distance <= DistanceToBring and distanceX <= DistanceX and distanceY <= DistanceY and distanceZ <= DistanceZ then
-                        if not clone then
-                            local BypassCFrameKick = zombieRootPart:Clone()
-                            BypassCFrameKick.Anchored = true
-                            BypassCFrameKick.Name = HitPartType
-                            BypassCFrameKick.OriginalSize.Value = Vector3.new(3, 3, 3)
-                            BypassCFrameKick.Size = Vector3.new(3, 3, 3)             
-                            
-                            local isClone = Instance.new("BoolValue")
-                            isClone.Name = "IsClone"
-                            isClone.Parent = BypassCFrameKick
-                            
-                            BypassCFrameKick.Parent = v
-                            clone = BypassCFrameKick
-                        end
-                        local offset = charpart.CFrame:VectorToWorldSpace(Vector3.new(0, 0, -6))
-                        clone.Position = charpart.Position + offset
-                        clone.Name = HitPartType
-                            if ShowHitPart then
-                             clone.Transparency = 0.7
-                          else
-                             clone.Transparency = 1
-                        end
-                    end
-                end
-            end
-        end
-    end
-end)
-
-OwO:Toggle("Show HitPart", false, function(bool2)
-ShowHitPart = bool2
-end)
-
-local dropdown = OwO:Dropdown("HitPart Type", {"Head", "HumanoidRootPart", "UpperTorso"}, function(name)
-   HitPartType = tostring(name)
-end)
-
-OwO:Slider("Bring HitPart Distance", 1, 100, 25, function(value)
-    DistanceToBring = tonumber(value) or 25
-    DistanceX = tonumber(value) or 25
-    DistanceZ = tonumber(value) or 25
-end)
-
-OwO:Label("Gun Mods", Color3.fromRGB(127, 143, 166))
-
-local fastfire = false
-local CamLock = false
-local MaxDmg = false
-local NoReloader= false
-local fastswinging = false
-
-OwO:Toggle("Fast Swinging", false, function(OhValue)
-fastswinging = OhValue
-repeat
-wait(10)
-pcall(function()
-for i,v in pairs(getgc(true)) do
-   if type(v) == 'table' and rawget(v, 'swinganims') then
-v.swinganims[1][1][6] = 0
-v.swinganims[1][2][6] = 0
-v.swinganims[1][3][6] = 0
-v.swinganims[1][4][6] = 0
-v.swinganims[2][1][6] = 0
-v.swinganims[2][2][6] = 0
-v.swinganims[2][3][6] = 0
-v.swinganims[2][4][6] = 0
-v.swinganims[3][1][6] = 0
-v.swinganims[3][2][6] = 0
-v.swinganims[3][3][6] = 0
-v.swinganims[3][4][6] = 0
-v.swinganims[4][1][6] = 0
-v.swinganims[4][2][6] = 0
-v.swinganims[4][3][6] = 0
-v.swinganims[4][4][6] = 0
-v.range = 999999999
-end
-end
-end)
-until fastswinging == false
-end)
-
-OwO:Toggle("Fast Fire", false, function(bool7)
-fastfire = bool7
-repeat
-wait(10)
-local spread1 = {
-  Increase = 0,
-  Decrease = 0,
-  Max = 0,
-  Min = 0
-}
-
-local rec = {
-  Tilt = { 0, 0 },
-  Side = { 0, 0 },
-  Vertical = { 0, 0 },
-  Back = { 0, 0 },
-  Aimed = 0,
-  FirstShot = 0
-}
-
-pcall(function()
-for i,v in pairs(getgc(true)) do
-   if type(v) == 'table' and rawget(v, 'magsize') then
-       v.magsize = math.huge
-       v.storedammo = math.huge
-       v.rpm = math.huge
-       v.spread = spread1
-       v.recoil = rec
-       v.mode = "Auto"
-   end
-end
-end)
-until fastfire == false
-end)
-
-OwO:Toggle("Max Damage", false, function(damn)
-MaxDmg = damn
-
-repeat
-wait(10)
-pcall(function() 
-for i,v in pairs(getgc(true)) do
-   if type(v) == 'table' and rawget(v, 'damage') then
-     v.damage[1][1] = 9999
-     v.damage[1][2] = 9999
-     v.damage[2][1] = 9999
-     v.damage[2][2] = 9999
-     end
-   end
-end)
-until MaxDmg == false
-end)
-
-OwO:Toggle("No Reloading", false, function(noice)
-NoReloader = noice
-
-while NoReloader and wait(0.1) do
-game:GetService("ReplicatedStorage").RemoteEvent:FireServer("Reloaded", "3")
-end
-end)
-
-OwO:Label("Auto Collection", Color3.fromRGB(127, 143, 166))
-
-local AutoCollectPowerUps = false
-local AutoCollectRewards = false
-
-OwO:Toggle("Power Ups", false, function(bool4)
-AutoCollectPowerUps = bool4
-while AutoCollectPowerUps and wait(1) do
-       if game:GetService("Workspace").Ignore:FindFirstChild("PowerUps") then
-                for i,v in pairs(game:GetService("Workspace").Ignore.PowerUps:GetChildren()) do
-                    v.CFrame = CFrame.new(game.Players.LocalPlayer.Character.HumanoidRootPart.Position)
-                    v.Position = game.Players.LocalPlayer.Character.HumanoidRootPart.Position
-                  -- firetouchinterest(game.Players.LocalPlayer.Character.HumanoidRootPart, v, 0)
-                 --   task.wait(0.1)
-               --     firetouchinterest(game.Players.LocalPlayer.Character.HumanoidRootPart, v, 1)
-                end
-            end
-       end
-end)
-
--- Lol
-
-Lol:Button("God Mode (Can Bypass Speed)", function()
-local isGod = false
-local char = game.Players.LocalPlayer.Character
-local originalhumanoid = char.Humanoid
-local clonehumanoid = char.Humanoid:Clone()
-clonehumanoid.Parent = nil
-wait(0.1)
-char.Humanoid:Destroy()
-clonehumanoid.Parent = char
-
-local animator = clonehumanoid:FindFirstChild("Animator")
-if not animator then
-animator = Instance.new("Animator")
-animator.Parent = clonehumanoid
-end
-
-local f = Instance.new("ForceField")
-f.Parent = char
-f.Visible = false
-wait(0.1)
-f.Visible = true
-
-isGod = true
-
+loki.Name = "loki"
+loki.Parent = mainopen
+loki.BackgroundColor3 = Color3.fromRGB(224,224,224)
+loki.BackgroundTransparency = 1.000
+loki.Position = UDim2.new(-0.0529999994, 0, -0.244000003, 0)
+loki.Size = UDim2.new(0, 69, 0, 62)
+loki.Image = "rbxassetid://17339439921"
+ 
+posto.Name = "posto"
+posto.Parent = mainopen
+posto.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+posto.Color = Color3.fromRGB(224,224,224)
+posto.LineJoinMode = Enum.LineJoinMode.Round
+posto.Thickness = 1
+posto.Transparency = 0
+posto.Enabled = true
+posto.Archivable = true
+ 
 local UserInputService = game:GetService("UserInputService")
 local TweenService = game:GetService("TweenService")
  
@@ -358,9 +90,419 @@ local function MakeDraggable(topbarobject, object)
     )
 end
 
+MakeDraggable(mainopen, mainopen) -- Making the button draggable
+
+mainopen.MouseButton1Click:Connect(function()
+    game:GetService("VirtualInputManager"):SendKeyEvent(true, "LeftControl", false, game)
+    game:GetService("VirtualInputManager"):SendKeyEvent(false, "LeftControl", false, game)
+end)
+
+local player = game:GetService("Players").LocalPlayer
+local RunService = game:GetService("RunService")
+
+local fpsCounter = Instance.new("ScreenGui")
+fpsCounter.Parent = game.CoreGui
+fpsCounter.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+fpsCounter.ResetOnSpawn = false
+
+local label = Instance.new("TextLabel")
+label.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+label.BackgroundTransparency = 1.000
+label.TextColor3 = Color3.fromRGB(255, 255, 255)
+label.Font = Enum.Font.GothamBlack
+label.Size = UDim2.new(0, 150, 0, 70)
+label.Position = UDim2.new(0, 200, 0, 10)
+label.Text = "FPS: 0\nTime Played: 0h 0m 0s"
+label.TextSize = 10
+label.Parent = fpsCounter
+
+local startTime = tick()
+local lastUpdateTime = tick()
+local frameCount = 0
+
+RunService.RenderStepped:Connect(function()
+    local currentTime = tick()
+    local deltaTime = currentTime - lastUpdateTime
+    frameCount = frameCount + 1
+
+    if deltaTime >= 1 then
+        local fps = math.round(frameCount / deltaTime)
+        local elapsedTime = currentTime - startTime
+
+        local hours = math.floor(elapsedTime / 3600)
+        local minutes = math.floor((elapsedTime % 3600) / 60)
+        local seconds = math.floor(elapsedTime % 60)
+
+        label.Text = "FPS: " .. fps .. "\nTime Played: " .. hours .. "h " .. minutes .. "m " .. seconds .. "s"
+
+        lastUpdateTime = currentTime
+        frameCount = 0
+    end
+end)
+
+print("-- Fast Main Loader V3")
+
+print("-- Unknown Hub X 1/4: Checking Game...")
+
+print("-- Unknown Hub X 2/4: Getting Service...")
+
+local wait = task.wait
+local spawn = task.spawn
+local Players = game:GetService("Players")
+local Player = game:GetService("Players").LocalPlayer
+local RunService = game:GetService("RunService")
+local UserInputService = game:GetService("UserInputService")
+local HttpService = game:GetService("HttpService")
+local Workspace = game:GetService("Workspace")
+local CoreGui = game:GetService("CoreGui")
+local VirtualInputManager = game:GetService('VirtualInputManager')
+local TeleportService = game:GetService("TeleportService")
+for i,v in pairs(getconnections(Player.Idled)) do
+    v:Disable()
+end 
+
+print("-- Unknown Hub X 3/4: Exploit Support...")
+
+if not require then
+    return game.Players.LocalPlayer:Kick("Your Exploit doesn't support: require(path)")
+else
+print("Supported require()")
+end
+
+if not firetouchinterest  then
+    return game.Players.LocalPlayer:Kick("Your Exploit doesn't support: firetouchinterest()")
+else
+print("Supported firetouchinterest()")
+end
+
+if not setfpscap or setfpscap(500) then
+    return game.Players.LocalPlayer:Kick("Your Exploit doesn't support: setfpscap()")
+else
+print("Supported setfpscap()")
+end
+
+if not setfflag then
+    return game.Players.LocalPlayer:Kick("Your Exploit doesn't support: setfflag()")
+else
+print("Supported setfflag()")
+end
+
+print(" -- Unknown Hub X 4/4: Bypassing Anti Cheat")
+
+--[[
+(Only Available for Hitbox Expander)
+
+-- Bypass Anti Cheat V2
+local a = getrawmetatable(game)
+local b = a.__namecall
+setreadonly(a, false)
+
+a.__namecall = newcclosure(function(self, ...)
+    local Args = {...}
+    if tostring(self) == "RemoteEvent" then
+        if Args[1] == "K" then
+           warn("Anti Cheat tried to kick you!")
+            return "No"
+        end
+    end
+    return b(self, unpack(Args))
+end)
+]]
+
+print("Main Loaded")
+
+local Fluent = loadstring(game:HttpGet("https://github.com/dawid-scripts/Fluent/releases/latest/download/main.lua"))()
+local SaveManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/dawid-scripts/Fluent/master/Addons/SaveManager.lua"))()
+local InterfaceManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/Unknownproootest/Unknown-TreasureQuest/Alt/Test_FixMinimizeKey"))()
+
+local Window = Fluent:CreateWindow({
+    Title = "Unknown Hub X Zombie Uprising V1.5 (BETA) ",
+    SubTitle = "Made by Unknownproooolucky",
+    TabWidth = 160,
+    Size = UDim2.fromOffset(580, 460),
+    Acrylic = false, -- The blur may be detectable, setting this to false disables blur entirely
+    Theme = "Dark",
+    MinimizeKey = Enum.KeyCode.LeftControl -- Used when theres no MinimizeKeybind
+})
+
+local Options = Fluent.Options
+
+--Fluent provides Lucide Icons https://lucide.dev/icons/ for the tabs, icons are optional
+local Tabs = {
+    Main = Window:AddTab({ Title = "Main", Icon = " " }),
+    Farms = Window:AddTab({ Title = "Auto Farm", Icon = " " }),
+    Zombie = Window:AddTab({ Title = "Zombie Mods", Icon = " " }),
+    Settings = Window:AddTab({ Title = "Settings", Icon = "settings" })
+}
+
+-- Main
+
+local Player = game.Players.LocalPlayer
+
+local function getNearestZombies()
+    local nearest = nil
+    local dist = math.huge
+    local ZombiesList = game:GetService("Workspace").Zombies:GetChildren()
+
+    if next(ZombiesList) ~= nil then
+        for i, v in pairs(ZombiesList) do
+            if v:FindFirstChild("HumanoidRootPart") and v:FindFirstChild("Humanoid") and not v:FindFirstChild("IsClone") then
+                    local m = (Player.Character.HumanoidRootPart.Position - v.HumanoidRootPart.Position).Magnitude
+                    if m < dist then
+                        dist = m
+                        nearest = v
+                    end
+                end
+            end
+        end
+
+    return nearest
+end
+
+local function getNearestBosses()
+    local nearest = nil
+    local dist = math.huge
+    local isBossFolder = game.Workspace:FindFirstChild("Map"):FindFirstChild("BossFolder")
+
+    if isBossFolder then
+        local BossList = game:GetService("Workspace").Map.BossFolder:GetChildren()
+
+        if next(BossList) ~= nil then
+            for i, v in pairs(BossList) do
+                if v:FindFirstChild("HumanoidRootPart") and v:FindFirstChild("Humanoid") and not v:FindFirstChild("IsClone") then
+                        local m = (Player.Character.HumanoidRootPart.Position - v.HumanoidRootPart.Position).Magnitude
+                        if m < dist then
+                            dist = m
+                            nearest = v
+                        end
+                    end
+                end
+            end
+        end
+
+    return nearest
+end
+
+local camera = workspace.CurrentCamera
+
+function cameratracktoZombies()
+    local character = player.Character
+    local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
+    
+    local target = getNearestZombies()
+    if target then
+        local targetPosition = target.HumanoidRootPart.Position        
+        camera.CFrame = CFrame.lookAt(camera.CFrame.Position, targetPosition)
+   end
+end
+
+function cameratracktoBoss()
+    local character = player.Character
+    local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
+    
+    local target = getNearestBosses()
+    if target then
+        local targetPosition = target.HumanoidRootPart.Position        
+        camera.CFrame = CFrame.lookAt(camera.CFrame.Position, targetPosition)
+   end
+end
+
+function autoammo()
+game:GetService("ReplicatedStorage").RemoteEvent:FireServer("Reloaded", "3")
+end
+
+function MXDMG()
+     pcall(function() 
+            for i, v in pairs(getgc(true)) do
+                if type(v) == 'table' and rawget(v, 'damage') then
+                    for j = 1, 2 do
+                        if v.damage[j] then
+                            for k = 1, 2 do
+                              if v.damage[j][k] then
+                                 v.damage[j][k] = 100000
+                              end
+                          end
+                      end
+                  end
+              end
+          end
+     end)
+end
+
+function FastFiring()
+local spread1 = {
+  Increase = 0,
+  Decrease = 0,
+  Max = 0,
+  Min = 0
+}
+
+local rec = {
+  Tilt = { 0, 0 },
+  Side = { 0, 0 },
+  Vertical = { 0, 0 },
+  Back = { 0, 0 },
+  Aimed = 0,
+  FirstShot = 0
+}
+
+pcall(function()
+for i,v in pairs(getgc(true)) do
+   if type(v) == 'table' and rawget(v, 'magsize') then
+       v.magsize = math.huge
+       v.storedammo = math.huge
+       v.rpm = math.huge
+       v.spread = spread1
+       v.recoil = rec
+       v.mode = "Auto"
+   end
+end
+end)
+end
+
+function NoReloadAnims()
+       pcall(function()
+            for i,v in pairs(getgc(true)) do
+                if type(v) == 'table' and rawget(v, 'reloadanim') then
+                    for j = 1, 15 do
+                        if v.reloadanim[j] and v.reloadanim[j][6] then
+                            v.reloadanim[j][6] = 0
+                        end
+                        if j == 6 or j == 8 then
+                            if v.reloadanim[j] and v.reloadanim[j][8] then
+                              v.reloadanim[j][8] = 0
+                          end
+                     end
+                 end
+             end
+         end
+    end)
+end
+
+function FastSwingers()
+     pcall(function()
+          for i, v in pairs(getgc(true)) do
+              if type(v) == 'table' and rawget(v, 'swinganims') then
+                     for j = 1, 4 do
+                        for k = 1, 4 do
+                            if v.swinganims[j] and v.swinganims[j][k] and v.swinganims[j][k][6] then
+                                v.swinganims[j][k][6] = 0
+                            end
+                        end
+                    end
+                 v.range = 999999999
+            end
+        end
+    end)
+end
+
+local fastfire = false
+local LoadAmmo = false
+local Aimbot = false
+local MaxDmg = false
+local NoReloader= false
+local fastswinging = false
+
+Tabs.Main:AddParagraph({
+        Title = "Mods",
+        Content = " "
+    })
+    
+Tabs.Main:AddParagraph({
+        Title = "Gun",
+        Content = ""
+    })
+
+   local Toggle = Tabs.Main:AddToggle("FastFirerate", {Title = "Fast Fire", Default = false })
+
+    Toggle:OnChanged(function(bool7)
+    fastfire = bool7
+  repeat
+  if fastfire then
+   wait(10)
+    spawn(FastFiring)
+    end
+   until fastfire == false
+end)
+
+
+   local Toggle = Tabs.Main:AddToggle("AutoLoadAmmo", {Title = "Auto Load Ammo", Default = false })
+
+    Toggle:OnChanged(function(noice)
+    LoadAmmo = noice
+    
+    repeat
+    if LoadAmmo then
+    wait(0.2)
+    spawn(autoammo)
+    end
+    until LoadAmmo == false    
+    end)
+
+   local Toggle = Tabs.Main:AddToggle("NoReload", {Title = "No Reload", Default = false })
+
+    Toggle:OnChanged(function(UhhWaht)
+    NoReloader = UhhWaht
+    repeat
+    if NoReloader then
+    wait(10)
+        spawn(NoReloadAnims)
+       end
+    until NoReloader == false
+    end)
+
+
+Tabs.Main:AddParagraph({
+        Title = "Knife",
+        Content = ""
+    })
+
+   local Toggle = Tabs.Main:AddToggle("FastSwing", {Title = "Fast Swinging", Default = false })
+
+    Toggle:OnChanged(function(Val)
+    fastswinging = Val
+    repeat
+    if fastswinging then
+        wait(10)
+         spawn(FastSwingers)
+         end
+        until fastswinging == false
+    end)
+
+
+Tabs.Main:AddParagraph({
+        Title = "Local Player",
+        Content = " "
+    })
+    
+Tabs.Main:AddButton({
+        Title = "God Mode",
+        Description = "Allow to Bypass the Speed and Jump",
+        Callback = function()
+local isGod = false
+local char = game.Players.LocalPlayer.Character
+local originalhumanoid = char.Humanoid
+local clonehumanoid = char.Humanoid:Clone()
+clonehumanoid.Parent = nil
+wait(0.1)
+char.Humanoid:Destroy()
+clonehumanoid.Parent = char
+
+local animator = clonehumanoid:FindFirstChild("Animator")
+if not animator then
+animator = Instance.new("Animator")
+animator.Parent = clonehumanoid
+end
+
+local f = Instance.new("ForceField")
+f.Parent = char
+f.Visible = false
+wait(0.1)
+f.Visible = true
+
+isGod = true
 local Players = game:GetService("Players")
 local player = Players.LocalPlayer
-local isGod = true  -- Assuming this is set somewhere else in your code
 
 local screenGui = Instance.new("ScreenGui")
 screenGui.ResetOnSpawn = false
@@ -402,33 +544,479 @@ jumpButton.Activated:Connect(makePlayerJump)
 MakeDraggable(jumpIcon, jumpButton)
 
 UserInputService.JumpRequest:Connect(makePlayerJump)
+  end
+})
+
+local Input = Tabs.Main:AddInput("Walkspeed", {
+        Title = "Walk Speed",
+        Default = 16,
+        Placeholder = "Placeholder",
+        Numeric = false, -- Only allows numbers
+        Finished = false, -- Only calls callback when you press enter
+        Callback = function(WS)
+game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = WS
+game.Players.LocalPlayer.Character.Humanoid:SetAttribute("DefaultWalkSpeed", tonumber(WS))
+        end
+    })
+    
+local Input = Tabs.Main:AddInput("Jumppower", {
+        Title = "Jump Power",
+        Default = 50,
+        Placeholder = "Placeholder",
+        Numeric = false, -- Only allows numbers
+        Finished = false, -- Only calls callback when you press enter
+        Callback = function(JP)
+game.Players.LocalPlayer.Character.Humanoid.JumpPower = JP
+game.Players.LocalPlayer.Character.Humanoid:SetAttribute("DefaultJumpPower", tonumber(JP))
+        end
+    })
+    
+-- Farms
+
+local normalgrav = workspace.Gravity
+
+Tabs.Farms:AddParagraph({
+        Title = "Farm Zombies",
+        Content = "Kinda Broken tho"
+    })
+
+local AutoFarmZombies = false
+local AutoFarmBoss = false
+
+local Toggle = Tabs.Farms:AddToggle("FarmZombies", {Title = "Auto Farm Zombies", Default = false })
+
+Toggle:OnChanged(function(boolX1)
+AutoFarmZombies = boolX1
+
+if AutoFarmZombies then
+workspace.Gravity = 0
+else
+	workspace.Gravity = normalgrav
+end
+
+local ZombieRootPart = game.Workspace.Zombies:FindFirstChild("HumanoidRootPart")
+
+while AutoFarmZombies and wait(0.1) do
+if getNearestZombies() then
+Player.Character.HumanoidRootPart.CFrame = (getNearestZombies().HumanoidRootPart.CFrame * CFrame.new(0, 2, 2))
+MXDMG()
+end
+end
 end)
 
-Lol:Slider("Walk-Speed",1,100,16, function(Speed)
-   game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = tonumber(Speed)
-   game.Players.LocalPlayer.Character.Humanoid:SetAttribute("DefaultWalkSpeed", tonumber(Speed))
+local Toggle = Tabs.Farms:AddToggle("AutoCollectPowerUps", {Title = "Auto Farm Bosses", Default = false })
+
+Toggle:OnChanged(function(boolX2)
+AutoFarmBoss = boolX2
+
+if AutoFarmBoss then
+workspace.Gravity = 0
+else
+	workspace.Gravity = normalgrav
+end
+
+local bossRootPart = game.Workspace:FindFirstChild("Map"):FindFirstChild("BossFolder")
+
+while AutoFarmBoss and wait(0.1) do
+if getNearestBosses() or bossRootPart then
+AutoFarmZombies = false
+Player.Character.HumanoidRootPart.CFrame = (getNearestBosses().HumanoidRootPart.CFrame * CFrame.new(0, 5, 10))
+MXDMG()
+else
+AutoFarmZombies = true
+end
+end
 end)
 
-Lol:Slider("Jump-Power",1,100,50, function(Jump)
-   game.Players.LocalPlayer.Character.Humanoid.JumpPower = tonumber(Jump)
-   game.Players.LocalPlayer.Character.Humanoid:SetAttribute("DefaultJumpPower", tonumber(Jump))
+Tabs.Farms:AddParagraph({
+        Title = "Auto Collection",
+        Content = " "
+    })
+
+local AutoCollectPowerUps = false
+local AutoCollectRewards = false
+
+local Toggle = Tabs.Farms:AddToggle("AutoCollectPowerUps", {Title = "Power Ups", Default = false })
+
+Toggle:OnChanged(function(bool4)
+AutoCollectPowerUps = bool4
+while AutoCollectPowerUps and wait(0.1) do
+       if game:GetService("Workspace").Ignore:FindFirstChild("PowerUps") then
+                for i,v in pairs(game:GetService("Workspace").Ignore.PowerUps:GetChildren()) do
+                    v.CFrame = CFrame.new(game.Players.LocalPlayer.Character.HumanoidRootPart.Position)
+                    v.Position = game.Players.LocalPlayer.Character.HumanoidRootPart.Position
+                  -- firetouchinterest(game.Players.LocalPlayer.Character.HumanoidRootPart, v, 0)
+                 --   task.wait(0.1)
+               --     firetouchinterest(game.Players.LocalPlayer.Character.HumanoidRootPart, v, 1)
+                end
+            end
+       end
 end)
 
---[[
-(Only Available for Hitbox Expander)
+local Toggle = Tabs.Farms:AddToggle("AutoCollectPowerUps", {Title = "Care Package", Default = false })
 
--- Bypass Anti Cheat V2
-local a = getrawmetatable(game)
-local b = a.__namecall
-setreadonly(a, false)
+Toggle:OnChanged(function(bool5)
+AutoCollectRewards = bool5
+while AutoCollectRewards and wait(0.1) do
+       if game:GetService("Workspace").Ignore:FindFirstChild("Rewards") then
+                for i,v in pairs(game:GetService("Workspace").Ignore.Rewards:GetChildren()) do
+                  if v:FindFirstChildWhichIsA("Part") then
+                    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(v.MainPart.Position)
+                  -- firetouchinterest(game.Players.LocalPlayer.Character.HumanoidRootPart, v, 0)
+                 --   task.wait(0.1)
+               --     firetouchinterest(game.Players.LocalPlayer.Character.HumanoidRootPart, v, 1)
+                    end
+                end
+            end
+       end
+end)
 
-a.__namecall = newcclosure(function(self, ...)
-    local Args = {...}
-    if tostring(self) == "RemoteEvent" then
-        if Args[1] == "K" then
-            return nil
+local UnknownOpen = "Open C"
+local TypeCases = "Bronze Cases"
+local AmountType = "One"
+local AutoOpen = false
+
+Tabs.Farms:AddParagraph({
+        Title = "Auto Cases",
+        Content = " "
+    })
+
+local Dropdown = Tabs.Farms:AddDropdown("CaseTypes", {
+        Title = "Select Case",
+        Values = {"Bronze Case", "Iron Case", "Copper Case", "Silver Case", "Gold Case", "Platinum Case", "Rhodium Case", "Element 115 Case"},
+        Multi = false,
+        Default = 1,
+    })
+
+    Dropdown:OnChanged(function(Value)
+        TypeCases = Value
+    end)
+    
+local Dropdown = Tabs.Farms:AddDropdown("AmountToOpen", {
+        Title = "Select Amount",
+        Values = {"One", "All"},
+        Multi = false,
+        Default = 1,
+    })
+
+    Dropdown:OnChanged(function(Value)
+        AmountType = Value
+    end)
+
+local Toggle = Tabs.Farms:AddToggle("AutoOpenCases", {Title = "Auto Open Cases", Default = false })
+
+Toggle:OnChanged(function(bool6)
+AutoOpen = bool6
+
+while AutoOpen and wait(0.1) do
+game:GetService("ReplicatedStorage").RemoteEvent:FireServer(UnknownOpen, AmountType, TypeCases)
+  end
+end)
+
+-- Zombie
+
+Tabs.Zombie:AddParagraph({
+        Title = "HitPart",
+        Content = " "
+    })
+    
+local HitPart = false
+local HitPart2 = false
+local HitPartType = "HumanoidRootPart"
+local DistanceToBring = 25
+local ShowHitPart = false
+
+-- Distances Position
+local DistanceX = 25
+local DistanceY = 4
+local DistanceZ = 25
+
+local Toggle = Tabs.Zombie:AddToggle("ZombieHitPart", {Title = "Bring Zombie HitPart", Default = false })
+
+Toggle:OnChanged(function(bool)
+HitPart = bool
+    while HitPart and wait(0.1) do
+        local player = game.Players.LocalPlayer
+        local charpart = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
+        
+        if charpart then
+            for i, v in pairs(game:GetService("Workspace").Zombies:GetChildren()) do
+                local zombieRootPart = v:FindFirstChild("HumanoidRootPart")
+                local zombieHumanoid = v:FindFirstChild("Humanoid")
+                
+                local clone = nil
+                for _, part in pairs(v:GetChildren()) do
+                    if part:IsA("BasePart") and part:FindFirstChild("IsClone") then
+                        clone = part
+                        break
+                    end
+                end
+                
+                if zombieRootPart then
+                    local distance = (charpart.Position - zombieRootPart.Position).Magnitude
+                    local distanceX = math.abs(charpart.Position.X - zombieRootPart.Position.X)
+                    local distanceY = math.abs(charpart.Position.Y - zombieRootPart.Position.Y)
+                    local distanceZ = math.abs(charpart.Position.Z - zombieRootPart.Position.Z)
+                    
+                    if distance <= DistanceToBring and distanceX <= DistanceX and distanceY <= DistanceY and distanceZ <= DistanceZ then
+                        if not clone then
+                            local BypassCFrameKick = zombieRootPart:Clone()
+                            BypassCFrameKick.Anchored = true
+                            BypassCFrameKick.Name = HitPartType
+                            BypassCFrameKick.OriginalSize.Value = Vector3.new(3, 3, 3)
+                            BypassCFrameKick.Size = Vector3.new(3, 3, 3)             
+                            
+                            local isClone = Instance.new("BoolValue")
+                            isClone.Name = "IsClone"
+                            isClone.Parent = BypassCFrameKick
+                            
+                            BypassCFrameKick.Parent = v
+                            clone = BypassCFrameKick
+                        end
+                        local offset = charpart.CFrame:VectorToWorldSpace(Vector3.new(0, 0, -6))
+                        clone.Position = charpart.Position + offset
+                        clone.Name = HitPartType
+                            if ShowHitPart then
+                             clone.Transparency = 0.7
+                          else
+                             clone.Transparency = 1
+                        end
+                    end
+                end
+            end
         end
     end
-    return b(self, unpack(Args))
 end)
-]]
+
+local Toggle = Tabs.Zombie:AddToggle("BossHitPart", {Title = "Bring Boss HitPart", Default = false })
+
+Toggle:OnChanged(function(booloh)
+HitPart2 = booloh
+    while HitPart2 and wait(0.1) do
+        local player = game.Players.LocalPlayer
+        local charpart = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
+        local isBossFolder = game.Workspace:FindFirstChild("Map"):FindFirstChild("BossFolder")
+        
+        if charpart and isBossFolder then
+            for i, v in pairs(game:GetService("Workspace").Map.BossFolder:GetChildren()) do
+                local bossRootPart = v:FindFirstChild("HumanoidRootPart")
+                local bosshumanoid = v:FindFirstChild("Humanoid")
+                
+                local clone = nil
+                for _, part in pairs(v:GetChildren()) do
+                    if part:IsA("BasePart") and part:FindFirstChild("IsClone") then
+                        clone = part
+                        break
+                    end
+                end
+                
+                if bossRootPart then
+                    local distance = (charpart.Position - bossRootPart.Position).Magnitude
+                    
+                    if distance <= 10000 then
+                        if not clone then
+                            local BypassCFrameKick = bossRootPart:Clone()
+                            BypassCFrameKick.Anchored = true
+                            BypassCFrameKick.Name = "HumanoidRootPart"
+                            BypassCFrameKick.OriginalSize.Value = Vector3.new(5, 5, 5)
+                            BypassCFrameKick.Size = Vector3.new(5, 5, 5)
+                            
+                            local isClone = Instance.new("BoolValue")
+                            isClone.Name = "IsClone"
+                            isClone.Parent = BypassCFrameKick
+                            
+                            BypassCFrameKick.Parent = v
+                            clone = BypassCFrameKick
+                        end
+                        local offset = charpart.CFrame:VectorToWorldSpace(Vector3.new(0, 0, -6))
+                        clone.Position = charpart.Position + offset
+                            if ShowHitPart then
+                             clone.Transparency = 0.7
+                          else
+                             clone.Transparency = 1
+                        end
+                    end
+                end
+            end
+        end
+    end
+end)
+
+local Toggle = Tabs.Zombie:AddToggle("ShowHitPart", {Title = "Show HitPart", Default = false })
+
+Toggle:OnChanged(function(bool2)
+ShowHitPart = bool2
+end)
+
+local Input = Tabs.Zombie:AddInput("DistanceHitPart", {
+        Title = "Distance to Bring HitPart",
+        Default = 25,
+        Placeholder = "Number",
+        Numeric = false, -- Only allows numbers
+        Finished = false, -- Only calls callback when you press enter
+        Callback = function(Value)
+    DistanceToBring = tonumber(value) or 25
+    DistanceX = tonumber(value) or 25
+    DistanceZ = tonumber(value) or 25
+        end
+    })
+
+Tabs.Zombie:AddParagraph({
+        Title = "ESP",
+        Content = " "
+    })
+
+local ESP = false
+
+local Toggle = Tabs.Zombie:AddToggle("EspZombie", {Title = "Esp Zombie", Default = false })
+
+    Toggle:OnChanged(function(bool)
+ESP = bool
+
+spawn(function()
+    while wait(0.2) do
+        pcall(function()
+            if ESP then
+                for i, v in pairs(game:GetService("Workspace").Zombies:GetChildren()) do
+                    if v:FindFirstChild('HumanoidRootPart') and not v:FindFirstChild("IsClone") then
+                        local evilHumanoid = v:FindFirstChild("Humanoid")  -- Change "Humanoid" to "EvilHumanoid"
+                        
+                        if not v:FindFirstChild("MobEap") then
+                            local BillboardGui = Instance.new("BillboardGui")
+                            local TextLabel = Instance.new("TextLabel")
+
+                            BillboardGui.Parent = v
+                            BillboardGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+                            BillboardGui.Active = true
+                            BillboardGui.Name = "MobEap"
+                            BillboardGui.AlwaysOnTop = true
+                            BillboardGui.LightInfluence = 1.000
+                            BillboardGui.Size = UDim2.new(0, 200, 0, 50)
+                            BillboardGui.StudsOffset = Vector3.new(0, 2.5, 0)
+
+                            TextLabel.Parent = BillboardGui
+                            TextLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+                            TextLabel.BackgroundTransparency = 1.000
+                            TextLabel.Size = UDim2.new(0, 200, 0, 50)
+                            TextLabel.TextScaled = false
+                            TextLabel.TextColor3 = Color3.fromRGB(0, 255, 0)
+                            TextLabel.Font = Enum.Font.GothamBold
+                            TextLabel.TextSize = 14  -- Adjust the text size to your preference
+
+                            v.MobEap = BillboardGui  -- Store the BillboardGui in MobEap for later use
+                        end
+
+                        local distance = math.floor((game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.HumanoidRootPart.Position).Magnitude)
+
+                        if evilHumanoid then
+                            local health = math.floor(evilHumanoid.Health)
+                            v.MobEap.TextLabel.Text = v.Name.." - "..distance.." M\nHealth: "..health
+                        else
+                            v.MobEap.TextLabel.Text = v.Name.." - "..distance.." M"
+                        end
+                    end
+                end
+            else
+                for i, v in pairs(game:GetService("Workspace").Zombies:GetChildren()) do
+                    if v:FindFirstChild("MobEap") then
+                        v.MobEap:Destroy()
+                    end
+                end
+            end
+        end)
+    end
+end)
+    end)
+
+    Options.EspZombie:SetValue(false)
+    
+    
+ local ESP2 = false
+ 
+local Toggle = Tabs.Zombie:AddToggle("EspBoss", {Title = "Esp Boss", Default = false })
+
+    Toggle:OnChanged(function(bool)
+        ESP2 = bool
+
+spawn(function()
+    while wait(0.2) do
+        pcall(function()
+          local isBossFolder = game.Workspace:FindFirstChild("Map"):FindFirstChild("BossFolder")
+            if ESP2 and isBossFolder then
+                for i, v in pairs(game:GetService("Workspace").Map.BossFolder:GetChildren()) do
+                    if v:FindFirstChild('HumanoidRootPart') and not v:FindFirstChild("IsClone") then
+                        local evilHumanoid = v:FindFirstChild("Humanoid")  -- Change "Humanoid" to "EvilHumanoid"
+                        
+                        if not v:FindFirstChild("MobEap") then
+                            local BillboardGui = Instance.new("BillboardGui")
+                            local TextLabel = Instance.new("TextLabel")
+
+                            BillboardGui.Parent = v
+                            BillboardGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+                            BillboardGui.Active = true
+                            BillboardGui.Name = "MobEap"
+                            BillboardGui.AlwaysOnTop = true
+                            BillboardGui.LightInfluence = 1.000
+                            BillboardGui.Size = UDim2.new(0, 200, 0, 50)
+                            BillboardGui.StudsOffset = Vector3.new(0, 2.5, 0)
+
+                            TextLabel.Parent = BillboardGui
+                            TextLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+                            TextLabel.BackgroundTransparency = 1.000
+                            TextLabel.Size = UDim2.new(0, 200, 0, 50)
+                            TextLabel.TextScaled = false
+                            TextLabel.TextColor3 = Color3.fromRGB(255, 0, 0)
+                            TextLabel.Font = Enum.Font.GothamBold
+                            TextLabel.TextSize = 14  -- Adjust the text size to your preference
+
+                            v.MobEap = BillboardGui  -- Store the BillboardGui in MobEap for later use
+                        end
+
+                        local distance = math.floor((game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.HumanoidRootPart.Position).Magnitude)
+
+                        if evilHumanoid then
+                            local health = math.floor(evilHumanoid.Health)
+                            v.MobEap.TextLabel.Text = v.Name.." - "..distance.." M\nHealth: "..health
+                        else
+                            v.MobEap.TextLabel.Text = v.Name.." - "..distance.." M"
+                        end
+                    end
+                end
+            else
+                for i, v in pairs(game:GetService("Workspace").Map.BossFolder:GetChildren()) do
+                    if v:FindFirstChild("MobEap") then
+                        v.MobEap:Destroy()
+                    end
+                end
+            end
+        end)
+    end
+end)
+    end)
+
+    Options.EspBoss:SetValue(false)
+
+-- Settings
+
+Tabs.Settings:AddParagraph({
+        Title = "Save Config",
+        Content = "Save A Config"
+    })
+
+-- Save Manager
+SaveManager:SetLibrary(Fluent)
+InterfaceManager:SetLibrary(Fluent)
+
+SaveManager:SetIgnoreIndexes({})
+
+-- Save Folder
+InterfaceManager:SetFolder("UnknownHubXUniversal")
+SaveManager:SetFolder("UnknownHubXUniversal/ZombieUprising")
+
+InterfaceManager:BuildInterfaceSection(Tabs.Settings)
+SaveManager:BuildConfigSection(Tabs.Settings)
+
+Window:SelectTab(1)
+
+-- Auto Load Configuration
+SaveManager:LoadAutoloadConfig()
