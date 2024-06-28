@@ -732,8 +732,6 @@ Tabs.Misc:AddButton({
    end
 })
 
---[[
-
 Tabs.Misc:AddParagraph({
         Title = "Gun Attachments",
         Content = " "
@@ -741,7 +739,6 @@ Tabs.Misc:AddParagraph({
     
 local RemoteStringAttachments = "Update attachments"
 local UhhWhat = "Update Arms And Gun"
-local Huh = "Create Arms"
 local SelectedAmmunitions = ""
 local SelectedOptics = ""
 local SelectedSide = ""
@@ -765,8 +762,6 @@ local WhatTable = {}
 local ohNumber4 = 1
 
 game:GetService("ReplicatedStorage").RemoteEvent:FireServer(UhhWhat, GunNametxt, WhatTable, ohNumber4, RemoteUpdateAttach)
-
-game:GetService("ReplicatedStorage").RemoteEvent:FireServer(Huh, GunNametxt, WhatTable, RemoteUpdateAttach)
 end
 
     local Dropdown = Tabs.Misc:AddDropdown("SelectAmmunition", {
