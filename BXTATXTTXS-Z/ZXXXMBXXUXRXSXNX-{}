@@ -240,6 +240,8 @@ local Tabs = {
 
 local Player = game.Players.LocalPlayer
 
+---(Farming)----
+
 local function getNearestZombies()
     local nearest = nil
     local dist = math.huge
@@ -284,8 +286,10 @@ local function getNearestBosses()
     return nearest
 end
 
-local camera = workspace.CurrentCamera
+------(Aimbot)---------
 
+--[[
+ALTERNATIVE AIMBOT AND BUGGY
 function cameratracktoZombies()
     local character = Player.Character
     local humanoidRootPart = character:FindFirstChild("HumanoidRootPart")
@@ -355,6 +359,7 @@ function cameratracktoBoss()
 end)
     end
 end
+]]
 
 function autoammo()
 game:GetService("ReplicatedStorage").RemoteEvent:FireServer("Reloaded", "3")
@@ -551,7 +556,6 @@ Tabs.Main:AddParagraph({
         until fastswinging == false
     end)
 
-
 Tabs.Main:AddParagraph({
         Title = "Local Player",
         Content = " "
@@ -732,13 +736,93 @@ Tabs.Misc:AddButton({
    end
 })
 
+local SelectedPrimary = ""
+local SelectedSecondary = ""
+local SelectedTertiary = ""
+local SelectedMelee = ""
+local SelectedPerks = ""
+local SelectedGrenade = ""
+
+Tabs.Misc:AddParagraph({
+        Title = "Loadout Inventory",
+        Content = "It doesnt work, if u equip a other gun or unowned guns.\nWhen you rejoin the Loadout is updated"
+    })
+    
+local Input = Tabs.Misc:AddInput("Primary", {
+        Title = "Enter Primary",
+        Default = "",
+        Placeholder = "Gun",
+        Numeric = false, -- Only allows numbers
+        Finished = false, -- Only calls callback when you press enter
+        Callback = function(skin2txt)
+            skin2 = skin2txt
+        end
+    })
+    
+local Input = Tabs.Misc:AddInput("Secondary", {
+        Title = "Enter Secondary",
+        Default = "",
+        Placeholder = "Pistol",
+        Numeric = false, -- Only allows numbers
+        Finished = false, -- Only calls callback when you press enter
+        Callback = function(skin2txt)
+            skin2 = skin2txt
+        end
+    })
+    
+local Input = Tabs.Misc:AddInput("Tertiary", {
+        Title = "Enter Tertiary",
+        Default = "",
+        Placeholder = "Tertiary",
+        Numeric = false, -- Only allows numbers
+        Finished = false, -- Only calls callback when you press enter
+        Callback = function(skin2txt)
+            skin2 = skin2txt
+        end
+    })
+    
+local Input = Tabs.Misc:AddInput("Melee", {
+        Title = "Enter Melee",
+        Default = "",
+        Placeholder = "Saber",
+        Numeric = false, -- Only allows numbers
+        Finished = false, -- Only calls callback when you press enter
+        Callback = function(skin2txt)
+            skin2 = skin2txt
+        end
+    })
+    
+local Input = Tabs.Misc:AddInput("Perks", {
+        Title = "Enter Perks",
+        Default = "",
+        Placeholder = "Berserker",
+        Numeric = false, -- Only allows numbers
+        Finished = false, -- Only calls callback when you press enter
+        Callback = function(skin2txt)
+            skin2 = skin2txt
+        end
+    })
+    
+local Input = Tabs.Misc:AddInput("Grenade", {
+        Title = "Enter Grenade",
+        Default = "",
+        Placeholder = "Grenade",
+        Numeric = false, -- Only allows numbers
+        Finished = false, -- Only calls callback when you press enter
+        Callback = function(skin2txt)
+            skin2 = skin2txt
+        end
+    })
+    
+--[[
+
 Tabs.Misc:AddParagraph({
         Title = "Gun Attachments",
         Content = " "
     })
     
 local RemoteStringAttachments = "Update attachments"
-local UhhWhat = "Update Arms And Gun"
+-- local UhhWhat = "Update Arms And Gun"
 local SelectedAmmunitions = ""
 local SelectedOptics = ""
 local SelectedSide = ""
@@ -747,6 +831,7 @@ local SelectedBarrel = ""
 local SelectedGrip = ""
 
 function Updateattachment()
+
 local RemoteUpdateAttach = {
 	["Ammunition"] = SelectedAmmunitions,
 	["Optic"] = SelectedOptics,
@@ -758,10 +843,35 @@ local RemoteUpdateAttach = {
 
 game:GetService("ReplicatedStorage").RemoteEvent:FireServer(RemoteStringAttachments, GunNametxt, RemoteUpdateAttach)
 
-local WhatTable = {}
-local ohNumber4 = 1
+local gmt = getrawmetatable(game)
+setreadonly(gmt, false)
+local oldNamecall = gmt.__namecall
 
-game:GetService("ReplicatedStorage").RemoteEvent:FireServer(UhhWhat, GunNametxt, WhatTable, ohNumber4, RemoteUpdateAttach)
+gmt.__namecall = newcclosure(function(self, ...)
+    local Args = {...}
+    local method = getnamecallmethod()
+
+    if tostring(self) == "Framework" and tostring(method) == "Update attachments" then
+        if Args[1] == RemoteStringAttachments and Args[2] == GunNametxt and Args[3] == RemoteUpdateAttach then
+            return oldNamecall(self, ...)
+        end
+
+        Args[1] = RemoteStringAttachments
+        Args[2] = GunNametxt
+        Args[3] = RemoteUpdateAttach
+        return oldNamecall(self, unpack(Args))
+    end
+
+    return oldNamecall(self, ...)
+end)
+
+setreadonly(gmt, true)
+
+
+-- local WhatTable = {}
+-- local ohNumber4 = 1
+
+-- game:GetService("ReplicatedStorage").RemoteEvent:FireServer(UhhWhat, GunNametxt, WhatTable, ohNumber4, RemoteUpdateAttach)
 end
 
     local Dropdown = Tabs.Misc:AddDropdown("SelectAmmunition", {
@@ -837,6 +947,7 @@ Tabs.Misc:AddButton({
        Updateattachment()
    end
 })
+
 ]]
 
 Tabs.Misc:AddParagraph({
