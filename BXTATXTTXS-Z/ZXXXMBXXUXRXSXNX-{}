@@ -1440,94 +1440,76 @@ Tabs.Zombie:AddParagraph({
 
 local ESP = false
 
-local Toggle = Tabs.Zombie:AddToggle("EspZombie", { Title = "Esp Zombie", Default = false })
+local Toggle = Tabs.Zombie:AddToggle("EspZombie", {Title = "Esp Zombie", Default = false })
 
-Toggle:OnChanged(function(bool)
-    ESP = bool
+    Toggle:OnChanged(function(bool)
+ESP = bool
 
-    spawn(function()
-        while wait(0.2) do
-            pcall(function()
-                if ESP then
-                    for i, v in pairs(game:GetService("Workspace").Zombies:GetChildren()) do
-                        if v:FindFirstChild('HumanoidRootPart') and not v:FindFirstChild("IsClone") then
-                            local evilHumanoid = v:FindFirstChild("Humanoid") -- Change "Humanoid" to "EvilHumanoid"
+spawn(function()
+    while wait(0.2) do
+        pcall(function()
+            if ESP then
+                for i, v in pairs(game:GetService("Workspace").Zombies:GetChildren()) do
+                    if v:FindFirstChild('HumanoidRootPart') and not v:FindFirstChild("IsClone") then
+                        local evilHumanoid = v:FindFirstChild("Humanoid")  -- Change "Humanoid" to "EvilHumanoid"
+                        
+                        if not v:FindFirstChild("MobEap") then
+                            local BillboardGui = Instance.new("BillboardGui")
+                            local TextLabel = Instance.new("TextLabel")
+
+                            BillboardGui.Parent = v
+                            BillboardGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+                            BillboardGui.Active = true
+                            BillboardGui.Name = "MobEap"
+                            BillboardGui.AlwaysOnTop = true
+                            BillboardGui.LightInfluence = 1.000
+                            BillboardGui.Size = UDim2.new(0, 200, 0, 50)
+                            BillboardGui.StudsOffset = Vector3.new(0, 2.5, 0)
                             
-                            if not v:FindFirstChild("MobEap") then
-                                local BillboardGui = Instance.new("BillboardGui")
-                                local TextLabel = Instance.new("TextLabel")
+                            local frame = Instance.new("Frame")
+                            frame.ZIndex = 10
+                            frame.BackgroundTransparency = 0.3
+                            frame.Size = UDim2.new(3, 0, 3, 0)
+                            frame.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
+                            frame.Parent = BillboardGui
+                    
+                            local uiCorner = Instance.new("UICorner")
+                            uiCorner.CornerRadius = UDim.new(0.5, 0)
+                            uiCorner.Parent = frame
 
-                                BillboardGui.Parent = v
-                                BillboardGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
-                                BillboardGui.Active = true
-                                BillboardGui.Name = "MobEap"
-                                BillboardGui.AlwaysOnTop = true
-                                BillboardGui.LightInfluence = 1.000
-                                BillboardGui.Size = UDim2.new(0, 200, 0, 50)
-                                BillboardGui.StudsOffset = Vector3.new(0, 2.5, 0)
+                            TextLabel.Parent = BillboardGui
+                            TextLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+                            TextLabel.BackgroundTransparency = 1.000
+                            TextLabel.Size = UDim2.new(0, 200, 0, 50)
+                            TextLabel.TextScaled = false
+                            TextLabel.TextColor3 = Color3.fromRGB(0, 255, 0)
+                            TextLabel.Font = Enum.Font.GothamBold
+                            TextLabel.TextSize = 14  -- Adjust the text size to your preference
 
-                                TextLabel.Parent = BillboardGui
-                                TextLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-                                TextLabel.BackgroundTransparency = 1.000
-                                TextLabel.Size = UDim2.new(0, 200, 0, 50)
-                                TextLabel.TextScaled = false
-                                TextLabel.TextColor3 = Color3.fromRGB(0, 255, 0)
-                                TextLabel.Font = Enum.Font.GothamBold
-                                TextLabel.TextSize = 14 -- Adjust the text size to your preference
-
-                                v.MobEap = BillboardGui -- Store the BillboardGui in MobEap for later use
-                            end
-
-                            local distance = math.floor((game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.HumanoidRootPart.Position).Magnitude)
-
-                            if evilHumanoid then
-                                local health = math.floor(evilHumanoid.Health)
-                                v.MobEap.TextLabel.Text = v.Name.." - "..distance.." M\nHealth: "..health
-                            else
-                                v.MobEap.TextLabel.Text = v.Name.." - "..distance.." M"
-                            end
-
-                            -- Circle drawing logic
-                            if not v:FindFirstChild("ESP_Circle") then
-                                local circle = Drawing.new("Circle")
-                                circle.Color = Color3.fromRGB(0, 255, 0)
-                                circle.Thickness = 2
-                                circle.NumSides = 100
-                                circle.Radius = 50 -- Adjust the radius to your preference
-                                circle.Visible = true
-
-                                -- Set the position of the circle
-                                local rootPos = v.HumanoidRootPart.Position
-                                local screenPos, onScreen = workspace.CurrentCamera:WorldToViewportPoint(rootPos)
-
-                                circle.Position = Vector2.new(screenPos.X, screenPos.Y)
-                                v.ESP_Circle = circle
-                            end
-
-                            -- Update the position of the circle
-                            local rootPos = v.HumanoidRootPart.Position
-                            local screenPos, onScreen = workspace.CurrentCamera:WorldToViewportPoint(rootPos)
-
-                            if v:FindFirstChild("ESP_Circle") then
-                                v.ESP_Circle.Position = Vector2.new(screenPos.X, screenPos.Y)
-                            end
-
+                            v.MobEap = BillboardGui  -- Store the BillboardGui in MobEap for later use
                         end
-                    end
-                else
-                    for i, v in pairs(game:GetService("Workspace").Zombies:GetChildren()) do
-                        if v:FindFirstChild("MobEap") then
-                            v.MobEap:Destroy()
-                        end
-                        if v:FindFirstChild("ESP_Circle") then
-                            v.ESP_Circle:Remove()
+
+                        local distance = math.floor((game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.HumanoidRootPart.Position).Magnitude)
+
+                        if evilHumanoid then
+                            local health = math.floor(evilHumanoid.Health)
+                            v.MobEap.TextLabel.Text = v.Name.." - "..distance.." M\nHealth: "..health
+                        else
+                            v.MobEap.TextLabel.Text = v.Name.." - "..distance.." M"
                         end
                     end
                 end
-            end)
-        end
-    end)
+            else
+                for i, v in pairs(game:GetService("Workspace").Zombies:GetChildren()) do
+                    if v:FindFirstChild("MobEap") then
+                        v.MobEap:Destroy()
+                    end
+                end
+            end
+        end)
+    end
 end)
+    end)
 
     Options.EspZombie:SetValue(false)
     
@@ -1536,93 +1518,75 @@ end)
  
 local Toggle = Tabs.Zombie:AddToggle("EspBoss", {Title = "Esp Boss", Default = false })
 
-Toggle:OnChanged(function(bool)
-    ESP2 = bool
+    Toggle:OnChanged(function(bool)
+        ESP2 = bool
 
-    spawn(function()
-        while wait(0.2) do
-            pcall(function()
-                local isBossFolder = game.Workspace:FindFirstChild("Map"):FindFirstChild("BossFolder")
-                if ESP2 and isBossFolder then
-                    for i, v in pairs(game:GetService("Workspace").Map.BossFolder:GetChildren()) do
-                        if v:FindFirstChild('HumanoidRootPart') and not v:FindFirstChild("IsClone") then
-                            local evilHumanoid = v:FindFirstChild("Humanoid") -- Change "Humanoid" to "EvilHumanoid"
+spawn(function()
+    while wait(0.2) do
+        pcall(function()
+          local isBossFolder = game.Workspace:FindFirstChild("Map"):FindFirstChild("BossFolder")
+            if ESP2 and isBossFolder then
+                for i, v in pairs(game:GetService("Workspace").Map.BossFolder:GetChildren()) do
+                    if v:FindFirstChild('HumanoidRootPart') and not v:FindFirstChild("IsClone") then
+                        local evilHumanoid = v:FindFirstChild("Humanoid")  -- Change "Humanoid" to "EvilHumanoid"
+                        
+                        if not v:FindFirstChild("MobEap") then
+                            local BillboardGui = Instance.new("BillboardGui")
+                            local TextLabel = Instance.new("TextLabel")
+
+                            BillboardGui.Parent = v
+                            BillboardGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+                            BillboardGui.Active = true
+                            BillboardGui.Name = "MobEap"
+                            BillboardGui.AlwaysOnTop = true
+                            BillboardGui.LightInfluence = 1.000
+                            BillboardGui.Size = UDim2.new(0, 200, 0, 50)
+                            BillboardGui.StudsOffset = Vector3.new(0, 2.5, 0)
                             
-                            if not v:FindFirstChild("MobEap") then
-                                local BillboardGui = Instance.new("BillboardGui")
-                                local TextLabel = Instance.new("TextLabel")
+                            local frame = Instance.new("Frame")
+                            frame.ZIndex = 10
+                            frame.BackgroundTransparency = 0.3
+                            frame.Size = UDim2.new(3, 0, 3, 0)
+                            frame.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
+                            frame.Parent = BillboardGui
+                    
+                            local uiCorner = Instance.new("UICorner")
+                            uiCorner.CornerRadius = UDim.new(0.5, 0)
+                            uiCorner.Parent = frame
 
-                                BillboardGui.Parent = v
-                                BillboardGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
-                                BillboardGui.Active = true
-                                BillboardGui.Name = "MobEap"
-                                BillboardGui.AlwaysOnTop = true
-                                BillboardGui.LightInfluence = 1.000
-                                BillboardGui.Size = UDim2.new(0, 200, 0, 50)
-                                BillboardGui.StudsOffset = Vector3.new(0, 2.5, 0)
+                            TextLabel.Parent = BillboardGui
+                            TextLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+                            TextLabel.BackgroundTransparency = 1.000
+                            TextLabel.Size = UDim2.new(0, 200, 0, 50)
+                            TextLabel.TextScaled = false
+                            TextLabel.TextColor3 = Color3.fromRGB(255, 0, 0)
+                            TextLabel.Font = Enum.Font.GothamBold
+                            TextLabel.TextSize = 14  -- Adjust the text size to your preference
 
-                                TextLabel.Parent = BillboardGui
-                                TextLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-                                TextLabel.BackgroundTransparency = 1.000
-                                TextLabel.Size = UDim2.new(0, 200, 0, 50)
-                                TextLabel.TextScaled = false
-                                TextLabel.TextColor3 = Color3.fromRGB(255, 0, 0)
-                                TextLabel.Font = Enum.Font.GothamBold
-                                TextLabel.TextSize = 14 -- Adjust the text size to your preference
-
-                                v.MobEap = BillboardGui -- Store the BillboardGui in MobEap for later use
-                            end
-
-                            local distance = math.floor((game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.HumanoidRootPart.Position).Magnitude)
-
-                            if evilHumanoid then
-                                local health = math.floor(evilHumanoid.Health)
-                                v.MobEap.TextLabel.Text = v.Name.." - "..distance.." M\nHealth: "..health
-                            else
-                                v.MobEap.TextLabel.Text = v.Name.." - "..distance.." M"
-                            end
-
-                            -- Circle drawing logic
-                            if not v:FindFirstChild("ESP_Circle") then
-                                local circle = Drawing.new("Circle")
-                                circle.Color = Color3.fromRGB(255, 0, 0)
-                                circle.Thickness = 2
-                                circle.NumSides = 100
-                                circle.Radius = 50 -- Adjust the radius to your preference
-                                circle.Visible = true
-
-                                -- Set the position of the circle
-                                local rootPos = v.HumanoidRootPart.Position
-                                local screenPos, onScreen = workspace.CurrentCamera:WorldToViewportPoint(rootPos)
-
-                                circle.Position = Vector2.new(screenPos.X, screenPos.Y)
-                                v.ESP_Circle = circle
-                            end
-
-                            -- Update the position of the circle
-                            local rootPos = v.HumanoidRootPart.Position
-                            local screenPos, onScreen = workspace.CurrentCamera:WorldToViewportPoint(rootPos)
-
-                            if v:FindFirstChild("ESP_Circle") then
-                                v.ESP_Circle.Position = Vector2.new(screenPos.X, screenPos.Y)
-                            end
-
+                            v.MobEap = BillboardGui  -- Store the BillboardGui in MobEap for later use
                         end
-                    end
-                else
-                    for i, v in pairs(game:GetService("Workspace").Map.BossFolder:GetChildren()) do
-                        if v:FindFirstChild("MobEap") then
-                            v.MobEap:Destroy()
-                        end
-                        if v:FindFirstChild("ESP_Circle") then
-                            v.ESP_Circle:Remove()
+
+                        local distance = math.floor((game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.HumanoidRootPart.Position).Magnitude)
+
+                        if evilHumanoid then
+                            local health = math.floor(evilHumanoid.Health)
+                            v.MobEap.TextLabel.Text = v.Name.." - "..distance.." M\nHealth: "..health
+                        else
+                            v.MobEap.TextLabel.Text = v.Name.." - "..distance.." M"
                         end
                     end
                 end
-            end)
-        end
-    end)
+            else
+                for i, v in pairs(game:GetService("Workspace").Map.BossFolder:GetChildren()) do
+                    if v:FindFirstChild("MobEap") then
+                        v.MobEap:Destroy()
+                    end
+                end
+            end
+        end)
+    end
 end)
+    end)
 
     Options.EspBoss:SetValue(false)
 
