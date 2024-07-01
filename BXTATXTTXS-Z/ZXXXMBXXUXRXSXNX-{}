@@ -216,7 +216,7 @@ local SaveManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/d
 local InterfaceManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/Unknownproootest/Unknown-TreasureQuest/Alt/Test_FixMinimizeKey"))()
 
 local Window = Fluent:CreateWindow({
-    Title = "Unknown Hub X Zombie Uprising V1.5 (BETA) ",
+    Title = "Unknown Hub X Zombie Uprising V2.1 ",
     SubTitle = "Made by Unknownproooolucky",
     TabWidth = 160,
     Size = UDim2.fromOffset(580, 460),
@@ -1513,7 +1513,7 @@ local Input = Tabs.Zombie:AddInput("DistanceHitPart", {
 -- Beta Tester Only
     
 Tabs.Zombie:AddParagraph({
-        Title = "Projectiles Shoot",
+        Title = "Bullet Aura",
         Content = " "
     })
 
@@ -1580,7 +1580,7 @@ local function ShootNearestBosses()
     return nearest
 end
 
-local ToggleZombie = Tabs.Zombie:AddToggle("ShootZombies", {Title = "Projectiles Shoot Zombies", Default = false })
+local ToggleZombie = Tabs.Zombie:AddToggle("ShootZombies", {Title = "Bullet Aura Zombies", Default = false })
 
 ToggleZombie:OnChanged(function(bool)
     ShootZombies = bool
@@ -1603,7 +1603,7 @@ ToggleZombie:OnChanged(function(bool)
     end
 end)
 
-local ToggleBoss = Tabs.Zombie:AddToggle("ShootBoss", {Title = "Projectiles Shoot Boss", Default = false })
+local ToggleBoss = Tabs.Zombie:AddToggle("ShootBoss", {Title = "Bullet Aura Boss (BUG)", Default = false })
 
 ToggleBoss:OnChanged(function(bool)
     ShootBoss = bool
@@ -1627,7 +1627,7 @@ ToggleBoss:OnChanged(function(bool)
 end)
 
 local Input = Tabs.Zombie:AddInput("DistanceShooting", {
-    Title = "Distance to Shooting",
+    Title = "Bullet Aura Range",
     Default = 25,
     Placeholder = "Number",
     Numeric = true, -- Only allows numbers
