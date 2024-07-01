@@ -1245,7 +1245,7 @@ local ZombieRootPart = game.Workspace.Zombies:FindFirstChild("HumanoidRootPart")
 
 while AutoFarmZombies and wait(0.1) do
 if getNearestZombies() then
-Player.Character.HumanoidRootPart.CFrame = (getNearestZombies().HumanoidRootPart.CFrame * CFrame.new(0, 1.75, 4.5))
+Player.Character.HumanoidRootPart.CFrame = (getNearestZombies().HumanoidRootPart.CFrame * CFrame.new(0, 0.2, 4.5))
 KillAura()
 --- MXDMG() (makes lag no sense)
 end
@@ -1269,7 +1269,7 @@ while AutoFarmBoss and wait(0.1) do
 if getNearestBosses() or bossRootPart then
 AutoFarmZombies = false
 KillAura2()
-Player.Character.HumanoidRootPart.CFrame = (getNearestBosses().HumanoidRootPart.CFrame * CFrame.new(0, 3, 0.4))
+Player.Character.HumanoidRootPart.CFrame = (getNearestBosses().HumanoidRootPart.CFrame * CFrame.new(0, 1, 0.4))
 -- MXDMG() (makes lag no sense)
 else
 AutoFarmZombies = true
