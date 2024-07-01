@@ -1152,8 +1152,6 @@ Tabs.Farms:AddParagraph({
         Content = "Make Sure Enable the God Mode .\n"
     })
 
--- Explode to zombies
-
 function KillAura()
 
 local function getNearestZombies2()
@@ -1178,9 +1176,9 @@ end
 
 local ohTable1 = {
 	["SourcePart"] = game.Players.LocalPlayer.Character.HumanoidRootPart,
-	["TargetPos"] = getNearestZombies2().HumanoidRootPart.Position + Vector3.new(0, 0, -1),
+	["TargetPos"] = getNearestZombies2().Head.Position + Vector3.new(0, 0, -0.3),
 	["Model"] = game.Players.LocalPlayer.Character,
-	["SourcePos"] = getNearestZombies2().HumanoidRootPart.Position,
+	["SourcePos"] = getNearestZombies2().Head.Position,
 	["ModelType"] = "Character",
 	["PlayerName"] = game.Players.LocalPlayer.Name,
 	["WeaponName"] = "M16A3 SW"
@@ -1217,7 +1215,7 @@ end
 
 local ohTable1 = {
 	["SourcePart"] = game.Players.LocalPlayer.Character.HumanoidRootPart,
-	["TargetPos"] = getNearestBosse2().HumanoidRootPart.Position + Vector3.new(0, 0, -1),
+	["TargetPos"] = getNearestBosse2().HumanoidRootPart.Position + Vector3.new(0, 0, -0.4),
 	["Model"] = game.Players.LocalPlayer.Character,
 	["SourcePos"] = getNearestBosse2().HumanoidRootPart.Position,
 	["ModelType"] = "Character",
@@ -1511,13 +1509,141 @@ local Input = Tabs.Zombie:AddInput("DistanceHitPart", {
     DistanceZ = tonumber(value) or 25
         end
     })
+    
+-- Beta Tester Only
+    
+Tabs.Zombie:AddParagraph({
+        Title = "Projectiles Shoot",
+        Content = " "
+    })
+
+-- Distances Position
+local RangeShoot = 25
+local DistancetoShootX = 25
+local DistancetoShootY = 15
+local DistancetoShootZ = 25
+local ShootZombies = false
+local ShootBoss = false
+
+local function ShootNearestZombies()
+    local nearest = nil
+    local distX = DistancetoShootX
+    local distY = DistancetoShootY
+    local distZ = DistancetoShootZ
+    local ZombiesList = game:GetService("Workspace").Zombies:GetChildren()
+
+    if next(ZombiesList) ~= nil then
+        for _, v in pairs(ZombiesList) do
+            if v:FindFirstChild("Head") and v:FindFirstChild("Humanoid") and not v:FindFirstChild("IsClone") then
+                local playerPos = game.Players.LocalPlayer.Character.HumanoidRootPart.Position
+                local zombiePos = v.Head.Position
+                local dx = math.abs(playerPos.X - zombiePos.X)
+                local dy = math.abs(playerPos.Y - zombiePos.Y)
+                local dz = math.abs(playerPos.Z - zombiePos.Z)
+                
+                if dx < distX and dy < distY and dz < distZ then
+                    local m = (playerPos - zombiePos).Magnitude
+                    if m < RangeShoot and m < distX and m < distY and m < distZ then
+                        distX = dx
+                        distY = dy
+                        distZ = dz
+                        nearest = v
+                    end
+                end
+            end
+        end
+    end
+
+    return nearest
+end
+
+local function ShootNearestBosses()
+    local nearest = nil
+    local dist = math.huge
+    local isBossFolder = game.Workspace:FindFirstChild("Map"):FindFirstChild("BossFolder")
+
+    if isBossFolder then
+        local BossList = game:GetService("Workspace").Map.BossFolder:GetChildren()
+
+        if next(BossList) ~= nil then
+            for _, v in pairs(BossList) do
+                if v:FindFirstChild("Head") and v:FindFirstChild("Humanoid") and not v:FindFirstChild("IsClone") then
+                    local m = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.Head.Position).Magnitude
+                    if m < dist then
+                        dist = m
+                        nearest = v
+                    end
+                end
+            end
+        end
+    end
+
+    return nearest
+end
+
+local ToggleZombie = Tabs.Zombie:AddToggle("ShootZombies", {Title = "Projectiles Shoot Zombies", Default = false })
+
+ToggleZombie:OnChanged(function(bool)
+    ShootZombies = bool
+    while ShootZombies and wait(0.1) do
+        local nearestZombie = ShootNearestZombies()
+        
+        if nearestZombie then
+            local shootData = {
+                ["SourcePart"] = game.Players.LocalPlayer.Character.HumanoidRootPart,
+                ["TargetPos"] = nearestZombie.Head.Position + Vector3.new(0, 0, -0.3),
+                ["Model"] = game.Players.LocalPlayer.Character,
+                ["SourcePos"] = nearestZombie.Head.Position,
+                ["ModelType"] = "Character",
+                ["PlayerName"] = game.Players.LocalPlayer.Name,
+                ["WeaponName"] = "M16A3 SW"
+            }
+
+            game:GetService("ReplicatedStorage").RemoteEventF:FireServer(shootData)
+        end
+    end
+end)
+
+local ToggleBoss = Tabs.Zombie:AddToggle("ShootBoss", {Title = "Projectiles Shoot Boss", Default = false })
+
+ToggleBoss:OnChanged(function(bool)
+    ShootBoss = bool
+    while ShootBoss and wait(0.1) do
+        local nearestBoss = ShootNearestBosses()
+        
+        if nearestBoss then
+            local shootData = {
+                ["SourcePart"] = game.Players.LocalPlayer.Character.HumanoidRootPart,
+                ["TargetPos"] = nearestBoss.Head.Position + Vector3.new(0, 0, -0.4),
+                ["Model"] = game.Players.LocalPlayer.Character,
+                ["SourcePos"] = nearestBoss.Head.Position,
+                ["ModelType"] = "Character",
+                ["PlayerName"] = game.Players.LocalPlayer.Name,
+                ["WeaponName"] = "M16A3 SW"
+            }
+
+            game:GetService("ReplicatedStorage").RemoteEventF:FireServer(shootData)
+        end
+    end
+end)
+
+local Input = Tabs.Zombie:AddInput("DistanceShooting", {
+        Title = "Distance to Shooting",
+        Default = 25,
+        Placeholder = "Number",
+        Numeric = false, -- Only allows numbers
+        Finished = false, -- Only calls callback when you press enter
+        Callback = function(Value)
+    RangeShoot = tonumber(value) or 25
+    DistancetoShootX = tonumber(value) or 25
+    DistancetoShootZ = tonumber(value) or 25
+        end
+    })
 
 Tabs.Zombie:AddParagraph({
         Title = "ESP",
         Content = " "
     })
-
-local ESP = false
 
 local ESP = false
 
