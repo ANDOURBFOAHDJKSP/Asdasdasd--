@@ -1562,21 +1562,6 @@ ToggleZombie:OnChanged(function(bool)
                 ["WeaponName"] = "PzF 3"
             }
 
---[[ Patched by ServerSide Script            
-            local explosion = Instance.new("Explosion")
-            explosion.Position = nearestZombie.Head.Position
-            explosion.BlastRadius = 4
-            explosion.BlastPressure = 1
-            explosion.ExplosionType = Enum.ExplosionType.NoCraters
-            explosion.Parent = game.Workspace
-       
-explosion.Hit:Connect(function(hitPart)
-        if hitPart and hitPart:IsA("BasePart") then
-            hitPart:BreakJoints()
-        end
-    end)
-]]
-
             game:GetService("ReplicatedStorage").RemoteEventF:FireServer(shootData)
         end
     end
