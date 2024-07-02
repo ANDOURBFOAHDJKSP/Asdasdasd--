@@ -535,7 +535,7 @@ end)
     wait(10)
         spawn(NoBoltReload)
        end
-    until NoReloader == false
+    until NoBolt == false
     end)
 
 
@@ -1589,13 +1589,13 @@ ToggleZombie:OnChanged(function(bool)
         
         if nearestZombie then
             local shootData = {
-                ["SourcePart"] = game.Players.LocalPlayer.Character.HumanoidRootPart,
-                ["TargetPos"] = nearestZombie.Head.Position + Vector3.new(0, -0.2, 0.3),
-                ["Model"] = game.Players.LocalPlayer.Character,
-                ["SourcePos"] = nearestZombie.Head.Position,
                 ["ModelType"] = "Character",
+                ["TargetPos"] = nearestZombie.Head.Position + Vector3.new(0, -0.2, -0.5),
+                ["Model"] = game.Players.LocalPlayer.Character,
                 ["PlayerName"] = game.Players.LocalPlayer.Name,
-                ["WeaponName"] = "M16A3 SW"
+                ["SourcePos"] = nearestZombie.Head.Position,
+                ["SourcePart"] = game.Players.LocalPlayer.Character.HumanoidRootPart, 
+                ["WeaponName"] = "PzF 3"
             }
 
             game:GetService("ReplicatedStorage").RemoteEventF:FireServer(shootData)
@@ -1603,7 +1603,7 @@ ToggleZombie:OnChanged(function(bool)
     end
 end)
 
-local ToggleBoss = Tabs.Zombie:AddToggle("ShootBoss", {Title = "Bullet Aura Boss (BUG)", Default = false })
+local ToggleBoss = Tabs.Zombie:AddToggle("ShootBoss", {Title = "Bullet Aura Boss", Default = false })
 
 ToggleBoss:OnChanged(function(bool)
     ShootBoss = bool
@@ -1611,14 +1611,17 @@ ToggleBoss:OnChanged(function(bool)
         local nearestBoss = ShootNearestBosses()
         
         if nearestBoss then
+        nearestBoss.Humanoid.Health = 100 -- fix error
+        nearestBoss.Humanoid.MaxHealth = 100 -- fix error
+        
             local shootData = {
                 ["SourcePart"] = game.Players.LocalPlayer.Character.HumanoidRootPart,
-                ["TargetPos"] = nearestBoss.Head.Position + Vector3.new(0, -0.3, 0.4),
+                ["TargetPos"] = nearestBoss.Head.Position + Vector3.new(0, -0.3, -0.4),
                 ["Model"] = game.Players.LocalPlayer.Character,
                 ["SourcePos"] = nearestBoss.Head.Position,
                 ["ModelType"] = "Character",
                 ["PlayerName"] = game.Players.LocalPlayer.Name,
-                ["WeaponName"] = "M16A3 SW"
+                ["WeaponName"] = "PzF 3"
             }
 
             game:GetService("ReplicatedStorage").RemoteEventF:FireServer(shootData)
