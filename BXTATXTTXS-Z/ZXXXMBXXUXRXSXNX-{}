@@ -1188,45 +1188,6 @@ game:GetService("ReplicatedStorage").RemoteEventF:FireServer(ohTable1)
 wait(0.1) -- anti lag
 end
 
-function KillAura2()
-local function getNearestBosse2()
-    local nearest = nil
-    local dist = 30
-    local isBossFolder = game.Workspace:FindFirstChild("Map"):FindFirstChild("BossFolder")
-
-    if isBossFolder then
-        local BossList = game:GetService("Workspace").Map.BossFolder:GetChildren()
-
-        if next(BossList) ~= nil then
-            for i, v in pairs(BossList) do
-                if v:FindFirstChild("HumanoidRootPart") and v:FindFirstChild("Humanoid") and not v:FindFirstChild("IsClone") then
-                        local m = (Player.Character.HumanoidRootPart.Position - v.HumanoidRootPart.Position).Magnitude
-                        if m < dist then
-                            dist = m
-                            nearest = v
-                        end
-                    end
-                end
-            end
-        end
-
-    return nearest
-end
-
-local ohTable1 = {
-	["SourcePart"] = game.Players.LocalPlayer.Character.HumanoidRootPart,
-	["TargetPos"] = getNearestBosse2().HumanoidRootPart.Position + Vector3.new(0, -0.3, 0.4),
-	["Model"] = game.Players.LocalPlayer.Character,
-	["SourcePos"] = getNearestBosse2().HumanoidRootPart.Position,
-	["ModelType"] = "Character",
-	["PlayerName"] = game.Players.LocalPlayer.Name,
-	["WeaponName"] = "M16A3 SW"
-}
-
-game:GetService("ReplicatedStorage").RemoteEventF:FireServer(ohTable1)
-wait(0.1) -- anti lag
-end
-
 local AutoFarmZombies = false
 local AutoFarmBoss = false
 
@@ -1268,7 +1229,6 @@ local bossRootPart = game.Workspace:FindFirstChild("Map"):FindFirstChild("BossFo
 while AutoFarmBoss and wait(0.1) do
 if getNearestBosses() or bossRootPart then
 AutoFarmZombies = false
-KillAura2()
 Player.Character.HumanoidRootPart.CFrame = (getNearestBosses().HumanoidRootPart.CFrame * CFrame.new(0, 1, 0.4))
 -- MXDMG() (makes lag no sense)
 else
@@ -1477,7 +1437,7 @@ HitPart2 = booloh
                             BypassCFrameKick.Parent = v
                             clone = BypassCFrameKick
                         end
-                        local offset = charpart.CFrame:VectorToWorldSpace(Vector3.new(0, 0, -6))
+                        local offset = charpart.CFrame:VectorToWorldSpace(Vector3.new(0, 0, -8))
                         clone.Position = charpart.Position + offset
                             if ShowHitPart then
                              clone.Transparency = 0.7
@@ -1511,7 +1471,7 @@ local Input = Tabs.Zombie:AddInput("DistanceHitPart", {
     })
     
 -- Beta Tester Only
-    
+ 
 Tabs.Zombie:AddParagraph({
         Title = "Bullet Aura",
         Content = " "
@@ -1582,9 +1542,11 @@ end
 
 local ToggleZombie = Tabs.Zombie:AddToggle("ShootZombies", {Title = "Bullet Aura Zombies", Default = false })
 
+local DelayShoot = 0.1
+
 ToggleZombie:OnChanged(function(bool)
     ShootZombies = bool
-    while ShootZombies and wait(0.1) do
+    while ShootZombies and wait(DelayShoot) do
         local nearestZombie = ShootNearestZombies()
         
         if nearestZombie then
@@ -1598,12 +1560,27 @@ ToggleZombie:OnChanged(function(bool)
                 ["WeaponName"] = "PzF 3"
             }
 
+--[[ Patched by ServerSide Script            
+            local explosion = Instance.new("Explosion")
+            explosion.Position = nearestZombie.Head.Position
+            explosion.BlastRadius = 4
+            explosion.BlastPressure = 1
+            explosion.ExplosionType = Enum.ExplosionType.NoCraters
+            explosion.Parent = game.Workspace
+       
+explosion.Hit:Connect(function(hitPart)
+        if hitPart and hitPart:IsA("BasePart") then
+            hitPart:BreakJoints()
+        end
+    end)
+]]
+
             game:GetService("ReplicatedStorage").RemoteEventF:FireServer(shootData)
         end
     end
 end)
 
-local ToggleBoss = Tabs.Zombie:AddToggle("ShootBoss", {Title = "Bullet Aura Boss", Default = false })
+local ToggleBoss = Tabs.Zombie:AddToggle("ShootBoss", {Title = "Bullet Aura Boss (BUG)", Default = false })
 
 ToggleBoss:OnChanged(function(bool)
     ShootBoss = bool
@@ -1636,9 +1613,20 @@ local Input = Tabs.Zombie:AddInput("DistanceShooting", {
     Numeric = true, -- Only allows numbers
     Finished = true, -- Calls callback when you press enter
     Callback = function(value)
-            RangeShoot = tonumber(value) or tonumber(value) or 25
+            RangeShoot = tonumber(value) or 25
             DistancetoShootX = tonumber(value) or 25
             DistancetoShootZ = tonumber(value) or 25
+    end
+})
+
+local Input = Tabs.Zombie:AddInput("DelayShoot", {
+    Title = "Delay Shoot",
+    Default = 0.1,
+    Placeholder = "Number",
+    Numeric = true, -- Only allows numbers
+    Finished = true, -- Calls callback when you press enter
+    Callback = function(value)         
+            DelayShoot = tonumber(value) or 0.1
     end
 })
 
