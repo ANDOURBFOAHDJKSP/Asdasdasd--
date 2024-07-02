@@ -1188,20 +1188,6 @@ game:GetService("ReplicatedStorage").RemoteEventF:FireServer(ohTable1)
 wait(0.1) -- anti lag
 end
 
-local ohTable1 = {
-	["SourcePart"] = game.Players.LocalPlayer.Character.HumanoidRootPart,
-	["TargetPos"] = getNearestBosse2().HumanoidRootPart.Position + Vector3.new(0, -0.3, 0.4),
-	["Model"] = game.Players.LocalPlayer.Character,
-	["SourcePos"] = getNearestBosse2().HumanoidRootPart.Position,
-	["ModelType"] = "Character",
-	["PlayerName"] = game.Players.LocalPlayer.Name,
-	["WeaponName"] = "M16A3 SW"
-}
-
-game:GetService("ReplicatedStorage").RemoteEventF:FireServer(ohTable1)
-wait(0.1) -- anti lag
-end
-
 local AutoFarmZombies = false
 local AutoFarmBoss = false
 
