@@ -785,13 +785,52 @@ Tabs.Misc:AddButton({
    end
 })
 
---[[
-
 Tabs.Misc:AddParagraph({
         Title = "Gun Attachments",
         Content = " "
     })
     
+ local updateloop = false
+    
+function loadattachments()
+-- List of IntValue names
+local intValueNames = {"Angled", "Potato", "Slanted", "Ergonomic", "Stubby", "Vertical", "Advanced", "AP RIP", "RIP", "Armor Piercing", "Hollow Point", "FMJ", "Laser Pointer Green", "Laser Pointer Blue", "Laser Pointer Green", "Compensator", "Suppressor", "Muzzle Brake", "Long Suppressor", "XL Muzzle Break", "Extended", "Speed Loader", "Ext. Speed Loader", "Extra Large", "XL Speed Loader", "XL Magazine", "XXL Speed Loader", "Cobra RDS", "Coyote RDS", "HD-33", "Reflex RDS", "HOLO", "PKA-S", "PSO-1", "ACOG", "PKA", "PRISMA", "M145", "CL", "PKS-07", "RS", "BSL"}
+
+-- Get the parent folder
+local ownedFolder = game.ReplicatedStorage.Stats[game.Players.LocalPlayer.Name]:FindFirstChild("Owned")
+
+-- Check if the parent folder exists
+if ownedFolder then
+    for _, folder in ipairs(ownedFolder:GetChildren()) do
+        if folder:IsA("Folder") then
+            for _, intValueName in ipairs(intValueNames) do
+                -- Check if the IntValue already exists in the subfolder
+                if not folder:FindFirstChild(intValueName) then
+                    local intValue = Instance.new("IntValue")
+                    intValue.Name = intValueName
+                    intValue.Value = 0 -- Set initial value to 0, change if needed
+                 if folder:FindFirstChild("Attachments") then
+                    intValue.Parent = folder.Attachments
+                  end
+                end
+            end
+        end
+    end
+else
+    warn("Failed Unlocking")
+end
+end
+    
+Tabs.Misc:AddButton({
+        Title = "Unlock all Attachments",
+        Description = "(NOT PERMANENT)",
+        Callback = function()
+       spawn(loadattachments)
+   end
+})
+    
+ --[[
+
 local RemoteStringAttachments = "Update attachments"
 -- local UhhWhat = "Update Arms And Gun"
 local SelectedAmmunitions = ""
@@ -802,7 +841,7 @@ local SelectedBarrel = ""
 local SelectedGrip = ""
 
 function Updateattachment()
-
+loadattachments()
 local RemoteUpdateAttach = {
 	["Ammunition"] = SelectedAmmunitions,
 	["Optic"] = SelectedOptics,
@@ -813,31 +852,6 @@ local RemoteUpdateAttach = {
 }
 
 game:GetService("ReplicatedStorage").RemoteEvent:FireServer(RemoteStringAttachments, GunNametxt, RemoteUpdateAttach)
-
-local gmt = getrawmetatable(game)
-setreadonly(gmt, false)
-local oldNamecall = gmt.__namecall
-
-gmt.__namecall = newcclosure(function(self, ...)
-    local Args = {...}
-    local method = getnamecallmethod()
-
-    if tostring(self) == "Framework" and tostring(method) == "Update attachments" then
-        if Args[1] == RemoteStringAttachments and Args[2] == GunNametxt and Args[3] == RemoteUpdateAttach then
-            return oldNamecall(self, ...)
-        end
-
-        Args[1] = RemoteStringAttachments
-        Args[2] = GunNametxt
-        Args[3] = RemoteUpdateAttach
-        return oldNamecall(self, unpack(Args))
-    end
-
-    return oldNamecall(self, ...)
-end)
-
-setreadonly(gmt, true)
-
 
 -- local WhatTable = {}
 -- local ohNumber4 = 1
@@ -891,7 +905,7 @@ end
     
     local Dropdown = Tabs.Misc:AddDropdown("SelectBarrel", {
         Title = "Select Barrel",
-        Values = {"Compensator", "Suppressor", "Muzzle Brake", "Long Suppressor", "XL Muzzle Brake"},
+        Values = {"Compensator", "Suppressor", "Muzzle Break", "Long Suppressor", "XL Muzzle Break"},
         Multi = false,
         Default = 1,
     })
@@ -902,7 +916,7 @@ end
     
     local Dropdown = Tabs.Misc:AddDropdown("SelectGrip", {
         Title = "Select Grip",
-        Values = {"Angled", "Potato", "Slanted", "Ergonomic", "Stubby", "Vertical", "Advance"},
+        Values = {"Angled", "Potato", "Slanted", "Ergonomic", "Stubby", "Vertical", "Advanced"},
         Multi = false,
         Default = 1,
     })
@@ -1149,14 +1163,14 @@ local normalgrav = workspace.Gravity
 
 Tabs.Farms:AddParagraph({
         Title = "Farm Zombies",
-        Content = "Make Sure Enable the God Mode .\n"
+        Content = "Make Sure Enable the God Mode .\n and also Bring Boss Hitpart"
     })
 
 function KillAura()
 
 local function getNearestZombies2()
     local nearest = nil
-    local dist = 30
+    local dist = 25
     local ZombiesList = game:GetService("Workspace").Zombies:GetChildren()
 
     if next(ZombiesList) ~= nil then
@@ -1174,9 +1188,10 @@ local function getNearestZombies2()
     return nearest
 end
 
+if getNearestZombies2() then
 local ohTable1 = {
 	["SourcePart"] = game.Players.LocalPlayer.Character.HumanoidRootPart,
-	["TargetPos"] = getNearestZombies2().Head.Position + Vector3.new(0, -0.2, 0.3),
+	["TargetPos"] = getNearestZombies2().Head.Position,
 	["Model"] = game.Players.LocalPlayer.Character,
 	["SourcePos"] = getNearestZombies2().Head.Position,
 	["ModelType"] = "Character",
@@ -1187,6 +1202,21 @@ local ohTable1 = {
 game:GetService("ReplicatedStorage").RemoteEventF:FireServer(ohTable1)
 wait(0.1) -- anti lag
 end
+end
+
+function FarmzombiesV2()
+if game:GetService("Workspace").Ignore:FindFirstChild("Rewards"):FindFirstChild("Carepackage") then
+game.Players.LocalPlayer.Character.Humanoid.HipHeight = 0
+for i,v in pairs(game:GetService("Workspace").Ignore.Rewards:GetChildren()) do
+      if v:FindFirstChildWhichIsA("Part") then
+        game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(v.MainPart.Position)
+         end
+     end
+else
+     game.Players.LocalPlayer.Character.Humanoid.HipHeight = 10
+     KillAura()
+      end
+end
 
 local AutoFarmZombies = false
 local AutoFarmBoss = false
@@ -1196,22 +1226,25 @@ local Toggle = Tabs.Farms:AddToggle("FarmZombies", {Title = "Auto Farm Zombies",
 Toggle:OnChanged(function(boolX1)
 AutoFarmZombies = boolX1
 
-if AutoFarmZombies then
-workspace.Gravity = 0
-else
-	workspace.Gravity = normalgrav
-end
-
 local ZombieRootPart = game.Workspace.Zombies:FindFirstChild("HumanoidRootPart")
 
 while AutoFarmZombies and wait(0.1) do
+--[[ meh buggy
 if getNearestZombies() then
 Player.Character.HumanoidRootPart.CFrame = (getNearestZombies().HumanoidRootPart.CFrame * CFrame.new(0, 0.2, 4.5))
 KillAura()
 --- MXDMG() (makes lag no sense)
 end
+]]
+if AutoFarmZombies then
+FarmzombiesV2()
+else
+game.Players.LocalPlayer.Character.Humanoid.HipHeight = 0
+end
 end
 end)
+
+--[[ meh buggy
 
 local Toggle = Tabs.Farms:AddToggle("AutoCollectPowerUps", {Title = "Auto Farm Bosses", Default = false })
 
@@ -1236,6 +1269,8 @@ AutoFarmZombies = true
 end
 end
 end)
+
+]]
 
 Tabs.Farms:AddParagraph({
         Title = "Auto Collection",
@@ -1469,10 +1504,6 @@ local Input = Tabs.Zombie:AddInput("DistanceHitPart", {
     DistanceZ = tonumber(value) or 25
         end
     })
-    
--- Beta Tester Only
- 
---[[ Privated by Owner
  
 Tabs.Zombie:AddParagraph({
         Title = "Bullet Aura",
@@ -1554,18 +1585,34 @@ ToggleZombie:OnChanged(function(bool)
         if nearestZombie then
             local shootData = {
                 ["ModelType"] = "Character",
-                ["TargetPos"] = nearestZombie.Head.Position + Vector3.new(0, -0.2, -0.5),
+                ["TargetPos"] = nearestZombie.Head.Position,
                 ["Model"] = game.Players.LocalPlayer.Character,
                 ["PlayerName"] = game.Players.LocalPlayer.Name,
                 ["SourcePos"] = nearestZombie.Head.Position,
-                ["SourcePart"] = game.Players.LocalPlayer.Character.HumanoidRootPart, 
+                ["SourcePart"] = game.Players.LocalPlayer.Character.Torso, 
                 ["WeaponName"] = "PzF 3"
             }
+
+            --[[Patched by ServerSide Script
+            local explosion = Instance.new("Explosion")
+            explosion.Position = nearestZombie.Head.Position
+            explosion.BlastRadius = 4
+            explosion.BlastPressure = 1
+            explosion.ExplosionType = Enum.ExplosionType.NoCraters
+            explosion.Parent = game.Workspace
+       
+            explosion.Hit:Connect(function(hitPart)
+                if hitPart and hitPart:IsA("BasePart") then
+                    hitPart:BreakJoints()
+                end
+            end)]]
 
             game:GetService("ReplicatedStorage").RemoteEventF:FireServer(shootData)
         end
     end
 end)
+
+--[[
 
 local ToggleBoss = Tabs.Zombie:AddToggle("ShootBoss", {Title = "Bullet Aura Boss (BUG)", Default = false })
 
@@ -1593,6 +1640,8 @@ ToggleBoss:OnChanged(function(bool)
     end
 end)
 
+]]
+
 local Input = Tabs.Zombie:AddInput("DistanceShooting", {
     Title = "Bullet Aura Range",
     Default = 25,
@@ -1606,6 +1655,8 @@ local Input = Tabs.Zombie:AddInput("DistanceShooting", {
     end
 })
 
+--[[
+
 local Input = Tabs.Zombie:AddInput("DelayShoot", {
     Title = "Delay Shoot",
     Default = 0.1,
@@ -1616,7 +1667,6 @@ local Input = Tabs.Zombie:AddInput("DelayShoot", {
             DelayShoot = tonumber(value) or 0.1
     end
 })
-
 ]]
 
 Tabs.Zombie:AddParagraph({
