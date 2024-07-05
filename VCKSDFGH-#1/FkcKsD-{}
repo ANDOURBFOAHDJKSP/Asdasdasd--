@@ -814,13 +814,6 @@ Fluent:Notify({
         SubContent = " ", -- Optional
         Duration = 10 -- Set to nil to make the notification not disappear
     })
-
-Fluent:Notify({
-        Title = "Guesttester_1 Message",
-        Content = "Hey, Everyone ive been busy for 3 days so i decided to stop making scripts and i need a rest, see ya in 2 months :)",
-        SubContent = "Unknownproooolucky and Idk_Roblox Will Working in this script", -- Optional
-        Duration = 10 -- Set to nil to make the notification not disappear
-    })
     
 local Window = Fluent:CreateWindow({
     Title = "Unknown Hub X TQ ",
@@ -1138,11 +1131,12 @@ Options.AutoMedkits:SetValue(false)
 
 end
  
---[[
 Tabs.Main:AddParagraph({
         Title = "Farming Events",
         Content = " "
     })
+
+--[[
 
 local Toggle1 = Tabs.Main:AddToggle("WarriorEventFarn", {Title = "Auto Kill Event Mobs (Warrior)", Default = false })
 
@@ -1186,6 +1180,8 @@ Toggle1:OnChanged(function(State)
         end
     end)
 end)
+
+]]
 
 function killeventmobs()
 if workspace:FindFirstChild("Dungeon") then
@@ -1246,16 +1242,18 @@ spawn(function()
             local player, cha, plr, hum = getPlayer()
             local dungeon, rooms, enemies, shrines = getDungeon()
             for _, v in pairs(rooms:GetDescendants()) do
-                if v:FindFirstChildWhichIsA("TouchTransmitter", true) and v.Name == "Trigger" then
-                    v.Primary.CFrame = plr.CFrame
+            --    if v:FindFirstChildWhichIsA("TouchTransmitter", true) and v.Name == "Trigger" then
+                --    v.Primary.CFrame = plr.CFrame
                     killeventmobs()
                     wait()
-                end
+         --       end
             end
             wait()
         end
     end)
 end)
+
+--[[
 
 -- Initialize the global variable
 _G.TPG3 = false
