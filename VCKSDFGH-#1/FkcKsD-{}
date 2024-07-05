@@ -1194,7 +1194,7 @@ if workspace:FindFirstChild("Dungeon") then
            if damage.Name == Skill or damage.Name == Skill1 or damage:FindFirstChildWhichIsA("TouchTransmitter") then
            local distance = (monster.HumanoidRootPart.Position - damage.Position).Magnitude
            
-           if distance <= 1000 then
+           if distance <= 100000000 then
              monster:FindFirstChild("HumanoidRootPart").CFrame = CFrame.new(damage.position + Vector3.new(0, 0, 1.5))
                monster:FindFirstChild("HumanoidRootPart").Position = damage.position + Vector3.new(0, 0, 1.5)
                monster:FindFirstChild("HumanoidRootPart").Anchored = true
