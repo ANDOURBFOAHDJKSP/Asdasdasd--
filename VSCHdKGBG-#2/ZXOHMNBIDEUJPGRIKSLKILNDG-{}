@@ -1328,8 +1328,10 @@ local normalgrav = workspace.Gravity
 
 Tabs.Farms:AddParagraph({
         Title = "Farm Zombies",
-        Content = "Make Sure Enable the God Mode .\n and also Bring Boss Hitpart"
+        Content = "(CLOSED)"
     })
+
+--[[
 
 function KillAura()
 
@@ -1394,13 +1396,11 @@ AutoFarmZombies = boolX1
 local ZombieRootPart = game.Workspace.Zombies:FindFirstChild("HumanoidRootPart")
 
 while AutoFarmZombies and wait(0.1) do
---[[ meh buggy
 if getNearestZombies() then
 Player.Character.HumanoidRootPart.CFrame = (getNearestZombies().HumanoidRootPart.CFrame * CFrame.new(0, 0.2, 4.5))
 KillAura()
 --- MXDMG() (makes lag no sense)
 end
-]]
 if AutoFarmZombies then
 FarmzombiesV2()
 else
@@ -1408,8 +1408,6 @@ game.Players.LocalPlayer.Character.Humanoid.HipHeight = 0
 end
 end
 end)
-
---[[ meh buggy
 
 local Toggle = Tabs.Farms:AddToggle("AutoCollectPowerUps", {Title = "Auto Farm Bosses", Default = false })
 
