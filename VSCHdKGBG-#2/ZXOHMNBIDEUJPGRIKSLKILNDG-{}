@@ -1331,110 +1331,6 @@ Tabs.Farms:AddParagraph({
         Content = "(CLOSED)"
     })
 
---[[
-
-function KillAura()
-
-local function getNearestZombies2()
-    local nearest = nil
-    local dist = 25
-    local ZombiesList = game:GetService("Workspace").Zombies:GetChildren()
-
-    if next(ZombiesList) ~= nil then
-        for i, v in pairs(ZombiesList) do
-            if v:FindFirstChild("HumanoidRootPart") and v:FindFirstChild("Humanoid") and not v:FindFirstChild("IsClone") then
-                    local m = (Player.Character.HumanoidRootPart.Position - v.HumanoidRootPart.Position).Magnitude
-                    if m < dist then
-                        dist = m
-                        nearest = v
-                    end
-                end
-            end
-        end
-
-    return nearest
-end
-
-if getNearestZombies2() then
-local ohTable1 = {
-	["SourcePart"] = game.Players.LocalPlayer.Character.HumanoidRootPart,
-	["TargetPos"] = getNearestZombies2().Head.Position,
-	["Model"] = game.Players.LocalPlayer.Character,
-	["SourcePos"] = getNearestZombies2().Head.Position,
-	["ModelType"] = "Character",
-	["PlayerName"] = game.Players.LocalPlayer.Name,
-	["WeaponName"] = "M16A3 SW"
-}
-
-game:GetService("ReplicatedStorage").RemoteEventF:FireServer(ohTable1)
-wait(0.1) -- anti lag
-end
-end
-
-function FarmzombiesV2()
-if game:GetService("Workspace").Ignore:FindFirstChild("Rewards"):FindFirstChild("Carepackage") then
-game.Players.LocalPlayer.Character.Humanoid.HipHeight = 0
-for i,v in pairs(game:GetService("Workspace").Ignore.Rewards:GetChildren()) do
-      if v:FindFirstChildWhichIsA("Part") then
-        game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(v.MainPart.Position)
-         end
-     end
-else
-     game.Players.LocalPlayer.Character.Humanoid.HipHeight = 10
-     KillAura()
-      end
-end
-
-local AutoFarmZombies = false
-local AutoFarmBoss = false
-
-local Toggle = Tabs.Farms:AddToggle("FarmZombies", {Title = "Auto Farm Zombies", Default = false })
-
-Toggle:OnChanged(function(boolX1)
-AutoFarmZombies = boolX1
-
-local ZombieRootPart = game.Workspace.Zombies:FindFirstChild("HumanoidRootPart")
-
-while AutoFarmZombies and wait(0.1) do
-if getNearestZombies() then
-Player.Character.HumanoidRootPart.CFrame = (getNearestZombies().HumanoidRootPart.CFrame * CFrame.new(0, 0.2, 4.5))
-KillAura()
---- MXDMG() (makes lag no sense)
-end
-if AutoFarmZombies then
-FarmzombiesV2()
-else
-game.Players.LocalPlayer.Character.Humanoid.HipHeight = 0
-end
-end
-end)
-
-local Toggle = Tabs.Farms:AddToggle("AutoCollectPowerUps", {Title = "Auto Farm Bosses", Default = false })
-
-Toggle:OnChanged(function(boolX2)
-AutoFarmBoss = boolX2
-
-if AutoFarmBoss then
-workspace.Gravity = 0
-else
-	workspace.Gravity = normalgrav
-end
-
-local bossRootPart = game.Workspace:FindFirstChild("Map"):FindFirstChild("BossFolder")
-
-while AutoFarmBoss and wait(0.1) do
-if getNearestBosses() or bossRootPart then
-AutoFarmZombies = false
-Player.Character.HumanoidRootPart.CFrame = (getNearestBosses().HumanoidRootPart.CFrame * CFrame.new(0, 1, 0.4))
--- MXDMG() (makes lag no sense)
-else
-AutoFarmZombies = true
-end
-end
-end)
-
-]]
-
 Tabs.Farms:AddParagraph({
         Title = "Auto Collection",
         Content = " "
@@ -1675,7 +1571,7 @@ Tabs.Zombie:AddParagraph({
 
 local RangeShoot = 25
 local DistancetoShootX = 25
-local DistancetoShootY = 15
+local DistancetoShootY = 25
 local DistancetoShootZ = 25
 local ShootZombies = false
 local ShootBoss = false
@@ -1712,7 +1608,9 @@ local function ShootNearestZombies()
     return nearest
 end
 
-local ToggleZombie = Tabs.Zombie:AddToggle("ShootZombies", {Title = "Bullet Aura Zombies", Default = false })
+-- NEW VERSION AND WORKS
+
+local ToggleZombie = Tabs.Zombie:AddToggle("ShootZombies", {Title = "Bullet Aura (Advanced)", Default = false })
 
 local DelayShoot = 0.1
 
@@ -1722,34 +1620,47 @@ ToggleZombie:OnChanged(function(bool)
         local nearestZombie = ShootNearestZombies()
         
         if nearestZombie then
-            local shootData = {
-                ["ModelType"] = "Character",
-                ["TargetPos"] = nearestZombie.Head.Position,
-                ["Model"] = game.Players.LocalPlayer.Character,
-                ["PlayerName"] = game.Players.LocalPlayer.Name,
-                ["SourcePos"] = Vector3.new(0, 0, 0),
-                ["SourcePart"] = game.Players.LocalPlayer.Character.HumanoidRootPart,
-                ["WeaponName"] = "PzF 3"
-            }
+            local rayOrigin = game.Players.LocalPlayer.Character.Head.Position
+            local rayDirection = (nearestZombie.Head.Position - rayOrigin).unit * 100000
+            local ray = Ray.new(rayOrigin, rayDirection)
+            
+            local raycastParams = RaycastParams.new()
+            raycastParams.FilterType = Enum.RaycastFilterType.Blacklist
+            raycastParams.FilterDescendantsInstances = {game.Players.LocalPlayer.Character}
 
-            --[[Patched by ServerSide Script
-            local explosion = Instance.new("Explosion")
-            explosion.Position = nearestZombie.Head.Position
-            explosion.BlastRadius = 4
-            explosion.BlastPressure = 1
-            explosion.ExplosionType = Enum.ExplosionType.NoCraters
-            explosion.Parent = game.Workspace
-       
-            explosion.Hit:Connect(function(hitPart)
-                if hitPart and hitPart:IsA("BasePart") then
-                    hitPart:BreakJoints()
-                end
-            end)]]
+            local raycastResult = workspace:Raycast(rayOrigin, rayDirection, raycastParams)
 
-            game:GetService("ReplicatedStorage").RemoteEventF:FireServer(shootData)
+            if raycastResult and raycastResult.Instance:IsDescendantOf(nearestZombie) then
+                local shootData = {
+                    ["ModelType"] = "Character",
+                    ["TargetPos"] = raycastResult.Position,
+                    ["Model"] = game.Players.LocalPlayer.Character,
+                    ["PlayerName"] = game.Players.LocalPlayer.Name,
+                    ["SourcePos"] = rayOrigin,
+                    ["SourcePart"] = {},
+                    ["WeaponName"] = "PzF 3"
+                }
+
+                --[[Patched by ServerSide Script
+                local explosion = Instance.new("Explosion")
+                explosion.Position = nearestZombie.Head.Position
+                explosion.BlastRadius = 4
+                explosion.BlastPressure = 1
+                explosion.ExplosionType = Enum.ExplosionType.NoCraters
+                explosion.Parent = game.Workspace
+
+                explosion.Hit:Connect(function(hitPart)
+                    if hitPart and hitPart:IsA("BasePart") then
+                        hitPart:BreakJoints()
+                    end
+                end]]
+
+                game:GetService("ReplicatedStorage").RemoteEventF:FireServer(shootData)
+            end
         end
     end
 end)
+
 
 local Input = Tabs.Zombie:AddInput("DistanceShooting", {
     Title = "Bullet Aura Range",
@@ -1760,6 +1671,7 @@ local Input = Tabs.Zombie:AddInput("DistanceShooting", {
     Callback = function(value)
             RangeShoot = tonumber(value) or 25
             DistancetoShootX = tonumber(value) or 25
+            DistancetoShootY = tonumber(value) or 25
             DistancetoShootZ = tonumber(value) or 25
     end
 })
