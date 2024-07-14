@@ -573,20 +573,20 @@ function Tween(table, callback)
     local distance = (targetPart.Position - plr.Position).Magnitude
 
     local movementSpeed = 0
-
+    
     if SlowTween then
         if distance < 150 then
-            movementSpeed = 20
+            movementSpeed = 10
         elseif distance < 200 then
-            movementSpeed = 25
+            movementSpeed = 10
         elseif distance < 300 then
-            movementSpeed = 30
+            movementSpeed = 15
         elseif distance < 500 then
-            movementSpeed = 35
+            movementSpeed = 20
         elseif distance < 1000 then
-            movementSpeed = 40
+            movementSpeed = 25
         else
-            movementSpeed = 40
+            movementSpeed = 30
         end
     end
 
@@ -1133,10 +1133,8 @@ end
  
 Tabs.Main:AddParagraph({
         Title = "Farming Events",
-        Content = " "
+        Content = ""
     })
-
---[[
 
 local Toggle1 = Tabs.Main:AddToggle("WarriorEventFarn", {Title = "Auto Kill Event Mobs (Warrior)", Default = false })
 
@@ -1153,8 +1151,7 @@ Toggle1:OnChanged(function(State)
     end)
     spawn(function()
         while wait() and Settings.Re do 
-            pcall(function()
-            
+            pcall(function()            
                 ReplicatedStorage.Shared.Remotes.Data.ClaimPrizes:FireServer()
                 for i, v in pairs(Workspace:GetChildren()) do
                     if v:FindFirstChild("FinishRoom", true) and v:FindFirstChild("FinishRoom", true):FindFirstChild("Hitbox", true) then
@@ -1179,9 +1176,65 @@ Toggle1:OnChanged(function(State)
             wait()
         end
     end)
+    spawn(function()
+        while wait() and Settings.Re do
+            local player, cha, plr, hum = getPlayer()
+            local dungeon, rooms, enemies, shrines = getDungeon()
+            for _, v in pairs(rooms:GetDescendants()) do
+                if v:FindFirstChildWhichIsA("TouchTransmitter", true) and v.Name == "UnderwaterTeleporter" then
+                    v.Start.CFrame = plr.CFrame
+                    wait(3)
+                    v.Start:Destroy()
+                end
+            end
+            wait()
+        end
+    end)
 end)
 
-]]
+local function findBossRoomInWorkspace(workspace)
+    local function searchInChildren(parent)
+        for _, child in pairs(parent:GetChildren()) do
+            if child:IsA("Model") and child.Name == "BossRoom" then
+                local BossPart = child:FindFirstChild("PlayerSpawn")
+                if BossPart then
+                    return BossPart
+                end
+            end
+
+            local foundPart = searchInChildren(child)
+            if foundPart then
+                return foundPart
+            end
+        end
+
+        return nil
+    end
+
+    return searchInChildren(workspace)
+end
+
+local function MoveOutFromBossRoom()
+    wait(1)
+    local PlayerSpawn = findBossRoomInWorkspace(workspace)
+    if PlayerSpawn then
+        local targetPosition = PlayerSpawn.Position - Vector3.new(0, 0, -30)
+        local movementSpeed = 13
+
+        local TweenService = game:GetService("TweenService")
+        local HumanoidRootPart = game.Players.LocalPlayer.Character.HumanoidRootPart
+
+        local distance = (targetPosition - HumanoidRootPart.Position).Magnitude
+        local duration = distance / movementSpeed
+
+        local tweenInfo = TweenInfo.new(duration, Enum.EasingStyle.Linear)
+        local tween = TweenService:Create(HumanoidRootPart, tweenInfo, {
+            CFrame = CFrame.new(targetPosition)
+        })
+
+        tween:Play()
+    end
+end
 
 function killeventmobs()
 if workspace:FindFirstChild("Dungeon") then
@@ -1194,7 +1247,7 @@ if workspace:FindFirstChild("Dungeon") then
            if damage.Name == Skill or damage.Name == Skill1 or damage:FindFirstChildWhichIsA("TouchTransmitter") then
            local distance = (monster.HumanoidRootPart.Position - damage.Position).Magnitude
            
-           if distance <= 100000000 then
+           if distance <= 1000 then
              monster:FindFirstChild("HumanoidRootPart").CFrame = CFrame.new(damage.position + Vector3.new(0, 0, 1.5))
                monster:FindFirstChild("HumanoidRootPart").Position = damage.position + Vector3.new(0, 0, 1.5)
                monster:FindFirstChild("HumanoidRootPart").Anchored = true
@@ -1236,7 +1289,15 @@ game:GetService("RunService").RenderStepped:Connect(function()
                 RunService.RenderStepped:Wait()
             end
         end)
-    end)  
+    end) 
+    
+spawn(function()
+     while wait(0.1) and WizardEventFarm do
+          killeventmobs()
+        MoveOutFromBossRoom()
+    end
+ end)
+  --[[
 spawn(function()
         while wait(0.1) and WizardEventFarm do
             local player, cha, plr, hum = getPlayer()
@@ -1244,9 +1305,25 @@ spawn(function()
             for _, v in pairs(rooms:GetDescendants()) do
             --    if v:FindFirstChildWhichIsA("TouchTransmitter", true) and v.Name == "Trigger" then
                 --    v.Primary.CFrame = plr.CFrame
-                    killeventmobs()
+                   MoveOutFromBossRoom()
+                    matareventosmobs()
                     wait()
          --       end
+            end
+            wait()
+        end
+    end)
+   ]]
+    spawn(function()
+        while wait() and WizardEventFarm do
+            local player, cha, plr, hum = getPlayer()
+            local dungeon, rooms, enemies, shrines = getDungeon()
+            for _, v in pairs(rooms:GetDescendants()) do
+                if v:FindFirstChildWhichIsA("TouchTransmitter", true) and v.Name == "UnderwaterTeleporter" then
+                    v.Start.CFrame = plr.CFrame
+                    wait(3)
+                    v.Start:Destroy()
+                end
             end
             wait()
         end
@@ -2467,8 +2544,10 @@ end
     Toggle:OnChanged(function(State)
 NoClipx = State
 repeat
+if NoClipx then
    Noclip()
        wait(0.1)
+        end
        until not NoClipx == true
     end)
 
@@ -2719,7 +2798,7 @@ Tabs.FarmSettings:AddParagraph({
     
 local TweenSpeed = Tabs.FarmSettings:AddDropdown("TweenSpeedType", {
         Title = "Tween Calculation Speed",
-        Values = {"Slow (20-40)", "Normal (30-50)", "Fast (40-60)", "Malicious (50-70)"},
+        Values = {"Slow (5)", "Normal (30-50)", "Fast (40-60)", "Malicious (50-70)"},
         Multi = false,
         Default = 2,
     })
@@ -2727,11 +2806,23 @@ local TweenSpeed = Tabs.FarmSettings:AddDropdown("TweenSpeedType", {
 TweenSpeed:OnChanged(function(Type)
     if Type == "Slow (20-40)" then
         SlowTween = Type
+        NormalTween = false
+        FastTween = false
+        MaliciousTween = false
     elseif Type == "Normal (30-50)" then
+        SlowTween = false
         NormalTween = Type
+        FastTween = false
+        MaliciousTween = false
     elseif Type == "Fast (40-60)" then
+        SlowTween = false
+        NormalTween = false
         FastTween = Type
+        MaliciousTween = false
     elseif Type == "Malicious (50-70)" then
+        SlowTween = false
+        NormalTween = false
+        FastTween = false
         MaliciousTween = Type
     end
 end)
@@ -3567,11 +3658,3 @@ Window:SelectTab(1)
 
 -- Auto Load Configuration
 SaveManager:LoadAutoloadConfig()
-
-print("Changed SimulationRaduis")
-
-game:GetService("RunService").RenderStepped:Connect(function()
-    sethiddenproperty(game:GetService("Players").LocalPlayer, 'SimulationRadius', math.huge)
-    sethiddenproperty(game:GetService("Players").LocalPlayer, 'MaximumSimulationRadius', math.huge)
-    RunService.RenderStepped:Wait()
-end)
