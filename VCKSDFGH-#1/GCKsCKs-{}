@@ -299,7 +299,7 @@ local dungeonraid = {"Wave Defense Dungeon", "Ancient Jungle Dungeon", "Coral Ki
 "Santa's Workshop Dungeon", "Ice Palace Dungeon", "Frenzy Factory Dungeon", "Fiery Fortress Dungeon", "Danger Depths Dungeon", "Poison Prison Dungeon",
 "Smog Sanctum Dungeon", "Missing Map Dungeon", "Brightest Beach Dungeon", "Spookiest Mansion Dungeon"}
 
-local questrequest = require(game:GetService("Players").LocalPlayer.PlayerScripts.Shared.Modules.Pages.Quests)
+local questrequest = require(game:GetService("Players").LocalPlayer.PlayerScripts:WaitForChild("Shared"):WaitForChild("Modules"):WaitForChild("Pages"):WaitForChild("Quests"))
 local questslot1 = questrequest["_quest_slots"][1]["_quest_info"].Name
 local questslot2 = questrequest["_quest_slots"][2]["_quest_info"].Name
 local QuestDiffculty = "Easy"
@@ -349,6 +349,7 @@ game:GetService("ReplicatedStorage").Lobby.Remotes.StartGame:FireServer()
 end
 
 function AutoQuest_1()
+spawn(function()
 writefile("UnknownHubXUniversal/TreasureQuest/AutoQuestConfig.txt", "NormalQuest")
 if questslot1 == "Wave Defense Bosses" or questslot1 == "Wave Defense Dungeon" or questslot1 == "Wave Defense Waves" or questslot1 == "Wave Defense Dungeon Monster Kills" then
 game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Wave Defense", "Wave Defense", "Classic", "Solo", 1);
@@ -569,11 +570,11 @@ if questslot2 == "Daily Dungeon Bosses" or questslot2 == "Daily Dungeon Dungeon"
 game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Daily Dungeon", QuestDiffculty, "Endless", "Solo", 1);
 writefile("UnknownHubXUniversal/TreasureQuest/AutoQuestConfig.txt", "NormalQuest")
 end
-
+end)
 end
 
 function AutoQuest_2()
-
+spawn(function()
 if questslot1 == "Sweetie" or questslot1 == "Horseman" or questslot1 == "Obsidian" or questslot1 == "Blaze" or questslot1 == "Peppermint" or questslot1 == "Overlord" or questslot1 == "Star Guardian" or questslot1 == "Frost" or questslot1 == "Miniboss Master" or questslot1 == "Brute" or questslot1 == "Voltage" or questslot1 == "Greenback" or questslot1 == "Witch" or questslot1 == "Reaper" then
 game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Ancient Jungle", QuestDiffculty, "Minibosses", "Solo", 1);
 writefile("UnknownHubXUniversal/TreasureQuest/AutoQuestConfig.txt", "NormalQuest")
@@ -747,11 +748,11 @@ if questslot1 == "Shopper" or questslot2 == "Shopper" then
         end
     end
 end
-
+end)
 end
 
 function AutoQuestCombo()
-
+spawn(function()
 if questslot1 == "Sweetie Miniboss Kills" or questslot1 == "Horseman Miniboss Kills" or questslot1 == "Obsidian Miniboss Kills" or questslot1 == "Blaze Miniboss Kills" or questslot1 == "Peppermint Miniboss Kills" or questslot1 == "Overlord Miniboss Kills" or questslot1 == "Star Guardian Miniboss Kills" or questslot1 == "Frost Miniboss Kills" or questslot1 == "Miniboss Master" or questslot1 == "Brute Miniboss Kills" or questslot1 == "Voltage Miniboss Kills" or questslot1 == "Greenback Miniboss Kills" or questslot1 == "Witch Miniboss Kills" or questslot1 == "Reaper Miniboss Kills" or questslot1 == "Miniboss Kills" or questslot1 == "Miniboss Master" then
 if questslot2 == "Sweetie Miniboss Kills" or questslot2 == "Horseman Miniboss Kills" or questslot2 == "Obsidian Miniboss Kills" or questslot2 == "Blaze Miniboss Kills" or questslot2 == "Peppermint Miniboss Kills" or questslot2 == "Overlord Miniboss Kills" or questslot2 == "Star Guardian Miniboss Kills" or questslot2 == "Frost Miniboss Kills" or questslot2 == "Miniboss Master" or questslot2 == "Brute Miniboss Kills" or questslot2 == "Voltage Miniboss Kills" or questslot2 == "Greenback Miniboss Kills" or questslot2 == "Witch Miniboss Kills" or questslot2 == "Reaper Miniboss Kills" or questslot1 == "Miniboss Kills" or questslot2 == "Miniboss Master" then
 writefile("UnknownHubXUniversal/TreasureQuest/AutoQuestConfig.txt", "ComboQuest")
@@ -1325,7 +1326,7 @@ game:GetService("ReplicatedStorage").Lobby.Remotes.CreateSquad:FireServer("Brigh
 writefile("UnknownHubXUniversal/TreasureQuest/AutoQuestConfig.txt", "ComboQuest")
 end
 end
-
+end)
 end
 
 function skipmissingquest()
@@ -1356,13 +1357,6 @@ Fluent:Notify({
         Title = "Quick Optimzer",
         Content = "Done!",
         SubContent = "", -- Optional
-        Duration = 10 -- Set to nil to make the notification not disappear
-    })
-
-Fluent:Notify({
-        Title = "Guesttester_1 Message",
-        Content = "Hey, Everyone ive been busy for 3 days so i decided to stop making scripts and i need a rest, see ya in 2 months :)",
-        SubContent = "Unknownproooolucky and Idk_Roblox Will Working in this script", -- Optional
         Duration = 10 -- Set to nil to make the notification not disappear
     })
     
