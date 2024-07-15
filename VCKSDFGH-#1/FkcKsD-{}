@@ -532,13 +532,14 @@ function getShrines()
     return target
 end
 
-function pressE()
-    game:service('VirtualInputManager'):SendKeyEvent(true, "E", false, game)
+function pressKey()
+    game:GetService("VirtualInputManager"):SendKeyEvent(true, "E", false, game)
+    game:GetService("VirtualInputManager"):SendKeyEvent(true, "F", false, game)
 end
 
 function collectShrines(shrine)
 if shrine.Primary then
-    spawn(pressE)
+    spawn(pressKey)
     Tween({
         target = shrine,
         targetPart = shrine.Primary,
