@@ -1495,6 +1495,7 @@ local Toggle = Tabs.Farms:AddToggle("AutoCollectCarePackage", {Title = "Presents
 Toggle:OnChanged(function(bool8)
 AutoCollectPresents = bool8
 while AutoCollectPresents and wait(0.1) do
+if game:GetService("Workspace"):FindFirstChild("Map") and game:GetService("Workspace"):FindFirstChild("Map"):FindFirstChild("Decorations") then
    for i, v  in pairs(game:GetService("Workspace").Map.Decorations:GetDescendants()) do
         if v:FindFirstChildWhichIsA("TouchTransmitter") then
               firetouchinterest(v, game.Players.LocalPlayer.Character.HumanoidRootPart, 0)
@@ -1503,6 +1504,7 @@ while AutoCollectPresents and wait(0.1) do
             end
          end
      end
+    end
 end)
 
 local UnknownOpen = "Open C"
