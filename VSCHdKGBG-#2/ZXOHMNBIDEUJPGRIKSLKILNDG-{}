@@ -164,25 +164,25 @@ end
 print("-- Unknown Hub X 3/4: Exploit Support...")
 
 if not require then
-    return game.Players.LocalPlayer:Kick("Your Exploit doesn't support: require(path)")
+    return game:GetService("Players").LocalPlayer:Kick("Your Exploit doesn't support: require(path)")
 else
 print("Supported require()")
 end
 
 if not firetouchinterest  then
-    return game.Players.LocalPlayer:Kick("Your Exploit doesn't support: firetouchinterest()")
+    return game:GetService("Players").LocalPlayer:Kick("Your Exploit doesn't support: firetouchinterest()")
 else
 print("Supported firetouchinterest()")
 end
 
 if not setfpscap or setfpscap(500) then
-    return game.Players.LocalPlayer:Kick("Your Exploit doesn't support: setfpscap()")
+    return game:GetService("Players").LocalPlayer:Kick("Your Exploit doesn't support: setfpscap()")
 else
 print("Supported setfpscap()")
 end
 
 if not setfflag then
-    return game.Players.LocalPlayer:Kick("Your Exploit doesn't support: setfflag()")
+    return game:GetService("Players").LocalPlayer:Kick("Your Exploit doesn't support: setfflag()")
 else
 print("Supported setfflag()")
 end
@@ -216,7 +216,7 @@ local SaveManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/d
 local InterfaceManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/Unknownproootest/Unknown-TreasureQuest/Alt/Test_FixMinimizeKey"))()
 
 local Window = Fluent:CreateWindow({
-    Title = "Unknown Hub X Zombie Uprising V2.1 ",
+    Title = "Unknown Hub X Zombie Uprising V2.2 (1B VISITS) ",
     SubTitle = "Made by Unknownproooolucky",
     TabWidth = 160,
     Size = UDim2.fromOffset(580, 460),
@@ -238,7 +238,7 @@ local Tabs = {
 
 -- Main
 
-local Player = game.Players.LocalPlayer
+local Player = game:GetService("Players").LocalPlayer
 
 ---(Farming)----
 
@@ -265,7 +265,7 @@ end
 local function getNearestBosses()
     local nearest = nil
     local dist = math.huge
-    local isBossFolder = game.Workspace:FindFirstChild("Map"):FindFirstChild("BossFolder")
+    local isBossFolder = game:GetService("Workspace"):FindFirstChild("Map"):FindFirstChild("BossFolder")
 
     if isBossFolder then
         local BossList = game:GetService("Workspace").Map.BossFolder:GetChildren()
@@ -383,6 +383,17 @@ function MXDMG()
      end)
 end
 
+function MXDMG2()
+pcall(function() 
+   for i, v in pairs(getgc(true)) do
+       if type(v) == 'table' and rawget(v, 'magsize') then
+            v.vdamage = 10000
+            v.vdamage2 = 10000
+              end
+          end
+     end)
+end
+
 function NoBoltReload()
     pcall(function()
             for i,v in pairs(getgc(true)) do
@@ -432,6 +443,46 @@ for i,v in pairs(getgc(true)) do
    end
 end
 end)
+end
+
+function FastFiringV2()
+local spread1 = {
+  Increase = 0,
+  Decrease = 0,
+  Max = 0,
+  Min = 0
+}
+
+local rec = {
+  Tilt = { 0, 0 },
+  Side = { 0, 0 },
+  Vertical = { 0, 0 },
+  Back = { 0, 0 },
+  Aimed = 0,
+  FirstShot = 0
+}
+
+pcall(function()
+for i,v in pairs(getgc(true)) do
+   if type(v) == 'table' and rawget(v, 'magsize') then
+         v.magsize = math.huge
+         v.storedammo = math.huge
+         v.rpm = math.huge
+         v.spread = spread1
+         v.recoil = rec
+         v.Rocket = true
+         v.velocity = 200
+         v.vpenetration = 600
+         v.mode = "Rocket"
+         v.VisibleRocket = true
+         v.vdamage = 10000
+         v.vdamage2 = 10000
+         v.radius = 50
+         v.TracerPart = "Tracer_RocketS"
+         v.gravity = 196
+            end
+        end
+    end)
 end
 
 function NoReloadAnims()
@@ -556,7 +607,7 @@ Tabs.Main:AddParagraph({
         until fastswinging == false
     end)
 
-if game.Players.LocalPlayer.Name == "alladd17" or game.Players.LocalPlayer.Name == "Peleeelallee" or game.Players.LocalPlayer.Name == "Guilfordy_sagalol" then
+if game:GetService("Players").LocalPlayer.Name == "alladd17" or game:GetService("Players").LocalPlayer.Name == "Peleeelallee" or game:GetService("Players").LocalPlayer.Name == "Guilfordy_sagalol" then
 
 Tabs.Main:AddParagraph({
         Title = "Trolls",
@@ -566,7 +617,7 @@ Tabs.Main:AddParagraph({
  local function ShootNearestBosses()
     local nearest = nil
     local dist = math.huge
-    local isBossFolder = game.Workspace:FindFirstChild("Map"):FindFirstChild("BossFolder")
+    local isBossFolder = game:GetService("Workspace"):FindFirstChild("Map"):FindFirstChild("BossFolder")
 
     if isBossFolder then
         local BossList = game:GetService("Workspace").Map.BossFolder:GetChildren()
@@ -574,7 +625,7 @@ Tabs.Main:AddParagraph({
         if next(BossList) ~= nil then
             for _, v in pairs(BossList) do
                 if v:FindFirstChild("Head") and v:FindFirstChild("Humanoid") and not v:FindFirstChild("IsClone") then
-                    local m = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.Head.Position).Magnitude
+                    local m = (game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.Position - v.Head.Position).Magnitude
                     if m < dist then
                         dist = m
                         nearest = v
@@ -591,7 +642,7 @@ end
 
 ToggleBoss:OnChanged(function(bool)
     ShootBoss = bool
-    while ShootBoss and wait(0.1) do
+    while ShootBoss and wait(0.03) do
         local nearestBoss = ShootNearestBosses()
         
         if nearestBoss then
@@ -599,12 +650,12 @@ ToggleBoss:OnChanged(function(bool)
         nearestBoss.Humanoid.MaxHealth = 100 -- fix error
         
             local shootData = {
-                ["SourcePart"] = game.Players.LocalPlayer.Character.HumanoidRootPart,
+                ["SourcePart"] = game:GetService("Players").LocalPlayer.Character.HumanoidRootPart,
                 ["TargetPos"] = nearestBoss.Head.Position + Vector3.new(0, -0.3, -0.4),
-                ["Model"] = game.Players.LocalPlayer.Character,
+                ["Model"] = game:GetService("Players").LocalPlayer.Character,
                 ["SourcePos"] = nearestBoss.Head.Position,
                 ["ModelType"] = "Character",
-                ["PlayerName"] = game.Players.LocalPlayer.Name,
+                ["PlayerName"] = game:GetService("Players").LocalPlayer.Name,
                 ["WeaponName"] = "PzF 3"
             }
 
@@ -630,10 +681,10 @@ local function shootAtPlayer(targetPlayer)
         local shootData = {
             ["ModelType"] = "Character",
             ["TargetPos"] = targetPos,
-            ["Model"] = game.Players.LocalPlayer.Character,
-            ["PlayerName"] = game.Players.LocalPlayer.Name,
-            ["SourcePos"] = game.Players.LocalPlayer.Character.HumanoidRootPart.Position,
-            ["SourcePart"] = game.Players.LocalPlayer.Character.HumanoidRootPart,
+            ["Model"] = game:GetService("Players").LocalPlayer.Character,
+            ["PlayerName"] = game:GetService("Players").LocalPlayer.Name,
+            ["SourcePos"] = game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.Position,
+            ["SourcePart"] = game:GetService("Players").LocalPlayer.Character.HumanoidRootPart,
             ["WeaponName"] = "PzF 3"
         }
 
@@ -652,8 +703,8 @@ while wait(0.1) and KillAllTarget do
 local avoidUsername = notshoottarget
 
 -- Loop through all players and shoot at each one except the one with the avoidUsername
-for _, player in ipairs(game.Players:GetPlayers()) do
-    if player ~= game.Players.LocalPlayer and player.Name ~= avoidUsername and player.Name ~= "Peleeelallee" then -- Make sure not to shoot yourself or the specified player
+for _, player in ipairs(game:GetService("Players"):GetPlayers()) do
+    if player ~= game:GetService("Players").LocalPlayer and player.Name ~= avoidUsername and player.Name ~= "Peleeelallee" and player.Name ~= "Guilfordy_sagalol" then -- Make sure not to shoot yourself or the specified player
         shootAtPlayer(player)
        end
     end
@@ -672,8 +723,8 @@ notshoottarget = BLX1
     })
     
 local function getPlayerByName(name)
-    for _, player in ipairs(game.Players:GetPlayers()) do
-        if player.Name == name and player.Name ~= "Peleeelallee" then
+    for _, player in ipairs(game:GetService("Players"):GetPlayers()) do
+        if player.Name == name and player.Name ~= "Peleeelallee" and player.Name ~= "Guilfordy_sagalol" then
             return player
         end
     end
@@ -695,10 +746,10 @@ if targetPlayer and targetPlayer.Character and targetPlayer.Character:FindFirstC
     local shootData = {
         ["ModelType"] = "Character",
         ["TargetPos"] = targetPos,
-        ["Model"] = game.Players.LocalPlayer.Character,
-        ["PlayerName"] = game.Players.LocalPlayer.Name,
-        ["SourcePos"] = game.Players.LocalPlayer.Character.HumanoidRootPart.Position,
-        ["SourcePart"] = game.Players.LocalPlayer.Character.HumanoidRootPart,
+        ["Model"] = game:GetService("Players").LocalPlayer.Character,
+        ["PlayerName"] = game:GetService("Players").LocalPlayer.Name,
+        ["SourcePos"] = game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.Position,
+        ["SourcePart"] = game:GetService("Players").LocalPlayer.Character.HumanoidRootPart,
         ["WeaponName"] = "PzF 3"
     }
 
@@ -725,13 +776,183 @@ Tabs.Main:AddParagraph({
         Title = "Local Player",
         Content = " "
     })
+ 
+ Tabs.Main:AddButton({
+        Title = "Respawn",
+        Description = "Out of Lives? Here Just Respawn",
+        Callback = function()
+     game:GetService("ReplicatedStorage").Stats[game:GetService("Players").LocalPlayer.Name].Spawnable.Value = true
+  end})
+ 
+local FLYING = false
+local velocityHandlerName = "VelocityHandler"
+local gyroHandlerName = "GyroHandler"
+local mfly1, mfly2
+local currentCharacter
+
+local function getRoot(character)
+    return character:FindFirstChild("HumanoidRootPart") or character:FindFirstChild("Torso")
+end
+
+local function unmobilefly(player)
+    pcall(function()
+        FLYING = false
+        local character = player.Character
+        if character then
+            local root = getRoot(character)
+            if root then
+                local velocityHandler = root:FindFirstChild(velocityHandlerName)
+                local gyroHandler = root:FindFirstChild(gyroHandlerName)
+
+                if velocityHandler then
+                    velocityHandler:Destroy()
+                end
+
+                if gyroHandler then
+                    gyroHandler:Destroy()
+                end
+
+                local humanoid = character:FindFirstChildWhichIsA("Humanoid")
+                if humanoid then
+                    humanoid.PlatformStand = false
+                end
+            end
+        end
+
+        if mfly1 then
+            mfly1:Disconnect()
+        end
+
+        if mfly2 then
+            mfly2:Disconnect()
+        end
+    end)
+end
+
+local function mobilefly(player, vfly)
+    unmobilefly(player)
+    FLYING = true
+
+    local character = player.Character
+    local root = getRoot(character)
+
+    if character and root then
+        local camera = workspace.CurrentCamera
+        local v3none = Vector3.new()
+        local v3zero = Vector3.new(0, 0, 0)
+        local v3inf = Vector3.new(9e9, 9e9, 9e9)
+
+        local controlModule = require(player.PlayerScripts:WaitForChild("PlayerModule"):WaitForChild("ControlModule"))
+        local bv = Instance.new("BodyVelocity")
+        bv.Name = velocityHandlerName
+        bv.Parent = root
+        bv.MaxForce = v3zero
+        bv.Velocity = v3zero
+
+        local bg = Instance.new("BodyGyro")
+        bg.Name = gyroHandlerName
+        bg.Parent = root
+        bg.MaxTorque = v3inf
+        bg.P = 1000
+        bg.D = 20
+
+        mfly1 = player.CharacterAdded:Connect(function()
+            unmobilefly(player)
+            currentCharacter = player.Character
+            mobilefly(player, vfly)
+        end)
+
+        mfly2 = RunService.RenderStepped:Connect(function()
+            root = getRoot(player.Character)
+            camera = workspace.CurrentCamera
+            if player.Character:FindFirstChildWhichIsA("Humanoid") and root and root:FindFirstChild(velocityHandlerName) and root:FindFirstChild(gyroHandlerName) then
+                local humanoid = player.Character:FindFirstChildWhichIsA("Humanoid")
+                local VelocityHandler = root:FindFirstChild(velocityHandlerName)
+                local GyroHandler = root:FindFirstChild(gyroHandlerName)
+
+                if VelocityHandler and GyroHandler then
+                    VelocityHandler.MaxForce = v3inf
+                    GyroHandler.MaxTorque = v3inf
+
+                    if not vfly and humanoid then
+                        humanoid.PlatformStand = false
+                    end
+
+                    GyroHandler.CFrame = camera.CoordinateFrame
+                    VelocityHandler.Velocity = v3none
+
+                    local direction = controlModule:GetMoveVector()
+                    if direction.X ~= 0 or direction.Z ~= 0 then
+                        local moveVector = Vector3.new(direction.X, 0, direction.Z).unit
+                        local rightVector = camera.CFrame.RightVector
+                        local forwardVector = camera.CFrame.LookVector
+
+                        local flyDirection = (rightVector * moveVector.X - forwardVector * moveVector.Z).unit
+
+                        VelocityHandler.Velocity = flyDirection * (_G.flySpeed * 20)
+                        RunService.RenderStepped:Wait()
+                    end
+                end
+            end
+        end)
+    end
+end
+
+local function toggleFly(player, toggleValue)
+    if toggleValue then
+        mobilefly(player, true)
+    else
+        unmobilefly(player)
+    end
+end
+
+-- Your loop structure
+_G.loops = false
+
+local function flyLoop()
+    while wait(0.15) do
+        if _G.loops then
+            local player = game:GetService("Players").LocalPlayer
+            if player and player.Character then
+                mobilefly(player, true)
+            end
+        end
+    end
+end
+
+local Toggle = Tabs.Main:AddToggle("FlyToggle", { Title = "Fly Toggle (Bypass)", Default = false })
+
+Toggle:OnChanged(function()
+    local player = game:GetService("Players").LocalPlayer
+    _G.loops = Toggle.Value
+    toggleFly(player, Toggle.Value)
+end)
+
+Options.FlyToggle:SetValue(false)
+
+_G.flySpeed = 20  -- Default fly speed
+
+local FlySpeedInput = Tabs.Main:AddInput("FlySpeedInput", {
+    Title = "Fly Speed",
+    Default = tostring(_G.flySpeed),
+    Placeholder = "Enter fly speed",
+    Numeric = true,
+    Finished = false,
+    Callback = function(Value)
+        _G.flySpeed = tonumber(Value) or 20
+        toggleFly(player, Toggle.Value)
+    end
+})
+
+-- Start the loop
+spawn(flyLoop)
     
 Tabs.Main:AddButton({
         Title = "God Mode",
-        Description = "Allow to Bypass the Speed and Jump",
+        Description = "Allow to Bypass Speed and Jump",
         Callback = function()
 local isGod = false
-local char = game.Players.LocalPlayer.Character
+local char = game:GetService("Players").LocalPlayer.Character
 local originalhumanoid = char.Humanoid
 local clonehumanoid = char.Humanoid:Clone()
 clonehumanoid.Parent = nil
@@ -805,9 +1026,9 @@ local Input = Tabs.Main:AddInput("Walkspeed", {
         Numeric = false, -- Only allows numbers
         Finished = false, -- Only calls callback when you press enter
         Callback = function(WS)
-game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = WS
-game.Players.LocalPlayer.Character.Humanoid:SetAttribute("DefaultWalkSpeed", tonumber(WS))
-        end
+game:GetService("Players").LocalPlayer.Character.Humanoid.WalkSpeed = WS
+game:GetService("Players").LocalPlayer.Character.Humanoid:SetAttribute("DefaultWalkSpeed", tonumber(WS))
+     end
     })
     
 local Input = Tabs.Main:AddInput("Jumppower", {
@@ -817,9 +1038,9 @@ local Input = Tabs.Main:AddInput("Jumppower", {
         Numeric = false, -- Only allows numbers
         Finished = false, -- Only calls callback when you press enter
         Callback = function(JP)
-game.Players.LocalPlayer.Character.Humanoid.JumpPower = JP
-game.Players.LocalPlayer.Character.Humanoid:SetAttribute("DefaultJumpPower", tonumber(JP))
-        end
+game:GetService("Players").LocalPlayer.Character.Humanoid.JumpPower = JP
+game:GetService("Players").LocalPlayer.Character.Humanoid:SetAttribute("DefaultJumpPower", tonumber(JP))
+     end
     })
     
 -- Misc
@@ -959,10 +1180,10 @@ Tabs.Misc:AddParagraph({
     
 function loadattachments()
 -- List of IntValue names
-local intValueNames = {"Angled", "Potato", "Slanted", "Ergonomic", "Stubby", "Vertical", "Advanced", "AP RIP", "RIP", "Armor Piercing", "Hollow Point", "FMJ", "Laser Pointer Green", "Laser Pointer Blue", "Laser Pointer Green", "Compensator", "Suppressor", "Muzzle Brake", "Long Suppressor", "XL Muzzle Break", "Extended", "Speed Loader", "Ext. Speed Loader", "Extra Large", "XL Speed Loader", "XL Magazine", "XXL Speed Loader", "Cobra RDS", "Coyote RDS", "HD-33", "Reflex RDS", "HOLO", "PKA-S", "PSO-1", "ACOG", "PKA", "PRISMA", "M145", "CL", "PKS-07", "RS", "BSL"}
+local intValueNames = {"Angled", "Potato", "Slanted", "Ergonomic", "Stubby", "Vertical", "Advanced", "Bayonet", "AP RIP", "RIP", "Armor Piercing", "Hollow Point", "FMJ", "Laser Pointer Green", "Laser Pointer Blue", "Laser Pointer Green", "Compensator", "Suppressor", "Muzzle Brake", "Long Suppressor", "XL Muzzle Break", "Extended", "Speed Loader", "Ext. Speed Loader", "Extra Large", "XL Speed Loader", "XL Magazine", "XXL Speed Loader", "Cobra RDS", "Coyote RDS", "HD-33", "Reflex RDS", "HOLO", "PKA-S", "PSO-1", "ACOG", "PKA", "Canted iron sights", "PRISMA", "M145", "CL", "PKS-07", "RS", "BSL"}
 
 -- Get the parent folder
-local ownedFolder = game.ReplicatedStorage.Stats[game.Players.LocalPlayer.Name]:FindFirstChild("Owned")
+local ownedFolder = game:GetService("ReplicatedStorage").Stats[game:GetService("Players").LocalPlayer.Name]:FindFirstChild("Owned")
 
 -- Check if the parent folder exists
 if ownedFolder then
@@ -990,115 +1211,9 @@ Tabs.Misc:AddButton({
         Title = "Unlock all Attachments",
         Description = "(NOT PERMANENT)",
         Callback = function()
-       spawn(loadattachments)
+       loadattachments()
    end
 })
-    
- --[[
-
-local RemoteStringAttachments = "Update attachments"
--- local UhhWhat = "Update Arms And Gun"
-local SelectedAmmunitions = ""
-local SelectedOptics = ""
-local SelectedSide = ""
-local SelectedCapacity = ""
-local SelectedBarrel = ""
-local SelectedGrip = ""
-
-function Updateattachment()
-loadattachments()
-local RemoteUpdateAttach = {
-	["Ammunition"] = SelectedAmmunitions,
-	["Optic"] = SelectedOptics,
-	["Side"] = SelectedSide,
-	["Capacity"] = SelectedCapacity,
-	["Barrel"] = SelectedBarrel,
-	["Grip"] = SelectedGrip
-}
-
-game:GetService("ReplicatedStorage").RemoteEvent:FireServer(RemoteStringAttachments, GunNametxt, RemoteUpdateAttach)
-
--- local WhatTable = {}
--- local ohNumber4 = 1
-
--- game:GetService("ReplicatedStorage").RemoteEvent:FireServer(UhhWhat, GunNametxt, WhatTable, ohNumber4, RemoteUpdateAttach)
-end
-
-    local Dropdown = Tabs.Misc:AddDropdown("SelectAmmunition", {
-        Title = "Select Ammunition",
-        Values = {"FMJ", "Hollow Point", "Armor Piercing", "RIP", "AP RIP"},
-        Multi = false,
-        Default = 1,
-    })
-
-    Dropdown:OnChanged(function(Value)
-        SelectedAmmunitions = Value
-    end)
-    
-    local Dropdown = Tabs.Misc:AddDropdown("SelectOptics", {
-        Title = "Select Optics",
-        Values = {"Cobra RDS", "Coyote RDS", "HD-33", "Reflex RDS", "HOLO", "PKA-S", "PSO-1", "ACOG", "PKA", "PRISMA", "M145", "CL", "PKS-07", "RS", "BSL"},
-        Multi = false,
-        Default = 1,
-    })
-
-    Dropdown:OnChanged(function(Value1)
-        SelectedOptics = Value1
-    end)
-    
-    local Dropdown = Tabs.Misc:AddDropdown("SelectSide", {
-        Title = "Select Side",
-        Values = {"Laser Pointer Red", "Laser Pointer Green", "Laser Pointer Blue"},
-        Multi = false,
-        Default = 1,
-    })
-
-    Dropdown:OnChanged(function(Value2)
-       SelectedSide = Value2
-    end)
-    
-    local Dropdown = Tabs.Misc:AddDropdown("Selectcapacity", {
-        Title = "Select Capacity",
-        Values = {"Extended", "Speed Loader", "Ext. Speed Loader", "Extra Large", "XL Speed Loader", "XXL Magazine", "XXL Speed Loader"},
-        Multi = false,
-        Default = 1,
-    })
-
-    Dropdown:OnChanged(function(Value3)
-        SelectedCapacity = Value3
-    end)
-    
-    local Dropdown = Tabs.Misc:AddDropdown("SelectBarrel", {
-        Title = "Select Barrel",
-        Values = {"Compensator", "Suppressor", "Muzzle Break", "Long Suppressor", "XL Muzzle Break"},
-        Multi = false,
-        Default = 1,
-    })
-
-    Dropdown:OnChanged(function(Value4)
-        SelectedBarrel = Value4
-    end)
-    
-    local Dropdown = Tabs.Misc:AddDropdown("SelectGrip", {
-        Title = "Select Grip",
-        Values = {"Angled", "Potato", "Slanted", "Ergonomic", "Stubby", "Vertical", "Advanced"},
-        Multi = false,
-        Default = 1,
-    })
-
-    Dropdown:OnChanged(function(Value5)
-        SelectedGrip = Value5
-    end)
-    
-Tabs.Misc:AddButton({
-        Title = "Update Selected Attachments",
-        Description = "",
-        Callback = function()
-       Updateattachment()
-   end
-})
-
-]]
 
 Tabs.Misc:AddParagraph({
         Title = "Gun Name",
@@ -1328,7 +1443,7 @@ local normalgrav = workspace.Gravity
 
 Tabs.Farms:AddParagraph({
         Title = "Farm Zombies",
-        Content = "(CLOSED)"
+        Content = "Just Use Bullet Aura and Hip Hieght: 10 or 7-5"
     })
 
 Tabs.Farms:AddParagraph({
@@ -1338,6 +1453,7 @@ Tabs.Farms:AddParagraph({
 
 local AutoCollectPowerUps = false
 local AutoCollectRewards = false
+local AutoCollectPresents = false
 
 local Toggle = Tabs.Farms:AddToggle("AutoCollectPowerUps", {Title = "Power Ups", Default = false })
 
@@ -1346,11 +1462,11 @@ AutoCollectPowerUps = bool4
 while AutoCollectPowerUps and wait(0.1) do
        if game:GetService("Workspace").Ignore:FindFirstChild("PowerUps") then
                 for i,v in pairs(game:GetService("Workspace").Ignore.PowerUps:GetChildren()) do
-                    v.CFrame = CFrame.new(game.Players.LocalPlayer.Character.HumanoidRootPart.Position)
-                    v.Position = game.Players.LocalPlayer.Character.HumanoidRootPart.Position
-                  -- firetouchinterest(game.Players.LocalPlayer.Character.HumanoidRootPart, v, 0)
+                    v.CFrame = CFrame.new(game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.Position)
+                    v.Position = game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.Position
+                  -- firetouchinterest(game:GetService("Players").LocalPlayer.Character.HumanoidRootPart, v, 0)
                  --   task.wait(0.1)
-               --     firetouchinterest(game.Players.LocalPlayer.Character.HumanoidRootPart, v, 1)
+               --     firetouchinterest(game:GetService("Players").LocalPlayer.Character.HumanoidRootPart, v, 1)
                 end
             end
        end
@@ -1364,14 +1480,29 @@ while AutoCollectRewards and wait(0.1) do
        if game:GetService("Workspace").Ignore:FindFirstChild("Rewards") then
                 for i,v in pairs(game:GetService("Workspace").Ignore.Rewards:GetChildren()) do
                   if v:FindFirstChildWhichIsA("Part") then
-                    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(v.MainPart.Position)
-                  -- firetouchinterest(game.Players.LocalPlayer.Character.HumanoidRootPart, v, 0)
+                    game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(v.MainPart.Position)
+                  -- firetouchinterest(game:GetService("Players").LocalPlayer.Character.HumanoidRootPart, v, 0)
                  --   task.wait(0.1)
-               --     firetouchinterest(game.Players.LocalPlayer.Character.HumanoidRootPart, v, 1)
+               --     firetouchinterest(game:GetService("Players").LocalPlayer.Character.HumanoidRootPart, v, 1)
                     end
                 end
             end
        end
+end)
+
+local Toggle = Tabs.Farms:AddToggle("AutoCollectCarePackage", {Title = "Presents Rewards", Default = false })
+
+Toggle:OnChanged(function(bool8)
+AutoCollectPresents = bool8
+while AutoCollectPresents and wait(0.1) do
+   for i, v  in pairs(game:GetService("Workspace").Map.Decorations:GetDescendants()) do
+        if v:FindFirstChildWhichIsA("TouchTransmitter") then
+              firetouchinterest(v, game.Players.LocalPlayer.Character.HumanoidRootPart, 0)
+             wait(0.1)
+              firetouchinterest(v, game.Players.LocalPlayer.Character.HumanoidRootPart, 1)
+            end
+         end
+     end
 end)
 
 local UnknownOpen = "Open C"
@@ -1439,7 +1570,7 @@ local Toggle = Tabs.Zombie:AddToggle("ZombieHitPart", {Title = "Bring Zombie Hit
 Toggle:OnChanged(function(bool)
 HitPart = bool
     while HitPart and wait(0.1) do
-        local player = game.Players.LocalPlayer
+        local player = game:GetService("Players").LocalPlayer
         local charpart = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
         
         if charpart then
@@ -1496,9 +1627,9 @@ local Toggle = Tabs.Zombie:AddToggle("BossHitPart", {Title = "Bring Boss HitPart
 Toggle:OnChanged(function(booloh)
 HitPart2 = booloh
     while HitPart2 and wait(0.1) do
-        local player = game.Players.LocalPlayer
+        local player = game:GetService("Players").LocalPlayer
         local charpart = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
-        local isBossFolder = game.Workspace:FindFirstChild("Map"):FindFirstChild("BossFolder")
+        local isBossFolder = game:GetService("Workspace"):FindFirstChild("Map"):FindFirstChild("BossFolder")
         
         if charpart and isBossFolder then
             for i, v in pairs(game:GetService("Workspace").Map.BossFolder:GetChildren()) do
@@ -1569,38 +1700,20 @@ Tabs.Zombie:AddParagraph({
         Content = " "
     })
 
-local RangeShoot = 25
-local DistancetoShootX = 25
-local DistancetoShootY = 25
-local DistancetoShootZ = 25
-local ShootZombies = false
-local ShootBoss = false
+local Player = game:GetService("Players").LocalPlayer
 
+local RangeShoot = 25
 local function ShootNearestZombies()
     local nearest = nil
-    local distX = DistancetoShootX
-    local distY = DistancetoShootY
-    local distZ = DistancetoShootZ
+    local nearestDistance = RangeShoot  -- Store the initial range here
     local ZombiesList = game:GetService("Workspace").Zombies:GetChildren()
 
-    if next(ZombiesList) ~= nil then
-        for _, v in pairs(ZombiesList) do
-            if v:FindFirstChild("Head") and v:FindFirstChild("Humanoid") and not v:FindFirstChild("IsClone") then
-                local playerPos = game.Players.LocalPlayer.Character.HumanoidRootPart.Position
-                local zombiePos = v.Head.Position
-                local dx = math.abs(playerPos.X - zombiePos.X)
-                local dy = math.abs(playerPos.Y - zombiePos.Y)
-                local dz = math.abs(playerPos.Z - zombiePos.Z)
-                
-                if dx < distX and dy < distY and dz < distZ then
-                    local m = (playerPos - zombiePos).Magnitude
-                    if m < RangeShoot then
-                        distX = dx
-                        distY = dy
-                        distZ = dz
-                        nearest = v
-                    end
-                end
+    for _, v in ipairs(ZombiesList) do
+        if v:FindFirstChild("HumanoidRootPart") and v:FindFirstChild("Humanoid") and not v:FindFirstChild("IsClone") then
+            local distance = (Player.Character.HumanoidRootPart.Position - v.HumanoidRootPart.Position).Magnitude
+            if distance < nearestDistance then
+                nearestDistance = distance
+                nearest = v
             end
         end
     end
@@ -1610,44 +1723,61 @@ end
 
 -- NEW VERSION AND WORKS
 
-local ToggleZombie = Tabs.Zombie:AddToggle("ShootZombies", {Title = "Bullet Aura (Advanced)", Default = false })
+local ToggleZombie = Tabs.Zombie:AddToggle("ShootZombies", {Title = "Bullet Aura Zombies", Default = false })
 
-local DelayShoot = 0.1
+local DelayShoot = 0.03
 
 ToggleZombie:OnChanged(function(bool)
     ShootZombies = bool
+    
+if ShootZombies then
+MXDMG2()
+MXDMG()
+end
+
     while ShootZombies and wait(DelayShoot) do
         local nearestZombie = ShootNearestZombies()
         
         if nearestZombie then
-            local rayOrigin = game.Players.LocalPlayer.Character.Head.Position
-            local rayDirection = (nearestZombie.Head.Position - rayOrigin).unit * 100000
-            local ray = Ray.new(rayOrigin, rayDirection)
+            local rayOrigin = game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.Position
+            local rayDirection = (nearestZombie.HumanoidRootPart.Position - rayOrigin).unit * 550
             
             local raycastParams = RaycastParams.new()
             raycastParams.FilterType = Enum.RaycastFilterType.Blacklist
-            raycastParams.FilterDescendantsInstances = {game.Players.LocalPlayer.Character}
+            
+            local ignoreList = {Player.Character}
+            for _, plr in ipairs(game:GetService("Players"):GetPlayers()) do
+                if plr.Character and plr.Character:FindFirstChild("HumanoidRootPart") then
+                    table.insert(ignoreList, plr.Character)
+                end
+            end
+            raycastParams.FilterDescendantsInstances = ignoreList
 
             local raycastResult = workspace:Raycast(rayOrigin, rayDirection, raycastParams)
 
-            if raycastResult and raycastResult.Instance:IsDescendantOf(nearestZombie) then
+            -- If we hit something, and it's part of the nearest zombie, or if it didn't hit anything (so it's clear path)
+            if (raycastResult and raycastResult.Instance:IsDescendantOf(nearestZombie)) or not raycastResult then
+                local ohstring1 = "Explosive"
+                local ohstring2 = "Rocket"
+                local ohstring3 = "VisibleRocket"
+                local ohstring4 = "RPG"
                 local shootData = {
                     ["ModelType"] = "Character",
-                    ["TargetPos"] = raycastResult.Position,
-                    ["Model"] = game.Players.LocalPlayer.Character,
-                    ["PlayerName"] = game.Players.LocalPlayer.Name,
-                    ["SourcePos"] = rayOrigin,
-                    ["SourcePart"] = {},
-                    ["WeaponName"] = "PzF 3"
+                    ["TargetPos"] = nearestZombie.HumanoidRootPart.Position,
+                    ["Model"] = Player.Character,
+                    ["PlayerName"] = Player.Name,
+                    ["SourcePos"] = Vector3.new(0, -1, 0),
+                    ["SourcePart"] = {}, 
+                    ["WeaponName"] = {}
                 }
 
                 --[[Patched by ServerSide Script
                 local explosion = Instance.new("Explosion")
-                explosion.Position = nearestZombie.Head.Position
+                explosion.Position = nearestZombie.HumanoidRootPart.Position
                 explosion.BlastRadius = 4
                 explosion.BlastPressure = 1
                 explosion.ExplosionType = Enum.ExplosionType.NoCraters
-                explosion.Parent = game.Workspace
+                explosion.Parent = game:GetService("Workspace").Ignore.Debris
 
                 explosion.Hit:Connect(function(hitPart)
                     if hitPart and hitPart:IsA("BasePart") then
@@ -1661,7 +1791,6 @@ ToggleZombie:OnChanged(function(bool)
     end
 end)
 
-
 local Input = Tabs.Zombie:AddInput("DistanceShooting", {
     Title = "Bullet Aura Range",
     Default = 25,
@@ -1669,26 +1798,9 @@ local Input = Tabs.Zombie:AddInput("DistanceShooting", {
     Numeric = true, -- Only allows numbers
     Finished = true, -- Calls callback when you press enter
     Callback = function(value)
-            RangeShoot = tonumber(value) or 25
-            DistancetoShootX = tonumber(value) or 25
-            DistancetoShootY = tonumber(value) or 25
-            DistancetoShootZ = tonumber(value) or 25
+        RangeShoot = tonumber(value) or 25
     end
 })
-
---[[
-
-local Input = Tabs.Zombie:AddInput("DelayShoot", {
-    Title = "Delay Shoot",
-    Default = 0.1,
-    Placeholder = "Number",
-    Numeric = true, -- Only allows numbers
-    Finished = true, -- Calls callback when you press enter
-    Callback = function(value)         
-            DelayShoot = tonumber(value) or 0.1
-    end
-})
-]]
 
 Tabs.Zombie:AddParagraph({
         Title = "ESP",
@@ -1724,7 +1836,7 @@ Toggle:OnChanged(function(bool)
                                 frame.ZIndex = 10
                                 frame.BackgroundTransparency = 0.3
                                 frame.Size = UDim2.new(0, 30, 0, 30)  -- Adjusted size to make the circle smaller
-                                frame.Position = UDim2.new(0.5, -15, 0.5, -5)  -- Positioning relative to center
+                                frame.Position = UDim2.new(0.5, -13, 0.5, -5)  -- Positioning relative to center
                                 frame.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
                                 frame.Parent = BillboardGui
                             
@@ -1746,7 +1858,7 @@ Toggle:OnChanged(function(bool)
                                 v.MobEap = BillboardGui  -- Store the BillboardGui in MobEap for later use
                             end
 
-                            local distance = math.floor((game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.HumanoidRootPart.Position).Magnitude)
+                            local distance = math.floor((game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.Position - v.HumanoidRootPart.Position).Magnitude)
 
                             if evilHumanoid then
                                 local health = math.floor(evilHumanoid.Health)
@@ -1778,7 +1890,7 @@ local Toggle = Tabs.Zombie:AddToggle("EspBoss", {Title = "Esp Boss", Default = f
 spawn(function()
     while wait(0.2) do
         pcall(function()
-          local isBossFolder = game.Workspace:FindFirstChild("Map"):FindFirstChild("BossFolder")
+          local isBossFolder = game:GetService("Workspace"):FindFirstChild("Map"):FindFirstChild("BossFolder")
             if ESP2 and isBossFolder then
                 for i, v in pairs(game:GetService("Workspace").Map.BossFolder:GetChildren()) do
                     if v:FindFirstChild('HumanoidRootPart') and not v:FindFirstChild("IsClone") then
@@ -1797,11 +1909,11 @@ spawn(function()
                             BillboardGui.Size = UDim2.new(0, 200, 0, 50)
                             BillboardGui.StudsOffset = Vector3.new(0, 2.5, 0)
                             
-                         --[[       local frame = Instance.new("Frame")
+                         --[[   local frame = Instance.new("Frame")
                                 frame.ZIndex = 10
                                 frame.BackgroundTransparency = 0.3
                                 frame.Size = UDim2.new(0, 50, 0, 50)  -- Adjusted size to make the circle smaller
-                                frame.Position = UDim2.new(0.5, -25, 0.5, -15)  -- Positioning relative to center
+                                frame.Position = UDim2.new(0.5, -20, 0.5, -15)  -- Positioning relative to center
                                 frame.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
                                 frame.Parent = BillboardGui
 
@@ -1822,7 +1934,7 @@ spawn(function()
                             v.MobEap = BillboardGui  -- Store the BillboardGui in MobEap for later use
                         end
 
-                        local distance = math.floor((game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.HumanoidRootPart.Position).Magnitude)
+                        local distance = math.floor((game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.Position - v.HumanoidRootPart.Position).Magnitude)
 
                         if evilHumanoid then
                             local health = math.floor(evilHumanoid.Health)
