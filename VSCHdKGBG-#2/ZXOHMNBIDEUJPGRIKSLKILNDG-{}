@@ -368,7 +368,7 @@ end
 function MXDMG()
      pcall(function() 
             for i, v in pairs(getgc(true)) do
-                if type(v) == 'table' and rawget(v, 'damage') then
+                if type(v) == 'table' and rawget(v, 'magsize') then
                     for j = 1, 2 do
                         if v.damage[j] then
                             for k = 1, 2 do
@@ -400,11 +400,11 @@ function NoBoltReload()
                 if type(v) == 'table' and rawget(v, 'boltanim') then
                     for j = 1, 15 do
                         if v.boltanim[j] and v.boltanim[j][6] then
-                            v.boltanim[j][6] = 0.09
+                            v.boltanim[j][6] = 0
                         end
                         if j == 6 or j == 8 then
                             if v.boltanim[j] and v.boltanim[j][8] then
-                              v.boltanim[j][8] = 0.09
+                              v.boltanim[j][8] = 0
                           end
                      end
                  end
@@ -783,7 +783,84 @@ Tabs.Main:AddParagraph({
         Callback = function()
      game:GetService("ReplicatedStorage").Stats[game:GetService("Players").LocalPlayer.Name].Spawnable.Value = true
   end})
- 
+    
+Tabs.Main:AddButton({
+        Title = "God Mode",
+        Description = "",
+        Callback = function()
+local isGod = false
+local char = game:GetService("Players").LocalPlayer.Character
+local originalhumanoid = char.Humanoid
+local clonehumanoid = char.Humanoid:Clone()
+clonehumanoid.Parent = nil
+wait(0.1)
+char.Humanoid:Destroy()
+clonehumanoid.Parent = char
+
+local animator = clonehumanoid:FindFirstChild("Animator")
+if not animator then
+animator = Instance.new("Animator")
+animator.Parent = clonehumanoid
+end
+
+local f = Instance.new("ForceField")
+f.Parent = char
+f.Visible = false
+wait(0.1)
+f.Visible = true
+
+isGod = true
+local Players = game:GetService("Players")
+local player = Players.LocalPlayer
+
+local screenGui = Instance.new("ScreenGui")
+screenGui.ResetOnSpawn = false
+screenGui.Parent = player:WaitForChild("PlayerGui")
+
+local jumpButton = Instance.new("TextButton")
+jumpButton.Size = UDim2.new(0, 100, 0, 100) 
+jumpButton.Position = UDim2.new(1, -110, 1, -110)
+jumpButton.Text = ""
+jumpButton.BackgroundColor3 = Color3.new(0.5, 0.5, 0.5)  -- Gray color
+jumpButton.TextColor3 = Color3.new(1, 1, 1)  -- White text color
+jumpButton.Parent = screenGui
+
+local jumpIcon = Instance.new("ImageLabel")
+jumpIcon.Size = UDim2.new(1, 0, 1, 0)
+jumpIcon.Position = UDim2.new(0, 0, 0, 0)
+jumpIcon.BackgroundTransparency = 1
+jumpIcon.Image = "rbxassetid://18154379297" 
+jumpIcon.Parent = jumpButton
+
+local function makePlayerJump()
+    local character = player.Character or player.CharacterAdded:Wait()
+    local humanoid = character:FindFirstChildOfClass("Humanoid")
+    if isGod and humanoid and humanoid.FloorMaterial ~= Enum.Material.Air then
+        humanoid:ChangeState(Enum.HumanoidStateType.Jumping)
+    end
+end
+
+UserInputService.InputBegan:Connect(function(input, gameProcessed)
+    if gameProcessed then return end
+
+    if input.KeyCode == Enum.KeyCode.Space then
+        makePlayerJump()
+    end
+end)
+
+jumpButton.Activated:Connect(makePlayerJump)
+
+MakeDraggable(jumpIcon, jumpButton)
+
+UserInputService.JumpRequest:Connect(makePlayerJump)
+  end
+})
+
+Tabs.Main:AddParagraph({
+        Title = "(Bypassed)",
+        Content = ""
+    })
+
 local FLYING = false
 local velocityHandlerName = "VelocityHandler"
 local gyroHandlerName = "GyroHandler"
@@ -920,7 +997,7 @@ local function flyLoop()
     end
 end
 
-local Toggle = Tabs.Main:AddToggle("FlyToggle", { Title = "Fly Toggle (Bypass)", Default = false })
+local Toggle = Tabs.Main:AddToggle("FlyToggle", { Title = "Fly Toggle", Default = false })
 
 Toggle:OnChanged(function()
     local player = game:GetService("Players").LocalPlayer
@@ -946,106 +1023,87 @@ local FlySpeedInput = Tabs.Main:AddInput("FlySpeedInput", {
 
 -- Start the loop
 spawn(flyLoop)
-    
-Tabs.Main:AddButton({
-        Title = "God Mode",
-        Description = "Allow to Bypass Speed and Jump",
-        Callback = function()
-local isGod = false
-local char = game:GetService("Players").LocalPlayer.Character
-local originalhumanoid = char.Humanoid
-local clonehumanoid = char.Humanoid:Clone()
-clonehumanoid.Parent = nil
-wait(0.1)
-char.Humanoid:Destroy()
-clonehumanoid.Parent = char
 
-local animator = clonehumanoid:FindFirstChild("Animator")
-if not animator then
-animator = Instance.new("Animator")
-animator.Parent = clonehumanoid
-end
+local HumanModCons = {}
+local speaker = game.Players.LocalPlayer
 
-local f = Instance.new("ForceField")
-f.Parent = char
-f.Visible = false
-wait(0.1)
-f.Visible = true
-
-isGod = true
-local Players = game:GetService("Players")
-local player = Players.LocalPlayer
-
-local screenGui = Instance.new("ScreenGui")
-screenGui.ResetOnSpawn = false
-screenGui.Parent = player:WaitForChild("PlayerGui")
-
-local jumpButton = Instance.new("TextButton")
-jumpButton.Size = UDim2.new(0, 100, 0, 100) 
-jumpButton.Position = UDim2.new(1, -110, 1, -110)
-jumpButton.Text = ""
-jumpButton.BackgroundColor3 = Color3.new(0.5, 0.5, 0.5)  -- Gray color
-jumpButton.TextColor3 = Color3.new(1, 1, 1)  -- White text color
-jumpButton.Parent = screenGui
-
-local jumpIcon = Instance.new("ImageLabel")
-jumpIcon.Size = UDim2.new(1, 0, 1, 0)
-jumpIcon.Position = UDim2.new(0, 0, 0, 0)
-jumpIcon.BackgroundTransparency = 1
-jumpIcon.Image = "rbxassetid://18154379297" 
-jumpIcon.Parent = jumpButton
-
-local function makePlayerJump()
-    local character = player.Character or player.CharacterAdded:Wait()
-    local humanoid = character:FindFirstChildOfClass("Humanoid")
-    if isGod and humanoid and humanoid.FloorMaterial ~= Enum.Material.Air then
-        humanoid:ChangeState(Enum.HumanoidStateType.Jumping)
+-- Define the slider for walkspeed
+local SliderWalkSpeed = Tabs.Main:AddSlider("Walkspeed", {
+    Title = "Walkspeed Slider",
+    Description = "",
+    Default = 16,
+    Min = 16,
+    Max = 200,
+    Rounding = 1,
+    Callback = function(speed)
+        -- Function to update walkspeed
+        local function WalkSpeedChange()
+            local Char = speaker.Character or workspace:FindFirstChild(speaker.Name)
+            local Human = Char and Char:FindFirstChildWhichIsA("Humanoid")
+            if Char and Human then
+                Human.WalkSpeed = speed
+            end
+        end
+        
+        WalkSpeedChange()
+        
+        -- Monitor changes to WalkSpeed property
+        if HumanModCons.wsConn then
+            HumanModCons.wsConn:Disconnect()
+        end
+        local Char = speaker.Character or speaker.CharacterAdded:Wait()
+        local Human = Char:WaitForChild("Humanoid")
+        HumanModCons.wsConn = Human.Changed:Connect(function(property)
+            if property == "WalkSpeed" then
+                WalkSpeedChange()
+            end
+        end)
     end
-end
-
-UserInputService.InputBegan:Connect(function(input, gameProcessed)
-    if gameProcessed then return end
-
-    if input.KeyCode == Enum.KeyCode.Space then
-        makePlayerJump()
-    end
-end)
-
-jumpButton.Activated:Connect(makePlayerJump)
-
-MakeDraggable(jumpIcon, jumpButton)
-
-UserInputService.JumpRequest:Connect(makePlayerJump)
-  end
 })
 
-local Input = Tabs.Main:AddInput("Walkspeed", {
-        Title = "Walk Speed",
-        Default = 16,
-        Placeholder = "Placeholder",
-        Numeric = false, -- Only allows numbers
-        Finished = false, -- Only calls callback when you press enter
-        Callback = function(WS)
-game:GetService("Players").LocalPlayer.Character.Humanoid.WalkSpeed = WS
-game:GetService("Players").LocalPlayer.Character.Humanoid:SetAttribute("DefaultWalkSpeed", tonumber(WS))
-     end
-    })
-    
-local Input = Tabs.Main:AddInput("Jumppower", {
-        Title = "Jump Power",
-        Default = 50,
-        Placeholder = "Placeholder",
-        Numeric = false, -- Only allows numbers
-        Finished = false, -- Only calls callback when you press enter
-        Callback = function(JP)
-game:GetService("Players").LocalPlayer.Character.Humanoid.JumpPower = JP
-game:GetService("Players").LocalPlayer.Character.Humanoid:SetAttribute("DefaultJumpPower", tonumber(JP))
-     end
-    })
+-- Define the slider for jump power
+local SliderJumpPower = Tabs.Main:AddSlider("JumpPower", {
+    Title = "Jump Power Slider",
+    Description = "",
+    Default = 50,
+    Min = 50,
+    Max = 200,
+    Rounding = 1,
+    Callback = function(jpower)
+        -- Function to update jump power
+        local function JumpPowerChange()
+            local Char = speaker.Character or workspace:FindFirstChild(speaker.Name)
+            local Human = Char and Char:FindFirstChildWhichIsA("Humanoid")
+            if Char and Human then
+                if Human.UseJumpPower then
+                    Human.JumpPower = jpower
+                else
+                    Human.JumpHeight = jpower
+                end
+            end
+        end
+        
+        JumpPowerChange()
+        
+        -- Monitor changes to JumpPower or JumpHeight property
+        if HumanModCons.jpConn then
+            HumanModCons.jpConn:Disconnect()
+        end
+        local Char = speaker.Character or speaker.CharacterAdded:Wait()
+        local Human = Char:WaitForChild("Humanoid")
+        HumanModCons.jpConn = Human.Changed:Connect(function(property)
+            if property == "JumpPower" or property == "JumpHeight" then
+                JumpPowerChange()
+            end
+        end)
+    end
+})
     
 -- Misc
 
 local GunNametxt = ""
+local colortype1 = ""
+local colortype2 = ""
 local skin1 = ""
 local skin2 = ""
 local ColorSelect1 = ""
@@ -1270,109 +1328,6 @@ Tabs.Misc:AddParagraph({
         Title = "Character Avatar",
         Content = " "
     })
-    
-local WaistID = 0
-local HatID = 0
-local ShoulderID = 0
-local NeckID = 0
-local SelectedParentNumber = 1
-
-function UpdateAvatar()
-local ohString1 = "Spawn"
-local ohTable2 = {
-	["Waist"] = WaistID,
-	["Hat"] = {
-		[SelectedParentNumber] = HatID
-	},
-	["Neck"] = NeckID,
-	["Shoulders"] = {
-		[SelectedParentNumber] = ShoulderID
-	}
-}
-local ohInstance3 = workspace.Map.Teleport.Spawn
-
-game:GetService("ReplicatedStorage").RemoteEvent:FireServer(ohString1, ohTable2, ohInstance3)
-end
-
---[[
-
-function UpdateHatAvatar()
-local ohString1 = "Spawn"
-local ohTable2 = {
-	["Waist"] = WaistID
-	["Neck"] = NeckID
-	["Hat"] = {
-		[SelectedParentNumber] = HatID
-	},
-	["Shoulders"] = {
-		[SelectedParentNumber] = ShoulderID
-	}
-}
-
-local ohInstance3 = workspace.Map.Teleport.Spawn
-
-game:GetService("ReplicatedStorage").RemoteEvent:FireServer(ohString1, ohTable2, ohInstance3)
-end
-
-function UpdateWaistAvatar()
-local ohString1 = "Spawn"
-local ohTable2 = {
-	["Waist"] = WaistID,
-	["Neck"] = NeckID,
-	["Hat"] = {
-		[SelectedParentNumber] = HatID
-	},
-	["Shoulders"] = {
-		[SelectedParentNumber] = ShoulderID
-	}
-}
-
-local ohInstance3 = workspace.Map.Teleport.Spawn
-
-game:GetService("ReplicatedStorage").RemoteEvent:FireServer(ohString1, ohTable2, ohInstance3)
-end
-
-function UpdateShouldersAvatar()
-local ohString1 = "Spawn"
-local ohTable2 = {
-	["Waist"] = WaistID,
-	["Neck"] = NeckID,
-	["Hat"] = {
-		[SelectedParentNumber] = HatID
-	},
-	["Face"] = {},
-	["Back"] = 6099640862,
-	["Shirt"] = 6782791743,
-	["Pants"] = 6782793248,
-	["Shoulders"] = {
-		[SelectedParentNumber] = ShoulderID
-	}
-}
-
-local ohInstance3 = workspace.Map.Teleport.Spawn
-
-game:GetService("ReplicatedStorage").RemoteEvent:FireServer(ohString1, ohTable2, ohInstance3)
-end
-
-function UpdateNeckAvatar()
-local ohString1 = "Spawn"
-local ohTable2 = {
-	["Waist"] = WaistID,
-	["Neck"] = NeckID,
-	["Hat"] = {
-		[SelectedParentNumber] = HatID
-	},
-	["Shoulders"] = {
-		[SelectedParentNumber] = ShoulderID
-	}
-}
-
-local ohInstance3 = workspace.Map.Teleport.Spawn
-
-game:GetService("ReplicatedStorage").RemoteEvent:FireServer(ohString1, ohTable2, ohInstance3)
-end
-
-]]
 
     local Dropdown = Tabs.Misc:AddDropdown("SelectNumber", {
         Title = "Select Accessories Primary",
@@ -1797,8 +1752,8 @@ local Input = Tabs.Zombie:AddInput("DistanceShooting", {
     Title = "Bullet Aura Range",
     Default = 25,
     Placeholder = "Number",
-    Numeric = true, -- Only allows numbers
-    Finished = true, -- Calls callback when you press enter
+    Numeric = false, -- Only allows numbers
+    Finished = false, -- Calls callback when you press enter
     Callback = function(value)
         RangeShoot = tonumber(value) or 25
     end
