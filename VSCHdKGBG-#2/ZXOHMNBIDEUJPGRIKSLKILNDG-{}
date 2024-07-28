@@ -216,8 +216,8 @@ local SaveManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/d
 local InterfaceManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/Unknownproootest/Unknown-TreasureQuest/Alt/Test_FixMinimizeKey"))()
 
 local Window = Fluent:CreateWindow({
-    Title = "Unknown Hub X Zombie Uprising V2.2 (1B VISITS) ",
-    SubTitle = "Made by Unknownproooolucky",
+    Title = "Unknown Hub X ZU V2.3",
+    SubTitle = "Made by Unknownproooolucky discord.gg/d2a3KkTD6r",
     TabWidth = 160,
     Size = UDim2.fromOffset(580, 460),
     Acrylic = false, -- The blur may be detectable, setting this to false disables blur entirely
@@ -286,81 +286,6 @@ local function getNearestBosses()
     return nearest
 end
 
-------(Aimbot)---------
-
---[[
-ALTERNATIVE AIMBOT AND BUGGY
-function cameratracktoZombies()
-    local character = Player.Character
-    local humanoidRootPart = character:FindFirstChild("HumanoidRootPart")
-    local humanoid = character:FindFirstChild("Humanoid")
-    
-    local target = getNearestZombies()
-    if target and humanoidRootPart and humanoid then
-        local targetPosition = target.HumanoidRootPart.Position
-        
-        -- Calculate the direction from character to zombie
-        local lookVector = (targetPosition - humanoidRootPart.Position).Unit
-        
-        -- Calculate the camera's rotation to face the zombie's back
-        local cameraLookVector = -lookVector
-        
-        -- Update the camera's CFrame to look at the zombie's back
-        local newCameraCFrame = CFrame.lookAt(camera.CFrame.Position, camera.CFrame.Position + cameraLookVector)
-        camera.CFrame = newCameraCFrame
-        
-        -- Disable AutoRotate to prevent humanoid from automatically rotating
-        humanoid.AutoRotate = false
-        
-        -- Rotate the character to face the zombie's back
-        humanoidRootPart.CFrame = CFrame.new(humanoidRootPart.Position, humanoidRootPart.Position + lookVector)
-        
-        player.CharacterAdded:Connect(function(character)
-    local humanoid = character:WaitForChild("Humanoid")
-    humanoid.Died:Connect(function()
-        camera.CFrame = CFrame.new(character.HumanoidRootPart.Position)
-        humanoid.AutoRotate = true -- Re-enable AutoRotate upon respawn
-    end)
-end)
-    end
-end
-
-function cameratracktoBoss()
-    local character = Player.Character
-    local humanoidRootPart = character:FindFirstChild("HumanoidRootPart")
-    local humanoid = character:FindFirstChild("Humanoid")
-    
-    local target = getNearestBosses()
-    if target and humanoidRootPart and humanoid then
-        local targetPosition = target.HumanoidRootPart.Position
-        
-        -- Calculate the direction from character to zombie
-        local lookVector = (targetPosition - humanoidRootPart.Position).Unit
-        
-        -- Calculate the camera's rotation to face the zombie's back
-        local cameraLookVector = -lookVector
-        
-        -- Update the camera's CFrame to look at the zombie's back
-        local newCameraCFrame = CFrame.lookAt(camera.CFrame.Position, camera.CFrame.Position + cameraLookVector)
-        camera.CFrame = newCameraCFrame
-        
-        -- Disable AutoRotate to prevent humanoid from automatically rotating
-        humanoid.AutoRotate = false
-        
-        -- Rotate the character to face the zombie's back
-        humanoidRootPart.CFrame = CFrame.new(humanoidRootPart.Position, humanoidRootPart.Position + lookVector)
-        
-        player.CharacterAdded:Connect(function(character)
-    local humanoid = character:WaitForChild("Humanoid")
-    humanoid.Died:Connect(function()
-        camera.CFrame = CFrame.new(character.HumanoidRootPart.Position)
-        humanoid.AutoRotate = true -- Re-enable AutoRotate upon respawn
-    end)
-end)
-    end
-end
-]]
-
 function autoammo()
 game:GetService("ReplicatedStorage").RemoteEvent:FireServer("Reloaded", "3")
 end
@@ -378,6 +303,8 @@ function MXDMG()
                           end
                       end
                   end
+                  v.magsize = 99999999
+                  v.storedammo = 99999999
               end
           end
      end)
@@ -387,8 +314,10 @@ function MXDMG2()
 pcall(function() 
    for i, v in pairs(getgc(true)) do
        if type(v) == 'table' and rawget(v, 'magsize') then
-            v.vdamage = 10000
-            v.vdamage2 = 10000
+            v.vdamage = 100000
+            v.vdamage2 = 100000
+            v.magsize = 99999999
+            v.storedammo = 99999999
               end
           end
      end)
@@ -409,6 +338,7 @@ function NoBoltReload()
                      end
                  end
                  v.gripanim[6] = 0
+                 v.pellets = math.huge
              end
          end
     end)
@@ -436,10 +366,11 @@ for i,v in pairs(getgc(true)) do
    if type(v) == 'table' and rawget(v, 'magsize') then
        v.magsize = math.huge
        v.storedammo = math.huge
-       v.rpm = math.huge
+       v.rpm = 0
        v.spread = spread1
        v.recoil = rec
        v.mode = "Auto"
+       v.pellets = math.huge
    end
 end
 end)
@@ -467,7 +398,7 @@ for i,v in pairs(getgc(true)) do
    if type(v) == 'table' and rawget(v, 'magsize') then
          v.magsize = math.huge
          v.storedammo = math.huge
-         v.rpm = math.huge
+         v.rpm = 0
          v.spread = spread1
          v.recoil = rec
          v.Rocket = true
@@ -552,7 +483,7 @@ Tabs.Main:AddParagraph({
 end)
 
 
-   local Toggle = Tabs.Main:AddToggle("AutoLoadAmmo", {Title = "Auto Load Ammo", Default = false })
+   local Toggle = Tabs.Main:AddToggle("AutoLoadAmmo", {Title = "No Gun Reload V1", Default = false })
 
     Toggle:OnChanged(function(noice)
     LoadAmmo = noice
@@ -565,7 +496,7 @@ end)
     until LoadAmmo == false    
     end)
 
-   local Toggle = Tabs.Main:AddToggle("NoReload", {Title = "No Gun Reload", Default = false })
+   local Toggle = Tabs.Main:AddToggle("NoReload", {Title = "No Gun Reload V2", Default = false })
 
     Toggle:OnChanged(function(UhhWaht)
     NoReloader = UhhWaht
@@ -607,7 +538,7 @@ Tabs.Main:AddParagraph({
         until fastswinging == false
     end)
 
-if game:GetService("Players").LocalPlayer.Name == "alladd17" or game:GetService("Players").LocalPlayer.Name == "Peleeelallee" or game:GetService("Players").LocalPlayer.Name == "Guilfordy_sagalol" then
+if game:GetService("Players").LocalPlayer.Name == "alladd17" or game:GetService("Players").LocalPlayer.Name == "Peleeelallee" or game:GetService("Players").LocalPlayer.Name == "Guilfordy_sagalol" or game:GetService("Players").LocalPlayer.Name == "Cjdjjdjskaodknf" then
 
 Tabs.Main:AddParagraph({
         Title = "Trolls",
@@ -783,7 +714,22 @@ Tabs.Main:AddParagraph({
         Callback = function()
      game:GetService("ReplicatedStorage").Stats[game:GetService("Players").LocalPlayer.Name].Spawnable.Value = true
   end})
-    
+
+local Toggle = Tabs.Main:AddToggle("AntiAfk", {Title = "Anti-AFK", Default = false })
+
+    Toggle:OnChanged(function()
+local vu = game:GetService("VirtualUser")
+repeat wait() until game:IsLoaded() 
+	game:GetService("Players").LocalPlayer.Idled:connect(function()
+    game:GetService("VirtualUser"):ClickButton2(Vector2.new())
+		vu:Button2Down(Vector2.new(0,0),workspace.CurrentCamera.CFrame)
+		wait(1)
+		vu:Button2Up(Vector2.new(0,0),workspace.CurrentCamera.CFrame)
+     end)
+ end)
+
+Options.AntiAfk:SetValue(true)
+
 Tabs.Main:AddButton({
         Title = "God Mode",
         Description = "",
@@ -1098,7 +1044,7 @@ local SliderJumpPower = Tabs.Main:AddSlider("JumpPower", {
         end)
     end
 })
-    
+
 -- Misc
 
 local GunNametxt = ""
@@ -1145,9 +1091,34 @@ local ohString5 = SelectedMelee
 local ohNil6 = nil
 local ohString7 = SelectedGrenade
 local ohString8 = SelectedPerks
-local ohString9 = "Spawned"
 
-game:GetService("ReplicatedStorage").RemoteEvent:FireServer(ohString1, ohString2, ohString3, ohString4, ohString5, ohNil6, ohString7, ohString8, ohString9)
+game:GetService("ReplicatedStorage").RemoteEvent:FireServer(ohString1, ohString2, ohString3, ohString4, ohString5, ohNil6, ohString7, ohString8, "Spawned")
+game:GetService("ReplicatedStorage").RemoteEvent:FireServer(ohString1, ohString2, ohString3, ohString4, ohString5, ohNil6, ohString7, ohString8, "Exit")
+game:GetService("ReplicatedStorage").RemoteEvent:FireServer("Update")
+end
+
+function UpdateLoadoutV2()
+for i, v in pairs(getgc(true)) do
+    if type(v) == 'table' and rawget(v, 'mala') then
+        local malaTable = v['mala']
+        if type(malaTable) == 'table' then
+            malaTable[1] = SelectedPrimary
+            malaTable[2] = SelectedSecondary
+            malaTable[3] = SelectedTertiary
+            malaTable[4] = SelectedMelee
+        end
+    end
+end
+for i, v in pairs(getgc(true)) do
+    if type(v) == 'table' and rawget(v, 'grenade') then
+        v.grenade = SelectedGrenade
+    end
+end
+for i, v in pairs(getgc(true)) do
+    if type(v) == 'table' and rawget(v, 'perk') then
+        v.perk = SelectedPerks
+    end
+end
 end
 
 Tabs.Misc:AddParagraph({
@@ -1226,6 +1197,7 @@ Tabs.Misc:AddButton({
         Description = "",
         Callback = function()
        UpdateLoadoutV1()
+       UpdateLoadoutV2()
    end
 })
 
@@ -1264,14 +1236,17 @@ else
     warn("Failed Unlocking")
 end
 end
+
+local UnlockAttachToggle = false
     
-Tabs.Misc:AddButton({
-        Title = "Unlock all Attachments",
-        Description = "(NOT PERMANENT)",
-        Callback = function()
-       loadattachments()
-   end
-})
+local Toggle = Tabs.Misc:AddToggle("UnlockAttachments", {Title = "Unlock All Attachments", Default = false })
+
+    Toggle:OnChanged(function(State)
+        UnlockAttachToggle = State
+   while wait(1) and UnlockAttachToggle do
+      loadattachments()
+      end
+    end)
 
 Tabs.Misc:AddParagraph({
         Title = "Gun Name",
@@ -1328,68 +1303,102 @@ Tabs.Misc:AddParagraph({
         Title = "Character Avatar",
         Content = " "
     })
-
-    local Dropdown = Tabs.Misc:AddDropdown("SelectNumber", {
-        Title = "Select Accessories Primary",
-        Values = {1, 2},
-        Multi = false,
-        Default = 1,
-    })
-
-    Dropdown:OnChanged(function(UhhValue)
-        SelectedParentNumber = UhhValue
-    end)
-
-local Input = Tabs.Misc:AddInput("Hat", {
-        Title = "Hat Accessories ID",
-        Default = 0,
-        Placeholder = "1055299",
-        Numeric = false, -- Only allows numbers
-        Finished = false, -- Only calls callback when you press enter
-        Callback = function(BC)
-            HatID = BC
-        end
-    })
     
-local Input = Tabs.Misc:AddInput("Waist", {
-        Title = "Waist Accessories ID",
-        Default = 0,
-        Placeholder = "0",
-        Numeric = false, -- Only allows numbers
-        Finished = false, -- Only calls callback when you press enter
-        Callback = function(BC2)
-            WaistID = BC2
-        end
-    })
-    
-local Input = Tabs.Misc:AddInput("Shoulder", {
-        Title = "Shoulder Accessories ID",
-        Default = 0,
-        Placeholder = "0",
-        Numeric = false, -- Only allows numbers
-        Finished = false, -- Only calls callback when you press enter
-        Callback = function(BC3)
-            ShoulderID = BC3
-        end
-    })
+local WaistID = 0
+local HatID = 0
+local ShoulderID = 0
+local NeckID = 0
+local SelectedParentNumber = 1
 
-local Input = Tabs.Misc:AddInput("Shoulder", {
-        Title = "Neck Accessories ID",
-        Default = 0,
-        Placeholder = "0",
-        Numeric = false, -- Only allows numbers
-        Finished = false, -- Only calls callback when you press enter
-        Callback = function(BC4)
-            NeckID = BC4
+function UpdateAvatar()
+    for i, v in pairs(getgc(true)) do
+        if type(v) == 'table' and rawget(v, 'avatar') then
+            local avatarTable = v['avatar']
+            if type(avatarTable) == 'table' then
+                if SelectedParentNumber == 1 then
+                    avatarTable["Waist"] = WaistID
+                    if avatarTable["Hat"] and type(avatarTable["Hat"]) == 'table' then
+                        avatarTable["Hat"][1] = HatID
+                    end
+                    avatarTable["Neck"] = NeckID
+                    if avatarTable["Shoulders"] and type(avatarTable["Shoulders"]) == 'table' then
+                        avatarTable["Shoulders"][1] = ShoulderID
+                    end
+                elseif SelectedParentNumber == 2 then
+                    if avatarTable["Hat"] and type(avatarTable["Hat"]) == 'table' then
+                        avatarTable["Hat"][2] = HatID
+                    end
+                    avatarTable["Neck"] = NeckID  -- assuming single value for Neck
+                    if avatarTable["Shoulders"] and type(avatarTable["Shoulders"]) == 'table' then
+                        avatarTable["Shoulders"][2] = ShoulderID
+                    end
+                end
+            end
         end
-    })
+    end
+end
+
+local Dropdown = Tabs.Misc:AddDropdown("SelectNumber", {
+    Title = "Select Accessories Primary",
+    Values = {1, 2},
+    Multi = false,
+    Default = 1,
+})
+
+Dropdown:OnChanged(function(UhhValue)
+    SelectedParentNumber = UhhValue
+end)
+
+Tabs.Misc:AddInput("Hat", {
+    Title = "Hat Accessories ID",
+    Default = 0,
+    Placeholder = "1055299",
+    Numeric = false, -- Only allows numbers
+    Finished = false, -- Only calls callback when you press enter
+    Callback = function(BC)
+        HatID = BC
+    end
+})
+
+Tabs.Misc:AddInput("Waist", {
+    Title = "Waist Accessories ID",
+    Default = 0,
+    Placeholder = "0",
+    Numeric = false, -- Only allows numbers
+    Finished = false, -- Only calls callback when you press enter
+    Callback = function(BC2)
+        WaistID = BC2
+    end
+})
+
+Tabs.Misc:AddInput("Shoulder", {
+    Title = "Shoulder Accessories ID",
+    Default = 0,
+    Placeholder = "0",
+    Numeric = false, -- Only allows numbers
+    Finished = false, -- Only calls callback when you press enter
+    Callback = function(BC3)
+        ShoulderID = BC3
+    end
+})
+
+Tabs.Misc:AddInput("Neck", {  -- Fixed the duplicate input title
+    Title = "Neck Accessories ID",
+    Default = 0,
+    Placeholder = "0",
+    Numeric = false, -- Only allows numbers
+    Finished = false, -- Only calls callback when you press enter
+    Callback = function(BC4)
+        NeckID = BC4
+    end
+})
 
 Tabs.Misc:AddButton({
-        Title = "Wear Selected Accessories ID",
-        Description = "",
-        Callback = function()
-       UpdateAvatar()
-   end
+    Title = "Wear Selected Accessories ID",
+    Description = "",
+    Callback = function()
+        UpdateAvatar()
+    end
 })
 
 -- Farms
@@ -1397,9 +1406,332 @@ Tabs.Misc:AddButton({
 local normalgrav = workspace.Gravity
 
 Tabs.Farms:AddParagraph({
-        Title = "Farm Zombies",
-        Content = "Just Use Bullet Aura and Hip Hieght: 10 or 7-5"
+        Title = "Auto Farm",
+        Content = "(BETA)"
     })
+    
+Tabs.Farms:AddParagraph({
+        Title = "Enable Auto Collection Care Package and Power Ups",
+        Content = ""
+    })
+    
+ Tabs.Farms:AddParagraph({
+        Title = "Gun Level Farm: Equip the name from loadout then enter the name\nto primary, secondary, tertiary not melee",
+        Content = ""
+    })
+ 
+ local Primary = game.ReplicatedStorage.Stats[game.Players.LocalPlayer.Name].Loadout.Primary
+ local Secondary = game.ReplicatedStorage.Stats[game.Players.LocalPlayer.Name].Loadout.Secondary
+ local Tertiary = game.ReplicatedStorage.Stats[game.Players.LocalPlayer.Name].Loadout.Tertiary
+ local Equipped = game.ReplicatedStorage.Stats[game.Players.LocalPlayer.Name].Loadout.Equipped
+
+function forceEquipping()
+    if Primary["Ammo_Stored"].Value > 0 then
+        game:GetService("VirtualInputManager"):SendKeyEvent(true, "One", false, game)
+        wait(0.1)
+        game:GetService("VirtualInputManager"):SendKeyEvent(false, "One", false, game)
+    end
+
+    if Secondary["Ammo_Stored"].Value > 0 then
+        game:GetService("VirtualInputManager"):SendKeyEvent(true, "Two", false, game)
+        wait(0.1)
+        game:GetService("VirtualInputManager"):SendKeyEvent(false, "Two", false, game)
+    end
+
+    if Tertiary["Ammo_Stored"].Value > 0 then
+        game:GetService("VirtualInputManager"):SendKeyEvent(true, "Three", false, game)
+        wait(0.1)
+        game:GetService("VirtualInputManager"):SendKeyEvent(false, "Three", false, game)
+    end
+end
+
+
+function restoreammo()
+if Primary["Ammo_Stored"].Value == 0 and not switchedPrimary then
+        game:GetService("VirtualInputManager"):SendKeyEvent(true, "Two", false, game)
+        wait(0.1)
+        game:GetService("VirtualInputManager"):SendKeyEvent(false, "Two", false, game)
+        switchedPrimary = true
+    elseif Primary["Ammo_Stored"].Value > 0 then
+        switchedPrimary = false
+    end
+
+    if Secondary["Ammo_Stored"].Value == 0 and not switchedSecondary then
+        game:GetService("VirtualInputManager"):SendKeyEvent(true, "Three", false, game)
+        wait(0.1)
+        game:GetService("VirtualInputManager"):SendKeyEvent(false, "Three", false, game)
+        switchedSecondary = true
+    elseif Secondary["Ammo_Stored"].Value > 0 then
+        switchedSecondary = false
+    end
+
+    if Tertiary["Ammo_Stored"].Value == 0 and not switchedTertiary then
+        game:GetService("VirtualInputManager"):SendKeyEvent(true, "One", false, game)
+        wait(0.1)
+        game:GetService("VirtualInputManager"):SendKeyEvent(false, "One", false, game)
+        switchedTertiary = true
+    elseif Tertiary["Ammo_Stored"].Value > 0 then
+        switchedTertiary = false
+    end
+if Primary["Ammo_Stored"].Value == 0 and Secondary["Ammo_Stored"].Value == 0 and Tertiary["Ammo_Stored"].Value == 0 then
+local ThePurchase = "Purchase P"
+local SelectedPerk = "Goala Cola"
+local theTable3 = {}
+game:GetService("ReplicatedStorage").RemoteFunction:InvokeServer(ThePurchase, SelectedPerk, theTable3)
+end
+end
+
+local Player = game:GetService("Players").LocalPlayer
+local AdjustRangeShoot = 2500
+local BringHitPartDistanced = 10
+
+local function getNearestZombiesV2()
+    local nearest = nil
+    local nearestDistance = AdjustRangeShoot  -- Store the initial range here
+    local ZombiesList = game:GetService("Workspace").Zombies:GetChildren()
+
+    for _, v in ipairs(ZombiesList) do
+        if v:FindFirstChild("HumanoidRootPart") and v:FindFirstChild("Humanoid") and not v:FindFirstChild("IsClone") then
+            local distance = (Player.Character.HumanoidRootPart.Position - v.HumanoidRootPart.Position).Magnitude
+            if distance < nearestDistance then
+                nearestDistance = distance
+                nearest = v
+            end
+        end
+    end
+
+    return nearest
+end
+
+local function getNearestBosses()
+    local nearest = nil
+    local dist = math.huge
+    local isBossFolder = game:GetService("Workspace"):FindFirstChild("Map"):FindFirstChild("BossFolder")
+
+    if isBossFolder then
+        local BossList = game:GetService("Workspace").Map.BossFolder:GetChildren()
+
+        if next(BossList) ~= nil then
+            for i, v in pairs(BossList) do
+                if v:FindFirstChild("HumanoidRootPart") and v:FindFirstChild("Humanoid") and not v:FindFirstChild("IsClone") then
+                        local m = (Player.Character.HumanoidRootPart.Position - v.HumanoidRootPart.Position).Magnitude
+                        if m < dist then
+                            dist = m
+                            nearest = v
+                        end
+                    end
+                end
+            end
+        end
+
+    return nearest
+end
+
+function AutoShootZombies()
+local player = game:GetService("Players").LocalPlayer
+        local charpart = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
+        
+        if charpart then
+            for i, v in pairs(game:GetService("Workspace").Zombies:GetChildren()) do
+                local zombieRootPart = v:FindFirstChild("HumanoidRootPart")
+                local zombieHumanoid = v:FindFirstChild("Humanoid")
+                
+                local clone = nil
+                for _, part in pairs(v:GetChildren()) do
+                    if part:IsA("BasePart") and part:FindFirstChild("IsClone") then
+                        clone = part
+                        break
+                    end
+                end
+                
+                if zombieRootPart then
+                    local distance = (charpart.Position - zombieRootPart.Position).Magnitude
+                    
+                    if distance <= BringHitPartDistanced then
+                        if not clone then
+                            local BypassCFrameKick = zombieRootPart:Clone()
+                            BypassCFrameKick.Anchored = true
+                            BypassCFrameKick.Name = "HumanoidRootPart"
+                            BypassCFrameKick.OriginalSize.Value = Vector3.new(3, 3, 3)
+                            BypassCFrameKick.Size = Vector3.new(3, 3, 3)             
+                            
+                            local isClone = Instance.new("BoolValue")
+                            isClone.Name = "IsClone"
+                            isClone.Parent = BypassCFrameKick
+                            
+                            BypassCFrameKick.Parent = v
+                            clone = BypassCFrameKick
+                        end
+                        local offset = charpart.CFrame:VectorToWorldSpace(Vector3.new(0, 0, -6))
+                        clone.Position = charpart.Position + offset
+                        clone.Name = "HumanoidRootPart"
+                        end
+                    end
+                end
+
+      local nearestZombie = getNearestZombiesV2()
+        
+        if nearestZombie then
+            local rayOrigin = game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.Position
+            local rayDirection = (nearestZombie.HumanoidRootPart.Position - rayOrigin).unit * 550
+            
+            local raycastParams = RaycastParams.new()
+            raycastParams.FilterType = Enum.RaycastFilterType.Blacklist
+            
+            local ignoreList = {Player.Character}
+            for _, plr in ipairs(game:GetService("Players"):GetPlayers()) do
+                if plr.Character and plr.Character:FindFirstChild("HumanoidRootPart") then
+                    table.insert(ignoreList, plr.Character)
+                end
+            end
+            raycastParams.FilterDescendantsInstances = ignoreList
+
+            local raycastResult = workspace:Raycast(rayOrigin, rayDirection, raycastParams)
+            local hitInvisibleWall = raycastResult and raycastResult.Instance and raycastResult.Instance.Transparency == 1 and not raycastResult.Instance.CanCollide
+
+            -- If we hit something, and it's part of the nearest zombie, or if it didn't hit anything (so it's clear path)
+            if (raycastResult and raycastResult.Instance:IsDescendantOf(nearestZombie)) or not raycastResult or hitInvisibleWall then
+            
+                local shootData = {
+                    ["ModelType"] = "Character",
+                    ["TargetPos"] = nearestZombie.HumanoidRootPart.Position,
+                    ["Model"] = Player.Character,
+                    ["PlayerName"] = Player.Name,
+                    ["SourcePos"] = Vector3.new(0, -1, 0),
+                    ["SourcePart"] = {}, 
+                    ["WeaponName"] = {}
+                }
+ 
+              game:GetService("ReplicatedStorage").RemoteEventF:FireServer(shootData)
+              end
+         end
+    end
+end  
+
+function AutoShootBosses()
+  local player = game:GetService("Players").LocalPlayer
+        local charpart = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
+        local isBossFolder = game:GetService("Workspace"):FindFirstChild("Map"):FindFirstChild("BossFolder")
+        
+        if charpart and isBossFolder then
+            for i, v in pairs(game:GetService("Workspace").Map.BossFolder:GetChildren()) do
+                local bossRootPart = v:FindFirstChild("HumanoidRootPart")
+                local bosshumanoid = v:FindFirstChild("Humanoid")
+                
+                local clone = nil
+                for _, part in pairs(v:GetChildren()) do
+                    if part:IsA("BasePart") and part:FindFirstChild("IsClone") then
+                        clone = part
+                        break
+                    end
+                end
+                
+                if bossRootPart then
+                    local distance = (charpart.Position - bossRootPart.Position).Magnitude
+                    
+                    if distance <= 10000 then
+                        if not clone then
+                            local BypassCFrameKick = bossRootPart:Clone()
+                            BypassCFrameKick.Anchored = true
+                            BypassCFrameKick.Name = "HumanoidRootPart"
+                            BypassCFrameKick.OriginalSize.Value = Vector3.new(4, 4, 4)
+                            BypassCFrameKick.Size = Vector3.new(4, 4, 4)
+                            
+                            local isClone = Instance.new("BoolValue")
+                            isClone.Name = "IsClone"
+                            isClone.Parent = BypassCFrameKick
+                            
+                            BypassCFrameKick.Parent = v
+                            clone = BypassCFrameKick
+                        end
+                        local offset = charpart.CFrame:VectorToWorldSpace(Vector3.new(0, 0, -8))
+                        clone.Position = charpart.Position + offset
+                        end
+                    end
+                end
+
+     if not game:GetService("Workspace"):FindFirstChild("Map"):FindFirstChild("BossFolder") then
+         AdjustRangeShoot = 2500
+         else
+         AdjustRangeShoot = 10
+         end
+    end
+end
+
+function AdjustExplosion()
+for i,v in pairs(getgc(true)) do
+   if type(v) == 'table' and rawget(v, 'radius') then
+       v.radius = 100000
+       v.blastradius = 100000
+       v.TracerPart = "Tracer_RocketS"
+   end
+end
+
+for _, v in pairs(game:GetService("Workspace").Ignore.Debris:GetDescendants()) do
+        -- Check if v is a Part and if it has an Explosion child
+        if v:IsA("Part") and v:FindFirstChild("Explosion") then
+            -- Set the size of the Part
+            v.Size = Vector3.new(10000, 10000, 10000)
+            
+            -- Get the Explosion child, assumed to be a ParticleEmitter
+            local explosion = v:FindFirstChild("Explosion")
+            
+            -- Check if Explosion is a ParticleEmitter
+            if explosion and explosion:IsA("ParticleEmitter") then
+                -- Set the size sequence for the ParticleEmitter
+                local sizeSequence = NumberSequence.new{
+                    NumberSequenceKeypoint.new(0, 100000),
+                    NumberSequenceKeypoint.new(1, 100000)
+                }
+                explosion.Size = sizeSequence
+            end
+        end
+     end
+end
+
+local HipValue = 8
+
+function ChangeHipHeight()
+game.Players.LocalPlayer.Character.Humanoid.HipHeight = HipValue
+end
+
+local AutoFarmZombies = false
+
+local Toggle = Tabs.Farms:AddToggle("AutoFarmZombieBossV1", {Title = "Auto Farm (Zombies/Boss)", Default = false })
+
+Toggle:OnChanged(function(boolX2)
+AutoFarmZombies = boolX2
+
+if AutoFarmZombies then
+MXDMG()
+MXDMG2()
+else
+game.Players.LocalPlayer.Character.Humanoid.HipHeight = 0
+wait(1)
+game.Players.LocalPlayer.Character.Humanoid.HipHeight = 0
+end
+
+while AutoFarmZombies and wait(0.1) do
+forceEquipping()
+  restoreammo()
+  ChangeHipHeight()
+  AutoShootZombies()
+  AutoShootBosses()
+  AdjustExplosion()
+  end
+end)
+
+local Slider = Tabs.Farms:AddSlider("HipHeight", {
+    Title = "Height Slider",
+    Description = "",
+    Default = 8,
+    Min = 1,
+    Max = 10,
+    Rounding = 1,
+    Callback = function(HeightSlider)
+        HipValue = HeightSlider
+    end
+})
 
 Tabs.Farms:AddParagraph({
         Title = "Auto Collection",
@@ -1450,7 +1782,7 @@ local Toggle = Tabs.Farms:AddToggle("AutoCollectCarePackage", {Title = "Presents
 Toggle:OnChanged(function(bool8)
 AutoCollectPresents = bool8
 while AutoCollectPresents and wait(0.1) do
-if game:GetService("Workspace"):FindFirstChild("Map") and game:GetService("Workspace"):FindFirstChild("Map"):FindFirstChild("Decorations") then
+   if game:GetService("Workspace"):FindFirstChild("Map") and game:GetService("Workspace"):FindFirstChild("Map"):FindFirstChild("Decorations") then
    for i, v  in pairs(game:GetService("Workspace").Map.Decorations:GetDescendants()) do
         if v:FindFirstChildWhichIsA("TouchTransmitter") then
               firetouchinterest(v, game.Players.LocalPlayer.Character.HumanoidRootPart, 0)
@@ -1714,16 +2046,13 @@ end
 
             -- If we hit something, and it's part of the nearest zombie, or if it didn't hit anything (so it's clear path)
             if (raycastResult and raycastResult.Instance:IsDescendantOf(nearestZombie)) or not raycastResult then
-                local ohstring1 = "Explosive"
-                local ohstring2 = "Rocket"
-                local ohstring3 = "VisibleRocket"
-                local ohstring4 = "RPG"
+            
                 local shootData = {
                     ["ModelType"] = "Character",
-                    ["TargetPos"] = nearestZombie.HumanoidRootPart.Position,
+                    ["TargetPos"] = nearestZombie.Head.Position,
                     ["Model"] = Player.Character,
                     ["PlayerName"] = Player.Name,
-                    ["SourcePos"] = Vector3.new(0, -1, 0),
+                    ["SourcePos"] = Vector3.new(0, -1, -0.5),
                     ["SourcePart"] = {}, 
                     ["WeaponName"] = {}
                 }
@@ -1752,8 +2081,8 @@ local Input = Tabs.Zombie:AddInput("DistanceShooting", {
     Title = "Bullet Aura Range",
     Default = 25,
     Placeholder = "Number",
-    Numeric = false, -- Only allows numbers
-    Finished = false, -- Calls callback when you press enter
+    Numeric = true, -- Only allows numbers
+    Finished = true, -- Calls callback when you press enter
     Callback = function(value)
         RangeShoot = tonumber(value) or 25
     end
@@ -1789,7 +2118,7 @@ Toggle:OnChanged(function(bool)
                                 BillboardGui.Size = UDim2.new(0, 200, 0, 50)
                                 BillboardGui.StudsOffset = Vector3.new(0, 2.5, 0)
 
-                         --[[     local frame = Instance.new("Frame")
+                                local frame = Instance.new("Frame")
                                 frame.ZIndex = 10
                                 frame.BackgroundTransparency = 0.3
                                 frame.Size = UDim2.new(0, 30, 0, 30)  -- Adjusted size to make the circle smaller
@@ -1800,7 +2129,6 @@ Toggle:OnChanged(function(bool)
                                 local uiCorner = Instance.new("UICorner")
                                 uiCorner.CornerRadius = UDim.new(0.5, 0)
                                 uiCorner.Parent = frame
-                            ]]
                             
                                 local TextLabel = Instance.new("TextLabel")
                                 TextLabel.Parent = BillboardGui
@@ -1866,7 +2194,7 @@ spawn(function()
                             BillboardGui.Size = UDim2.new(0, 200, 0, 50)
                             BillboardGui.StudsOffset = Vector3.new(0, 2.5, 0)
                             
-                         --[[   local frame = Instance.new("Frame")
+                                local frame = Instance.new("Frame")
                                 frame.ZIndex = 10
                                 frame.BackgroundTransparency = 0.3
                                 frame.Size = UDim2.new(0, 50, 0, 50)  -- Adjusted size to make the circle smaller
@@ -1877,7 +2205,6 @@ spawn(function()
                                 local uiCorner = Instance.new("UICorner")
                                 uiCorner.CornerRadius = UDim.new(0.5, 0)
                                 uiCorner.Parent = frame
-                             ]]
                              
                             TextLabel.Parent = BillboardGui
                             TextLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
