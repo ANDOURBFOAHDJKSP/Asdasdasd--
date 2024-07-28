@@ -1360,6 +1360,40 @@ Fluent:Notify({
         Duration = 10 -- Set to nil to make the notification not disappear
     })
     
+ local Players = game:GetService("Players")
+local localPlayer = Players.LocalPlayer
+
+function CheckSpecificUsernames()
+    for _, player in pairs(Players:GetPlayers()) do
+        if player ~= localPlayer then
+            if player.Name == "Guesttester_1" then
+   Fluent:Notify({
+        Title = "Message",
+        Content = "U Meet Guesttester_1 the Co Owner!",
+        SubContent = "", -- Optional
+        Duration = 10 -- Set to nil to make the notification not disappear
+    })
+            elseif player.Name == "Unknownproooolucky" then
+Fluent:Notify({
+        Title = "Message",
+        Content = "U Meet Unknownproooolucky the Owner!",
+        SubContent = "", -- Optional
+        Duration = 10 -- Set to nil to make the notification not disappear
+    })
+            elseif player.Name == "Guesttester1_alt" then
+     Fluent:Notify({
+        Title = "Message",
+        Content = "U Meet Guesttester_1 the Co Owner!",
+        SubContent = "", -- Optional
+        Duration = 10 -- Set to nil to make the notification not disappear
+    })
+            end
+        end
+    end
+end
+
+CheckSpecificUsernames()
+
 local Window = Fluent:CreateWindow({
     Title = "Unknown Hub X TQ ",
     SubTitle = "V5.0 (Lobby) discord.gg/d2a3KkTD6r",
