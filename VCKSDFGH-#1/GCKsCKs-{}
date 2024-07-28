@@ -1362,7 +1362,7 @@ Fluent:Notify({
     
 local Window = Fluent:CreateWindow({
     Title = "Unknown Hub X TQ ",
-    SubTitle = "V4.9 (Lobby) discord.gg/d2a3KkTD6r",
+    SubTitle = "V5.0 (Lobby) discord.gg/d2a3KkTD6r",
     TabWidth = 160,
     Size = UDim2.fromOffset(580, 460),
     Acrylic = true, -- The blur may be detectable, setting this to false disables blur entirely
