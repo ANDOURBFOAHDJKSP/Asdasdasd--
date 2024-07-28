@@ -1,17 +1,7 @@
 -- Define the correct key
 local Player = game:GetService("Players")
 
-if not Player.Name == "Guesttester_1" or Player.Name == "Unknownproooolucky" or Player.Name == "Guilfordy_sagalol" then
 local correctKey = "UnknownHubXUniversal-HB8L9P0O8KB8L91L81J9LOP099BNCXZY77"
-end
-
-if Player.Name == "Guesttester_1" or Player.Name == "Guilfordy_sagalol" then
-local correctKey = "EnterHWIDCoOwner(Guesttester_1)"
-end
-
-if Player.Name == "Unknownproooolucky" then
-local correctKey = "EnterHWIDOwner(UnknownprooooluckyXD)"
-end
 
 local keyFileName = "UnknownTQHub/KeyHub.txt"
 
