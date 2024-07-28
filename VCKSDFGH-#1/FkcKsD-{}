@@ -302,18 +302,23 @@ end
 
 function getNearestTarget()
     local target
-    local closet = math.huge
+    local closest = math.huge
     local player, cha, plr, hum = getPlayer()
     local dungeon, rooms, enemies, shrines = getDungeon()
+    
     for _, v in pairs(enemies:GetChildren()) do
         if v:FindFirstChild("EvilHumanoid") and v:FindFirstChild("HumanoidRootPart") and v.EvilHumanoid.Health > 0 then
-            local distance = (v.HumanoidRootPart.Position - plr.Position).Magnitude
-            if distance < closet then
-                closet = distance
-                target = v
+            local isClone = v:FindFirstChild("IsClone")
+            if not isClone then
+                local distance = (v.HumanoidRootPart.Position - plr.Position).Magnitude
+                if distance < closest then
+                    closest = distance
+                    target = v
+                end
             end
         end
     end
+    
     return target
 end
 
@@ -332,6 +337,55 @@ function getNearestAttack()
     end
 
     return nearestAttack, closestDistance
+end
+
+local HitPartSizeX = 10
+local HitPartSizeY = 10
+local HitPartSizeZ = 10
+local ShowHitPart = false
+
+function getNearestHitPart()
+    local player = game:GetService("Players").LocalPlayer
+    local charpart = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
+    
+    if charpart then
+        for _, v in pairs(game:GetService("Workspace").Dungeon.Enemies:GetChildren()) do
+            local enemyRootPart = v:FindFirstChild("HumanoidRootPart")
+            local enemyUpperTorso = v:FindFirstChild("UpperTorso")
+            local enemyHead = v:FindFirstChild("Head")
+
+            if enemyRootPart and enemyHead and enemyUpperTorso then
+                local TargetDistance = 1000
+                local distance = (charpart.Position - enemyHead.Position).Magnitude
+                local distance2 = (charpart.Position - enemyRootPart.Position).Magnitude
+                
+                if distance2 <= 30 then
+                enemyRootPart.CFrame = enemyUpperTorso.CFrame
+                enemyRootPart.Position = enemyUpperTorso.Position
+                end
+
+                if distance <= TargetDistance then
+                    enemyHead.Size = Vector3.new(HitPartSizeX, HitPartSizeY, HitPartSizeZ)
+                    enemyHead.Anchored = true
+                    
+                    for _, child in pairs(enemyHead:GetChildren()) do
+                        if child:IsA("SpecialMesh") or child:IsA("Mesh") or v:IsA("Decal") then
+                            child:Destroy()
+                        end
+                    end
+                    
+                    local offset = charpart.CFrame:VectorToWorldSpace(Vector3.new(0, 0, -8))
+                    enemyHead.Position = charpart.Position + offset                
+                    
+                    if ShowHitPart then
+                        enemyHead.Transparency = 0.7
+                    else
+                        enemyHead.Transparency = 1
+                    end
+                end
+            end
+        end
+    end
 end
 
 local Skill = {
@@ -390,6 +444,7 @@ if workspace:FindFirstChild("Dungeon") then
             end
        end
      end
+     wait(0.1)
 end
             
               end
@@ -414,7 +469,7 @@ if workspace:FindFirstChild("Dungeon") then
           
               end
            end
-       wait(0.2)
+       wait(1)
      end
 end
             
@@ -462,7 +517,7 @@ function killAuraHigh(monster)
             end
        end
             
-            wait(0.2)
+            wait(1)
               end
        end
 end
@@ -516,35 +571,36 @@ y = 0
 z = -2
 
 _G.TweenShrine = false
-local shrineName = "Summoning"
+local shrineNames = {"Summoning", "Healing", "Sacrifice"} -- Default selected shrine names
 
 function getShrines()
-    local target
-    local dungeon, rooms, enemies, shrines = getDungeon()
+    local shrinesList = {}
+    local dungeon = getDungeon()
     local shrines = dungeon:WaitForChild("Shrines")
     for _, shrine in ipairs(shrines:GetChildren()) do
         if shrine:FindFirstChild("Primary") and shrine.Primary:FindFirstChild("ProximityPrompt") then
-            if shrine.Name == shrineName then
-                target = shrine
+            if table.find(shrineNames, shrine.Name) then
+                table.insert(shrinesList, shrine)
             end
         end
     end
-    return target
+    return shrinesList
 end
+
+local ShrineKeyType = "E"
 
 function pressKey()
-    game:GetService("VirtualInputManager"):SendKeyEvent(true, "E", false, game)
-    game:GetService("VirtualInputManager"):SendKeyEvent(true, "F", false, game)
+    game:GetService("VirtualInputManager"):SendKeyEvent(true, ShrineKeyType, false, game)
 end
 
-function collectShrines(shrine)
-if shrine.Primary then
-    spawn(pressKey)
-    Tween({
-        target = shrine,
-        targetPart = shrine.Primary,
-        newCFrame = CFrame.new(0, 0, 2.6)
-    })
+function collectShrine(shrine)
+    if shrine.Primary then
+        spawn(pressKey)
+        Tween({
+            target = shrine,
+            targetPart = shrine.Primary,
+            newCFrame = CFrame.new(0, 0, 2.6)
+        })
     end
 end
 
@@ -576,7 +632,9 @@ function Tween(table, callback)
     local movementSpeed = 0
     
     if SlowTween then
-        if distance < 150 then
+          if distance < 30 then
+            movementSpeed = 10
+        elseif distance < 150 then
             movementSpeed = 10
         elseif distance < 200 then
             movementSpeed = 10
@@ -592,7 +650,9 @@ function Tween(table, callback)
     end
 
     if NormalTween then
-        if distance < 150 then
+          if distance < 30 then
+            movementSpeed = 10
+        elseif distance < 150 then
             movementSpeed = 30
         elseif distance < 200 then
             movementSpeed = 35
@@ -608,7 +668,9 @@ function Tween(table, callback)
     end
 
     if FastTween then
-        if distance < 150 then
+         if distance < 30 then
+            movementSpeed = 10
+        elseif distance < 150 then
             movementSpeed = 40
         elseif distance < 200 then
             movementSpeed = 45
@@ -624,7 +686,9 @@ function Tween(table, callback)
     end
 
     if MaliciousTween then
-        if distance < 150 then
+         if distance < 30 then
+            movementSpeed = 10
+        elseif distance < 150 then
             movementSpeed = 50
         elseif distance < 200 then
             movementSpeed = 55
@@ -724,6 +788,8 @@ function tpToMonsters()
         targetPart = monster.HumanoidRootPart,
         newCFrame = CFrame.new(x, y, z)
     })
+    
+    getNearestHitPart()
  
 end
  
@@ -791,6 +857,12 @@ else
 print("Supported setfflag()")
 end
 
+if game.Players then
+print("Advance Api")
+else
+print("Service Api")
+end
+
 print("-- Unknown Hub X 5/5: Loaded, Pls Wait for Few Seconds...")
 
 wait(0.2)
@@ -818,7 +890,7 @@ Fluent:Notify({
     
 local Window = Fluent:CreateWindow({
     Title = "Unknown Hub X TQ ",
-    SubTitle = "V4.9 (Dungeon) discord.gg/d2a3KkTD6r",
+    SubTitle = "V5.0 (Dungeon) discord.gg/d2a3KkTD6r",
     TabWidth = 160,
     Size = UDim2.fromOffset(580, 460),
     Acrylic = true, -- The blur may be detectable, setting this to false disables blur entirely
@@ -845,7 +917,7 @@ Tabs.Main:AddParagraph({
     })
 
 -- Example usage in your second script
-local Toggle1 = Tabs.Main:AddToggle("AutokillMobsWarrior", {Title = "Auto Kill Mobs (Warrior)", Default = false })
+local Toggle1 = Tabs.Main:AddToggle("AutokillMobs", {Title = "Auto Kill Mobs", Default = false })
 
 Toggle1:OnChanged(function(State)
     Settings.H = State
@@ -859,7 +931,9 @@ Toggle1:OnChanged(function(State)
         end)
     end)
     spawn(function()
-        while wait(0.1) and Settings.H do 
+        repeat
+        if Settings.H then
+          wait(0.1)
             pcall(function()
                 ReplicatedStorage.Shared.Remotes.Data.ClaimPrizes:FireServer()
                 for i, v in pairs(Workspace:GetChildren()) do
@@ -869,80 +943,13 @@ Toggle1:OnChanged(function(State)
                     end 
                 end 
                 tpToMonsters()
-            end)
-        end
+             end)
+          end
+        until Settings.H == false
     end)
  end)
  
-Options.AutokillMobsWarrior:SetValue(false)
-
-function InstantKill()
-if workspace:FindFirstChild("Dungeon") then
-        for index, value in pairs(workspace.Dungeon:GetDescendants()) do
-            if value:IsA("Model") and value:FindFirstChild("HumanoidRootPart") then
-                value:FindFirstChild("HumanoidRootPart").CFrame = CFrame.new(-105, 100, -275)
-                value:FindFirstChild("HumanoidRootPart").Position = Vector3.new(-105, 100, -275)
- 
- if value.HumanoidRootPart then
-Tween({
-	targetPart = value.HumanoidRootPart,
-	newCFrame = CFrame.new(10, 10, 10)
-})
-               end
-           end
-      end        
-
-for i, v in pairs(Workspace:GetChildren()) do
-       if v:FindFirstChild("FinishRoom", true) and v:FindFirstChild("FinishRoom", true):FindFirstChild("Hitbox", true) then
-       firetouchinterest(Player.Character:FindFirstChild("HumanoidRootPart", true),v:FindFirstChild("FinishRoom",true):FindFirstChild("Hitbox",true):FindFirstChild("Part",true),0)
-       firetouchinterest(Player.Character:FindFirstChild("HumanoidRootPart", true),v:FindFirstChild("FinishRoom",true):FindFirstChild("Hitbox",true):FindFirstChild("Part",true),1)
-             end
-        end 
-    end
-
-local dungeon, rooms, enemies, shrines = getDungeon()
-
-    if rooms:FindFirstChild("FinishRoom") and rooms.FinishRoom:FindFirstChild("Hitbox") then
-        Tween({
-            targetPart = rooms.FinishRoom.Hitbox.Part
-        })
-    end
-end
-
-local InstantKilltg = false
-
-local Toggle4 = Tabs.Main:AddToggle("AutoKillMobsWizard", { Title = "Auto Kill Mobs (Wizard)", Default = false })
-
-Toggle4:OnChanged(function(vaf)
-    InstantKilltg = vaf
- 
- spawn(function()
-    game:GetService("RunService").RenderStepped:Connect(function()
-        if InstantKilltg then
-            pcall(function()
-                ScriptFunction(Script)
-                ScriptFunction2(Script, GetClosestt().PrimaryPart.Position)
-                RunService.RenderStepped:Wait()
-            end)
-        end
-    end)
- end)
- 
-if InstantKilltg then
-local part = Instance.new("Part", workspace.Characters)
-        part.Name = "WaveDefensefarm"
-        part.Size = Vector3.new(25, 1, 25)
-        part.Anchored = true
-        part.Position = Vector3.new(-105, 100, -275)
-end
- 
-    while InstantKilltg and wait(0.2) do
-        
-        InstantKill()
-    end
-end)
-
-Options.AutoKillMobsWizard:SetValue(false)
+Options.AutokillMobs:SetValue(false)
 
 end
 
@@ -953,24 +960,6 @@ Tabs.Main:AddParagraph({
         Content = "This is Not Support in Public Wave, Defense Only Solo Wave Defense"
     })
 
-function InstantKill2()
-if workspace:FindFirstChild("Dungeon") then
-        for index, value in pairs(workspace.Dungeon:GetDescendants()) do
-            if value:IsA("Model") and value:FindFirstChild("HumanoidRootPart") then
-                value:FindFirstChild("HumanoidRootPart").CFrame = CFrame.new(-1800, 1200, -3200)
-                value:FindFirstChild("HumanoidRootPart").Position = Vector3.new(-1800, 1200, -3200)
- 
- if value.HumanoidRootPart then
-Tween({
-	targetPart = value.HumanoidRootPart,
-	newCFrame = CFrame.new(10, 10, 10)
-})
-                   end
-               end
-           end
-      end        
- end
- 
  function WaveDefenseWar()
  local player, cha, plr, hum = getPlayer()
  local TargetDistance = math.huge
@@ -984,6 +973,9 @@ Tween({
 	targetPart = value.HumanoidRootPart,
 	newCFrame = CFrame.new(x, y, z)
 })
+
+getNearestHitPart()
+
                    end
                end
            end
@@ -992,7 +984,7 @@ Tween({
  
  local FarmWaveDefense1 = false
 
-local Toggle = Tabs.Main:AddToggle("WaveDefenseWarrior", {Title = "Auto Kill Mobs (Warrior)", Default = false })
+local Toggle = Tabs.Main:AddToggle("WaveDefenseFarm", {Title = "Auto Kill Mobs", Default = false })
 
 Toggle:OnChanged(function(State)
     FarmWaveDefense1 = State
@@ -1006,53 +998,18 @@ Toggle:OnChanged(function(State)
         end)
     end)
     spawn(function()
-        while wait(0.1) and FarmWaveDefense1 do 
-            pcall(function()
-            
+        repeat
+        if FarmWaveDefense1 then
+           wait(0.1)
+            pcall(function()       
                 ReplicatedStorage.Shared.Remotes.Data.ClaimPrizes:FireServer()
                 WaveDefenseWar()
             end)
         end
+        until FarmWaveDefense1 == false
     end)
  end)
  
- local InstantKilltg2 = false
-
-local Toggle3 = Tabs.Main:AddToggle("WaveDefenseWizard", {Title = "Auto Kill Mobs (Wizard)", Default = false })
-
-Toggle3:OnChanged(function(Value1)
-    InstantKilltg2 = Value1
- 
- spawn(function()
-    game:GetService("RunService").RenderStepped:Connect(function()
-        if InstantKilltg2 then
-            pcall(function()
-                -- Assuming ScriptFunction, ScriptFunction2, GetClosestt, Noclip, and RunService are defined elsewhere
-                ScriptFunction(Script)
-                ScriptFunction2(Script, GetClosestt().PrimaryPart.Position)
-                RunService.RenderStepped:Wait()
-            end)
-        end
-    end)
- end)
- 
-if InstantKilltg2 then
-local part = Instance.new("Part", workspace.Characters)
-        part.Name = "WaveDefensefarm"
-        part.Size = Vector3.new(25, 1, 25)
-        part.Anchored = true
-        part.Position = Vector3.new(-1800, 1200, -3200)
-end
- 
-    while InstantKilltg2 and wait(0.2) do
-    
-        InstantKill2()
-    end
-end)
-
-
-Options.WaveDefenseWizard:SetValue(false)
-
 end
 
 Tabs.Main:AddParagraph({
@@ -1137,7 +1094,7 @@ Tabs.Main:AddParagraph({
         Content = ""
     })
 
-local Toggle1 = Tabs.Main:AddToggle("WarriorEventFarn", {Title = "Auto Kill Event Mobs (Warrior)", Default = false })
+local Toggle1 = Tabs.Main:AddToggle("EventFarm", {Title = "Auto Kill Event Mobs", Default = false })
 
 Toggle1:OnChanged(function(State)
     Settings.Re = State
@@ -1151,8 +1108,10 @@ Toggle1:OnChanged(function(State)
         end)
     end)
     spawn(function()
-        while wait() and Settings.Re do 
-            pcall(function()            
+        repeat
+        if Settings.Re then
+          wait(0.1)
+            pcall(function()
                 ReplicatedStorage.Shared.Remotes.Data.ClaimPrizes:FireServer()
                 for i, v in pairs(Workspace:GetChildren()) do
                     if v:FindFirstChild("FinishRoom", true) and v:FindFirstChild("FinishRoom", true):FindFirstChild("Hitbox", true) then
@@ -1161,8 +1120,9 @@ Toggle1:OnChanged(function(State)
                     end 
                 end 
                 tpToMonsters()
-            end)
-        end
+             end)
+          end
+        until Settings.Re == false
     end)
     spawn(function()
         while wait() and Settings.Re do
@@ -1179,144 +1139,6 @@ Toggle1:OnChanged(function(State)
     end)
     spawn(function()
         while wait() and Settings.Re do
-            local player, cha, plr, hum = getPlayer()
-            local dungeon, rooms, enemies, shrines = getDungeon()
-            for _, v in pairs(rooms:GetDescendants()) do
-                if v:FindFirstChildWhichIsA("TouchTransmitter", true) and v.Name == "UnderwaterTeleporter" then
-                    v.Start.CFrame = plr.CFrame
-                    wait(3)
-                    v.Start:Destroy()
-                end
-            end
-            wait()
-        end
-    end)
-end)
-
-local function findBossRoomInWorkspace(workspace)
-    local function searchInChildren(parent)
-        for _, child in pairs(parent:GetChildren()) do
-            if child:IsA("Model") and child.Name == "BossRoom" then
-                local BossPart = child:FindFirstChild("PlayerSpawn")
-                if BossPart then
-                    return BossPart
-                end
-            end
-
-            local foundPart = searchInChildren(child)
-            if foundPart then
-                return foundPart
-            end
-        end
-
-        return nil
-    end
-
-    return searchInChildren(workspace)
-end
-
-local function MoveOutFromBossRoom()
-    wait(1)
-    local PlayerSpawn = findBossRoomInWorkspace(workspace)
-    if PlayerSpawn then
-        local targetPosition = PlayerSpawn.Position - Vector3.new(0, 0, -30)
-        local movementSpeed = 13
-
-        local TweenService = game:GetService("TweenService")
-        local HumanoidRootPart = game.Players.LocalPlayer.Character.HumanoidRootPart
-
-        local distance = (targetPosition - HumanoidRootPart.Position).Magnitude
-        local duration = distance / movementSpeed
-
-        local tweenInfo = TweenInfo.new(duration, Enum.EasingStyle.Linear)
-        local tween = TweenService:Create(HumanoidRootPart, tweenInfo, {
-            CFrame = CFrame.new(targetPosition)
-        })
-
-        tween:Play()
-    end
-end
-
-function killeventmobs()
-if workspace:FindFirstChild("Dungeon") then
-   for _, monster in pairs(workspace.Dungeon:GetDescendants()) do
-    if monster:IsA("Model") and monster:FindFirstChild("HumanoidRootPart") then
-        if monster.Name ~= game.Players.LocalPlayer.Name then
-            local monsterRootPart = monster.HumanoidRootPart
-        
-        for _, damage in ipairs(game:GetService("Workspace").Ignore:GetDescendants()) do
-           if damage.Name == Skill or damage.Name == Skill1 or damage:FindFirstChildWhichIsA("TouchTransmitter") then
-           local distance = (monster.HumanoidRootPart.Position - damage.Position).Magnitude
-           
-           if distance <= 1000 then
-             monster:FindFirstChild("HumanoidRootPart").CFrame = CFrame.new(damage.position + Vector3.new(0, 0, 1.5))
-               monster:FindFirstChild("HumanoidRootPart").Position = damage.position + Vector3.new(0, 0, 1.5)
-               monster:FindFirstChild("HumanoidRootPart").Anchored = true
-               firetouchinterest(monster.HumanoidRootPart, damage, 0)
-           --  firetouchinterest(monster.Head, damage, 0)
-               firetouchinterest(monster.HumanoidRootPart, damage, 1)
-            -- firetouchinterest(monster.Head, damage, 1)
-             -- firetouchinterest(damage, monster.HumanoidRootPart, 0)
-             -- firetouchinterest(damage, monster.HumanoidRootPart, 1)
-           -- damage.Size = Vector3.new(25, 10, 25)
-          
-          if not damage:FindFirstChildWhichIsA("TouchTransmitter") then
-          warn("your ability is Teleport Mode")
-          damage.CFrame = CFrame.new(monster.HumanoidRootPart.Position)
-          end
-            
-              end
-         end
-    end
-end
-            wait(0.1)
-            
-              end
-          end
-     end
-end
-
-local WizardEventFarm = false
-
-local Toggle2 = Tabs.Main:AddToggle("WizardEventFarn", {Title = "Auto Kill Event Mobs (Wizard)", Default = false })
-
-Toggle2:OnChanged(function(State)
-WizardEventFarm = State
-game:GetService("RunService").RenderStepped:Connect(function()
-        pcall(function()
-            if WizardEventFarm then
-                ScriptFunction(Script)
-                ScriptFunction2(Script, GetClosestt().PrimaryPart.Position)
-                RunService.RenderStepped:Wait()
-            end
-        end)
-    end) 
-    
-spawn(function()
-     while wait(0.1) and WizardEventFarm do
-          killeventmobs()
-        MoveOutFromBossRoom()
-    end
- end)
-  --[[
-spawn(function()
-        while wait(0.1) and WizardEventFarm do
-            local player, cha, plr, hum = getPlayer()
-            local dungeon, rooms, enemies, shrines = getDungeon()
-            for _, v in pairs(rooms:GetDescendants()) do
-            --    if v:FindFirstChildWhichIsA("TouchTransmitter", true) and v.Name == "Trigger" then
-                --    v.Primary.CFrame = plr.CFrame
-                   MoveOutFromBossRoom()
-                    matareventosmobs()
-                    wait()
-         --       end
-            end
-            wait()
-        end
-    end)
-   ]]
-    spawn(function()
-        while wait() and WizardEventFarm do
             local player, cha, plr, hum = getPlayer()
             local dungeon, rooms, enemies, shrines = getDungeon()
             for _, v in pairs(rooms:GetDescendants()) do
@@ -1387,46 +1209,69 @@ Toggle:OnChanged(function(Tswx)
 end)
 ]]
 
-function tpToShrine()
-    local player, cha, plr, hum = getPlayer()
-    -- local attackObject, attackDistance = getNearestAttack()
-    local shrine = getShrines()
+function tpToShrines()
+    local shrines = getShrines()
 
-    if shrine and _G.TweenShrine then
-        collectShrines(shrine)
-        return
+    if _G.TweenShrine then
+        for _, shrine in ipairs(shrines) do
+            collectShrine(shrine)
+        end
     end
-
 end
 
 Tabs.Main:AddParagraph({
         Title = "Auto Shrine",
-        Content = " "
+        Content = "(Sorry this is unavailable due to the bug, pls wait at the small update)"
     })
+ 
+ --[[
+ 
+ local ToggleShrine = Tabs.Main:AddToggle("TweenToShrine", {Title = "Auto Collect Shrine", Default = false })
 
-local ToggleShrine = Tabs.Main:AddToggle("TweenToShrine", {Title = "Auto Collect Shrine", Default = false })
+ToggleShrine:OnChanged(function(TWTG)
+    _G.TweenShrine = TWTG
+    while _G.TweenShrine and wait(0.2) do
+        tpToShrines()
+    end
+end)
 
-    ToggleShrine:OnChanged(function(TWTG)
-        _G.TweenShrine = TWTG
-        
- while _G.TweenShrine and wait(0.2) do
- tpToShrine()
- end
-    end)
+Options.TweenToShrine:SetValue(false)
 
-    Options.TweenToShrine:SetValue(false)
+local MultiDropdown = Tabs.Main:AddDropdown("ShrineSelected", {
+    Title = "Select Shrine",
+    Description = "",
+    Values = {"Summoning", "Healing", "Grass", "Sacrifice", "Unknown", "Unknown", "Unknown", "Unknown", "Unknown", "Unknown"},
+    Multi = true,
+    Default = {"Summoning", "Healing"},
+})
+
+MultiDropdown:SetValue({
+    Summoning = true,
+    Healing = true,
+    Sacrifice = false
+})
+
+MultiDropdown:OnChanged(function(Value)
+    shrineNames = {}
+    for name, state in pairs(Value) do
+        if state then
+            table.insert(shrineNames, name)
+        end
+    end
+end)
     
-
-local ShrineName = Tabs.Main:AddInput("ShrineName", {
-        Title = "Name of Shrine",
-        Default = shrineName,
-        Placeholder = "Name Here",
+local Input = Tabs.Main:AddInput("KeyShrineType", {
+        Title = "Key to Enable",
+        Default = "E",
+        Placeholder = "Enter the Keybind",
         Numeric = false, -- Only allows numbers
         Finished = false, -- Only calls callback when you press enter
-        Callback = function(TSHR)
-   shrineName = tostring(TSHR)
+        Callback = function(Stat)
+            ShrineKeyType = Stat
         end
     })
+    
+]]
 
 -- Define toggle settings in _G
 _G.Setting = {
@@ -1519,26 +1364,6 @@ spawn(AutoLeaveDiedLoop)
 end
 
 local AutoQuestLeaving = false
-
---[[
-function AutoQuestLeave()
-    local coreGui = game:GetService("CoreGui")
-    local robloxGui = coreGui.RobloxGui
-    local notificationFrame = robloxGui.NotificationFrame
-    
-    -- Check if the notification is an ImageLabel
-    if notificationFrame:FindFirstChild("Notification") then
-        -- Check if the asset is rbxassetid://3200915096
-        if notificationFrame.Notification.NotificationImage.Image == "rbxassetid://3200915096" then
-         print("Quest Complete!")
-            wait(0.3)
-            print("firing remote...")
-            wait(0.1)
-            game.ReplicatedStorage.Dungeon.Remotes.BackToLobby:FireServer()    
-        end
-    end
-end
-]]
 
 function AutoQuestLeave()
     local QuestText = readfile("UnknownHubXUniversal/TreasureQuest/AutoQuestConfig.txt")
@@ -1732,106 +1557,48 @@ local Input = Tabs.Main:AddInput("MinHealthInput", {
 if isLobby or isMainDungeon or isEventDungeon then
 
 Tabs.Enemies:AddParagraph({
-        Title = "Size a Hitbox",
+        Title = "HitPart",
         Content = " "
     })
-
-local RunService = game:GetService("RunService")
-
-local xhx, yhx, zhx, txx = 1, 1, 1, 0.5
-local hitboxTest = false
-local lastUpdateTime = 0
-local updateInterval = 2  -- Set the interval in seconds
-
-local function enableHitbox(monsterRootPart)
-   monsterRootPart.Size = Vector3.new(xhx, yhx, zhx)
--- game:GetService("TweenService"):Create(monsterRootPart, TweenInfo.new(1.5), {Size = Vector3.new(xhx, yhx, zhx)}):Play()                
-    monsterRootPart.Transparency = txx
-end
-
-local function disableHitbox(monsterRootPart)
-    monsterRootPart.Size = Vector3.new(5, 5, 5)
-    monsterRootPart.Transparency = 1
-end
-
-local function toggleHitboxState()
-    local currentTime = tick()
-    if currentTime - lastUpdateTime >= updateInterval then
-        lastUpdateTime = currentTime
-
-        local dungeon, rooms, enemies, shrines = getDungeon()
-
-        for _, monster in ipairs(enemies:GetChildren()) do
-            if monster:FindFirstChild("EvilHumanoid") and monster:FindFirstChild("HumanoidRootPart") and
-               monster.EvilHumanoid.Health > 0 then
-                local monsterRootPart = monster.HumanoidRootPart
-
-                if hitboxTest then
-                    enableHitbox(monsterRootPart)
-                else
-                    disableHitbox(monsterRootPart)
-                end
-            end
+    
+local Input = Tabs.Enemies:AddInput("HitPartSizeX", {
+        Title = "HitPart X",
+        Default = "10",
+        Placeholder = "Number",
+        Numeric = false, -- Only allows numbers
+        Finished = false, -- Only calls callback when you press enter
+        Callback = function(Value)
+            HitPartSizeX = Value
         end
-    end
-end
+    })
 
-local Toggle = Tabs.Enemies:AddToggle("HitboxEnemies", {Title = "Hitbox Toggle", Default = false })
+local Input = Tabs.Enemies:AddInput("HitPartSizeY", {
+        Title = "HitPart Y",
+        Default = "10",
+        Placeholder = "Number",
+        Numeric = false, -- Only allows numbers
+        Finished = false, -- Only calls callback when you press enter
+        Callback = function(Value)
+            HitPartSizeY = Value
+        end
+    })
+    
+local Input = Tabs.Enemies:AddInput("HitPartSizeZ", {
+        Title = "HitPart Z",
+        Default = "10",
+        Placeholder = "Number",
+        Numeric = false, -- Only allows numbers
+        Finished = false, -- Only calls callback when you press enter
+        Callback = function(Value)
+            HitPartSizeZ = Value
+        end
+    })
 
-Toggle:OnChanged(function(isEnabled)
-    hitboxTest = isEnabled
+local Toggle = Tabs.Enemies:AddToggle("ShowHitPart", {Title = "Show HitPart", Default = false })
+
+Toggle:OnChanged(function(State)
+    ShowHitPart = State
 end)
-
-RunService.RenderStepped:Connect(function()
-    toggleHitboxState()
-    RunService.RenderStepped:Wait()
-end)
-
-Options.HitboxEnemies:SetValue(false)
-
-local InputX = Tabs.Enemies:AddInput("InputX", {
-        Title = "Hitbox Size X",
-        Default = "1",
-        Placeholder = "Placeholder",
-        Numeric = false, -- Only allows numbers
-        Finished = false, -- Only calls callback when you press enter
-        Callback = function(jxk)
-        xhx = tonumber(jxk) or 5
-        end
-      })
-
-local InputY = Tabs.Enemies:AddInput("InputY", {
-        Title = "Hitbox Size Y",
-        Default = "1",
-        Placeholder = "Placeholder",
-        Numeric = false, -- Only allows numbers
-        Finished = false, -- Only calls callback when you press enter
-        Callback = function(gxk)
-        yhx = tonumber(gxk) or 5
-        end
-      })
-      
-local InputZ = Tabs.Enemies:AddInput("InputZ", {
-        Title = "Hitbox Size Z",
-        Default = "1",
-        Placeholder = "Placeholder",
-        Numeric = false, -- Only allows numbers
-        Finished = false, -- Only calls callback when you press enter
-        Callback = function(rxk)
-        zhx = tonumber(rxk) or 5
-        end
-     })
-
-local InputTransparency = Tabs.Enemies:AddInput("InputTransparency", {
-        Title = "Hitbox Transparency",
-        Default = "0.5",
-        Placeholder = "Placeholder",
-        Numeric = false, -- Only allows numbers
-        Finished = false, -- Only calls callback when you press enter
-        Callback = function(xxk)
-        txx = tonumber(xxk) or 0.5
-        end
-     })
 
 Tabs.Enemies:AddParagraph({
         Title = "Ability Mods",
@@ -1909,73 +1676,7 @@ Tabs.Enemies:AddParagraph({
         Content = " "
     })
 
-spawn(function()
-    while wait(1) do
-        pcall(function()
-            if MobESP then
-                for i, v in pairs(game:GetService("Workspace").Dungeon.Enemies:GetChildren()) do
-                    if v:FindFirstChild('HumanoidRootPart') then
-                        local evilHumanoid = v:FindFirstChild("EvilHumanoid")  -- Change "Humanoid" to "EvilHumanoid"
-                        
-                        if not v:FindFirstChild("MobEap") then
-                            local BillboardGui = Instance.new("BillboardGui")
-                            local TextLabel = Instance.new("TextLabel")
-
-                            BillboardGui.Parent = v
-                            BillboardGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
-                            BillboardGui.Active = true
-                            BillboardGui.Name = "MobEap"
-                            BillboardGui.AlwaysOnTop = true
-                            BillboardGui.LightInfluence = 1.000
-                            BillboardGui.Size = UDim2.new(0, 200, 0, 50)
-                            BillboardGui.StudsOffset = Vector3.new(0, 2.5, 0)
-
-                            TextLabel.Parent = BillboardGui
-                            TextLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-                            TextLabel.BackgroundTransparency = 1.000
-                            TextLabel.Size = UDim2.new(0, 200, 0, 50)
-                            TextLabel.Font = Enum.Font.GothamBold
-                            TextLabel.TextColor3 = Color3.fromRGB(7, 236, 240)
-                            TextLabel.TextSize = 14  -- Adjust the text size to your preference
-
-                            v.MobEap = BillboardGui  -- Store the BillboardGui in MobEap for later use
-                        end
-
-                        local distance = math.floor((game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.HumanoidRootPart.Position).Magnitude)
-
-                        if evilHumanoid then
-                            local health = math.floor(evilHumanoid.Health)
-                            v.MobEap.TextLabel.Text = v.Name.." - "..distance.." M\nHealth: "..health
-                        else
-                            v.MobEap.TextLabel.Text = v.Name.." - "..distance.." M"
-                        end
-                    end
-                end
-            else
-                for i, v in pairs(game:GetService("Workspace").Dungeon.Enemies:GetChildren()) do
-                    if v:FindFirstChild("MobEap") then
-                        v.MobEap:Destroy()
-                    end
-                end
-            end
-        end)
-    end
-end)
-
-local Toggle = Tabs.Enemies:AddToggle("EspMobs", {Title = "Esp Enemies", Default = false })
-
-    Toggle:OnChanged(function(nec)
-        MobESP = nec
-    end)
-    
-Options.EspMobs:SetValue(false)
-    
-
-local RunService = game:GetService("RunService")
-
 local archorMobsEnabled = false
-local lastUpdateTime = 0
-local updateInterval = 1
 
 local function archorMobsEnable(monsterRootPart, monsterHumanoid)
     monsterHumanoid.PlatformStand = true
@@ -1997,23 +1698,18 @@ local function archorMobsDisable(monsterRootPart, monsterHumanoid)
 end
 
 local function toggleArchorMobsState()
-    local currentTime = tick()
-    if currentTime - lastUpdateTime >= updateInterval then
-        lastUpdateTime = currentTime
+    local dungeon, rooms, enemies, shrines = getDungeon()
 
-        local dungeon, rooms, enemies, shrines = getDungeon()
+    for _, monster in ipairs(enemies:GetChildren()) do
+        if monster:FindFirstChild("EvilHumanoid") and monster:FindFirstChild("HumanoidRootPart") and
+           monster.EvilHumanoid.Health > 0 then
+            local monsterRootPart = monster.HumanoidRootPart
+            local monsterHumanoid = monster.EvilHumanoid
 
-        for _, monster in ipairs(enemies:GetChildren()) do
-            if monster:FindFirstChild("EvilHumanoid") and monster:FindFirstChild("HumanoidRootPart") and
-               monster.EvilHumanoid.Health > 0 then
-                local monsterRootPart = monster.HumanoidRootPart
-                local monsterHumanoid = monster.EvilHumanoid
-
-                if archorMobsEnabled then
-                    archorMobsEnable(monsterRootPart, monsterHumanoid)
-                else
-                    archorMobsDisable(monsterRootPart, monsterHumanoid)
-                end
+            if archorMobsEnabled then
+                archorMobsEnable(monsterRootPart, monsterHumanoid)
+            else
+                archorMobsDisable(monsterRootPart, monsterHumanoid)
             end
         end
     end
@@ -2023,33 +1719,14 @@ local ToggleArchorMobs = Tabs.Enemies:AddToggle("ArchorMobs", {Title = "Freeze E
 
 ToggleArchorMobs:OnChanged(function(isEnabled)
     archorMobsEnabled = isEnabled
-end)
-
-RunService.RenderStepped:Connect(function()
-    toggleArchorMobsState()
+    
+ repeat
+     toggleArchorMobsState()
+        wait(1)
+    until archorMobsEnabled == false
 end)
 
 Options.ArchorMobs:SetValue(false)
-
--- Function to get the nearest target
-function getNearestTarget()
-    local target
-    local closest = math.huge
-    local player, cha, plr, hum = getPlayer()
-    local dungeon, rooms, enemies, shrines = getDungeon()
-
-    for _, v in pairs(enemies:GetChildren()) do
-        if v:FindFirstChild("EvilHumanoid") and v:FindFirstChild("HumanoidRootPart") and v.EvilHumanoid.Health > 0 then
-            local distance = (v.HumanoidRootPart.Position - plr.Position).Magnitude
-            if distance < closest then
-                closest = distance
-                target = v
-            end
-        end
-    end
-
-    return target
-end
 
 -- Function to generate a random string
 function generateRandomString()
@@ -2155,106 +1832,49 @@ Tabs.Enemies:AddParagraph({
         Content = " "
     })
 
-local xhx, yhx, zhx, txx = 1, 1, 1, 0.5
-local hitboxTest = false
-local lastUpdateTime = 0
-local updateInterval = 2
-
-local function enableHitbox()
-    for _, value in pairs(workspace.Dungeon:GetDescendants()) do
-        if value:IsA("Model") and value:FindFirstChild("HumanoidRootPart") then
-            if value.Name ~= game.Players.LocalPlayer.Name then
-                value.HumanoidRootPart.Transparency = txx
-                value.HumanoidRootPart.Size = Vector3.new(xhx, yhx, zhx)
-            end
+Tabs.Enemies:AddParagraph({
+        Title = "HitPart",
+        Content = " "
+    })
+    
+local Input = Tabs.Enemies:AddInput("HitPartSizeX", {
+        Title = "HitPart X",
+        Default = "10",
+        Placeholder = "Number",
+        Numeric = false, -- Only allows numbers
+        Finished = false, -- Only calls callback when you press enter
+        Callback = function(Value)
+            HitPartSizeX = Value
         end
-    end
-end
+    })
 
-local function disableHitbox()
-    for _, value in pairs(workspace.Dungeon:GetDescendants()) do
-        if value:IsA("Model") and value:FindFirstChild("HumanoidRootPart") then
-            if value.Name ~= game.Players.LocalPlayer.Name then
-                value.HumanoidRootPart.Transparency = 1
-                value.HumanoidRootPart.Size = Vector3.new(5, 5, 5)
-            end
+local Input = Tabs.Enemies:AddInput("HitPartSizeY", {
+        Title = "HitPart Y",
+        Default = "10",
+        Placeholder = "Number",
+        Numeric = false, -- Only allows numbers
+        Finished = false, -- Only calls callback when you press enter
+        Callback = function(Value)
+            HitPartSizeY = Value
         end
-    end
-end
-
-local RunService = game:GetService("RunService")
-
-local function toggleHitboxState()
-    local currentTime = tick()
-    if currentTime - lastUpdateTime >= updateInterval then
-        lastUpdateTime = currentTime
-
-        if hitboxTest then
-            enableHitbox()
-        else
-            disableHitbox()
+    })
+    
+local Input = Tabs.Enemies:AddInput("HitPartSizeZ", {
+        Title = "HitPart Z",
+        Default = "10",
+        Placeholder = "Number",
+        Numeric = false, -- Only allows numbers
+        Finished = false, -- Only calls callback when you press enter
+        Callback = function(Value)
+            HitPartSizeZ = Value
         end
-    end
-end
+    })
 
-local Toggle = Tabs.Enemies:AddToggle("HitboxEnemies", { Title = "Hitbox Toggle", Default = false })
+local Toggle = Tabs.Enemies:AddToggle("ShowHitPart", {Title = "Show HitPart", Default = false })
 
-Toggle:OnChanged(function(isEnabled)
-    hitboxTest = isEnabled
-    toggleHitboxState()
+Toggle:OnChanged(function(State)
+    ShowHitPart = State
 end)
-
-RunService.RenderStepped:Connect(function()
-  if hitboxTest then
-    toggleHitboxState()
-    end
-end)
-
-Options.HitboxEnemies:SetValue(false)
-
-local InputX = Tabs.Enemies:AddInput("InputX", {
-        Title = "Hitbox Size X",
-        Default = "1",
-        Placeholder = "Placeholder",
-        Numeric = false, -- Only allows numbers
-        Finished = false, -- Only calls callback when you press enter
-        Callback = function(jxk)
-        xhx = tonumber(jxk) or 5
-        end
-      })
-
-local InputY = Tabs.Enemies:AddInput("InputY", {
-        Title = "Hitbox Size Y",
-        Default = "1",
-        Placeholder = "Placeholder",
-        Numeric = false, -- Only allows numbers
-        Finished = false, -- Only calls callback when you press enter
-        Callback = function(gxk)
-        yhx = tonumber(gxk) or 5
-        end
-      })
-      
-local InputZ = Tabs.Enemies:AddInput("InputZ", {
-        Title = "Hitbox Size Z",
-        Default = "1",
-        Placeholder = "Placeholder",
-        Numeric = false, -- Only allows numbers
-        Finished = false, -- Only calls callback when you press enter
-        Callback = function(rxk)
-        zhx = tonumber(rxk) or 5
-        end
-     })
-
-local InputTransparency = Tabs.Enemies:AddInput("InputTransparency", {
-        Title = "Hitbox Transparency",
-        Default = "0.5",
-        Placeholder = "Placeholder",
-        Numeric = false, -- Only allows numbers
-        Finished = false, -- Only calls callback when you press enter
-        Callback = function(xxk)
-        txx = tonumber(xxk) or 0.5
-        end
-     })
 
 AuraSecond = 1
 
@@ -2333,68 +1953,6 @@ Tabs.Enemies:AddParagraph({
         Title = "Enemy Mods",
         Content = " "
     })
-
-spawn(function()
-    while wait(1) do
-        pcall(function()
-            if MobESP then
-                for i, v in pairs(game:GetService("Workspace").Dungeon.Enemies:GetChildren()) do
-                    if v:FindFirstChild('HumanoidRootPart') then
-                        local evilHumanoid = v:FindFirstChild("EvilHumanoid") or v:FindFirstChildOfClass("Humanoid")  -- Change "Humanoid" to "EvilHumanoid"
-                        
-                        if not v:FindFirstChild("MobEap") then
-                            local BillboardGui = Instance.new("BillboardGui")
-                            local TextLabel = Instance.new("TextLabel")
-
-                            BillboardGui.Parent = v
-                            BillboardGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
-                            BillboardGui.Active = true
-                            BillboardGui.Name = "MobEap"
-                            BillboardGui.AlwaysOnTop = true
-                            BillboardGui.LightInfluence = 1.000
-                            BillboardGui.Size = UDim2.new(0, 200, 0, 50)
-                            BillboardGui.StudsOffset = Vector3.new(0, 2.5, 0)
-
-                            TextLabel.Parent = BillboardGui
-                            TextLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-                            TextLabel.BackgroundTransparency = 1.000
-                            TextLabel.Size = UDim2.new(0, 200, 0, 50)
-                            TextLabel.Font = Enum.Font.GothamBold
-                            TextLabel.TextColor3 = Color3.fromRGB(7, 236, 240)
-                            TextLabel.TextSize = 14  -- Adjust the text size to your preference
-
-                            v.MobEap = BillboardGui  -- Store the BillboardGui in MobEap for later use
-                        end
-
-                        local distance = math.floor((game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.HumanoidRootPart.Position).Magnitude)
-
-                        if evilHumanoid then
-                            local health = math.floor(evilHumanoid.Health)
-                            v.MobEap.TextLabel.Text = v.Name.." - "..distance.." M\nHealth: "..health
-                        else
-                            v.MobEap.TextLabel.Text = v.Name.." - "..distance.." M"
-                        end
-                    end
-                end
-            else
-                for i, v in pairs(game:GetService("Workspace").Dungeon.Enemies:GetChildren()) do
-                    if v:FindFirstChild("MobEap") then
-                        v.MobEap:Destroy()
-                    end
-                end
-            end
-        end)
-    end
-end)
-
-local Toggle = Tabs.Enemies:AddToggle("EspMobs", {Title = "Esp Enemies", Default = false })
-
-    Toggle:OnChanged(function(nec)
-        MobESP = nec
-    end)
-    
-Options.EspMobs:SetValue(false)
-    
 
 local RunService = game:GetService("RunService")
 
@@ -2703,7 +2261,7 @@ Options.FlyToggle:SetValue(false)
 _G.flySpeed = 20  -- Default fly speed
 
 local FlySpeedInput = Tabs.Character:AddInput("FlySpeedInput", {
-    Title = "Fly Speed (ignore about the error)",
+    Title = "Fly Speed",
     Default = tostring(_G.flySpeed),
     Placeholder = "Enter fly speed",
     Numeric = true,
@@ -2760,9 +2318,11 @@ Combatctrl["_roll_cooldown"] = -1
 end
 end)
 
+--[[
+
 local FastAttackXD = false
 
-local Toggle = Tabs.Character:AddToggle("DebounceAttack", {Title = "Debounce Attack (TESTING)", Default = false })
+local Toggle = Tabs.Character:AddToggle("DebounceAttack", {Title = "Debounce Attack", Default = false })
 
  Toggle:OnChanged(function(uhh)
  FastAttackXD = uhh
@@ -2789,6 +2349,7 @@ FastAttack()
  end
 until not FastAttackXD == true
 end)
+]]
 
 -- FarmSettings
 
@@ -2799,7 +2360,7 @@ Tabs.FarmSettings:AddParagraph({
     
 local TweenSpeed = Tabs.FarmSettings:AddDropdown("TweenSpeedType", {
         Title = "Tween Calculation Speed",
-        Values = {"Slow (5)", "Normal (30-50)", "Fast (40-60)", "Malicious (50-70)"},
+        Values = {"Slow (20-40)", "Normal (30-50)", "Fast (40-60)", "Malicious (50-70)"},
         Multi = false,
         Default = 2,
     })
@@ -2979,7 +2540,7 @@ local Toggle = Tabs.Misc:AddToggle("DestroyMap", {Title = "Destroy Map", Default
 local toggleState = false -- Default state
 
 local function destroyMap()
-local DungeonMap = workspace.Dungeon
+local DungeonMap = workspace:FindFirstChild("Dungeon")
 
 if DungeonMap then
 if isMainDungeon or isEventDungeon then
@@ -3006,26 +2567,18 @@ end
 
 Toggle:OnChanged(function(Value)
 toggleState = Value
-        if toggleState then
-        destroyWaveDefenseMap()
-            destroyMap()
+repeat
+   if toggleState then
+     destroyWaveDefenseMap()
+     destroyMap()
         --    destroyMap2()
         --    destroyMap3()
+        wait(0.1)
         end
+       until not toggleState == true
     end)
     
 Options.DestroyMap:SetValue(false)
-    
-game:GetService("RunService").RenderStepped:Connect(function()
-    if toggleState then
-    destroyWaveDefenseMap()
-        destroyMap()
-   --     destroyMap2()
-  --      destroyMap3()
-        workspace.Terrain:Clear()
-        RunService.RenderStepped:Wait()
-    end
-end)
 
 local DestroyChest = false
 local DestroyShrine = false
