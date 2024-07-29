@@ -624,10 +624,11 @@ ToggleBoss:OnChanged(function(bool)
         end
     end
 end)
+end
 
 Tabs.Main:AddParagraph({
-        Title = "Kill Player",
-        Content = ""
+        Title = "Trolls",
+        Content = " "
     })
     
 local ShootTarget = ""
@@ -731,7 +732,6 @@ local Input = Tabs.Main:AddInput("ShootTarget", {
 ShootTarget = BLX8
         end
     })
-end
 
 Tabs.Main:AddParagraph({
         Title = "Local Player",
@@ -2295,4 +2295,4 @@ SaveManager:BuildConfigSection(Tabs.Settings)
 Window:SelectTab(1)
 
 -- Auto Load Configuration
-SaveManager:LoadAutoloadConfig()
+SaveManager:LoadAutoloadConfig() 
