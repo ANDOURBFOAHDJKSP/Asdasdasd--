@@ -323,57 +323,58 @@ pcall(function()
      end)
 end
 
+local SettingFastFire = 0.1
+local SettingSniperReload = 0.1
+
 function NoBoltReload()
     pcall(function()
-            for i,v in pairs(getgc(true)) do
-                if type(v) == 'table' and rawget(v, 'boltanim') then
-                    for j = 1, 15 do
-                        if v.boltanim[j] and v.boltanim[j][6] then
-                            v.boltanim[j][6] = 0
-                        end
-                        if j == 6 or j == 8 then
-                            if v.boltanim[j] and v.boltanim[j][8] then
-                              v.boltanim[j][8] = 0
-                          end
-                     end
-                 end
-                 v.gripanim[6] = 0
-                 v.pellets = math.huge
-             end
-         end
+        for i, v in pairs(getgc(true)) do
+            if type(v) == 'table' and rawget(v, 'boltanim') then
+                for j = 1, 15 do
+                    if v.boltanim[j] and v.boltanim[j][6] then
+                        v.boltanim[j][6] = SettingSniperReload
+                    end
+                    if (j == 6 or j == 8) and v.boltanim[j] and v.boltanim[j][8] then
+                        v.boltanim[j][8] = SettingSniperReload
+                    end
+                end
+                if v.gripanim and v.gripanim[6] then
+                    v.gripanim[6] = 0
+                end
+            end
+        end
     end)
 end
 
 function FastFiring()
-local spread1 = {
-  Increase = 0,
-  Decrease = 0,
-  Max = 0,
-  Min = 0
-}
+    local spread1 = {
+        Increase = SettingFastFire,
+        Decrease = SettingFastFire,
+        Max = SettingFastFire,
+        Min = SettingFastFire
+    }
 
-local rec = {
-  Tilt = { 0, 0 },
-  Side = { 0, 0 },
-  Vertical = { 0, 0 },
-  Back = { 0, 0 },
-  Aimed = 0,
-  FirstShot = 0
-}
+    local rec = {
+        Tilt = { SettingFastFire, SettingFastFire },
+        Side = { SettingFastFire, SettingFastFire },
+        Vertical = { SettingFastFire, SettingFastFire },
+        Back = { SettingFastFire, SettingFastFire },
+        Aimed = SettingFastFire,
+        FirstShot = SettingFastFire
+    }
 
-pcall(function()
-for i,v in pairs(getgc(true)) do
-   if type(v) == 'table' and rawget(v, 'magsize') then
-       v.magsize = math.huge
-       v.storedammo = math.huge
-       v.rpm = 0
-       v.spread = spread1
-       v.recoil = rec
-       v.mode = "Auto"
-       v.pellets = math.huge
-   end
-end
-end)
+    pcall(function()
+        for i, v in pairs(getgc(true)) do
+            if type(v) == 'table' and rawget(v, 'magsize') then
+                v.magsize = math.huge
+                v.storedammo = math.huge
+                v.rpm = math.huge
+                v.spread = spread1
+                v.recoil = rec
+                v.mode = "Auto"
+            end
+        end
+    end)
 end
 
 function FastFiringV2()
@@ -466,7 +467,7 @@ Tabs.Main:AddParagraph({
     })
     
 Tabs.Main:AddParagraph({
-        Title = "Gun",
+        Title = "Gun Section",
         Content = ""
     })
 
@@ -522,7 +523,7 @@ end)
 
 
 Tabs.Main:AddParagraph({
-        Title = "Knife",
+        Title = "Knife Section",
         Content = ""
     })
 
@@ -537,6 +538,35 @@ Tabs.Main:AddParagraph({
          end
         until fastswinging == false
     end)
+    
+ Tabs.Main:AddParagraph({
+        Title = "Settings Section",
+        Content = ""
+    })
+    
+local Slider = Tabs.Main:AddSlider("FireSlider", {
+    Title = "Fast Fire Slider",
+    Description = "",
+    Default = 0.1,
+    Min = 0,
+    Max = 1.5,
+    Rounding = 2,  -- Changed rounding to 2 for better precision
+    Callback = function(Value)
+        SettingFastFire = Value
+    end
+})
+
+local Slider = Tabs.Main:AddSlider("SniperSlider", {
+    Title = "Sniper Reload Slider",
+    Description = "",
+    Default = 0.01,
+    Min = 0,
+    Max = 0.1,
+    Rounding = 3,  -- Changed rounding to 1 to match the precision of max value
+    Callback = function(Value)
+        SettingSniperReload = Value
+    end
+})
 
 if game:GetService("Players").LocalPlayer.Name == "alladd17" or game:GetService("Players").LocalPlayer.Name == "Peleeelallee" or game:GetService("Players").LocalPlayer.Name == "Guilfordy_sagalol" or game:GetService("Players").LocalPlayer.Name == "Cjdjjdjskaodknf" then
 
@@ -1123,7 +1153,7 @@ end
 
 Tabs.Misc:AddParagraph({
         Title = "Loadout Inventory",
-        Content = "It doesnt work, if u equip a other gun or unowned guns.\nWhen you rejoin the Loadout is updated"
+        Content = "WARNING: if the game break please rejoin!"
     })
     
 local Input = Tabs.Misc:AddInput("Primary", {
@@ -1301,7 +1331,7 @@ Tabs.Misc:AddButton({
 
 Tabs.Misc:AddParagraph({
         Title = "Character Avatar",
-        Content = " "
+        Content = "Unequip in the avatar if u want"
     })
     
 local WaistID = 0
@@ -1777,14 +1807,14 @@ while AutoCollectRewards and wait(0.1) do
        end
 end)
 
-local Toggle = Tabs.Farms:AddToggle("AutoCollectCarePackage", {Title = "Presents Rewards", Default = false })
+local Toggle = Tabs.Farms:AddToggle("AutoCollectPresent", {Title = "Presents Rewards", Default = false })
 
 Toggle:OnChanged(function(bool8)
 AutoCollectPresents = bool8
 while AutoCollectPresents and wait(0.1) do
    if game:GetService("Workspace"):FindFirstChild("Map") and game:GetService("Workspace"):FindFirstChild("Map"):FindFirstChild("Decorations") then
    for i, v  in pairs(game:GetService("Workspace").Map.Decorations:GetDescendants()) do
-        if v:FindFirstChildWhichIsA("TouchTransmitter") then
+        if v:FindFirstChildWhichIsA("TouchTransmitter") and game.Player.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
               firetouchinterest(v, game.Players.LocalPlayer.Character.HumanoidRootPart, 0)
              wait(0.1)
               firetouchinterest(v, game.Players.LocalPlayer.Character.HumanoidRootPart, 1)
@@ -2049,11 +2079,11 @@ end
             
                 local shootData = {
                     ["ModelType"] = "Character",
-                    ["TargetPos"] = nearestZombie.Head.Position,
+                    ["TargetPos"] = nearestZombie.Head.CFrame.Position,
                     ["Model"] = Player.Character,
                     ["PlayerName"] = Player.Name,
                     ["SourcePos"] = Vector3.new(0, -1, -0.5),
-                    ["SourcePart"] = {}, 
+                    ["SourcePart"] = 0,
                     ["WeaponName"] = {}
                 }
 
