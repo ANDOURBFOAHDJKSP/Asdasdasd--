@@ -3,7 +3,7 @@ local Player = game:GetService("Players")
 
 local correctKey = "UnknownHubXUniversal-HB8L9P0O8KB8L91L81J9LOP099BNCXZY77"
 
-local keyFileName = "UnknownTQHub/KeyHub.txt"
+local keyFileName = "UnknownHubXUniversal/KeyHub.txt"
 
 -- Function to save the correct key to a file
 local function saveKeyToFile(key)
