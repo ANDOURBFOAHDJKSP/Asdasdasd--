@@ -375,7 +375,8 @@ function getNearestHitPart()
                     end
                     
                     local offset = charpart.CFrame:VectorToWorldSpace(Vector3.new(0, 0, -8))
-                    enemyHead.Position = charpart.Position + offset                
+              --      enemyHead.Position = charpart.Position + offset                
+                    game:GetService("TweenService"):Create(enemyHead, TweenInfo.new(0.3), {Position = charpart.Position + offset}):Play()
                     
                     if ShowHitPart then
                         enemyHead.Transparency = 0.7
@@ -775,7 +776,7 @@ function tpToMonsters()
     local shrine = getShrines()
     
     if shrine and _G.TweenShrine then
-        collectShrines(shrine)
+        collectShrine(shrine)
         return
     end
 
