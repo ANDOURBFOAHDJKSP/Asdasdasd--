@@ -95,6 +95,51 @@ end
 
 MakeDraggable(mainopen, mainopen) -- Making the button draggable
 
+local RunService = game:GetService("RunService")
+local fpsCounter = Instance.new("ScreenGui")
+fpsCounter.Parent = game.CoreGui
+fpsCounter.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+fpsCounter.ResetOnSpawn = false
+
+local label = Instance.new("TextLabel")
+label.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+label.BackgroundTransparency = 1.000
+label.TextColor3 = Color3.fromRGB(255, 255, 255)
+label.Font = Enum.Font.GothamBlack
+label.Size = UDim2.new(0, 150, 0, 70)
+label.Position = UDim2.new(0, 200, 0, 10)
+label.Text = "FPS: 0\nTime Played: 0h 0m 0s"
+label.TextSize = 10
+label.Parent = fpsCounter
+
+local startTime = tick()
+local lastUpdateTime = tick()
+local frameCount = 0
+
+RunService.RenderStepped:Connect(function()
+    local currentTime = tick()
+    local deltaTime = currentTime - lastUpdateTime
+    frameCount = frameCount + 1
+    
+    if frameCount == 1 and untilloaded == true then
+       game.Players.LocalPlayer:Kick("Device Saver: CRASH DETECTED")
+    end
+
+    if deltaTime >= 1 then
+        local fps = math.round(frameCount / deltaTime)
+        local elapsedTime = currentTime - startTime
+
+        local hours = math.floor(elapsedTime / 3600)
+        local minutes = math.floor((elapsedTime % 3600) / 60)
+        local seconds = math.floor(elapsedTime % 60)
+
+        label.Text = "FPS: " .. fps .. "\nTime Played: " .. hours .. "h " .. minutes .. "m " .. seconds .. "s"
+
+        lastUpdateTime = currentTime
+        frameCount = 0
+    end
+end)
+
 mainopen.MouseButton1Click:Connect(function()
     game:GetService("VirtualInputManager"):SendKeyEvent(true, "LeftControl", false, game)
     game:GetService("VirtualInputManager"):SendKeyEvent(false, "LeftControl", false, game)
@@ -102,26 +147,19 @@ end)
 
 local Window = Fluent:CreateWindow({
     Title = "Unknown Hub X Evade",
-    SubTitle = "V1 (Beta) Made by Guesttester_1",
+    SubTitle = "V1.4 Made by Guesttester_1",
     TabWidth = 160,
     Size = UDim2.fromOffset(580, 460),
     Acrylic = true, -- The blur may be detectable, setting this to false disables blur entirely
     Theme = "Dark",
     MinimizeKey = Enum.KeyCode.LeftControl -- Used when theres no MinimizeKeybind
 })
-
-Fluent:Notify({
-        Title = "Made by Guesttester_1",
-        Content = "",
-        SubContent = "", -- Optional
-        Duration = 1 -- Set to nil to make the notification not disappear
-    })
     
 Fluent:Notify({
-        Title = "U can Now Dragging the BHOP, Fixed Keybind to BHOP not Disabling",
+        Title = ":)",
         Content = "",
         SubContent = "", -- Optional
-        Duration = 1 -- Set to nil to make the notification not disappear
+        Duration = 10 -- Set to nil to make the notification not disappear
     })
 
 local Tabs = {
@@ -240,7 +278,7 @@ Toggle:OnChanged(function(State)
     PlayerESP = State
     
     spawn(function()
-        while wait(0.2) do
+        while wait(0.3) do
             pcall(function()
                 if PlayerESP then
                     local localPlayer = game.Players.LocalPlayer
@@ -286,6 +324,9 @@ Toggle:OnChanged(function(State)
                             if gamePlayer and gamePlayer:GetAttribute('Downed') then
                                 humanoidRootPart.PlayerESP.TextLabel.TextColor3 = Color3.fromRGB(255, 0, 0)
                                 labelText = labelText .. " (Downed)"
+                            elseif gamePlayer and gamePlayer:GetAttribute('Team') == "Enemy" then
+                                humanoidRootPart.PlayerESP.TextLabel.TextColor3 = Color3.fromRGB(255, 0, 0)
+                                labelText = labelText .. " (Enemy)"
                             else
                                 humanoidRootPart.PlayerESP.TextLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
                             end
@@ -309,10 +350,33 @@ Toggle:OnChanged(function(State)
     end)
 end)
 
-local ESPObject
+local ObjectiveESP = false
+
+local Toggle = Tabs.Main:AddToggle("ESPObjective", {Title = "ESP Objective", Default = false })
+
+    Toggle:OnChanged(function(State)
+        ObjectiveESP = State
+        
+        task.spawn(
+                function()
+			while task.wait() do
+				ClearESP('Object_Tracker')
+				if not BotESP then
+					break
+				end
+				pcall(function()
+		          if workspace.Game.Map.Parts:FindFirstChild("Objectives") then
+              	   for i, v in next, workspace.Game.Map.Parts.Objectives:GetChildren() do
+						Simple_Create(v:FindFirstChildWhichIsA("BasePart"), "(Objective)", "Object_Tracker")
+						end
+					end
+				end)
+			end
+	 end)
+ end)
 
 Tabs.Main:AddParagraph({
-        Title = "Mods",
+        Title = "Game Mods",
         Content = " "
     })
     
@@ -322,7 +386,7 @@ local Toggle = Tabs.Main:AddToggle("AutoRespawn", {Title = "Auto Respawn", Defau
 
     Toggle:OnChanged(function(State)
         AutoRespawn = State
-      while task.wait(0.1) and AutoRespawn do
+      while task.wait(0.5) and AutoRespawn do
 			if not AutoRespawn then
 				break
 			end
@@ -404,25 +468,201 @@ disabletouch()
 		end        
     end)
     
-function timernotify()
-Fluent:Notify({
-        Title = "Round will end in",
-        Content = game.Players.LocalPlayer.PlayerGui:WaitForChild("HUD").Center.Vote.Info.Read.Timer.Text,
-        SubContent = "", -- Optional
-        Duration = 1 -- Set to nil to make the notification not disappear
+Tabs.Main:AddParagraph({
+        Title = "Character Mods",
+        Content = " "
     })
+    
+local Toggle = Tabs.Main:AddToggle("Noclip", {Title = "Noclip", Default = false })
+
+local NoClipx = false
+
+local function Noclip()
+            pcall(function()
+                for i, v in pairs(game.Players.LocalPlayer.Character:GetDescendants()) do
+                    if v:IsA("BasePart") then
+                        v.CanCollide = false
+                 end
+            end
+      end)
 end
 
-local TimerText = false
-
-local Toggle = Tabs.Main:AddToggle("TimerNotifier", {Title = "Timer Notifier", Default = false })
-
     Toggle:OnChanged(function(State)
-    TimerText = State
-while TimerText and wait(1) do
-timernotify()
-		end        
+NoClipx = State
+repeat
+if NoClipx then
+   Noclip()
+       wait(0.1)
+        end
+       until not NoClipx == true
     end)
+
+Options.Noclip:SetValue(false)
+
+local RunService = game:GetService("RunService")
+
+local FLYING = false
+local velocityHandlerName = "VelocityHandler"
+local gyroHandlerName = "GyroHandler"
+local mfly1, mfly2
+local currentCharacter
+
+local function getRoot(character)
+    return character:FindFirstChild("HumanoidRootPart") or character:FindFirstChild("Torso")
+end
+
+local function unmobilefly(player)
+    pcall(function()
+        FLYING = false
+        local character = player.Character
+        if character then
+            local root = getRoot(character)
+            if root then
+                local velocityHandler = root:FindFirstChild(velocityHandlerName)
+                local gyroHandler = root:FindFirstChild(gyroHandlerName)
+
+                if velocityHandler then
+                    velocityHandler:Destroy()
+                end
+
+                if gyroHandler then
+                    gyroHandler:Destroy()
+                end
+
+                local humanoid = character:FindFirstChildWhichIsA("Humanoid")
+                if humanoid then
+                    humanoid.PlatformStand = false
+                end
+            end
+        end
+
+        if mfly1 then
+            mfly1:Disconnect()
+        end
+
+        if mfly2 then
+            mfly2:Disconnect()
+        end
+    end)
+end
+
+local function mobilefly(player, vfly)
+    unmobilefly(player)
+    FLYING = true
+
+    local character = player.Character
+    local root = getRoot(character)
+
+    if character and root then
+        local camera = workspace.CurrentCamera
+        local v3none = Vector3.new()
+        local v3zero = Vector3.new(0, 0, 0)
+        local v3inf = Vector3.new(9e9, 9e9, 9e9)
+
+        local controlModule = require(player.PlayerScripts:WaitForChild("PlayerModule"):WaitForChild("ControlModule"))
+        local bv = Instance.new("BodyVelocity")
+        bv.Name = velocityHandlerName
+        bv.Parent = root
+        bv.MaxForce = v3zero
+        bv.Velocity = v3zero
+
+        local bg = Instance.new("BodyGyro")
+        bg.Name = gyroHandlerName
+        bg.Parent = root
+        bg.MaxTorque = v3inf
+        bg.P = 1000
+        bg.D = 20
+
+        mfly1 = player.CharacterAdded:Connect(function()
+            unmobilefly(player)
+            currentCharacter = player.Character
+            mobilefly(player, vfly)
+        end)
+
+        mfly2 = RunService.RenderStepped:Connect(function()
+            root = getRoot(player.Character)
+            camera = workspace.CurrentCamera
+            if player.Character:FindFirstChildWhichIsA("Humanoid") and root and root:FindFirstChild(velocityHandlerName) and root:FindFirstChild(gyroHandlerName) then
+                local humanoid = player.Character:FindFirstChildWhichIsA("Humanoid")
+                local VelocityHandler = root:FindFirstChild(velocityHandlerName)
+                local GyroHandler = root:FindFirstChild(gyroHandlerName)
+
+                if VelocityHandler and GyroHandler then
+                    VelocityHandler.MaxForce = v3inf
+                    GyroHandler.MaxTorque = v3inf
+
+                    if not vfly and humanoid then
+                        humanoid.PlatformStand = false
+                    end
+
+                    GyroHandler.CFrame = camera.CoordinateFrame
+                    VelocityHandler.Velocity = v3none
+
+                    local direction = controlModule:GetMoveVector()
+                    if direction.X ~= 0 or direction.Z ~= 0 then
+                        local moveVector = Vector3.new(direction.X, 0, direction.Z).unit
+                        local rightVector = camera.CFrame.RightVector
+                        local forwardVector = camera.CFrame.LookVector
+
+                        local flyDirection = (rightVector * moveVector.X - forwardVector * moveVector.Z).unit
+
+                        VelocityHandler.Velocity = flyDirection * (_G.flySpeed * 20)
+                        RunService.RenderStepped:Wait()
+                    end
+                end
+            end
+        end)
+    end
+end
+
+local function toggleFly(player, toggleValue)
+    if toggleValue then
+        mobilefly(player, true)
+    else
+        unmobilefly(player)
+    end
+end
+
+-- Your loop structure
+_G.loops = false
+
+local function flyLoop()
+    while wait(10) do
+        if _G.loops then
+            local player = game:GetService("Players").LocalPlayer
+            if player and player.Character then
+                mobilefly(player, true)
+            end
+        end
+    end
+end
+
+local Toggle = Tabs.Main:AddToggle("FlyToggle", { Title = "Fly Toggle", Default = false })
+
+Toggle:OnChanged(function()
+    local player = game:GetService("Players").LocalPlayer
+    _G.loops = Toggle.Value
+    toggleFly(player, Toggle.Value)
+end)
+
+Options.FlyToggle:SetValue(false)
+
+_G.flySpeed = 20  -- Default fly speed
+
+local FlySpeedInput = Tabs.Main:AddInput("FlySpeedInput", {
+    Title = "Fly Speed",
+    Default = tostring(_G.flySpeed),
+    Placeholder = "Enter fly speed",
+    Numeric = true,
+    Finished = false,
+    Callback = function(Value)
+        _G.flySpeed = tonumber(Value) or 20
+        toggleFly(player, Toggle.Value)
+    end
+})
+
+-- Start the loop
+spawn(flyLoop)
 
 Tabs.Main:AddParagraph({
         Title = "Manual",
@@ -455,7 +695,7 @@ Tabs.AutoFarm:AddParagraph({
 local FarmMoney = false
 local FarmTickets = false
 local AFKFarm = false
-local WorkspacePlayers = game:GetService("Workspace").Game.Players
+local WorkspacePlayers = game:GetService("Workspace").Game.Players 
 
 local GetDownedPlr = function()
     for i,v in pairs(WorkspacePlayers:GetChildren()) do
@@ -575,6 +815,8 @@ Tabs.Misc:AddParagraph({
 
 local TSpeed = 1500
 local TJump = 3
+local SavedSpeed = 1500
+local SavedJump = 3
 
 local Input = Tabs.Misc:AddInput("PlayerSpeed", {
         Title = "Player Speed",
@@ -584,6 +826,7 @@ local Input = Tabs.Misc:AddInput("PlayerSpeed", {
         Finished = false, -- Only calls callback when you press enter
         Callback = function(Value)
             TSpeed = tonumber(Value) or 1500
+            SavedSpeed = tonumber(Value) or 1500
         end
     })
     
@@ -595,9 +838,58 @@ local Input = Tabs.Misc:AddInput("PlayerJump", {
         Finished = false, -- Only calls callback when you press enter
         Callback = function(Value)
             TJump = tonumber(Value) or 3
+            SavedJump = tonumber(Value) or 3
         end
     })
+
+Tabs.Misc:AddParagraph({
+        Title = "Emote Dash",
+        Content = "Requirements: Equip Light and Crouch then Emote"
+    })
+
+local FakeEmoteDownDash = false
+local SelectedEmoteSpeed = 10000
+
+local Toggle = Tabs.Misc:AddToggle("AutoRespawn", {Title = "Fake Emote/Down Dash", Default = false })
+
+    Toggle:OnChanged(function(State)
+        FakeEmoteDownDash = State
+      if not FakeEmoteDownDash then
+      TSpeed = SavedSpeed
+      end
     
+      while wait() and FakeEmoteDownDash do
+			if not FakeEmoteDownDash then
+			TSpeed = SavedSpeed
+				break
+			end
+			local char = game.Players.LocalPlayer.Character or game.Players.LocalPlayer.CharacterAdded:Wait()
+			local stats = char:WaitForChild("StatChanges", 3)
+			if stats == nil then
+			  TSpeed = SavedSpeed
+				return
+			end
+			local EmoteError = char:GetAttribute("Emoting")
+			if char:GetAttribute("Crouching") == true and EmoteError and EmoteError == true then
+				TSpeed = SelectedEmoteSpeed
+			elseif stats:FindFirstChild("Speed") and stats:FindFirstChild("Speed"):FindFirstChild("Downed") and char:GetAttribute("Crouching") == true then
+			    TSpeed = 7500
+			else
+			    TSpeed = SavedSpeed
+			end
+		end
+    end)
+
+  local Dropdown = Tabs.Misc:AddDropdown("EmoteSpeed", {
+        Title = "Emote Dash Speed",
+        Values = {10000, 25000, 45000, 55000, 67000, 80000, 95000, 100000, 125000},
+        Multi = false,
+        Default = 1,
+    })
+
+    Dropdown:OnChanged(function(Value)
+        SelectedEmoteSpeed = Value
+    end)
 
 local old
 old = hookmetamethod(game,"__namecall",newcclosure(function(self,...)
@@ -641,7 +933,7 @@ Tabs.Misc:AddParagraph({
         Content = ""
     })
  
-  local BHop = false
+local BHop = false
 local delay = 1
 
 local Players = game:GetService("Players")
@@ -728,7 +1020,7 @@ Tabs.Misc:AddParagraph({
 
     Toggle:OnChanged(function(State)
  RemoveFog = State
- if RemoveFog then
+     if RemoveFog then
             Lighting.Ambient = Color3.new(1, 1, 1)
             Lighting.ColorShift_Bottom = Color3.new(1, 1, 1)
             Lighting.ColorShift_Top = Color3.new(1, 1, 1)
@@ -748,6 +1040,8 @@ Tabs.Misc:AddParagraph({
             Lighting.Brightness = {}
        end
 end)
+
+setfflag("TaskSchedulerTargetFps", "500")
 
 -- Settings
 
