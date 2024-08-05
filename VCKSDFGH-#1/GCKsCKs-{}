@@ -147,8 +147,7 @@ local isGrandGrotto
 local isLobby = game.PlaceId == 2960777560
 
 function bypassAntiCheat()
-    local exploiterController = game:GetService("Players").LocalPlayer.PlayerScripts.Shared.Client:WaitForChild(
-        'DumbExploiterController')
+    local exploiterController = game:GetService("Players").LocalPlayer.PlayerScripts.Shared.Client:FindFirstChild('DumbExploiterController')
 
     -- bypass anti-cheat
     local cheat = require(exploiterController)
