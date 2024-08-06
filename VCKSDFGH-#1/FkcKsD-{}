@@ -461,7 +461,7 @@ if workspace:FindFirstChild("Dungeon") then
             local monsterRootPart = monster.HumanoidRootPart
         
         for _, damage in ipairs(game:GetService("Workspace").Ignore:GetDescendants()) do
-           if damage.Name == Skill or damage.Name == Skill1 or damage:FindFirstChildWhichIsA("TouchTransmitter") then
+           if damage.Name == Skill or damage.Name == Skill1 or damage:FindFirstChildWhichIsA("TouchTransmitter") and damage ~= "Medkits" then
            local distance = (damage.Position - monster.HumanoidRootPart.Position).Magnitude
            
            if distance <= killaurarange then
@@ -470,7 +470,7 @@ if workspace:FindFirstChild("Dungeon") then
           
               end
            end
-       wait(1)
+       wait(0.1)
      end
 end
             
@@ -498,7 +498,7 @@ function killAuraHigh(monster)
         --     end)
         -- end
         pcall(function()
-                 if damage.ClassName ~= "BasePart" and damage.ClassName ~= "Model" and damage.ClassName ~= "Explosion" then
+                 if damage.ClassName ~= "BasePart" and damage.ClassName ~= "Model" and damage.ClassName ~= "Explosion" and damage ~= "Medkits" then
                  --       damage.CFrame = CFrame.new(monster.HumanoidRootPart.Position)
                  --     damage.Position = monster.HumanoidRootPart.Position
                     damage.Size = Vector3.new(NewSize, 10, NewSize)
@@ -518,7 +518,7 @@ function killAuraHigh(monster)
             end
        end
             
-            wait(1)
+            wait(0.1)
               end
        end
 end
@@ -570,40 +570,6 @@ x = 0
 y = 0
 
 z = -2
-
-_G.TweenShrine = false
-local shrineNames = {"Summoning", "Healing", "Sacrifice"} -- Default selected shrine names
-
-function getShrines()
-    local shrinesList = {}
-    local dungeon = getDungeon()
-    local shrines = dungeon:WaitForChild("Shrines")
-    for _, shrine in ipairs(shrines:GetChildren()) do
-        if shrine:FindFirstChild("Primary") and shrine.Primary:FindFirstChild("ProximityPrompt") then
-            if table.find(shrineNames, shrine.Name) then
-                table.insert(shrinesList, shrine)
-            end
-        end
-    end
-    return shrinesList
-end
-
-local ShrineKeyType = "E"
-
-function pressKey()
-    game:GetService("VirtualInputManager"):SendKeyEvent(true, ShrineKeyType, false, game)
-end
-
-function collectShrine(shrine)
-    if shrine.Primary then
-        spawn(pressKey)
-        Tween({
-            target = shrine,
-            targetPart = shrine.Primary,
-            newCFrame = CFrame.new(0, 0, 2.6)
-        })
-    end
-end
 
 function floating()
     while wait() do
@@ -776,8 +742,12 @@ function tpToMonsters()
     local shrine = getShrines()
     
     if shrine and _G.TweenShrine then
-        collectShrine(shrine)
-        return
+        collectNearestShrine(shrine)
+      else
+      Tween({
+        targetPart = monster.UpperTorso,
+        newCFrame = CFrame.new(x, y, z)
+    })
     end
 
     if not monster then
@@ -785,13 +755,68 @@ function tpToMonsters()
         return
     end
     
+    if monster.HumanoidRootPart then
     Tween({
         targetPart = monster.HumanoidRootPart,
         newCFrame = CFrame.new(x, y, z)
     })
-    
+    else
+    Tween({
+        targetPart = monster.UpperTorso,
+        newCFrame = CFrame.new(x, y, z)
+    })
+   end
+   
+  if monster:FindFirstChild("Head") then
     getNearestHitPart()
+   end
  
+end
+
+_G.TweenShrine = false
+local shrineNames = {"Summoning", "Healing", "Sacrifice"} -- Default selected shrine names
+
+function getShrines()
+    local shrinesList = {}
+    local dungeon = getDungeon()
+    local shrines = dungeon:WaitForChild("Shrines")
+    for _, shrine in ipairs(shrines:GetChildren()) do
+        if shrine:FindFirstChild("Primary") and shrine.Primary:FindFirstChild("ProximityPrompt") then
+            if table.find(shrineNames, shrine.Name) then
+                table.insert(shrinesList, shrine)
+            end
+        end
+    end
+    return shrinesList
+end
+
+local ShrineKeyType = "E"
+
+function pressKey()
+    game:GetService("VirtualInputManager"):SendKeyEvent(true, ShrineKeyType, false, game)
+end
+
+function collectNearestShrine(shrine)
+    local shrines = getShrines()
+    local nearestShrine = nil
+    local shortestDistance = math.huge
+    
+    for _, shrine in ipairs(shrines) do
+        local distance = (shrine.Primary.Position - game:GetService("Players").LocalPlayer.Character.Head.Position).Magnitude
+        if distance < shortestDistance then
+            shortestDistance = distance
+            nearestShrine = shrine
+        end
+    end
+
+    if nearestShrine and nearestShrine.Primary then
+        spawn(pressKey)
+        Tween({
+            target = nearestShrine,
+            targetPart = nearestShrine.Primary,
+            newCFrame = CFrame.new(0, 0, 2.6)
+        })
+    end
 end
  
 local Script = require(Player.PlayerScripts.Shared.Client.CombatController)
@@ -975,7 +1000,9 @@ Tween({
 	newCFrame = CFrame.new(x, y, z)
 })
 
+if value:FindFirstChild("Head") then
 getNearestHitPart()
+end
 
                    end
                end
@@ -1213,27 +1240,25 @@ end)
 function tpToShrines()
     local shrines = getShrines()
 
-    if _G.TweenShrine then
         for _, shrine in ipairs(shrines) do
-            collectShrine(shrine)
-        end
+            collectNearestShrine(shrine)
     end
 end
 
 Tabs.Main:AddParagraph({
         Title = "Auto Shrine",
-        Content = "(Sorry this is unavailable due to the bug, pls wait at the small update)"
+        Content = " "
     })
- 
- --[[
  
  local ToggleShrine = Tabs.Main:AddToggle("TweenToShrine", {Title = "Auto Collect Shrine", Default = false })
 
 ToggleShrine:OnChanged(function(TWTG)
     _G.TweenShrine = TWTG
-    while _G.TweenShrine and wait(0.2) do
+    repeat
+      if _G.TweenShrine and wait(0.1) then
         tpToShrines()
     end
+    until _G.TweenShrine == false
 end)
 
 Options.TweenToShrine:SetValue(false)
@@ -1241,7 +1266,7 @@ Options.TweenToShrine:SetValue(false)
 local MultiDropdown = Tabs.Main:AddDropdown("ShrineSelected", {
     Title = "Select Shrine",
     Description = "",
-    Values = {"Summoning", "Healing", "Grass", "Sacrifice", "Unknown", "Unknown", "Unknown", "Unknown", "Unknown", "Unknown"},
+    Values = {"Summoning", "Healing", "Grass", "Sacrifice", "Glass"},
     Multi = true,
     Default = {"Summoning", "Healing"},
 })
@@ -1271,8 +1296,6 @@ local Input = Tabs.Main:AddInput("KeyShrineType", {
             ShrineKeyType = Stat
         end
     })
-    
-]]
 
 -- Define toggle settings in _G
 _G.Setting = {
@@ -1639,7 +1662,7 @@ local isToggleActive = false
 Toggle:OnChanged(function(isToggled)
     isToggleActive = isToggled
 
-    while isToggleActive and wait(0.01) do
+    while isToggleActive and wait(0.1) do
     if not isToggleActive then break end
     if SelectedLow then
          AllKill()
@@ -2492,6 +2515,7 @@ setfpscap(Vav)
         end
     })
     
+setfflag("TaskSchedulerTargetFps", "500")
 setfpscap(500)
 
 Tabs.Misc:AddParagraph({
@@ -2687,6 +2711,14 @@ for _, value in pairs(workspace.Dungeon.Enemies:GetDescendants()) do
         end
     end
  end
+ 
+ local function RemoveAnimationMobs()
+for _, value in pairs(workspace.Dungeon.Enemies:GetDescendants()) do
+        if value:FindFirstChild("Animator") then
+        value:Destroy()
+        end
+    end
+ end
 
 function optimizeMobs()
         local dungeon, rooms, enemies, shrines = getDungeon()
@@ -2726,7 +2758,8 @@ if Destroy4 then
 optimizeMobs()
  invisibleMobs()
  removeMobs()
- wait(1)
+ RemoveAnimationMobs()
+ wait(0.1)
  end
 until not Destroy4 == true
     end)
