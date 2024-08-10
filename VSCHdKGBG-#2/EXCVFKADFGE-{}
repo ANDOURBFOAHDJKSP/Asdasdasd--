@@ -147,10 +147,10 @@ end)
 
 local Window = Fluent:CreateWindow({
     Title = "Unknown Hub X Evade",
-    SubTitle = "V1.4 Made by Guesttester_1",
+    SubTitle = "V1.4 Made by Guesttester_1 discord.gg/d2a3KkTD6r",
     TabWidth = 160,
     Size = UDim2.fromOffset(580, 460),
-    Acrylic = true, -- The blur may be detectable, setting this to false disables blur entirely
+    Acrylic = false, -- The blur may be detectable, setting this to false disables blur entirely
     Theme = "Dark",
     MinimizeKey = Enum.KeyCode.LeftControl -- Used when theres no MinimizeKeybind
 })
@@ -276,9 +276,8 @@ local Toggle = Tabs.Main:AddToggle("ESPPlayers", {Title = "ESP Players", Default
 
 Toggle:OnChanged(function(State)
     PlayerESP = State
-    
-    spawn(function()
-        while wait(0.3) do
+   
+        while PlayerESP and wait(0.3) do
             pcall(function()
                 if PlayerESP then
                     local localPlayer = game.Players.LocalPlayer
@@ -347,7 +346,6 @@ Toggle:OnChanged(function(State)
                 end
             end)
         end
-    end)
 end)
 
 local ObjectiveESP = false
@@ -367,7 +365,7 @@ local Toggle = Tabs.Main:AddToggle("ESPObjective", {Title = "ESP Objective", Def
 				pcall(function()
 		          if workspace.Game.Map.Parts:FindFirstChild("Objectives") then
               	   for i, v in next, workspace.Game.Map.Parts.Objectives:GetChildren() do
-						Simple_Create(v:FindFirstChildWhichIsA("BasePart"), "(Objective)", "Object_Tracker")
+						Simple_Create(v:FindFirstChildWhichIsA("BasePart"), "(OBJECTIVES)", "Object_Tracker")
 						end
 					end
 				end)
@@ -386,10 +384,9 @@ local Toggle = Tabs.Main:AddToggle("AutoRespawn", {Title = "Auto Respawn", Defau
 
     Toggle:OnChanged(function(State)
         AutoRespawn = State
-      while task.wait(0.5) and AutoRespawn do
-			if not AutoRespawn then
-				break
-			end
+      repeat
+      wait(0.1)
+      if AutoRespawn then
 		 local char = game.Players.LocalPlayer.Character or game.Players.LocalPlayer.CharacterAdded:Wait()
 			local stats = char:WaitForChild("StatChanges", 3)
 			if stats == nil then
@@ -399,9 +396,10 @@ local Toggle = Tabs.Main:AddToggle("AutoRespawn", {Title = "Auto Respawn", Defau
 				game:GetService("ReplicatedStorage").Events.Respawn:FireServer()
 			end
 		end
+		until AutoRespawn == false
     end)
 
-local AutoWhistleWhenDowned = false
+local AutoWhistle = false
 
 function autowistlefunction()
     local ohString1 = "Whistle"
@@ -410,22 +408,12 @@ function autowistlefunction()
    game:GetService("ReplicatedStorage").Events.Whistle:FireServer()
 end
 
-local Toggle = Tabs.Main:AddToggle("AutoRespawn", {Title = "Auto Whistle When Downed", Default = false })
+local Toggle = Tabs.Main:AddToggle("AutoRespawn", {Title = "Auto Whistle", Default = false })
 
     Toggle:OnChanged(function(State)
-        AutoWhistleWhenDowned = State
-      while task.wait(5) and AutoWhistleWhenDowned do
-			if not AutoWhistleWhenDowned then
-				break
-			end
-			local char = game.Players.LocalPlayer.Character or game.Players.LocalPlayer.CharacterAdded:Wait()
-			local stats = char:WaitForChild("StatChanges", 3)
-			if stats == nil then
-				return
-			end
-			if stats:FindFirstChild("Speed") and stats:FindFirstChild("Speed"):FindFirstChild("Downed") then
-				autowistlefunction()
-			end
+        AutoWhistle = State
+      while task.wait(1) and AutoWhistle do
+			autowistlefunction()
 		end
     end)
     
@@ -456,16 +444,21 @@ game.Players.LocalPlayer.PlayerScripts.CameraShake.Value = CFrame.new(0,0,0) * C
 local NoDamage = false
 
 function disabletouch()
+if game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
      nowaterdmg(game.Players.LocalPlayer.Character)
+    end
 end
 
-local Toggle = Tabs.Main:AddToggle("NoDmgtoWaterLavaIce", {Title = "No Damage Ice, Water, Lava", Default = false })
+local Toggle = Tabs.Main:AddToggle("RemoveDamageParts", {Title = "Remove Damage Parts", Default = false })
 
     Toggle:OnChanged(function(State)
     NoDamage = State
-while NoDamage and wait(0.1) do
+repeat
+wait(0.1)
+if NoDamage then
 disabletouch()
-		end        
+		end  
+	 until NoDamage == false
     end)
     
 Tabs.Main:AddParagraph({
@@ -809,7 +802,7 @@ Tabs.AutoFarm:AddButton({
 -- Misc
 
 Tabs.Misc:AddParagraph({
-        Title = "Speed and Jump",
+        Title = "Adjustments",
         Content = " "
     })
 
@@ -848,9 +841,10 @@ Tabs.Misc:AddParagraph({
     })
 
 local FakeEmoteDownDash = false
+local FakeEmoteDownDash2 = false
 local SelectedEmoteSpeed = 10000
 
-local Toggle = Tabs.Misc:AddToggle("AutoRespawn", {Title = "Fake Emote/Down Dash", Default = false })
+local Toggle = Tabs.Misc:AddToggle("EmoteD1", {Title = "Fake Emote/Down Dash", Default = false })
 
     Toggle:OnChanged(function(State)
         FakeEmoteDownDash = State
@@ -858,11 +852,10 @@ local Toggle = Tabs.Misc:AddToggle("AutoRespawn", {Title = "Fake Emote/Down Dash
       TSpeed = SavedSpeed
       end
     
-      while wait() and FakeEmoteDownDash do
-			if not FakeEmoteDownDash then
-			TSpeed = SavedSpeed
-				break
-			end
+    repeat
+      wait()
+       if FakeEmoteDownDash then
+       if game.Workspace:FindFirstChild("Game") and game.Workspace.Game:FindFirstChild("Players") and game.Workspace.Game.Players:FindFirstChild(game.Players.LocalPlayer.Name) then
 			local char = game.Players.LocalPlayer.Character or game.Players.LocalPlayer.CharacterAdded:Wait()
 			local stats = char:WaitForChild("StatChanges", 3)
 			if stats == nil then
@@ -878,13 +871,44 @@ local Toggle = Tabs.Misc:AddToggle("AutoRespawn", {Title = "Fake Emote/Down Dash
 			    TSpeed = SavedSpeed
 			end
 		end
+     end
+		until FakeEmoteDownDash == false
+    end)
+
+local Toggle = Tabs.Misc:AddToggle("EmoteD2", {Title = "Fake Emote Dash (No Crouching)", Default = false })
+
+    Toggle:OnChanged(function(State)
+        FakeEmoteDownDash2 = State
+      if not FakeEmoteDownDash2 then
+      TSpeed = SavedSpeed
+      end
+    
+    repeat
+      wait()
+       if FakeEmoteDownDash2 then
+           if game.Workspace:FindFirstChild("Game") and game.Workspace.Game:FindFirstChild("Players") and game.Workspace.Game.Players:FindFirstChild(game.Players.LocalPlayer.Name) then
+			local char = game.Players.LocalPlayer.Character or game.Players.LocalPlayer.CharacterAdded:Wait()
+			local stats = char:WaitForChild("StatChanges", 3)
+			if stats == nil then
+			  TSpeed = SavedSpeed
+				return
+			end
+			local EmoteError = char:GetAttribute("Emoting")
+			if EmoteError and EmoteError == true then
+				TSpeed = SelectedEmoteSpeed
+			else
+			    TSpeed = SavedSpeed
+			end
+		end
+     end
+		until FakeEmoteDownDash2 == false
     end)
 
   local Dropdown = Tabs.Misc:AddDropdown("EmoteSpeed", {
         Title = "Emote Dash Speed",
-        Values = {10000, 25000, 45000, 55000, 67000, 80000, 95000, 100000, 125000},
+        Values = {4500, 10000, 25000, 45000, 55000, 67000, 80000, 95000, 100000, 125000},
         Multi = false,
-        Default = 1,
+        Default = 2,
     })
 
     Dropdown:OnChanged(function(Value)
@@ -915,13 +939,20 @@ local Keybind = Tabs.Misc:AddKeybind("KeyBHOP", {
         
         Callback = function(Bool)
         BHopKey = Bool
-            while BHopKey and wait(0.1) do
+          spawn(function()
+            while true and wait(0.1) do
+                if BHopKey then
                local humanoid = game.Players.LocalPlayer.Character:FindFirstChildOfClass("Humanoid")
-             if humanoid and humanoid.FloorMaterial ~= Enum.Material.Air and humanoid then
-               humanoid:ChangeState(Enum.HumanoidStateType.Jumping)
-               end
+--        if humanoid and humanoid.FloorMaterial ~= Enum.Material.Air and humanoid then
+--            humanoid:ChangeState(Enum.HumanoidStateType.Jumping)
+--            end
+                 setfflag("MaxAltitudePDStickHipHeightPercent", "-24")
+             else
+                 setfflag("MaxAltitudePDStickHipHeightPercent", "1")
+                end
            end
-        end,
+       end)
+   end,
 
         ChangedCallback = function(New)
             print("Keybind changed!", New)
@@ -977,17 +1008,36 @@ local function createtoggle()
     MakeDraggable(toggleButton, frame)
 end
 
+
 -- Auto-Jump
 spawn(function()
 while true and wait(0.1) do
     if BHop2 then
+   setfflag("MaxAltitudePDStickHipHeightPercent", "-24") 
         local humanoid = LocalPlayer.Character:FindFirstChildOfClass("Humanoid")
-        if humanoid and humanoid.FloorMaterial ~= Enum.Material.Air and humanoid then
-            humanoid:ChangeState(Enum.HumanoidStateType.Jumping)
-            end
+--        if humanoid and humanoid.FloorMaterial ~= Enum.Material.Air and humanoid then
+--            humanoid:ChangeState(Enum.HumanoidStateType.Jumping)
+--            end
+      else
+      setfflag("MaxAltitudePDStickHipHeightPercent", "1")
        end
     end
 end)
+
+local Players = game:GetService("Players")
+
+local function onPlayerRemoving(player)
+    local character = player.Character
+    if character then
+        local humanoid = character:FindFirstChildOfClass("Humanoid")
+        if humanoid then
+            setfflag("MaxAltitudePDStickHipHeightPercent", "1")
+        end
+    end
+end
+
+-- Connect the function to the PlayerRemoving event
+Players.PlayerRemoving:Connect(onPlayerRemoving)
 
 function destroytoggle()
 local target = game.CoreGui
@@ -1008,8 +1058,85 @@ destroytoggle()
 end
 end)
 
+local SelectedCharacter = ""
+local SelectedUtilities = ""
+
+function UpdateFakeEquipment()
+game.Workspace.Game.Players[game.Players.LocalPlayer.Name]:SetAttribute("Character", SelectedCharacter)
+game.Workspace.Game.Players[game.Players.LocalPlayer.Name]:SetAttribute("Equipped", SelectedUtilities)
+end
+
 Tabs.Misc:AddParagraph({
-        Title = "Modify Lightings",
+        Title = "Fake Equipment",
+        Content = "(Visual)"
+    })
+    
+Tabs.Misc:AddButton({
+        Title = "Seal Character",
+        Description = "",
+        Callback = function()
+        game.Workspace.Game.Players[game.Players.LocalPlayer.Name]:SetAttribute("Character", "Seal")
+        end
+    })
+    
+Tabs.Misc:AddButton({
+        Title = "Jard Character",
+        Description = "",
+        Callback = function()
+        game.Workspace.Game.Players[game.Players.LocalPlayer.Name]:SetAttribute("Character", "Jard")
+        end
+    })
+
+Tabs.Misc:AddButton({
+        Title = "Clown Character",
+        Description = "",
+        Callback = function()
+        game.Workspace.Game.Players[game.Players.LocalPlayer.Name]:SetAttribute("Character", "ClownJard")
+        end
+    })
+
+Tabs.Misc:AddButton({
+        Title = "Trooper Character",
+        Description = "",
+        Callback = function()
+        game.Workspace.Game.Players[game.Players.LocalPlayer.Name]:SetAttribute("Character", "Trooper")
+        end
+    })
+    
+Tabs.Misc:AddButton({
+        Title = "Bobo Character",
+        Description = "Buggy :(",
+        Callback = function()
+        game.Workspace.Game.Players[game.Players.LocalPlayer.Name]:SetAttribute("Character", "Bobo")
+        end
+    })
+    
+Tabs.Misc:AddButton({
+        Title = "Defect Rebel Character",
+        Description = "",
+        Callback = function()
+        game.Workspace.Game.Players[game.Players.LocalPlayer.Name]:SetAttribute("Character", "DefectRebel")
+        end
+    })
+
+Tabs.Misc:AddButton({
+        Title = "VanGuard Character",
+        Description = "",
+        Callback = function()
+        game.Workspace.Game.Players[game.Players.LocalPlayer.Name]:SetAttribute("Character", "Vanguard")
+        end
+    })
+
+Tabs.Misc:AddButton({
+        Title = "Krampus Character",
+        Description = "",
+        Callback = function()
+        game.Workspace.Game.Players[game.Players.LocalPlayer.Name]:SetAttribute("Character", "Krampus")
+        end
+    })
+
+Tabs.Misc:AddParagraph({
+        Title = "Modified Client",
         Content = " "
     })
  
@@ -1041,7 +1168,90 @@ Tabs.Misc:AddParagraph({
        end
 end)
 
-setfflag("TaskSchedulerTargetFps", "500")
+Tabs.Misc:AddButton({
+        Title = "Accurate Low Quality",
+        Description = "",
+        Callback = function()
+        -- made by guesttester_1 (pls credit to me)
+-- i forgot to add remove textures script
+
+setfpscap(900) -- normal fps cap for other executors
+
+setfflag("TaskSchedulerTargetFps", "900") -- for setfpscap unc missing or unsupported for executors
+
+local function removeWater()
+    for _, obj in pairs(workspace:GetDescendants()) do
+        if obj:IsA("Terrain") then
+            obj.WaterTransparency = 1
+            obj.WaterWaveSize = 0
+            obj.WaterWaveSpeed = 0
+            obj.WaterReflectance = 0
+        end
+    end
+end
+
+local function removeReflections()
+    local lighting = game:GetService("Lighting")
+    lighting.EnvironmentSpecularScale = 0
+    lighting.EnvironmentDiffuseScale = 0
+end
+
+local function removeEffects()
+    for _, effect in pairs(workspace:GetDescendants()) do
+        if effect:IsA("ParticleEmitter") or effect:IsA("Smoke") or effect:IsA("Fire") or effect:IsA("Sparkles") then
+            effect.Enabled = false
+        end
+    end
+end
+
+local function removeExplosions()
+    for _, explosion in pairs(workspace:GetDescendants()) do
+        if explosion:IsA("Explosion") then
+            explosion:Destroy()
+        end
+    end
+end
+
+local function setLowShadows()
+    game.Lighting.GlobalShadows = false
+end
+
+local function setLowQuality()
+    settings().Rendering.QualityLevel = Enum.QualityLevel.Level01
+end
+
+local function setLowGraphics()
+local Lighting = game:FindService("Lighting")
+
+setscriptable(Lighting, "Technology", true)
+Lighting.Technology = Enum.Technology.Legacy
+
+for _, v in next, workspace:GetDescendants() do
+    if v:IsA("PointLight") or v:IsA("SpotLighting") or v:IsA("SurfaceLight") then
+        local Light = v
+        if not Light.Shadows then
+            Light.Shadows = true
+        end
+    end
+end
+end
+
+local function reduceLag()
+    removeWater()
+    removeReflections()
+    removeEffects()
+    removeExplosions()
+--    setLowShadows()
+    setLowQuality()
+    setLowGraphics()
+end
+
+reduceLag()
+
+        end
+ })
+
+setfflag("TaskSchedulerTargetFps", "900")
 
 -- Settings
 
