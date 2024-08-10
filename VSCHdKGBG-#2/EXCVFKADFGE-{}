@@ -359,7 +359,7 @@ local Toggle = Tabs.Main:AddToggle("ESPObjective", {Title = "ESP Objective", Def
                 function()
 			while task.wait() do
 				ClearESP('Object_Tracker')
-				if not BotESP then
+				if not ObjectiveESP then
 					break
 				end
 				pcall(function()
@@ -1015,9 +1015,9 @@ while true and wait(0.1) do
     if BHop2 then
    setfflag("MaxAltitudePDStickHipHeightPercent", "-24") 
         local humanoid = LocalPlayer.Character:FindFirstChildOfClass("Humanoid")
---        if humanoid and humanoid.FloorMaterial ~= Enum.Material.Air and humanoid then
---            humanoid:ChangeState(Enum.HumanoidStateType.Jumping)
---            end
+        if humanoid and humanoid.FloorMaterial ~= Enum.Material.Air and humanoid then
+            humanoid:ChangeState(Enum.HumanoidStateType.Jumping)
+            end
       else
       setfflag("MaxAltitudePDStickHipHeightPercent", "1")
        end
