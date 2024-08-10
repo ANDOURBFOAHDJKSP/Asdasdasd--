@@ -122,7 +122,7 @@ RunService.RenderStepped:Connect(function()
     frameCount = frameCount + 1
     
     if frameCount == 1 and untilloaded == true then
-       game.Players.LocalPlayer:Kick("Device Saver: CRASH DETECTED")
+       game:GetService("Players").LocalPlayer:Kick("Device Saver: CRASH DETECTED")
     end
 
     if deltaTime >= 1 then
@@ -144,6 +144,36 @@ mainopen.MouseButton1Click:Connect(function()
     game:GetService("VirtualInputManager"):SendKeyEvent(true, "LeftControl", false, game)
     game:GetService("VirtualInputManager"):SendKeyEvent(false, "LeftControl", false, game)
 end)
+
+if not require then
+    return game:GetService("Players").LocalPlayer:Kick("Your Exploit doesn't support: require(path)")
+else
+print("Supported require()")
+end
+
+if not firetouchinterest  then
+    return game:GetService("Players").LocalPlayer:Kick("Your Exploit doesn't support: firetouchinterest()")
+else
+print("Supported firetouchinterest()")
+end
+
+if not setfpscap or setfpscap(500) then
+    return game:GetService("Players").LocalPlayer:Kick("Your Exploit doesn't support: setfpscap()")
+else
+print("Supported setfpscap()")
+end
+
+if not setfflag then
+    return game:GetService("Players").LocalPlayer:Kick("Your Exploit doesn't support: setfflag()")
+else
+print("Supported setfflag()")
+end
+
+if not hookmetamethod then
+    return game:GetService("Players").LocalPlayer:Kick("Your Exploit doesn't support: Hookmetamethod()")
+else
+print("Supported hookmetamethod()")
+end
 
 local Window = Fluent:CreateWindow({
     Title = "Unknown Hub X Evade",
@@ -223,7 +253,7 @@ function Simple_Create(base, name, trackername, studs)
     txtdistance.TextColor3 = Color3.fromRGB(255, 255, 255)
     txtdistance.Parent = bb
     
-    local distance = math.floor((game.Players.LocalPlayer.Character.HumanoidRootPart.Position - base.Position).Magnitude)
+    local distance = math.floor((game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.Position - base.Position).Magnitude)
     
     txtdistance.Text = distance.. " M"
 end
@@ -280,7 +310,7 @@ Toggle:OnChanged(function(State)
         while PlayerESP and wait(0.3) do
             pcall(function()
                 if PlayerESP then
-                    local localPlayer = game.Players.LocalPlayer
+                    local localPlayer = game:GetService("Players").LocalPlayer
                     local localCharacter = localPlayer.Character
                     local localHumanoidRootPart = localCharacter and localCharacter:FindFirstChild("HumanoidRootPart")
                     
@@ -387,7 +417,7 @@ local Toggle = Tabs.Main:AddToggle("AutoRespawn", {Title = "Auto Respawn", Defau
       repeat
       wait(0.1)
       if AutoRespawn then
-		 local char = game.Players.LocalPlayer.Character or game.Players.LocalPlayer.CharacterAdded:Wait()
+		 local char = game:GetService("Players").LocalPlayer.Character or game:GetService("Players").LocalPlayer.CharacterAdded:Wait()
 			local stats = char:WaitForChild("StatChanges", 3)
 			if stats == nil then
 				return
@@ -437,15 +467,15 @@ local Toggle = Tabs.Main:AddToggle("NoCamShake", {Title = "No Camera Shake", Def
     Toggle:OnChanged(function(State)
     NoCameraShake = State
 while NoCameraShake and wait(0.1) do
-game.Players.LocalPlayer.PlayerScripts.CameraShake.Value = CFrame.new(0,0,0) * CFrame.new(0,0,0)
+game:GetService("Players").LocalPlayer.PlayerScripts.CameraShake.Value = CFrame.new(0,0,0) * CFrame.new(0,0,0)
 		end        
     end)
  
 local NoDamage = false
 
 function disabletouch()
-if game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
-     nowaterdmg(game.Players.LocalPlayer.Character)
+if game:GetService("Players").LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
+     nowaterdmg(game:GetService("Players").LocalPlayer.Character)
     end
 end
 
@@ -472,7 +502,7 @@ local NoClipx = false
 
 local function Noclip()
             pcall(function()
-                for i, v in pairs(game.Players.LocalPlayer.Character:GetDescendants()) do
+                for i, v in pairs(game:GetService("Players").LocalPlayer.Character:GetDescendants()) do
                     if v:IsA("BasePart") then
                         v.CanCollide = false
                  end
@@ -703,8 +733,8 @@ local revive = function()
     if downedplr ~= nil and downedplr:FindFirstChild('HumanoidRootPart') then
         task.spawn(function()
             while task.wait() do
-                if game.Players.LocalPlayer.Character then
-                    game.Players.LocalPlayer.Character:FindFirstChild('HumanoidRootPart').CFrame = CFrame.new(downedplr:FindFirstChild('HumanoidRootPart').Position.X, downedplr:FindFirstChild('HumanoidRootPart').Position.Y + 3, downedplr:FindFirstChild('HumanoidRootPart').Position.Z)
+                if game:GetService("Players").LocalPlayer.Character then
+                    game:GetService("Players").LocalPlayer.Character:FindFirstChild('HumanoidRootPart').CFrame = CFrame.new(downedplr:FindFirstChild('HumanoidRootPart').Position.X, downedplr:FindFirstChild('HumanoidRootPart').Position.Y + 3, downedplr:FindFirstChild('HumanoidRootPart').Position.Z)
                     task.wait()
                     game:GetService("ReplicatedStorage").Events.Revive.RevivePlayer:FireServer(tostring(downedplr), false)
                     task.wait(4.5)
@@ -721,7 +751,7 @@ end
 task.spawn(function()
     while task.wait() do
         if FarmMoney then
-            if game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:GetAttribute("Downed") then
+            if game:GetService("Players").LocalPlayer.Character and game:GetService("Players").LocalPlayer.Character:GetAttribute("Downed") then
                 game:GetService("ReplicatedStorage").Events.Respawn:FireServer()
                 task.wait(3)
             else
@@ -729,8 +759,8 @@ task.spawn(function()
                 task.wait(1)
             end
         end
-        if FarmMoney == false and AFKFarm and game.Players.LocalPlayer.Character:FindFirstChild('HumanoidRootPart') ~= nil then
-            game.Players.LocalPlayer.Character:FindFirstChild('HumanoidRootPart').CFrame = CFrame.new(6007, 7005, 8005)
+        if FarmMoney == false and AFKFarm and game:GetService("Players").LocalPlayer.Character:FindFirstChild('HumanoidRootPart') ~= nil then
+            game:GetService("Players").LocalPlayer.Character:FindFirstChild('HumanoidRootPart').CFrame = CFrame.new(6007, 7005, 8005)
         end
     end
 end)
@@ -754,7 +784,7 @@ if FarmTickets then
 			if not FarmTickets then
 				break
 			end
-			local char = game.Players.LocalPlayer.Character or game.Players.LocalPlayer.CharacterAdded:Wait()
+			local char = game:GetService("Players").LocalPlayer.Character or game:GetService("Players").LocalPlayer.CharacterAdded:Wait()
 			local tickets = workspace.Game.Effects.Tickets
 			local hrp = char:WaitForChild("HumanoidRootPart", 3)
 			if hrp == nil then
@@ -781,7 +811,7 @@ Tabs.AutoFarm:AddParagraph({
     })
 
 function tptoobjective()
-local hrp = game.Players.LocalPlayer.Character.HumanoidRootPart
+local hrp = game:GetService("Players").LocalPlayer.Character.HumanoidRootPart
 	if workspace.Game.Map.Parts:FindFirstChild("Objectives") then
 		for i, v in next, workspace.Game.Map.Parts.Objectives:GetChildren() do
 			if v.IsA(v, "Model") then
@@ -855,8 +885,8 @@ local Toggle = Tabs.Misc:AddToggle("EmoteD1", {Title = "Fake Emote/Down Dash", D
     repeat
       wait()
        if FakeEmoteDownDash then
-       if game.Workspace:FindFirstChild("Game") and game.Workspace.Game:FindFirstChild("Players") and game.Workspace.Game.Players:FindFirstChild(game.Players.LocalPlayer.Name) then
-			local char = game.Players.LocalPlayer.Character or game.Players.LocalPlayer.CharacterAdded:Wait()
+       if game.Workspace:FindFirstChild("Game") and game.Workspace.Game:FindFirstChild("Players") and game.Workspace.Game.Players:FindFirstChild(game:GetService("Players").LocalPlayer.Name) then
+			local char = game:GetService("Players").LocalPlayer.Character or game:GetService("Players").LocalPlayer.CharacterAdded:Wait()
 			local stats = char:WaitForChild("StatChanges", 3)
 			if stats == nil then
 			  TSpeed = SavedSpeed
@@ -886,8 +916,8 @@ local Toggle = Tabs.Misc:AddToggle("EmoteD2", {Title = "Fake Emote Dash (No Crou
     repeat
       wait()
        if FakeEmoteDownDash2 then
-           if game.Workspace:FindFirstChild("Game") and game.Workspace.Game:FindFirstChild("Players") and game.Workspace.Game.Players:FindFirstChild(game.Players.LocalPlayer.Name) then
-			local char = game.Players.LocalPlayer.Character or game.Players.LocalPlayer.CharacterAdded:Wait()
+           if game.Workspace:FindFirstChild("Game") and game.Workspace.Game:FindFirstChild("Players") and game.Workspace.Game.Players:FindFirstChild(game:GetService("Players").LocalPlayer.Name) then
+			local char = game:GetService("Players").LocalPlayer.Character or game:GetService("Players").LocalPlayer.CharacterAdded:Wait()
 			local stats = char:WaitForChild("StatChanges", 3)
 			if stats == nil then
 			  TSpeed = SavedSpeed
@@ -942,7 +972,7 @@ local Keybind = Tabs.Misc:AddKeybind("KeyBHOP", {
           spawn(function()
             while true and wait(0.1) do
                 if BHopKey then
-               local humanoid = game.Players.LocalPlayer.Character:FindFirstChildOfClass("Humanoid")
+               local humanoid = game:GetService("Players").LocalPlayer.Character:FindFirstChildOfClass("Humanoid")
 --        if humanoid and humanoid.FloorMaterial ~= Enum.Material.Air and humanoid then
 --            humanoid:ChangeState(Enum.HumanoidStateType.Jumping)
 --            end
@@ -1062,8 +1092,8 @@ local SelectedCharacter = ""
 local SelectedUtilities = ""
 
 function UpdateFakeEquipment()
-game.Workspace.Game.Players[game.Players.LocalPlayer.Name]:SetAttribute("Character", SelectedCharacter)
-game.Workspace.Game.Players[game.Players.LocalPlayer.Name]:SetAttribute("Equipped", SelectedUtilities)
+game.Workspace.Game.Players[game:GetService("Players").LocalPlayer.Name]:SetAttribute("Character", SelectedCharacter)
+game.Workspace.Game.Players[game:GetService("Players").LocalPlayer.Name]:SetAttribute("Equipped", SelectedUtilities)
 end
 
 Tabs.Misc:AddParagraph({
@@ -1075,7 +1105,7 @@ Tabs.Misc:AddButton({
         Title = "Seal Character",
         Description = "",
         Callback = function()
-        game.Workspace.Game.Players[game.Players.LocalPlayer.Name]:SetAttribute("Character", "Seal")
+        game.Workspace.Game.Players[game:GetService("Players").LocalPlayer.Name]:SetAttribute("Character", "Seal")
         end
     })
     
@@ -1083,7 +1113,7 @@ Tabs.Misc:AddButton({
         Title = "Jard Character",
         Description = "",
         Callback = function()
-        game.Workspace.Game.Players[game.Players.LocalPlayer.Name]:SetAttribute("Character", "Jard")
+        game.Workspace.Game.Players[game:GetService("Players").LocalPlayer.Name]:SetAttribute("Character", "Jard")
         end
     })
 
@@ -1091,7 +1121,7 @@ Tabs.Misc:AddButton({
         Title = "Clown Character",
         Description = "",
         Callback = function()
-        game.Workspace.Game.Players[game.Players.LocalPlayer.Name]:SetAttribute("Character", "ClownJard")
+        game.Workspace.Game.Players[game:GetService("Players").LocalPlayer.Name]:SetAttribute("Character", "ClownJard")
         end
     })
 
@@ -1099,7 +1129,7 @@ Tabs.Misc:AddButton({
         Title = "Trooper Character",
         Description = "",
         Callback = function()
-        game.Workspace.Game.Players[game.Players.LocalPlayer.Name]:SetAttribute("Character", "Trooper")
+        game.Workspace.Game.Players[game:GetService("Players").LocalPlayer.Name]:SetAttribute("Character", "Trooper")
         end
     })
     
@@ -1107,7 +1137,7 @@ Tabs.Misc:AddButton({
         Title = "Bobo Character",
         Description = "Buggy :(",
         Callback = function()
-        game.Workspace.Game.Players[game.Players.LocalPlayer.Name]:SetAttribute("Character", "Bobo")
+        game.Workspace.Game.Players[game:GetService("Players").LocalPlayer.Name]:SetAttribute("Character", "Bobo")
         end
     })
     
@@ -1115,7 +1145,7 @@ Tabs.Misc:AddButton({
         Title = "Defect Rebel Character",
         Description = "",
         Callback = function()
-        game.Workspace.Game.Players[game.Players.LocalPlayer.Name]:SetAttribute("Character", "DefectRebel")
+        game.Workspace.Game.Players[game:GetService("Players").LocalPlayer.Name]:SetAttribute("Character", "DefectRebel")
         end
     })
 
@@ -1123,7 +1153,7 @@ Tabs.Misc:AddButton({
         Title = "VanGuard Character",
         Description = "",
         Callback = function()
-        game.Workspace.Game.Players[game.Players.LocalPlayer.Name]:SetAttribute("Character", "Vanguard")
+        game.Workspace.Game.Players[game:GetService("Players").LocalPlayer.Name]:SetAttribute("Character", "Vanguard")
         end
     })
 
@@ -1131,7 +1161,7 @@ Tabs.Misc:AddButton({
         Title = "Krampus Character",
         Description = "",
         Callback = function()
-        game.Workspace.Game.Players[game.Players.LocalPlayer.Name]:SetAttribute("Character", "Krampus")
+        game.Workspace.Game.Players[game:GetService("Players").LocalPlayer.Name]:SetAttribute("Character", "Krampus")
         end
     })
 
