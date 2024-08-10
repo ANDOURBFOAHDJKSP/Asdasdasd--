@@ -306,10 +306,8 @@ function getNearestTarget()
     local player, cha, plr, hum = getPlayer()
     local dungeon, rooms, enemies, shrines = getDungeon()
     
-    for _, v in pairs(enemies:GetChildren()) do
-        if v:FindFirstChild("EvilHumanoid") and v:FindFirstChild("HumanoidRootPart") and v.EvilHumanoid.Health > 0 then
-            local isClone = v:FindFirstChild("IsClone")
-            if not isClone then
+    for _, v in pairs(enemies:GetDescendants()) do
+        if v:IsA("Model") and v:FindFirstChild("HumanoidRootPart") then
                 local distance = (v.HumanoidRootPart.Position - plr.Position).Magnitude
                 if distance < closest then
                     closest = distance
@@ -317,7 +315,6 @@ function getNearestTarget()
                 end
             end
         end
-    end
     
     return target
 end
@@ -417,6 +414,29 @@ local Skill1 = {
 
 local killaurarange = 250
 
+function ExplosionDamage()
+if workspace:FindFirstChild("Dungeon") then
+   for _, monster in pairs(workspace.Dungeon:GetDescendants()) do
+    if monster:FindFirstChild("HumanoidRootPart") then
+        if monster.Name ~= game.Players.LocalPlayer.Name then
+            local monsterRootPart = monster.HumanoidRootPart
+        
+        for _, damage in ipairs(game:GetService("Workspace").Ignore:GetDescendants()) do
+           if damage.Name == "Explosion" then
+                
+              damage.Position = monster.HumanoidRootPart.Position
+              damage.BlastRadius = 1000
+              damage.BlastPressure =10
+              damage.ExplosionType = Enum.ExplosionType.NoCraters
+           end
+     end
+end
+            
+              end
+          end
+     end
+end
+
 function killAuraLow(monster)
 if workspace:FindFirstChild("Dungeon") then
    for _, monster in pairs(workspace.Dungeon:GetDescendants()) do
@@ -435,6 +455,7 @@ if workspace:FindFirstChild("Dungeon") then
                firetouchinterest(monster.HumanoidRootPart, damage, 1)
                firetouchinterest(damage, monster.HumanoidRootPart, 0)
                firetouchinterest(damage, monster.HumanoidRootPart, 1)
+             --  ExplosionDamage()
            -- damage.Size = Vector3.new(25, 10, 25)
           
           if not damage:FindFirstChildWhichIsA("TouchTransmitter") then
@@ -467,7 +488,7 @@ if workspace:FindFirstChild("Dungeon") then
            if distance <= killaurarange then
                game:GetService("TweenService"):Create(damage, TweenInfo.new(0.3), {CFrame =  CFrame.new(monster.HumanoidRootPart.Position)}):Play()
                game:GetService("TweenService"):Create(damage, TweenInfo.new(0.3), {Position =  monster.HumanoidRootPart.Position}):Play()
-          
+         --      ExplosionDamage()
               end
            end
        wait(0.1)
@@ -513,6 +534,7 @@ function killAuraHigh(monster)
                --       damage.Position = monster.HumanoidRootPart.Position
                       game:GetService("TweenService"):Create(damage.Hitbox, TweenInfo.new(powerspeed), {CFrame =  CFrame.new(monster.HumanoidRootPart.Position)}):Play()
                   game:GetService("TweenService"):Create(damage.Hitbox, TweenInfo.new(powerspeed), {Position =  monster.HumanoidRootPart.Position}):Play()
+             --     ExplosionDamage()
                     end
                 end)
             end
@@ -735,44 +757,6 @@ function GetClosestt()
     return Target
 end
 
-function tpToMonsters()
-    local player, cha, plr, hum = getPlayer()
-    local attackObject, attackDistance = getNearestAttack()
-    local monster = getNearestTarget()
-    local shrine = getShrines()
-    
-    if shrine and _G.TweenShrine then
-        collectNearestShrine(shrine)
-      else
-      Tween({
-        targetPart = monster.UpperTorso,
-        newCFrame = CFrame.new(x, y, z)
-    })
-    end
-
-    if not monster then
-        NoMobsFound()
-        return
-    end
-    
-    if monster.HumanoidRootPart then
-    Tween({
-        targetPart = monster.HumanoidRootPart,
-        newCFrame = CFrame.new(x, y, z)
-    })
-    else
-    Tween({
-        targetPart = monster.UpperTorso,
-        newCFrame = CFrame.new(x, y, z)
-    })
-   end
-   
-  if monster:FindFirstChild("Head") then
-    getNearestHitPart()
-   end
- 
-end
-
 _G.TweenShrine = false
 local shrineNames = {"Summoning", "Healing", "Sacrifice"} -- Default selected shrine names
 
@@ -819,6 +803,37 @@ function collectNearestShrine(shrine)
     end
 end
  
+ function tpToMonsters()
+    local player, cha, plr, hum = getPlayer()
+    local attackObject, attackDistance = getNearestAttack()
+    local monster = getNearestTarget()
+    local shrine = getShrines()
+    
+    if shrine and _G.TweenShrine then
+        collectNearestShrine(shrine)
+    end
+
+    if not monster then
+        NoMobsFound()
+        return
+    end
+    
+    if monster:FindFirstChild("HumanoidRootPart") then
+    Tween({
+        targetPart = monster.HumanoidRootPart,
+        newCFrame = CFrame.new(x, y, z)
+    })
+    else
+    Tween({
+        targetPart = monster.UpperTorso,
+        newCFrame = CFrame.new(x, y, z)
+    })
+   end
+   
+   getNearestHitPart()
+   
+end
+
 local Script = require(Player.PlayerScripts.Shared.Client.CombatController)
 local ScriptFunction = Script.BasicAttack
 local ScriptFunction2 = Script.UseAbility
@@ -957,9 +972,7 @@ Toggle1:OnChanged(function(State)
         end)
     end)
     spawn(function()
-        repeat
-        if Settings.H then
-          wait(0.1)
+        while Settings.H and wait(0.1) do
             pcall(function()
                 ReplicatedStorage.Shared.Remotes.Data.ClaimPrizes:FireServer()
                 for i, v in pairs(Workspace:GetChildren()) do
@@ -971,7 +984,6 @@ Toggle1:OnChanged(function(State)
                 tpToMonsters()
              end)
           end
-        until Settings.H == false
     end)
  end)
  
@@ -1026,15 +1038,12 @@ Toggle:OnChanged(function(State)
         end)
     end)
     spawn(function()
-        repeat
-        if FarmWaveDefense1 then
-           wait(0.1)
+        while FarmWaveDefense1 and wait(0.1) do
             pcall(function()       
                 ReplicatedStorage.Shared.Remotes.Data.ClaimPrizes:FireServer()
                 WaveDefenseWar()
             end)
         end
-        until FarmWaveDefense1 == false
     end)
  end)
  
