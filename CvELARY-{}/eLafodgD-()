@@ -1,0 +1,479 @@
+-- Gui library
+local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/bloodball/-back-ups-for-libs/main/turtle"))()
+
+local Main = Library:Window("Main")
+local Misc = Library:Window("Misc")
+local Misc2 = Library:Window("Misc 2")
+
+local RunService = game:GetService("RunService")
+local fpsCounter = Instance.new("ScreenGui")
+fpsCounter.Parent = game.CoreGui
+fpsCounter.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+fpsCounter.ResetOnSpawn = false
+
+local label = Instance.new("TextLabel")
+label.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+label.BackgroundTransparency = 1.000
+label.TextColor3 = Color3.fromRGB(255, 255, 255)
+label.Font = Enum.Font.GothamBlack
+label.Size = UDim2.new(0, 150, 0, 70)
+label.Position = UDim2.new(0, 200, 0, 10)
+label.Text = "FPS: 0\nTime Played: 0h 0m 0s"
+label.TextSize = 10
+label.Parent = fpsCounter
+
+local startTime = tick()
+local lastUpdateTime = tick()
+local frameCount = 0
+
+RunService.RenderStepped:Connect(function()
+    local currentTime = tick()
+    local deltaTime = currentTime - lastUpdateTime
+    frameCount = frameCount + 1
+    
+    if frameCount == 1 and untilloaded == true then
+       game:GetService("Players").LocalPlayer:Kick("Device Saver: CRASH DETECTED")
+    end
+
+    if deltaTime >= 1 then
+        local fps = math.round(frameCount / deltaTime)
+        local elapsedTime = currentTime - startTime
+
+        local hours = math.floor(elapsedTime / 3600)
+        local minutes = math.floor((elapsedTime % 3600) / 60)
+        local seconds = math.floor(elapsedTime % 60)
+
+        label.Text = "FPS: " .. fps .. "\nTime Played: " .. hours .. "h " .. minutes .. "m " .. seconds .. "s"
+
+        lastUpdateTime = currentTime
+        frameCount = 0
+    end
+end)
+
+if not require then
+    return game:GetService("Players").LocalPlayer:Kick("Your Exploit doesn't support: require(path)")
+else
+print("Supported require()")
+end
+
+if not firetouchinterest  then
+    return game:GetService("Players").LocalPlayer:Kick("Your Exploit doesn't support: firetouchinterest()")
+else
+print("Supported firetouchinterest()")
+end
+
+if not setfpscap or setfpscap(500) then
+    return game:GetService("Players").LocalPlayer:Kick("Your Exploit doesn't support: setfpscap()")
+else
+print("Supported setfpscap()")
+end
+
+if not setfflag then
+    return game:GetService("Players").LocalPlayer:Kick("Your Exploit doesn't support: setfflag()")
+else
+print("Supported setfflag()")
+end
+
+if not hookmetamethod then
+    return game:GetService("Players").LocalPlayer:Kick("Your Exploit doesn't support: Hookmetamethod()")
+else
+print("Supported hookmetamethod()")
+end
+
+function Simple_Create(base, name, trackername, studs)
+    local bb = Instance.new("BillboardGui")
+    bb.Adornee = base
+    bb.ExtentsOffset = Vector3.new(0, 1, 0)
+    bb.AlwaysOnTop = true
+    bb.Size = UDim2.new(0, 6, 0, 6)
+    bb.StudsOffset = Vector3.new(0, 1, 0)
+    bb.Name = trackername
+    bb.Parent = game.CoreGui
+
+    local frame = Instance.new("Frame")
+    frame.ZIndex = 10
+    frame.BackgroundTransparency = 0.3
+    frame.Size = UDim2.new(3, 0, 3, 0)
+    frame.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
+    frame.Parent = bb
+
+    -- Add UICorner to make the frame circular
+    local uiCorner = Instance.new("UICorner")
+    uiCorner.CornerRadius = UDim.new(0.5, 0)
+    uiCorner.Parent = frame
+
+    local txtlbl = Instance.new("TextLabel")
+    txtlbl.ZIndex = 10
+    txtlbl.BackgroundTransparency = 1
+    txtlbl.Position = UDim2.new(0, 0, 0, -48)
+    txtlbl.Size = UDim2.new(1, 0, 10, 0)
+    txtlbl.Font = Enum.Font.GothamBold
+    txtlbl.Text = name
+    txtlbl.TextSize = 14    
+    txtlbl.TextStrokeTransparency = 0.5
+    txtlbl.TextColor3 = Color3.fromRGB(255, 0, 0)
+    txtlbl.Parent = bb
+    
+    local txtdistance = Instance.new("TextLabel")
+    txtdistance.ZIndex = 10
+    txtdistance.BackgroundTransparency = 1
+    txtdistance.Position = UDim2.new(0, 0, 0, -30)
+    txtdistance.Size = UDim2.new(1, 0, 10, 0)
+    txtdistance.Font = Enum.Font.GothamBold
+    txtdistance.TextSize = 14
+    txtdistance.TextStrokeTransparency = 0.5
+    txtdistance.TextColor3 = Color3.fromRGB(255, 255, 255)
+    txtdistance.Parent = bb
+    
+    local distance = math.floor((game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.Position - base.Position).Magnitude)
+    
+    txtdistance.Text = distance.. " M"
+end
+
+function ClearESP(espname)
+	for _, v in pairs(game.CoreGui:GetChildren()) do
+		if v.Name == espname and v:isA("BillboardGui") then
+			v:Destroy()
+		end
+	end
+end
+
+function nowaterdmg(t)
+	for i, v in next, t:GetChildren() do
+		if v.IsA(v, 'BasePart') then
+			v.CanTouch = false
+		end
+	end
+end
+
+local BotESP = false
+
+Main:Toggle("Bot ESP", false, function(State)
+    BotESP = State
+        
+        task.spawn(
+                function()
+			while task.wait() do
+				ClearESP('AI_Tracker')
+				if not BotESP then
+					break
+				end
+				pcall(function()
+					local GamePlayers = workspace.Game.Players
+					for i, v in pairs(GamePlayers:GetChildren()) do
+						if not game.Players:FindFirstChild(v.Name) then
+							Simple_Create(v.HumanoidRootPart, v.Name, "AI_Tracker")
+						end
+					end
+				end)
+			end
+	 end)
+ end)
+ 
+ local PlayerESP = false
+
+Main:Toggle("Player ESP", false, function(State)
+    PlayerESP = State
+
+    while PlayerESP and wait(0.3) do
+            pcall(function()
+                if PlayerESP then
+                    local localPlayer = game:GetService("Players").LocalPlayer
+                    local localCharacter = localPlayer.Character
+                    local localHumanoidRootPart = localCharacter and localCharacter:FindFirstChild("HumanoidRootPart")
+                    
+                    if not localHumanoidRootPart then
+                        return
+                    end
+
+                    for _, player in pairs(game.Players:GetPlayers()) do
+                        if player ~= localPlayer and player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
+                            local character = player.Character
+                            local humanoidRootPart = character.HumanoidRootPart
+
+                            if not humanoidRootPart:FindFirstChild("PlayerESP") then
+                                local BillboardGui = Instance.new("BillboardGui")
+                                local TextLabel = Instance.new("TextLabel")
+
+                                BillboardGui.Parent = humanoidRootPart
+                                BillboardGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+                                BillboardGui.Name = "PlayerESP"
+                                BillboardGui.AlwaysOnTop = true
+                                BillboardGui.LightInfluence = 1.000
+                                BillboardGui.Size = UDim2.new(0, 200, 0, 50)
+                                BillboardGui.StudsOffset = Vector3.new(0, 2.5, 0)
+                                BillboardGui.MaxDistance = 500
+
+                                TextLabel.Parent = BillboardGui
+                                TextLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+                                TextLabel.BackgroundTransparency = 1.000
+                                TextLabel.Size = UDim2.new(0, 200, 0, 50)
+                                TextLabel.TextScaled = false
+                                TextLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+                                TextLabel.Font = Enum.Font.GothamBold
+                                TextLabel.TextSize = 14
+                            end
+
+                            local distance = math.floor((localHumanoidRootPart.Position - humanoidRootPart.Position).Magnitude)
+                            local labelText = string.format("%s - %d M", player.Name, distance)
+
+                            local gamePlayer = workspace:WaitForChild("Game", 1337).Players:FindFirstChild(player.Name)
+                            if gamePlayer and gamePlayer:GetAttribute('Downed') then
+                                humanoidRootPart.PlayerESP.TextLabel.TextColor3 = Color3.fromRGB(255, 0, 0)
+                                labelText = labelText .. " (Downed)"
+                            elseif gamePlayer and gamePlayer:GetAttribute('Team') == "Enemy" then
+                                humanoidRootPart.PlayerESP.TextLabel.TextColor3 = Color3.fromRGB(255, 0, 0)
+                                labelText = labelText .. " (Enemy)"
+                            else
+                                humanoidRootPart.PlayerESP.TextLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+                            end
+                            
+                            humanoidRootPart.PlayerESP.TextLabel.Text = labelText
+                        end
+                    end
+                else
+                    for _, player in pairs(game.Players:GetPlayers()) do
+                        if player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
+                            local humanoidRootPart = player.Character.HumanoidRootPart
+                            local esp = humanoidRootPart:FindFirstChild("PlayerESP")
+                            if esp then
+                                esp:Destroy()
+                            end
+                        end
+                    end
+                end
+            end)
+        end
+end)
+
+local ObjectiveESP = false
+
+Main:Toggle("Objective ESP", false, function(State)
+    ObjectiveESP = State
+        
+        task.spawn(
+                function()
+			while task.wait() do
+				ClearESP('Object_Tracker')
+				if not ObjectiveESP then
+					break
+				end
+				pcall(function()
+		          if workspace.Game.Map.Parts:FindFirstChild("Objectives") then
+              	   for i, v in next, workspace.Game.Map.Parts.Objectives:GetChildren() do
+						Simple_Create(v:FindFirstChildWhichIsA("BasePart"), "(OBJECTIVES)", "Object_Tracker")
+						end
+					end
+				end)
+			end
+	 end)
+ end)
+ 
+ Main:Label("Game Mods", Color3.fromRGB(127, 143, 166))
+
+local AutoRespawn = false
+
+Main:Toggle("Auto Respawn", false, function(State)
+    AutoRespawn = State
+      while task.wait(0.1) and AutoRespawn do
+			if not AutoRespawn then
+				break
+			end
+		 local char = game.Players.LocalPlayer.Character or game.Players.LocalPlayer.CharacterAdded:Wait()
+			local stats = char:WaitForChild("StatChanges", 3)
+			if stats == nil then
+				return
+			end
+			if stats:FindFirstChild("Speed") and stats:FindFirstChild("Speed"):FindFirstChild("Downed") then
+				game:GetService("ReplicatedStorage").Events.Respawn:FireServer()
+			end
+		end
+ end)
+ 
+ local QuickRev = false
+  Main:Toggle("Quick Revive", false, function(State)
+    QuickRev = State
+ if QuickRev then
+ workspace.Game.Settings:SetAttribute("ReviveTime", 1.75)
+		else
+workspace.Game.Settings:SetAttribute('ReviveTime', 3)
+ end
+ end)
+ 
+ local NoCameraShake = false
+ 
+ Main:Toggle("No Camera Shake", false, function(State)
+    NoCameraShake = State
+while NoCameraShake and wait(0.1) do
+game.Players.LocalPlayer.PlayerScripts.CameraShake.Value = CFrame.new(0,0,0) * CFrame.new(0,0,0)
+		end        
+ end)
+ 
+ local NoDamage = false
+
+function disabletouch()
+     nowaterdmg(game.Players.LocalPlayer.Character)
+end
+
+Main:Toggle("Remove Damage Parts", false, function(State)
+    NoDamage = State
+while NoDamage and wait(0.1) do
+disabletouch()
+		end        
+ end)
+ 
+ Main:Label("Character Mods (Sadly not here)", Color3.fromRGB(127, 143, 166))
+ 
+ local TSpeed = 1500
+local TJump = 3
+local SavedSpeed = 1500
+local SavedJump = 3
+ 
+Misc:Label("Adjustment", Color3.fromRGB(127, 143, 166))
+
+Misc:Box("Player Speed", function(text, Value)
+   TSpeed = tonumber(text) or 1500
+   SavedSpeed = tonumber(text) or 1500
+end)
+
+Misc:Box("Player Jump", function(text, Value)
+   TJump = tonumber(text) or 3
+    SavedJump = tonumber(text) or 3
+end)
+
+local old
+old = hookmetamethod(game,"__namecall",newcclosure(function(self,...)
+    local Args = {...}
+    local method = getnamecallmethod()
+    if tostring(self) == 'Communicator' and method == "InvokeServer" and Args[1] == "update" then
+        return TSpeed, TJump 
+    end
+    return old(self,...)
+end))
+
+Misc:Label("Emote Dash", Color3.fromRGB(127, 143, 166))
+
+local FakeEmoteDownDash = false
+local SelectedEmoteSpeed = 4500
+
+  Misc:Toggle("Fake Emote Dash", false, function(State)
+    FakeEmoteDownDash = State
+      if not FakeEmoteDownDash then
+      TSpeed = SavedSpeed
+      end
+    
+    repeat
+      wait()
+       if FakeEmoteDownDash then
+       if game.Workspace:FindFirstChild("Game") and game.Workspace.Game:FindFirstChild("Players") and game.Workspace.Game.Players:FindFirstChild(game:GetService("Players").LocalPlayer.Name) then
+			local char = game:GetService("Players").LocalPlayer.Character or game:GetService("Players").LocalPlayer.CharacterAdded:Wait()
+			local stats = char:WaitForChild("StatChanges", 3)
+			if stats == nil then
+			  TSpeed = SavedSpeed
+				return
+			end
+			local EmoteError = char:GetAttribute("Emoting")
+			if char:GetAttribute("Crouching") == true and EmoteError and EmoteError == true then
+				TSpeed = SelectedEmoteSpeed
+			elseif stats:FindFirstChild("Speed") and stats:FindFirstChild("Speed"):FindFirstChild("Downed") and char:GetAttribute("Crouching") == true then
+			    TSpeed = 7500
+			else
+			    TSpeed = SavedSpeed
+			end
+		end
+     end
+		until FakeEmoteDownDash == false
+    end)
+    
+ local dropdown = Misc:Dropdown("Emote Speed", {4500, 10000, 25000, 45000, 55000, 67000, 80000, 95000, 100000, 125000}, function(name)
+   SelectedEmoteSpeed = name
+end)
+
+Misc:Label("BHOP", Color3.fromRGB(127, 143, 166))
+
+
+    
+local userInputService = game:GetService("UserInputService")
+local Keybind = Enum.KeyCode.B -- Default keybind
+local Bhoptoggle = false
+
+local function toggleBhop()
+    Bhoptoggle = not Bhoptoggle
+    if Bhoptoggle then
+        setfflag("MaxAltitudePDStickHipHeightPercent", "-24")
+    else
+        setfflag("MaxAltitudePDStickHipHeightPercent", "1")
+    end
+end
+
+-- Function to handle key press events
+local function onKeyPress(input, gameProcessed)
+    if gameProcessed then return end
+    if input.KeyCode == Keybind then
+        toggleBhop()
+    end
+end
+
+-- Connect the input event to the handler
+userInputService.InputBegan:Connect(onKeyPress)
+
+-- Allow changing the keybind
+local function updateKeybind(text)
+    local keyCode = Enum.KeyCode[text]
+    if keyCode then
+        Keybind = keyCode
+    else
+        warn("Invalid key: " .. text)
+    end
+end
+
+-- Example usage of changing keybind
+Misc:Box("Keybind to BHOP", function(text)
+    updateKeybind(text)
+end)
+
+local Lighting = game:GetService("Lighting")
+local normalambient = Lighting.Ambient
+local normalcolorshift = Lighting.ColorShift_Bottom
+local normalcolorshift2 = Lighting.ColorShift_Top
+local normalfog1 = Lighting.FogEnd
+local normalfog2 = Lighting.FogStart
+local normalGlobalshadow = Lighting.GlobalShadows
+local normalclock = Lighting.ClockTime
+local normalbrightness = Lighting.Brightness
+
+function fb()
+            Lighting.Ambient = Color3.new(1, 1, 1)
+            Lighting.ColorShift_Bottom = Color3.new(1, 1, 1)
+            Lighting.ColorShift_Top = Color3.new(1, 1, 1)
+            Lighting.FogEnd = 100000
+            Lighting.FogStart = 0
+            Lighting.GlobalShadows = false
+            Lighting.ClockTime = 14
+            Lighting.Brightness = 2
+end
+
+function nofb()
+            Lighting.Ambient = normalambient
+            Lighting.ColorShift_Bottom = normalcolorshift
+            Lighting.ColorShift_Top = normalcolorshift2
+            Lighting.FogEnd = normalfog1
+            Lighting.FogStart = normalfog2
+            Lighting.GlobalShadows = normalGlobalshadow
+            Lighting.ClockTime = normalclock
+            Lighting.Brightness = normalbrightness
+end
+ 
+  local Fullbrighting = false
+ 
+
+Misc2:Toggle("Full Bright", false, function(StateFB)
+    Fullbrighting = StateFB
+     if Fullbrighting then
+          fb()
+       else
+          nofb()
+       end
+end)
+
+setfflag("TaskSchedulerTargetFps", "900")
