@@ -305,8 +305,9 @@ function getNearestTarget()
     local closest = math.huge
     local player, cha, plr, hum = getPlayer()
     local dungeon, rooms, enemies, shrines = getDungeon()
-    
-    for _, v in pairs(enemies:GetDescendants()) do
+
+if workspace:FindFirstChild("Dungeon") then
+    for _, v in pairs(game:GetService("Workspace").Dungeon:GetDescendants()) do
         if v:IsA("Model") and v:FindFirstChild("HumanoidRootPart") then
                 local distance = (v.HumanoidRootPart.Position - plr.Position).Magnitude
                 if distance < closest then
@@ -316,7 +317,8 @@ function getNearestTarget()
             end
         end
     
-    return target
+        return target
+    end
 end
 
 function getNearestAttack()
@@ -817,18 +819,11 @@ end
         NoMobsFound()
         return
     end
-    
-    if monster:FindFirstChild("HumanoidRootPart") then
+   
     Tween({
         targetPart = monster.HumanoidRootPart,
         newCFrame = CFrame.new(x, y, z)
     })
-    else
-    Tween({
-        targetPart = monster.UpperTorso,
-        newCFrame = CFrame.new(x, y, z)
-    })
-   end
    
    getNearestHitPart()
    
@@ -875,25 +870,25 @@ game:GetService("Workspace"):FindFirstChild("Map")
 print("-- Unknown Hub X 4/5: Checking Exploit Support...")
 
 if not require then
-    return game.Players.LocalPlayer:Kick("Your Exploit doesn't support: require(path)")
+    return game:GetService("Players").LocalPlayer:Kick("Your Exploit doesn't support: require(path) | PLEASE TRY OTHER EXECUTORS")
 else
 print("Supported require()")
 end
 
 if not firetouchinterest  then
-    return game.Players.LocalPlayer:Kick("Your Exploit doesn't support: firetouchinterest()")
+    return game:GetService("Players").LocalPlayer:Kick("UNC RESTRICTION MISSING: firetouchinterest() | PLEASE TRY OTHER EXECUTORS")
 else
 print("Supported firetouchinterest()")
 end
 
 if not setfpscap or setfpscap(500) then
-    return game.Players.LocalPlayer:Kick("Your Exploit doesn't support: setfpscap()")
+    return game:GetService("Players").LocalPlayer:Kick("UNC RESTRICTION MISSING: setfpscap() | PLEASE TRY OTHER EXECUTORS")
 else
 print("Supported setfpscap()")
 end
 
 if not setfflag then
-    return game.Players.LocalPlayer:Kick("Your Exploit doesn't support: setfflag()")
+    return game:GetService("Players").LocalPlayer:Kick("UNC RESTRICTION MISSING: setfflag() | PLEASE TRY OTHER EXECUTORS")
 else
 print("Supported setfflag()")
 end
@@ -901,7 +896,7 @@ end
 if game.Players then
 print("Advance Api")
 else
-print("Service Api")
+print("Common Api")
 end
 
 print("-- Unknown Hub X 5/5: Loaded, Pls Wait for Few Seconds...")
