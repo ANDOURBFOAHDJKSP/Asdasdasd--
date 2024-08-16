@@ -177,7 +177,7 @@ end
 
 local Window = Fluent:CreateWindow({
     Title = "Unknown Hub X Evade",
-    SubTitle = "V1.4 Made by Guesttester_1 discord.gg/d2a3KkTD6r",
+    SubTitle = "V1.4 Made by ??? discord.gg/d2a3KkTD6r",
     TabWidth = 160,
     Size = UDim2.fromOffset(580, 460),
     Acrylic = false, -- The blur may be detectable, setting this to false disables blur entirely
@@ -186,10 +186,10 @@ local Window = Fluent:CreateWindow({
 })
     
 Fluent:Notify({
-        Title = ":)",
-        Content = "",
-        SubContent = "", -- Optional
-        Duration = 10 -- Set to nil to make the notification not disappear
+        Title = "( Guesttester_1 Message )",
+        Content = "Hi. i decide to leave the roblox exploitation, im so sick of haters and i cant handle it anymore, so yeah im quitting and not coming back...",
+        SubContent = "So you know i keep working the script so hard with my friend (Unknownproooolucky) and this is my last message and goodbye.. ill disappear in the internet", -- Optional
+        Duration = 25 -- Set to nil to make the notification not disappear
     })
 
 local Tabs = {
