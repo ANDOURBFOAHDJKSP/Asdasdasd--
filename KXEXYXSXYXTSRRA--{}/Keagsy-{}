@@ -11,7 +11,7 @@ local function saveKeyToFile(key)
 end
 
 local function runloadstring()
-    loadstring(game:HttpGet('https://raw.githubusercontent.com/jOSHCLABC/GajdkavdfJ-Test--1/Test/Uaksgsksbf-Kysys-%231/Cfrm-%7B%7D'))()
+    loadstring(game:HttpGet('https://raw.githubusercontent.com/Whatamanfaceguy1100/Asdasdasd--/AFGCHJK-JK/KXEXYXSXYXTSRRA--%7B%7D/Cfrm-%7B%7D'))()
 end
 
 -- Create GUI
