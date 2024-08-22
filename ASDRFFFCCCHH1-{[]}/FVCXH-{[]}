@@ -887,12 +887,6 @@ else
 print("Supported setfpscap()")
 end
 
-if not setfflag then
-    return game:GetService("Players").LocalPlayer:Kick("UNC RESTRICTION MISSING: setfflag() | PLEASE TRY OTHER EXECUTORS")
-else
-print("Supported setfflag()")
-end
-
 if game.Players then
 print("Advance Api")
 else
