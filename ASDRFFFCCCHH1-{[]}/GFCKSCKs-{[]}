@@ -278,12 +278,6 @@ else
 print("Supported setfpscap()")
 end
 
-if not setfflag then
-    return game.Players.LocalPlayer:Kick("Your Exploit doesn't support: setfflag()")
-else
-print("Supported setfflag()")
-end
-
 print("-- Unknown Hub X 5/5: Loaded, Pls Wait for Few Seconds...")
 
 wait(0.1)
