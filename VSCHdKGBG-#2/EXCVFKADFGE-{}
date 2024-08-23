@@ -177,20 +177,13 @@ end
 
 local Window = Fluent:CreateWindow({
     Title = "Unknown Hub X Evade",
-    SubTitle = "V1.4 Made by ??? discord.gg/d2a3KkTD6r",
+    SubTitle = "V1.4 Made by Unknownproooolucky discord.gg/d2a3KkTD6r",
     TabWidth = 160,
     Size = UDim2.fromOffset(580, 460),
     Acrylic = false, -- The blur may be detectable, setting this to false disables blur entirely
     Theme = "Dark",
     MinimizeKey = Enum.KeyCode.LeftControl -- Used when theres no MinimizeKeybind
 })
-    
-Fluent:Notify({
-        Title = "",
-        Content = "",
-        SubContent = "", -- Optional
-        Duration = 90 -- Set to nil to make the notification not disappear
-    })
 
 local Tabs = {
     Main = Window:AddTab({ Title = "Main", Icon = "" }),
@@ -219,7 +212,7 @@ function Simple_Create(base, name, trackername, studs)
     bb.Parent = game.CoreGui
 
     local frame = Instance.new("Frame")
-    frame.ZIndex = 10
+    rame.ZIndex = 10
     frame.BackgroundTransparency = 0.3
     frame.Size = UDim2.new(3, 0, 3, 0)
     frame.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
