@@ -283,7 +283,7 @@ local Toggle = Tabs.Main:AddToggle("ESPBot", {Title = "ESP Bot", Default = false
         
         task.spawn(
                 function()
-			while task.wait() do
+			while task.wait(0.2) do
 				ClearESP('AI_Tracker')
 				if not BotESP then
 					break
@@ -307,7 +307,7 @@ local Toggle = Tabs.Main:AddToggle("ESPPlayers", {Title = "ESP Players", Default
 Toggle:OnChanged(function(State)
     PlayerESP = State
    
-        while PlayerESP and wait(0.3) do
+        while PlayerESP and wait(0.37) do
             pcall(function()
                 if PlayerESP then
                     local localPlayer = game:GetService("Players").LocalPlayer
@@ -387,7 +387,7 @@ local Toggle = Tabs.Main:AddToggle("ESPObjective", {Title = "ESP Objective", Def
         
         task.spawn(
                 function()
-			while task.wait() do
+			while task.wait(0.2) do
 				ClearESP('Object_Tracker')
 				if not ObjectiveESP then
 					break
@@ -982,6 +982,17 @@ local Keybind = Tabs.Misc:AddKeybind("KeyBHOP", {
                 end
            end
        end)
+
+  spawn(function()
+     while true and wait(0.1) do
+      if BHopKey then
+      local humanoid = game:GetService("Players").LocalPlayer.Character:FindFirstChildOfClass("Humanoid")
+         if humanoid and humanoid:GetState() == Enum.HumanoidStateType.Running then
+             game.Players.LocalPlayer.Character.Communicator:InvokeServer("Jump")
+           end
+          end
+        end
+     end)
    end,
 
         ChangedCallback = function(New)
@@ -1053,6 +1064,17 @@ while true and wait(0.1) do
        end
     end
 end)
+
+spawn(function()
+     while true and wait(0.1) do
+      if BHop2 then
+        local humanoid = game:GetService("Players").LocalPlayer.Character:FindFirstChildOfClass("Humanoid")
+        if humanoid and humanoid:GetState() == Enum.HumanoidStateType.Running then
+          game.Players.LocalPlayer.Character.Communicator:InvokeServer("Jump")
+           end
+         end
+     end
+ end)
 
 local Players = game:GetService("Players")
 
