@@ -1186,13 +1186,16 @@ Tabs.Misc:AddParagraph({
     })
  
  local Lighting = game:GetService("Lighting")
-  local RemoveFog = false
- 
- local Toggle = Tabs.Misc:AddToggle("FullBright", {Title = "Full Bright", Default = false })
+local normalambient = Lighting.Ambient
+local normalcolorshift = Lighting.ColorShift_Bottom
+local normalcolorshift2 = Lighting.ColorShift_Top
+local normalfog1 = Lighting.FogEnd
+local normalfog2 = Lighting.FogStart
+local normalGlobalshadow = Lighting.GlobalShadows
+local normalclock = Lighting.ClockTime
+local normalbrightness = Lighting.Brightness
 
-    Toggle:OnChanged(function(State)
- RemoveFog = State
-     if RemoveFog then
+function fb()
             Lighting.Ambient = Color3.new(1, 1, 1)
             Lighting.ColorShift_Bottom = Color3.new(1, 1, 1)
             Lighting.ColorShift_Top = Color3.new(1, 1, 1)
@@ -1201,15 +1204,29 @@ Tabs.Misc:AddParagraph({
             Lighting.GlobalShadows = false
             Lighting.ClockTime = 14
             Lighting.Brightness = 2
-        else
-            Lighting.Ambient = Color3.new(0, 0, 0)
-            Lighting.ColorShift_Bottom = Color3.new(0, 0, 0)
-            Lighting.ColorShift_Top = Color3.new(0, 0, 0)
-            Lighting.FogEnd = {}
-            Lighting.FogStart = {}
-            Lighting.GlobalShadows = true
-            Lighting.ClockTime = {}
-            Lighting.Brightness = {}
+end
+
+function nofb()
+            Lighting.Ambient = normalambient
+            Lighting.ColorShift_Bottom = normalcolorshift
+            Lighting.ColorShift_Top = normalcolorshift2
+            Lighting.FogEnd = normalfog1
+            Lighting.FogStart = normalfog2
+            Lighting.GlobalShadows = normalGlobalshadow
+            Lighting.ClockTime = normalclock
+            Lighting.Brightness = normalbrightness
+end
+ 
+  local Fullbrighting = false
+ 
+ local Toggle = Tabs.Misc:AddToggle("FullBright", {Title = "Full Bright", Default = false })
+
+    Toggle:OnChanged(function(StateFB)
+ Fullbrighting = StateFB
+     if Fullbrighting then
+          fb()
+       else
+          nofb()
        end
 end)
 
