@@ -212,7 +212,7 @@ function Simple_Create(base, name, trackername, studs)
     bb.Parent = game.CoreGui
 
     local frame = Instance.new("Frame")
-    rame.ZIndex = 10
+    frame.ZIndex = 10
     frame.BackgroundTransparency = 0.3
     frame.Size = UDim2.new(3, 0, 3, 0)
     frame.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
