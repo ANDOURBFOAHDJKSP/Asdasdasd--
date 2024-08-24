@@ -205,13 +205,6 @@ local Window = Fluent:CreateWindow({
     MinimizeKey = Enum.KeyCode.LeftControl -- Used when theres no MinimizeKeybind
 })
     
-Fluent:Notify({
-        Title = ":)",
-        Content = "",
-        SubContent = "", -- Optional
-        Duration = 10 -- Set to nil to make the notification not disappear
-    })
-
 local Tabs = {
     Main = Window:AddTab({ Title = "Main", Icon = "" }),
     AutoFarm = Window:AddTab({ Title = "Auto Farms", Icon = "" }),
