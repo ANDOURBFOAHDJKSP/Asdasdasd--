@@ -1,7 +1,7 @@
 -- Define the correct key
 local Player = game:GetService("Players")
 
-local correctKey = "UnknownHubXUniversal-HB8L9P0O8KB8L91L81J9LOP099BNCXZY77"
+local correctKey = "UnknownHubXUniversal-GJK9P98NBCV6283LOPTR1047WVFSXC1IL0"
 
 local keyFileName = "UnknownHubXUniversal/KeyHub.txt"
 
