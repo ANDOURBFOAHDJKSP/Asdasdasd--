@@ -145,49 +145,77 @@ mainopen.MouseButton1Click:Connect(function()
     game:GetService("VirtualInputManager"):SendKeyEvent(false, "LeftControl", false, game)
 end)
 
+local player = game:GetService("Players").LocalPlayer
+local screenGui = Instance.new("ScreenGui", player:WaitForChild("PlayerGui"))
+
+-- Prevent the GUI from resetting when the player respawns
+screenGui.ResetOnSpawn = false
+
+local circleDot = Instance.new("ImageLabel", screenGui)
+
+-- Set properties for the circle dot
+circleDot.Size = UDim2.new(0, 10, 0, 10) -- 10x10 pixels
+circleDot.Position = UDim2.new(0.5, -5, 0.476, -5) -- Center horizontally and slightly below center vertically
+circleDot.Image = "rbxassetid://4608020054" -- Set the image to a circular dot
+circleDot.BackgroundTransparency = 1 -- Make the background transparent
+
 if not require then
-    return game:GetService("Players").LocalPlayer:Kick("Your Exploit doesn't support: require(path)")
+    return game:GetService("Players").LocalPlayer:Kick("UNC RESTRICTION MISSING: require(path) | PLEASE TRY OTHER EXECUTORS")
 else
 print("Supported require()")
 end
 
 if not firetouchinterest  then
-    return game:GetService("Players").LocalPlayer:Kick("Your Exploit doesn't support: firetouchinterest()")
+    return game:GetService("Players").LocalPlayer:Kick("UNC RESTRICTION MISSING: firetouchinterest() | PLEASE TRY OTHER EXECUTORS")
 else
 print("Supported firetouchinterest()")
 end
 
 if not setfpscap or setfpscap(500) then
-    return game:GetService("Players").LocalPlayer:Kick("Your Exploit doesn't support: setfpscap()")
+    return game:GetService("Players").LocalPlayer:Kick("UNC RESTRICTION MISSING: setfpscap() | PLEASE TRY OTHER EXECUTORS")
 else
 print("Supported setfpscap()")
 end
 
 if not setfflag then
-    return game:GetService("Players").LocalPlayer:Kick("Your Exploit doesn't support: setfflag()")
+    return game:GetService("Players").LocalPlayer:Kick("UNC RESTRICTION MISSING: setfflag() | PLEASE TRY OTHER EXECUTORS")
 else
 print("Supported setfflag()")
 end
 
 if not hookmetamethod then
-    return game:GetService("Players").LocalPlayer:Kick("Your Exploit doesn't support: Hookmetamethod()")
+    return game:GetService("Players").LocalPlayer:Kick("UNC RESTRICTION MISSING: Hookmetamethod() | PLEASE TRY OTHER EXECUTORS")
 else
 print("Supported hookmetamethod()")
 end
 
+if game.Players then
+print("Advance Api")
+else
+print("Common Api")
+end
+
 local Window = Fluent:CreateWindow({
     Title = "Unknown Hub X Evade",
-    SubTitle = "V1.4 Made by Unknownproooolucky discord.gg/d2a3KkTD6r",
+    SubTitle = "V1.5 Made by Unknownproooolucky discord.gg/d2a3KkTD6r",
     TabWidth = 160,
     Size = UDim2.fromOffset(580, 460),
     Acrylic = false, -- The blur may be detectable, setting this to false disables blur entirely
     Theme = "Dark",
     MinimizeKey = Enum.KeyCode.LeftControl -- Used when theres no MinimizeKeybind
 })
+    
+Fluent:Notify({
+        Title = ":)",
+        Content = "",
+        SubContent = "", -- Optional
+        Duration = 10 -- Set to nil to make the notification not disappear
+    })
 
 local Tabs = {
     Main = Window:AddTab({ Title = "Main", Icon = "" }),
     AutoFarm = Window:AddTab({ Title = "Auto Farms", Icon = "" }),
+    Nextbot = Window:AddTab({ Title = "Nextbot Mods", Icon = "" }),
     Misc = Window:AddTab({ Title = "Misc", Icon = "" }),
     Settings = Window:AddTab({ Title = "Save Config", Icon = "rbxassetid://7734052335" })
 }
@@ -727,7 +755,7 @@ local revive = function()
         task.spawn(function()
             while task.wait() do
                 if game:GetService("Players").LocalPlayer.Character then
-                    game:GetService("Players").LocalPlayer.Character:FindFirstChild('HumanoidRootPart').CFrame = CFrame.new(downedplr:FindFirstChild('HumanoidRootPart').Position.X, downedplr:FindFirstChild('HumanoidRootPart').Position.Y + 3, downedplr:FindFirstChild('HumanoidRootPart').Position.Z)
+                    game:GetService("Players").LocalPlayer.Character:FindFirstChild('HumanoidRootPart').CFrame = CFrame.new(downedplr:FindFirstChild('HumanoidRootPart').Position.X, downedplr:FindFirstChild('HumanoidRootPart').Position.Y + 1.5, downedplr:FindFirstChild('HumanoidRootPart').Position.Z)
                     task.wait()
                     game:GetService("ReplicatedStorage").Events.Revive.RevivePlayer:FireServer(tostring(downedplr), false)
                     task.wait(4.5)
@@ -819,6 +847,174 @@ Tabs.AutoFarm:AddButton({
         Description = "",
         Callback = function()
         tptoobjective()
+        end
+    })
+    
+-- Nextbot
+
+Tabs.Nextbot:AddParagraph({
+        Title = "Anti Nextbot",
+        Content = " "
+    })
+
+local SelectTeleportation = "Spawn"
+local AntiNextbotDistance = 15
+
+function AntiNextbot()
+    if game.Workspace:FindFirstChild("Game") and game.Workspace.Game:FindFirstChild("Players") and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
+    
+        local playerTeam = game.Workspace.Game.Players[game.Players.LocalPlayer.Name]:GetAttribute("Team")
+        if playerTeam == "Enemy" then
+            return -- Exit the function if the player is on the "Enemy" team
+        end
+    
+        for i, v in pairs(game.Workspace.Game.Players:GetDescendants()) do
+            if v:IsA("Model") and v:GetAttribute("Team") == "Enemy" then
+                local humanoidRootPart = v:FindFirstChild("HumanoidRootPart") or v:FindFirstChild("HRP")
+                if humanoidRootPart then
+                    local distance = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - humanoidRootPart.Position).Magnitude
+                    
+                    if distance < AntiNextbotDistance then
+                        if SelectTeleportation == "Spawn" then
+                            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(Vector3.new(0, -5000, 0))                         
+                        elseif SelectTeleportation == "Players" then
+                            local randomPlayer = game.Players:GetPlayers()[math.random(1, #game.Players:GetPlayers())]
+                            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(Vector3.new(randomPlayer.Character.Head.Position.X, randomPlayer.Character.Head.Position.Y, randomPlayer.Character.Head.Position.Z))
+                        end
+                    end
+                end
+            end
+        end
+    end
+end
+
+local AntiNextbotT = falae
+
+local Toggle = Tabs.Nextbot:AddToggle("AntiNextbotToggle", {Title = "Anti Nextbot Toggle", Default = false })
+
+    Toggle:OnChanged(function(Val)
+    AntiNextbotT = Val
+        
+    while AntiNextbotT and wait(0.1) do
+       AntiNextbot()
+       end
+    end)
+
+local Dropdown = Tabs.Nextbot:AddDropdown("AntiBotTeleport", {
+        Title = "Anti Nextbot Teleport Type",
+        Values = {"Spawn", "Players"},
+        Multi = false,
+        Default = 1,
+    })
+
+    Dropdown:OnChanged(function(Value)
+        SelectTeleportation = Value
+    end)
+    
+ local Input = Tabs.Nextbot:AddInput("NextbotDistance", {
+    Title = "Anti Nextbot Distance",
+    Default = 15,
+    Placeholder = "Number",
+    Numeric = false, -- Only allows numbers
+    Finished = false, -- Only calls callback when you press enter
+    Callback = function(Value)
+        -- Convert the input value to a number
+        AntiNextbotDistance = tonumber(Value) or 15 -- Default to 15 if the conversion fails
+    end
+})
+    
+
+function KillAll()
+    if game.Workspace:FindFirstChild("Game") and game.Workspace.Game:FindFirstChild("Players") and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
+        for _, player in pairs(game.Players:GetPlayers()) do
+            if player ~= game.Players.LocalPlayer and player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
+                game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = player.Character.HumanoidRootPart.CFrame * CFrame.new(0, 0, 2)
+            end
+        end
+    end
+end
+
+local HitboxSize = 3
+local HitboxTrans = 1
+
+function KillAura()
+for i,v in next, game:GetService('Players'):GetPlayers() do
+		if v.Name ~= game:GetService('Players').LocalPlayer.Name and not v:GetAttribute("Team") == "Enemy" then
+			pcall(function()
+				v.Character.HumanoidRootPart.Size = Vector3.new(HitboxSize, HitboxSize, HitboxSize)
+				v.Character.HumanoidRootPart.Transparency = HitboxTrans
+				v.Character.HumanoidRootPart.CanCollide = false
+			end)
+    	end
+	end 
+end
+
+function DisKillAura()
+for i,v in next, game:GetService('Players'):GetPlayers() do
+		if v.Name ~= game:GetService('Players').LocalPlayer.Name then
+		local NormalSizeX = 3
+		local NormalSizeY = 5
+		local NormalSizeZ = 3
+			pcall(function()
+				v.Character.HumanoidRootPart.Size = Vector3.new(NormalSizeX, NormalSizeY, NormalSizeZ)
+				v.Character.HumanoidRootPart.Transparency = 1
+				v.Character.HumanoidRootPart.CanCollide = false
+			end)
+    	end
+	end 
+end
+
+Tabs.Nextbot:AddParagraph({
+        Title = "Enemy Mode",
+        Content = "Player Nextbot / Imposter"
+    })
+    
+local HitboxToggle = false
+local KillAllT = false
+
+local Toggle = Tabs.Nextbot:AddToggle("HitboxPlayers", {Title = "Kill All", Default = false })
+
+    Toggle:OnChanged(function(Vale)
+    KillAllT = Vale
+        
+    while KillAllT and wait(0.1) do
+       KillAll()
+       end
+    end)
+
+local Toggle = Tabs.Nextbot:AddToggle("HitboxPlayers", {Title = "Hitbox Players", Default = false })
+
+    Toggle:OnChanged(function(Vals)
+    HitboxToggle = Vals
+    
+    if not HitboxToggle then
+      DisKillAura()
+    end
+        
+    while HitboxToggle and wait(0.1) do
+       KillAura()
+       end
+    end)
+
+local Input = Tabs.Nextbot:AddInput("HitboxSize", {
+        Title = "Hitbox Size",
+        Default = "3",
+        Placeholder = "Number",
+        Numeric = false, -- Only allows numbers
+        Finished = false, -- Only calls callback when you press enter
+        Callback = function(Value)
+            HitboxSize = Value
+        end
+    })
+    
+local Input = Tabs.Nextbot:AddInput("HitboxTrans", {
+        Title = "Hitbox Transparency",
+        Default = "1",
+        Placeholder = "Number",
+        Numeric = false, -- Only allows numbers
+        Finished = false, -- Only calls callback when you press enter
+        Callback = function(Value)
+            HitboxTrans = Value
         end
     })
 
@@ -929,7 +1125,7 @@ local Toggle = Tabs.Misc:AddToggle("EmoteD2", {Title = "Fake Emote Dash (No Crou
 
   local Dropdown = Tabs.Misc:AddDropdown("EmoteSpeed", {
         Title = "Emote Dash Speed",
-        Values = {4500, 10000, 25000, 45000, 55000, 67000, 80000, 95000, 100000, 125000},
+        Values = {4500, 10000, 15000, 25000, 35000, 45000, 55000, 67000, 75000, 80000, 95000, 100000, 125000},
         Multi = false,
         Default = 2,
     })
@@ -947,6 +1143,47 @@ old = hookmetamethod(game,"__namecall",newcclosure(function(self,...)
     end
     return old(self,...)
 end))
+
+Tabs.Misc:AddParagraph({
+        Title = "Adjusting Bounce",
+        Content = "(Only works in trimping)\nWarning: Do not Put too high like 1000-2500"
+    })
+    
+local BounceToggle = false
+local AdjustedBounce = 80
+
+local Toggle = Tabs.Misc:AddToggle("AdjustBounce", {Title = "Adjust Bounce Toggle", Default = false })
+
+    Toggle:OnChanged(function(State)
+        BounceToggle = State
+        
+     if not  BounceToggle then
+       game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = 0
+     end
+     
+  while BounceToggle and wait(0.1) do
+    local player = game.Players.LocalPlayer
+
+    if player.Character and player.Character:FindFirstChild("Humanoid") then
+       local SpeedValue = player.Character:GetAttribute("CurrentMoveSpeed")
+          player.Character.Humanoid.WalkSpeed = SpeedValue + AdjustedBounce
+        if player.Character:GetAttribute("Emoting") == true or SpeedValue == 0 then
+          player.Character.Humanoid.WalkSpeed = 0
+       end
+    end
+end
+    end)
+
+local Input = Tabs.Misc:AddInput("PlayerBounce", {
+        Title = "Player Bounce",
+        Default = "80",
+        Placeholder = "Bounce Number",
+        Numeric = false, -- Only allows numbers
+        Finished = false, -- Only calls callback when you press enter
+        Callback = function(Value)
+            AdjustedBounce = tonumber(Value) or 80
+        end
+    })
 
 Tabs.Misc:AddParagraph({
         Title = "Bhop",
@@ -977,13 +1214,10 @@ local Keybind = Tabs.Misc:AddKeybind("KeyBHOP", {
        end)
 
   spawn(function()
-     while true and wait(0.1) do
+     while true and wait(1.5) do
       if BHopKey then
-      local humanoid = game:GetService("Players").LocalPlayer.Character:FindFirstChildOfClass("Humanoid")
-         if humanoid and humanoid:GetState() == Enum.HumanoidStateType.Running then
-             game.Players.LocalPlayer.Character.Communicator:InvokeServer("Jump")
+           game.Players.LocalPlayer.Character.Communicator:InvokeServer("Jump")
            end
-          end
         end
      end)
    end,
@@ -1059,26 +1293,17 @@ while true and wait(0.1) do
 end)
 
 spawn(function()
-     while true and wait(0.1) do
+     while true and wait(1.5) do
       if BHop2 then
-        local humanoid = game:GetService("Players").LocalPlayer.Character:FindFirstChildOfClass("Humanoid")
-        if humanoid and humanoid:GetState() == Enum.HumanoidStateType.Running then
           game.Players.LocalPlayer.Character.Communicator:InvokeServer("Jump")
-           end
          end
      end
  end)
 
 local Players = game:GetService("Players")
 
-local function onPlayerRemoving(player)
-    local character = player.Character
-    if character then
-        local humanoid = character:FindFirstChildOfClass("Humanoid")
-        if humanoid then
-            setfflag("MaxAltitudePDStickHipHeightPercent", "1")
-        end
-    end
+local function onPlayerRemoving()
+setfflag("MaxAltitudePDStickHipHeightPercent", "1")
 end
 
 -- Connect the function to the PlayerRemoving event
@@ -1115,68 +1340,34 @@ Tabs.Misc:AddParagraph({
         Title = "Fake Equipment",
         Content = "(Visual)"
     })
-    
-Tabs.Misc:AddButton({
-        Title = "Seal Character",
-        Description = "",
-        Callback = function()
-        game.Workspace.Game.Players[game:GetService("Players").LocalPlayer.Name]:SetAttribute("Character", "Seal")
-        end
-    })
-    
-Tabs.Misc:AddButton({
-        Title = "Jard Character",
-        Description = "",
-        Callback = function()
-        game.Workspace.Game.Players[game:GetService("Players").LocalPlayer.Name]:SetAttribute("Character", "Jard")
-        end
+ 
+ local Dropdown = Tabs.Misc:AddDropdown("SelectionCharacter", {
+        Title = "Select Character",
+        Values = {"Player", "Jard", "Clownjard", "Bobo", "Seal", "Trooper", "DefectRebel", "Vanguard", "Krampus"},
+        Multi = false,
+        Default = 1,
     })
 
-Tabs.Misc:AddButton({
-        Title = "Clown Character",
-        Description = "",
-        Callback = function()
-        game.Workspace.Game.Players[game:GetService("Players").LocalPlayer.Name]:SetAttribute("Character", "ClownJard")
-        end
-    })
-
-Tabs.Misc:AddButton({
-        Title = "Trooper Character",
-        Description = "",
-        Callback = function()
-        game.Workspace.Game.Players[game:GetService("Players").LocalPlayer.Name]:SetAttribute("Character", "Trooper")
-        end
-    })
+    Dropdown:OnChanged(function(Value)
+        SelectedCharacter = Value
+    end)
     
-Tabs.Misc:AddButton({
-        Title = "Bobo Character",
-        Description = "Buggy :(",
-        Callback = function()
-        game.Workspace.Game.Players[game:GetService("Players").LocalPlayer.Name]:SetAttribute("Character", "Bobo")
-        end
+local Dropdown = Tabs.Misc:AddDropdown("SelectionUtility", {
+        Title = "Select Utility",
+        Values = {"Weaponless", "Compass", "Timer", "Decoy", "Radio", "Grapple", "AK-47", "Lantern", "Flashlight", "Night Vision", "Wrench"},
+        Multi = false,
+        Default = 1,
     })
+
+    Dropdown:OnChanged(function(Value)
+        SelectedUtilities = Value
+    end)
     
-Tabs.Misc:AddButton({
-        Title = "Defect Rebel Character",
+ Tabs.Misc:AddButton({
+        Title = "Update Selected Fake Equipment",
         Description = "",
         Callback = function()
-        game.Workspace.Game.Players[game:GetService("Players").LocalPlayer.Name]:SetAttribute("Character", "DefectRebel")
-        end
-    })
-
-Tabs.Misc:AddButton({
-        Title = "VanGuard Character",
-        Description = "",
-        Callback = function()
-        game.Workspace.Game.Players[game:GetService("Players").LocalPlayer.Name]:SetAttribute("Character", "Vanguard")
-        end
-    })
-
-Tabs.Misc:AddButton({
-        Title = "Krampus Character",
-        Description = "",
-        Callback = function()
-        game.Workspace.Game.Players[game:GetService("Players").LocalPlayer.Name]:SetAttribute("Character", "Krampus")
+          UpdateFakeEquipment()
         end
     })
 
@@ -1184,8 +1375,8 @@ Tabs.Misc:AddParagraph({
         Title = "Modified Client",
         Content = " "
     })
- 
- local Lighting = game:GetService("Lighting")
+
+local Lighting = game:GetService("Lighting")
 local normalambient = Lighting.Ambient
 local normalcolorshift = Lighting.ColorShift_Bottom
 local normalcolorshift2 = Lighting.ColorShift_Top
@@ -1229,6 +1420,8 @@ end
           nofb()
        end
 end)
+
+Options.FullBright:SetValue(false)
 
 Tabs.Misc:AddButton({
         Title = "Accurate Low Quality",
@@ -1303,12 +1496,19 @@ local function reduceLag()
     removeReflections()
     removeEffects()
     removeExplosions()
---    setLowShadows()
+    setLowShadows()
     setLowQuality()
-    setLowGraphics()
+--    setLowGraphics()
 end
 
 reduceLag()
+
+workspace.DescendantAdded:Connect(function(descendant)
+    if descendant:IsA("Terrain") or descendant:IsA("ParticleEmitter") or descendant:IsA("Smoke") or descendant:IsA("Fire") or descendant:IsA("Sparkles") or descendant:IsA("Explosion") then
+      wait(0.1)
+        reduceLag()
+     end
+end)
 
         end
  })
