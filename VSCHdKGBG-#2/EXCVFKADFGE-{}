@@ -205,6 +205,13 @@ local Window = Fluent:CreateWindow({
     MinimizeKey = Enum.KeyCode.LeftControl -- Used when theres no MinimizeKeybind
 })
     
+Fluent:Notify({
+        Title = ":)",
+        Content = "",
+        SubContent = "", -- Optional
+        Duration = 10 -- Set to nil to make the notification not disappear
+    })
+
 local Tabs = {
     Main = Window:AddTab({ Title = "Main", Icon = "" }),
     AutoFarm = Window:AddTab({ Title = "Auto Farms", Icon = "" }),
@@ -916,11 +923,15 @@ local Dropdown = Tabs.Nextbot:AddDropdown("AntiBotTeleport", {
     end
 })
     
+Tabs.Nextbot:AddParagraph({
+        Title = "Player Nextbot",
+        Content = " "
+    })
 
 function KillAll()
     if game.Workspace:FindFirstChild("Game") and game.Workspace.Game:FindFirstChild("Players") and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
         for _, player in pairs(game.Players:GetPlayers()) do
-            if player ~= game.Players.LocalPlayer and player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
+            if player ~= game.Players.LocalPlayer and player.Character and player.Character:FindFirstChild("HumanoidRootPart") and not player.Character :GetAttribute("Team") == "Enemy" then
                 game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = player.Character.HumanoidRootPart.CFrame * CFrame.new(0, 0, 2)
             end
         end
@@ -931,85 +942,80 @@ local HitboxSize = 3
 local HitboxTrans = 1
 
 function KillAura()
-for i,v in next, game:GetService('Players'):GetPlayers() do
-		if v.Name ~= game:GetService('Players').LocalPlayer.Name and not v:GetAttribute("Team") == "Enemy" then
-			pcall(function()
-				v.Character.HumanoidRootPart.Size = Vector3.new(HitboxSize, HitboxSize, HitboxSize)
-				v.Character.HumanoidRootPart.Transparency = HitboxTrans
-				v.Character.HumanoidRootPart.CanCollide = false
-			end)
-    	end
-	end 
+    for i, v in pairs(game:GetService('Players'):GetPlayers()) do
+        if v.Name ~= game:GetService('Players').LocalPlayer.Name then
+            pcall(function()
+                if v.Character and v.Character:FindFirstChild("HumanoidRootPart") then
+                    v.Character.HumanoidRootPart.Size = Vector3.new(HitboxSize, HitboxSize, HitboxSize)
+                    v.Character.HumanoidRootPart.Transparency = HitboxTrans
+                    v.Character.HumanoidRootPart.CanCollide = false
+                end
+            end)
+        end
+    end
 end
 
 function DisKillAura()
-for i,v in next, game:GetService('Players'):GetPlayers() do
-		if v.Name ~= game:GetService('Players').LocalPlayer.Name then
-		local NormalSizeX = 3
-		local NormalSizeY = 5
-		local NormalSizeZ = 3
-			pcall(function()
-				v.Character.HumanoidRootPart.Size = Vector3.new(NormalSizeX, NormalSizeY, NormalSizeZ)
-				v.Character.HumanoidRootPart.Transparency = 1
-				v.Character.HumanoidRootPart.CanCollide = false
-			end)
-    	end
-	end 
+    for i, v in pairs(game:GetService('Players'):GetPlayers()) do
+        if v.Name ~= game:GetService('Players').LocalPlayer.Name then
+            pcall(function()
+                if v.Character and v.Character:FindFirstChild("HumanoidRootPart") then
+                    v.Character.HumanoidRootPart.Size = Vector3.new(3, 5, 3) -- Reset to correct default size
+                    v.Character.HumanoidRootPart.Transparency = 1 -- Reset to default transparency
+                    v.Character.HumanoidRootPart.CanCollide = true -- Reset collision
+                end
+            end)
+        end
+    end
 end
 
-Tabs.Nextbot:AddParagraph({
-        Title = "Enemy Mode",
-        Content = "Player Nextbot / Imposter"
-    })
-    
 local HitboxToggle = false
 local KillAllT = false
 
-local Toggle = Tabs.Nextbot:AddToggle("HitboxPlayers", {Title = "Kill All", Default = false })
+local KillAllToggle = Tabs.Nextbot:AddToggle("KillAll", {Title = "Kill All", Default = false })
 
-    Toggle:OnChanged(function(Vale)
-    KillAllT = Vale
-        
+KillAllToggle:OnChanged(function(Value)
+    KillAllT = Value
+    
     while KillAllT and wait(0.1) do
-       KillAll()
-       end
-    end)
-
-local Toggle = Tabs.Nextbot:AddToggle("HitboxPlayers", {Title = "Hitbox Players", Default = false })
-
-    Toggle:OnChanged(function(Vals)
-    HitboxToggle = Vals
-    
-    if not HitboxToggle then
-      DisKillAura()
+        KillAura()
     end
-        
-    while HitboxToggle and wait(0.1) do
-       KillAura()
-       end
-    end)
+end)
 
-local Input = Tabs.Nextbot:AddInput("HitboxSize", {
-        Title = "Hitbox Size",
-        Default = "3",
-        Placeholder = "Number",
-        Numeric = false, -- Only allows numbers
-        Finished = false, -- Only calls callback when you press enter
-        Callback = function(Value)
-            HitboxSize = Value
-        end
-    })
+local HitboxToggleControl = Tabs.Nextbot:AddToggle("HitboxPlayers", {Title = "Hitbox Players", Default = false })
+
+HitboxToggleControl:OnChanged(function(Value)
+    HitboxToggle = Value
     
-local Input = Tabs.Nextbot:AddInput("HitboxTrans", {
-        Title = "Hitbox Transparency",
-        Default = "1",
-        Placeholder = "Number",
-        Numeric = false, -- Only allows numbers
-        Finished = false, -- Only calls callback when you press enter
-        Callback = function(Value)
-            HitboxTrans = Value
-        end
-    })
+    while HitboxToggle and wait(0.1) do
+     if not HitboxToggle then
+        DisKillAura()
+    end
+         KillAura()
+      end
+end)
+
+local HitboxSizeInput = Tabs.Nextbot:AddInput("HitboxSize", {
+    Title = "Hitbox Size",
+    Default = "3",
+    Placeholder = "Number",
+    Numeric = false, -- Only allows numbers
+    Finished = false, -- Only calls callback when you press enter
+    Callback = function(Value)
+        HitboxSize = tonumber(Value) or 3
+    end
+})
+
+local HitboxTransInput = Tabs.Nextbot:AddInput("HitboxTrans", {
+    Title = "Hitbox Transparency",
+    Default = "1",
+    Placeholder = "Number",
+    Numeric = false, -- Only allows numbers
+    Finished = false, -- Only calls callback when you press enter
+    Callback = function(Value)
+        HitboxTrans = tonumber(Value) or 1
+    end
+})
 
 -- Misc
 
@@ -1157,10 +1163,10 @@ local Toggle = Tabs.Misc:AddToggle("AdjustBounce", {Title = "Adjust Bounce Toggl
   while BounceToggle and wait(0.1) do
     local player = game.Players.LocalPlayer
 
-    if player.Character and player.Character:FindFirstChild("Humanoid") then
+    if player.Character and player.Character:FindFirstChildOfClass("Humanoid") then
        local SpeedValue = player.Character:GetAttribute("CurrentMoveSpeed")
           player.Character.Humanoid.WalkSpeed = SpeedValue + AdjustedBounce
-        if player.Character:GetAttribute("Emoting") == true or SpeedValue == 0 then
+        if player.Character:GetAttribute("Emoting") == true or SpeedValue == 0 or player.Character:GetAttribute("Downed") == true or not BounceToggle then
           player.Character.Humanoid.WalkSpeed = 0
        end
     end
