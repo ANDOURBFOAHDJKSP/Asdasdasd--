@@ -1155,19 +1155,19 @@ local Toggle = Tabs.Misc:AddToggle("AdjustBounce", {Title = "Adjust Bounce Toggl
 
     Toggle:OnChanged(function(State)
         BounceToggle = State
-        
-     if not  BounceToggle then
-       game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = 0
-     end
      
   while BounceToggle and wait(0.1) do
     local player = game.Players.LocalPlayer
-
-    if player.Character and player.Character:FindFirstChildOfClass("Humanoid") then
+    local humanoid = player.Character:FindFirstChildOfClass("Humanoid") 
+   if not  BounceToggle and humanoid then
+       humanoid.WalkSpeed = 0
+     end
+     
+    if player.Character and humanoid then
        local SpeedValue = player.Character:GetAttribute("CurrentMoveSpeed")
-          player.Character.Humanoid.WalkSpeed = SpeedValue + AdjustedBounce
+          humanoid.WalkSpeed = SpeedValue + AdjustedBounce
         if player.Character:GetAttribute("Emoting") == true or SpeedValue == 0 or player.Character:GetAttribute("Downed") == true or not BounceToggle then
-          player.Character.Humanoid.WalkSpeed = 0
+          humanoid.WalkSpeed = 0
        end
     end
 end
