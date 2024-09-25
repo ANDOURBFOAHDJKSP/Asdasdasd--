@@ -184,7 +184,7 @@ print("Supported setfflag()")
 end
 
 if not hookmetamethod then
-    return game:GetService("Players").LocalPlayer:Kick("UNC RESTRICTION MISSING: Hookmetamethod() | PLEASE TRY OTHER EXECUTORS")
+    return game:GetService("Players").LocalPlayer:Kick("UNC RESTRICTION MISSING: hookmetamethod() | PLEASE TRY OTHER EXECUTORS")
 else
 print("Supported hookmetamethod()")
 end
@@ -197,20 +197,13 @@ end
 
 local Window = Fluent:CreateWindow({
     Title = "Unknown Hub X Evade",
-    SubTitle = "V1.5.2 Made by Unknownproooolucky discord.gg/d2a3KkTD6r",
+    SubTitle = "V1.6 Made by Unknownproooolucky discord.gg/d2a3KkTD6r",
     TabWidth = 160,
     Size = UDim2.fromOffset(580, 460),
     Acrylic = false, -- The blur may be detectable, setting this to false disables blur entirely
     Theme = "Dark",
     MinimizeKey = Enum.KeyCode.LeftControl -- Used when theres no MinimizeKeybind
 })
-    
-Fluent:Notify({
-        Title = "Just releasing it already lol",
-        Content = "i have exam tomorrow :/",
-        SubContent = "", -- Optional
-        Duration = 10 -- Set to nil to make the notification not disappear
-    })
 
 local Tabs = {
     Main = Window:AddTab({ Title = "Main", Icon = "" }),
@@ -218,6 +211,7 @@ local Tabs = {
     Nextbot = Window:AddTab({ Title = "Nextbot Mods", Icon = "" }),
     Misc = Window:AddTab({ Title = "Misc", Icon = "" }),
     Settings = Window:AddTab({ Title = "Save Config", Icon = "rbxassetid://7734052335" })
+--    Admin = Window:AddTab({ Title = "Admin Commands", Icon = "rbxassetid://7734052335" })
 }
 
 local Options = Fluent.Options
@@ -304,7 +298,7 @@ local Toggle = Tabs.Main:AddToggle("ESPBot", {Title = "ESP Bot", Default = false
         
         task.spawn(
                 function()
-			while task.wait(0.2) do
+			while task.wait(0.4) do
 				ClearESP('AI_Tracker')
 				if not BotESP then
 					break
@@ -408,7 +402,7 @@ local Toggle = Tabs.Main:AddToggle("ESPObjective", {Title = "ESP Objective", Def
         
         task.spawn(
                 function()
-			while task.wait(0.2) do
+			while task.wait(0.4) do
 				ClearESP('Object_Tracker')
 				if not ObjectiveESP then
 					break
@@ -479,6 +473,54 @@ workspace.Game.Settings:SetAttribute("ReviveTime", 1.75)
 		else
 workspace.Game.Settings:SetAttribute('ReviveTime', 3)
 		end        
+    end)
+    
+function timernotify()
+local player = game.Players.LocalPlayer
+
+-- Create a new ScreenGui and Frame
+local screenGui = Instance.new("ScreenGui")
+screenGui.Parent = player.PlayerGui
+screenGui.ResetOnSpawn = false
+screenGui.Name = "TimerGui"
+
+-- Create a TextLabel for the timer
+local timerLabel = Instance.new("TextLabel")
+timerLabel.Parent = screenGui
+timerLabel.Size = UDim2.new(0, 200, 0, 50)
+timerLabel.Position = UDim2.new(0.5, -100, 0.1, 0) -- Centered on screen
+timerLabel.BackgroundTransparency = 1 -- Make background invisible
+timerLabel.TextScaled = true
+timerLabel.Font = Enum.Font.GothamBold
+timerLabel.TextColor3 = Color3.new(1, 1, 1) -- White text
+end
+
+function detimer()
+local player = game.Players.LocalPlayer
+
+if player.PlayerGui:FindFirstChild("TimerGui") then
+    player.PlayerGui.TimerGui:Destroy()
+  end
+end
+
+local TimerText = false
+
+local Toggle = Tabs.Main:AddToggle("TimerNotifier", {Title = "Timer Notifier", Default = false })
+
+    Toggle:OnChanged(function(State)
+    TimerText = State
+
+   if TimerText then
+   timernotify()
+else
+   detimer()
+  end
+
+    while TimerText and wait(0.1) do
+       if game.Players.LocalPlayer.PlayerGui:FindFirstChild("TimerGui") then
+             game.Players.LocalPlayer.PlayerGui.TimerGui.TextLabel.Text = game.Players.LocalPlayer.PlayerGui:WaitForChild("HUD").Center.Vote.Info.Read.Timer.Text
+           end
+        end
     end)
     
 local NoCameraShake = false
@@ -740,6 +782,7 @@ local FarmMoney = false
 local FarmTickets = false
 local AFKFarm = false
 local WorkspacePlayers = game:GetService("Workspace").Game.Players 
+local LegitReviveMode = false
 
 local GetDownedPlr = function()
     for i,v in pairs(WorkspacePlayers:GetChildren()) do
@@ -755,7 +798,7 @@ local revive = function()
         task.spawn(function()
             while task.wait() do
                 if game:GetService("Players").LocalPlayer.Character then
-                    game:GetService("Players").LocalPlayer.Character:FindFirstChild('HumanoidRootPart').CFrame = CFrame.new(downedplr:FindFirstChild('HumanoidRootPart').Position.X, downedplr:FindFirstChild('HumanoidRootPart').Position.Y + 1.5, downedplr:FindFirstChild('HumanoidRootPart').Position.Z)
+                    game:GetService("Players").LocalPlayer.Character:FindFirstChild('HumanoidRootPart').CFrame = CFrame.new(downedplr:FindFirstChild('HumanoidRootPart').Position.X, downedplr:FindFirstChild('HumanoidRootPart').Position.Y - 0.1, downedplr:FindFirstChild('HumanoidRootPart').Position.Z)
                     task.wait()
                     game:GetService("ReplicatedStorage").Events.Revive.RevivePlayer:FireServer(tostring(downedplr), false)
                     task.wait(4.5)
@@ -825,7 +868,7 @@ local Toggle = Tabs.AutoFarm:AddToggle("AFKFarm", {Title = "AFK Farm", Default =
     Toggle:OnChanged(function(State)
     AFKFarm = State
     end)
-
+    
 Tabs.AutoFarm:AddParagraph({
         Title = "Teleports",
         Content = ""
@@ -922,6 +965,73 @@ local Dropdown = Tabs.Nextbot:AddDropdown("AntiBotTeleport", {
         AntiNextbotDistance = tonumber(Value) or 15 -- Default to 15 if the conversion fails
     end
 })
+
+local HitPart = false
+local HitPartType = "HumanoidRootPart"
+local DistanceToBring = 1000
+local ShowHitPart = true
+
+-- Distances Position
+local DistanceX = 1000
+local DistanceY = 1000
+local DistanceZ = 1000
+
+local Toggle = Tabs.Nextbot:AddToggle("TestV1", {Title = "Hitbox Nextbot", Default = false })
+
+Toggle:OnChanged(function(bool)
+HitPart = bool
+    while HitPart and wait(0.1) do
+        local player = game:GetService("Players").LocalPlayer
+        local charpart = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
+        
+        if charpart then
+         local GamePlayers = workspace.Game.Players
+			for i, v in pairs(GamePlayers:GetChildren()) do
+		   	if not game.Players:FindFirstChild(v.Name) then
+                local NextRootPart = v:FindFirstChild("HumanoidRootPart")
+                
+                local clone = nil
+                for _, part in pairs(v:GetChildren()) do
+                    if part:IsA("BasePart") and part:FindFirstChild("IsClone") then
+                        clone = part
+                        break
+                    end
+                end
+                
+                if NextRootPart then
+                    local distance = (charpart.Position - NextRootPart.Position).Magnitude
+                    local distanceX = math.abs(charpart.Position.X - NextRootPart.Position.X)
+                    local distanceY = math.abs(charpart.Position.Y - NextRootPart.Position.Y)
+                    local distanceZ = math.abs(charpart.Position.Z - NextRootPart.Position.Z)
+                    
+                    if distance <= DistanceToBring and distanceX <= DistanceX and distanceY <= DistanceY and distanceZ <= DistanceZ then
+                        if not clone then
+                            local BypassCFrameKick = NextRootPart:Clone()
+                            BypassCFrameKick.Anchored = true
+                            BypassCFrameKick.Name = HitPartType
+                            
+                            local isClone = Instance.new("BoolValue")
+                            isClone.Name = "IsClone"
+                            isClone.Parent = BypassCFrameKick
+                            
+                            BypassCFrameKick.Parent = v
+                            clone = BypassCFrameKick
+                        end
+                        local offset = charpart.CFrame:VectorToWorldSpace(Vector3.new(0, 0, -6))
+                        clone.Position = charpart.Position + offset
+                        clone.Name = HitPartType
+                            if ShowHitPart then
+                             clone.Transparency = 0.7
+                          else
+                             clone.Transparency = 1
+                             end
+                        end
+                    end
+                end
+            end
+        end
+    end
+end)
     
 Tabs.Nextbot:AddParagraph({
         Title = "Player Nextbot",
@@ -949,6 +1059,7 @@ function KillAura()
                     v.Character.HumanoidRootPart.Size = Vector3.new(HitboxSize, HitboxSize, HitboxSize)
                     v.Character.HumanoidRootPart.Transparency = HitboxTrans
                     v.Character.HumanoidRootPart.CanCollide = false
+                    v.Character.HumanoidRootPart.Massless = true
                 end
             end)
         end
@@ -962,7 +1073,7 @@ function DisKillAura()
                 if v.Character and v.Character:FindFirstChild("HumanoidRootPart") then
                     v.Character.HumanoidRootPart.Size = Vector3.new(3, 5, 3) -- Reset to correct default size
                     v.Character.HumanoidRootPart.Transparency = 1 -- Reset to default transparency
-                    v.Character.HumanoidRootPart.CanCollide = true -- Reset collision
+                    v.Character.HumanoidRootPart.CanCollide = false
                 end
             end)
         end
@@ -986,6 +1097,10 @@ local HitboxToggleControl = Tabs.Nextbot:AddToggle("HitboxPlayers", {Title = "Hi
 
 HitboxToggleControl:OnChanged(function(Value)
     HitboxToggle = Value
+    
+    if not HitboxToggle then
+        DisKillAura()
+    end
     
     while HitboxToggle and wait(0.1) do
      if not HitboxToggle then
@@ -1059,7 +1174,7 @@ Tabs.Misc:AddParagraph({
     })
 
 Tabs.Misc:AddParagraph({
-        Title = "Emote Dash",
+        Title = "Sprint Emote Dash",
         Content = ""
     })
 
@@ -1067,7 +1182,7 @@ local FakeEmoteDownDash = false
 local FakeEmoteDownDash2 = false
 local SelectedEmoteSpeed = 10000
 
-local Toggle = Tabs.Misc:AddToggle("EmoteD1", {Title = "Fake Emote/Down Dash", Default = false })
+local Toggle = Tabs.Misc:AddToggle("EmoteD1", {Title = "Sprint Emote/Down Dash", Default = false })
 
     Toggle:OnChanged(function(State)
         FakeEmoteDownDash = State
@@ -1098,7 +1213,7 @@ local Toggle = Tabs.Misc:AddToggle("EmoteD1", {Title = "Fake Emote/Down Dash", D
 		until FakeEmoteDownDash == false
     end)
 
-local Toggle = Tabs.Misc:AddToggle("EmoteD2", {Title = "Fake Emote Dash (No Crouching)", Default = false })
+local Toggle = Tabs.Misc:AddToggle("EmoteD2", {Title = "Sprint Emote Dash (No Crouching)", Default = false })
 
     Toggle:OnChanged(function(State)
         FakeEmoteDownDash2 = State
@@ -1168,16 +1283,26 @@ Tabs.Misc:AddParagraph({
         Content = "Mobile/Tablet only"
     })
     
-local BreakEmote = false
+local BreakEmoteTG = false
 local BindableButtonToggle = false
 local SelectedEmoteSlot = "1"
 local CAS = game:GetService("ContextActionService")
 
 function BreakEmote()
-if game.Players.LocalPlayer.Character then
+if game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:GetAttribute("Emoting") == true then
       game.Players.LocalPlayer.Character.Humanoid.Sit = true
    end
 end
+
+local Toggle = Tabs.Misc:AddToggle("RagdollEmote", {Title = "Ragdoll Emote", Default = false})
+
+Toggle:OnChanged(function(StateBruh)
+    BreakEmoteTG = StateBruh
+ 
+   while BreakEmoteTG and wait(0.1) do
+      BreakEmote()
+   end
+end)
     
 local CAS = game:GetService("ContextActionService")
 local UserInputService = game:GetService("UserInputService")
@@ -1247,16 +1372,6 @@ Toggle:OnChanged(function(State)
         RemoveBindableButton() -- Remove buttons when toggled off
     end
 end)
-
-local Toggle = Tabs.Misc:AddToggle("RagdollEmote", {Title = "Ragdoll Emote", Default = false})
-
-Toggle:OnChanged(function(StateBruh)
-    BreakEmote = StateBruh
- 
-   while BreakEmote and wait(0.1) do
-      BreakEmote()
-   end
-end)
     
  local Dropdown = Tabs.Misc:AddDropdown("SelectionEmoteSlot", {
         Title = "Select Emote Slots",
@@ -1277,7 +1392,7 @@ Tabs.Misc:AddParagraph({
 local BounceToggle = false
 local AdjustedBounce = 80
 
-local Toggle = Tabs.Misc:AddToggle("AdjustBounce", {Title = "Adjust Bounce Toggle", Default = false })
+local Toggle = Tabs.Misc:AddToggle("AdjustBounce", {Title = "Player Bounce Toggle", Default = false })
 
     Toggle:OnChanged(function(State)
         BounceToggle = State
@@ -1316,6 +1431,7 @@ Tabs.Misc:AddParagraph({
     })
     
 local BHopKey = false
+local humanoid = game:GetService("Players").LocalPlayer.Character:FindFirstChildOfClass("Humanoid")
     
 local Keybind = Tabs.Misc:AddKeybind("KeyBHOP", {
         Title = "Keybind to BHOP",
@@ -1327,21 +1443,25 @@ local Keybind = Tabs.Misc:AddKeybind("KeyBHOP", {
           spawn(function()
             while true and wait(0.1) do
                 if BHopKey then
-               local humanoid = game:GetService("Players").LocalPlayer.Character:FindFirstChildOfClass("Humanoid")
---        if humanoid and humanoid.FloorMaterial ~= Enum.Material.Air and humanoid then
---            humanoid:ChangeState(Enum.HumanoidStateType.Jumping)
---            end
+          local humanoid = game:GetService("Players").LocalPlayer.Character:FindFirstChildOfClass("Humanoid")
+            if humanoid and humanoid.FloorMaterial ~= Enum.Material.Air and humanoid then
+              game.Players.LocalPlayer.Character.Communicator:InvokeServer("Jump")
+          end
                  setfflag("MaxAltitudePDStickHipHeightPercent", "-24")
              else
                  setfflag("MaxAltitudePDStickHipHeightPercent", "1")
                 end
            end
        end)
-
+       
   spawn(function()
-     while true and wait(1.5) do
+     while true and wait(0.1) do
       if BHopKey then
-           game.Players.LocalPlayer.Character.Communicator:InvokeServer("Jump")
+           if humanoid then
+          humanoid.Jump = true
+      else
+          humanoid.Jump = false
+            end
            end
         end
      end)
@@ -1407,10 +1527,10 @@ spawn(function()
 while true and wait(0.1) do
     if BHop2 then
    setfflag("MaxAltitudePDStickHipHeightPercent", "-24") 
-        local humanoid = LocalPlayer.Character:FindFirstChildOfClass("Humanoid")
-        if humanoid and humanoid.FloorMaterial ~= Enum.Material.Air and humanoid then
-            humanoid:ChangeState(Enum.HumanoidStateType.Jumping)
-            end
+        local humanoid = game:GetService("Players").LocalPlayer.Character:FindFirstChildOfClass("Humanoid")
+            if humanoid and humanoid.FloorMaterial ~= Enum.Material.Air and humanoid then
+             game.Players.LocalPlayer.Character.Communicator:InvokeServer("Jump")
+          end
       else
       setfflag("MaxAltitudePDStickHipHeightPercent", "1")
        end
@@ -1418,9 +1538,13 @@ while true and wait(0.1) do
 end)
 
 spawn(function()
-     while true and wait(1.3) do
+     while true and wait(0.1) do
       if BHop2 then
-          game.Players.LocalPlayer.Character.Communicator:InvokeServer("Jump")
+          if humanoid then
+          humanoid.Jump = true
+      else
+          humanoid.Jump = false
+            end
          end
      end
  end)
@@ -1431,7 +1555,6 @@ local function onPlayerRemoving()
 setfflag("MaxAltitudePDStickHipHeightPercent", "1")
 end
 
--- Connect the function to the PlayerRemoving event
 Players.PlayerRemoving:Connect(onPlayerRemoving)
 
 function destroytoggle()
@@ -1479,7 +1602,7 @@ Tabs.Misc:AddParagraph({
     
 local Dropdown = Tabs.Misc:AddDropdown("SelectionUtility", {
         Title = "Select Utility",
-        Values = {"Weaponless", "Compass", "Timer", "Decoy", "Radio", "Grapple", "AK-47", "Lantern", "Flashlight", "Night Vision", "Wrench"},
+        Values = {"Weaponless", "Compass", "Timer", "Decoy", "Radio", "GrappleHook", "AK-47", "Lantern", "Flashlight", "Night Vision", "Wrench"},
         Multi = false,
         Default = 1,
     })
@@ -1584,6 +1707,12 @@ local function removeEffects()
     end
 end
 
+local function removeGrass()
+setfflag("FRMMinGrassDistance", "0")
+setfflag("FRMMaxGrassDistance", "0")
+setfflag("RenderGrassDetailStrands", "0")
+end
+
 local function removeExplosions()
     for _, explosion in pairs(workspace:GetDescendants()) do
         if explosion:IsA("Explosion") then
@@ -1593,6 +1722,7 @@ local function removeExplosions()
 end
 
 local function setLowShadows()
+    game.Lighting.Technology = Enum.Technology.Voxel
     game.Lighting.GlobalShadows = false
 end
 
@@ -1600,45 +1730,36 @@ local function setLowQuality()
     settings().Rendering.QualityLevel = Enum.QualityLevel.Level01
 end
 
-local function setLowGraphics()
-local Lighting = game:FindService("Lighting")
-
-setscriptable(Lighting, "Technology", true)
-Lighting.Technology = Enum.Technology.Legacy
-
-for _, v in next, workspace:GetDescendants() do
-    if v:IsA("PointLight") or v:IsA("SpotLighting") or v:IsA("SurfaceLight") then
-        local Light = v
-        if not Light.Shadows then
-            Light.Shadows = true
-        end
-    end
-end
+local function setFlagsGraphics()
+setfflag("DebugGraphicsDisableDirect3D11", "true")
+setfflag("DebugGraphicsPreferVulkan", "true")
+setfflag("DebugTextureManagerSkipMips", "2")
+setfflag("TaskSchedulerLimitTargetFpsTo2402", "false")
+setfflag("TaskSchedulerTargetFps", "900")
 end
 
 local function reduceLag()
     removeWater()
     removeReflections()
-    removeEffects()
-    removeExplosions()
+--    removeEffects()
+--    removeExplosions()
     setLowShadows()
     setLowQuality()
---    setLowGraphics()
+    setFlagsGraphics()
+    removeGrass()
 end
 
 reduceLag()
 
 workspace.DescendantAdded:Connect(function(descendant)
-    if descendant:IsA("Terrain") or descendant:IsA("ParticleEmitter") or descendant:IsA("Smoke") or descendant:IsA("Fire") or descendant:IsA("Sparkles") or descendant:IsA("Explosion") then
-      wait(0.1)
+    if descendant:IsA("Terrain") then
+      wait(0.5)
         reduceLag()
      end
 end)
 
         end
  })
-
-setfflag("TaskSchedulerTargetFps", "900")
 
 -- Settings
 
