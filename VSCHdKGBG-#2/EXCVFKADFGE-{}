@@ -1526,13 +1526,13 @@ end
 spawn(function()
 while true and wait(0.1) do
     if BHop2 then
-   setfflag("MaxAltitudePDStickHipHeightPercent", "-24") 
         local humanoid = game:GetService("Players").LocalPlayer.Character:FindFirstChildOfClass("Humanoid")
             if humanoid and humanoid.FloorMaterial ~= Enum.Material.Air and humanoid then
              game.Players.LocalPlayer.Character.Communicator:InvokeServer("Jump")
           end
+        setfflag("MaxAltitudePDStickHipHeightPercent", "-24") 
       else
-      setfflag("MaxAltitudePDStickHipHeightPercent", "1")
+        setfflag("MaxAltitudePDStickHipHeightPercent", "1")
        end
     end
 end)
