@@ -1431,7 +1431,6 @@ Tabs.Misc:AddParagraph({
     })
     
 local BHopKey = false
-local humanoid = game:GetService("Players").LocalPlayer.Character:FindFirstChildOfClass("Humanoid")
     
 local Keybind = Tabs.Misc:AddKeybind("KeyBHOP", {
         Title = "Keybind to BHOP",
@@ -1443,25 +1442,25 @@ local Keybind = Tabs.Misc:AddKeybind("KeyBHOP", {
           spawn(function()
             while true and wait(0.1) do
                 if BHopKey then
-          local humanoid = game:GetService("Players").LocalPlayer.Character:FindFirstChildOfClass("Humanoid")
-            if humanoid and humanoid.FloorMaterial ~= Enum.Material.Air and humanoid then
-              game.Players.LocalPlayer.Character.Communicator:InvokeServer("Jump")
-          end
+               local humanoid = game:GetService("Players").LocalPlayer.Character:FindFirstChildOfClass("Humanoid")
+--        if humanoid and humanoid.FloorMaterial ~= Enum.Material.Air and humanoid then
+--            humanoid:ChangeState(Enum.HumanoidStateType.Jumping)
+--            end
                  setfflag("MaxAltitudePDStickHipHeightPercent", "-24")
              else
                  setfflag("MaxAltitudePDStickHipHeightPercent", "1")
                 end
            end
        end)
-       
+
   spawn(function()
      while true and wait(0.1) do
       if BHopKey then
-           if humanoid then
-          humanoid.Jump = true
-      else
-          humanoid.Jump = false
-            end
+           local humanoid = game:GetService("Players").LocalPlayer.Character:FindFirstChildOfClass("Humanoid")
+            if humanoid and humanoid.FloorMaterial ~= Enum.Material.Air and humanoid then
+             game.Players.LocalPlayer.Character.Communicator:InvokeServer("Jump")
+             humanoid.Jump = true
+             end
            end
         end
      end)
@@ -1526,13 +1525,13 @@ end
 spawn(function()
 while true and wait(0.1) do
     if BHop2 then
-        local humanoid = game:GetService("Players").LocalPlayer.Character:FindFirstChildOfClass("Humanoid")
-            if humanoid and humanoid.FloorMaterial ~= Enum.Material.Air and humanoid then
-             game.Players.LocalPlayer.Character.Communicator:InvokeServer("Jump")
-          end
-        setfflag("MaxAltitudePDStickHipHeightPercent", "-24") 
+   setfflag("MaxAltitudePDStickHipHeightPercent", "-24") 
+        local humanoid = LocalPlayer.Character:FindFirstChildOfClass("Humanoid")
+        if humanoid and humanoid.FloorMaterial ~= Enum.Material.Air and humanoid then
+            humanoid:ChangeState(Enum.HumanoidStateType.Jumping)
+            end
       else
-        setfflag("MaxAltitudePDStickHipHeightPercent", "1")
+      setfflag("MaxAltitudePDStickHipHeightPercent", "1")
        end
     end
 end)
@@ -1540,11 +1539,11 @@ end)
 spawn(function()
      while true and wait(0.1) do
       if BHop2 then
-          if humanoid then
-          humanoid.Jump = true
-      else
-          humanoid.Jump = false
-            end
+          local humanoid = game:GetService("Players").LocalPlayer.Character:FindFirstChildOfClass("Humanoid")
+            if humanoid and humanoid.FloorMaterial ~= Enum.Material.Air and humanoid then
+             game.Players.LocalPlayer.Character.Communicator:InvokeServer("Jump")
+             humanoid.Jump = true
+          end
          end
      end
  end)
