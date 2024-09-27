@@ -1448,7 +1448,7 @@ local Keybind = Tabs.Misc:AddKeybind("KeyBHOP", {
 --            end
                  setfflag("MaxAltitudePDStickHipHeightPercent", "-24")
              else
-                 setfflag("MaxAltitudePDStickHipHeightPercent", "1")
+                 setfflag("MaxAltitudePDStickHipHeightPercent", "10")
                 end
            end
        end)
@@ -1531,7 +1531,7 @@ while true and wait(0.1) do
             humanoid:ChangeState(Enum.HumanoidStateType.Jumping)
             end
       else
-      setfflag("MaxAltitudePDStickHipHeightPercent", "1")
+      setfflag("MaxAltitudePDStickHipHeightPercent", "10")
        end
     end
 end)
@@ -1551,7 +1551,7 @@ spawn(function()
 local Players = game:GetService("Players")
 
 local function onPlayerRemoving()
-setfflag("MaxAltitudePDStickHipHeightPercent", "1")
+setfflag("MaxAltitudePDStickHipHeightPercent", "10")
 end
 
 Players.PlayerRemoving:Connect(onPlayerRemoving)
