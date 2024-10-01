@@ -1309,7 +1309,7 @@ end
 
     local Dropdown = Tabs.Misc:AddDropdown("SelectAmmunition", {
         Title = "Select Loadout Sections",
-        Values = {"Primary", "Secondary", "Tertiary", "DupedSlots"},
+        Values = {"Primary", "Secondary"},
         Multi = false,
         Default = 1,
     })
