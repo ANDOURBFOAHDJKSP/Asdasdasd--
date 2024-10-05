@@ -228,16 +228,6 @@ local Tabs = {
 
 -- Main
 
-function KillZombies(weapontype,partaim)
-if weapontype == "gun" then
-game:GetService("ReplicatedStorage").Gun:FireServer({["Normal"] = Vector3.new(0,0,0),["Direction"] = getNearest()[partaim].Position,["Name"] = getEquippedWeapon(game.Players.LocalPlayer),["Hit"] = getNearest()[partaim],["Origin"] = getNearest()[partaim].Position,["Pos"] = getNearest()[partaim].Position})
-elseif weapontype == "melee" then
-game:GetService("ReplicatedStorage")["forhackers"]:InvokeServer("hit",getEquippedWeapon(game.Players.LocalPlayer),getNearest()[partaim])
-else
-	return "INVALID WEAPON TYPE"
-end
-end
-
 Tabs.Main:AddParagraph({
         Title = "Auto Crates",
         Content = " "
@@ -793,6 +783,16 @@ local camera = workspace.CurrentCamera
 _G._ZombieKillPart = "Head"
 _G._ZombieKillPart2 = "HumanoidRootPart"
 
+function KillZombies(weapontype,partaim)
+if weapontype == "gun" then
+game:GetService("ReplicatedStorage").Gun:FireServer({["Normal"] = Vector3.new(0,0,0),["Direction"] = getNearest()[partaim].Position,["Name"] = getEquippedWeapon(game.Players.LocalPlayer),["Hit"] = getNearest()[partaim],["Origin"] = getNearest()[partaim].Position,["Pos"] = getNearest()[partaim].Position})
+elseif weapontype == "melee" then
+game:GetService("ReplicatedStorage")["forhackers"]:InvokeServer("hit",getEquippedWeapon(game.Players.LocalPlayer),getNearest()[partaim])
+else
+	return "INVALID WEAPON TYPE"
+end
+end
+
 function RayFromCamera()
 local ray = Ray.new(workspace.CurrentCamera.CFrame.p, workspace.CurrentCamera.CFrame.lookVector * 100)
 
@@ -1034,8 +1034,15 @@ Tabs.Misc:AddButton({
 for i, v in pairs(getgc(true)) do
      if type(v) == 'table' and rawget(v, 'Firerate') then
        v.Damage = -9999
-       v.BulletPerShot = 25
-       v.Firerate = 50
+       v.BulletPerShot = 20
+       v.Firerate = 20
+       v.Length = 10000
+       v.Spread = {
+          Min = 0,
+  		Rec = 0,
+  		Inc = 0,
+	  	Max = 0
+       }
       end
 end
         end
@@ -1097,9 +1104,7 @@ local hooking = metatable.__index
 setreadonly(metatable,false)
 metatable.__index = newcclosure(function(value2, index2)
     if SilentAimBoss and value2 == MousePos and tostring(index2) == "Hit" then 
-    --  if Aim() and Aim():FindFirstChild(PrimaryPart) then
-           return Aim():FindFirstChild(PrimaryPart).CFrame
-      --  end
+       return Aim():FindFirstChild(PrimaryPart).CFrame
     end
     
     return hooking(value2, index2)
@@ -1147,13 +1152,12 @@ local Toggle = Tabs.Misc:AddToggle("KillAuraTG", {Title = "Kill Aura", Default =
  
 while KillAura and wait(0.1) do
 local player = game.Players.LocalPlayer
-local backpack2 = player.Character
-local backpack = player.Backpack
+local backpack = player.Backpack or player.Character
 local basicKnife = backpack:FindFirstChild(KnifeName)
 local handle = basicKnife:FindFirstChild("Handle")
 
 if basicKnife and handle then
-    handle.Size = Vector3.new(SizeHandle, SizeHandle, SizeHandle)
+    handle.Size = Vector3.new(SizeHandle, 0.8, SizeHandle)
     handle.CanCollide = false
     handle.Massless = true 
     KillZombies("melee",_G._ZombieKillPart)
