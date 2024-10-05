@@ -574,7 +574,7 @@ local groundDistance = 12
 
 repeat
 if FarmToggle == true and wait() then
-   if _G._userGun == true then
+   if _G._userGun == true and getNearest() and getNearest():FindFirstChild("HumanoidRootPart") then
 -- game:GetService("Workspace").CurrentCamera.CFrame = CFrame.new(game:GetService("Workspace").CurrentCamera.CFrame.p, getNearest().Head.Position)
 Player.Character.HumanoidRootPart.CFrame = (getNearest().HumanoidRootPart.CFrame * CFrame.new(0, groundDistance, 9))
 game:GetService("ReplicatedStorage")["forhackers"]:InvokeServer("hit",getEquippedWeapon(Player),getNearest()[_G._ZombieKillPart])
