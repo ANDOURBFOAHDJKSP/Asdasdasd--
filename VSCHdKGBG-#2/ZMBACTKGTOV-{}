@@ -229,35 +229,6 @@ local Tabs = {
 -- Main
 
 Tabs.Main:AddParagraph({
-        Title = "Auto Crates",
-        Content = " "
-    })
-    
-local SelectedCrate = "Basic #1"
-
-local Dropdown = Tabs.Main:AddDropdown("SelectedCrate", {
-        Title = "Select Crate",
-        Values = {"Basic #1","Basic #2","Basic #3","Uncommon","Rare","Legendary"},
-        Multi = false,
-        Default = 1,
-    })
-
-
-    Dropdown:OnChanged(function(list)
-        SelectedCrate = list
-    end)
-    
-local Toggle = Tabs.Main:AddToggle("AutoBuyCrate", {Title = "Auto Buy Crates", Default = false })
-
-    Toggle:OnChanged(function(bool)
-    OpenCrates = bool
-	while wait(0.1) and OpenCrates do
-		if OpenCrates == false then break end
-         game:GetService("ReplicatedStorage")["RemoteEventContainer"]["CommunicationF"]:InvokeServer("unbox_box",SelectedCrate)
-        end
-    end)
-
-Tabs.Main:AddParagraph({
         Title = "Leaderboard Notifier",
         Content = " "
     })
@@ -322,110 +293,6 @@ game.StarterGui:SetCore("SendNotification", {
 })
 
 end
-end)
-
-Tabs.Main:AddParagraph({
-        Title = "Game Mods",
-        Content = " "
-    })
-
-local Toggle = Tabs.Main:AddToggle("ClaimMission", {Title = "Auto Claim Mission", Default = false })
-
-    Toggle:OnChanged(function(State)
-        _G._claimUserMission = State
-	while wait() do
-		if _G._claimUserMission == false then break end
-			game:GetService("ReplicatedStorage")["RemoteEventContainer"]["CommunicationF"]:InvokeServer("claimReward",1)
-			game:GetService("ReplicatedStorage")["RemoteEventContainer"]["CommunicationF"]:InvokeServer("claimReward",2)
-			game:GetService("ReplicatedStorage")["RemoteEventContainer"]["CommunicationF"]:InvokeServer("claimReward",3)
-			game:GetService("ReplicatedStorage")["RemoteEventContainer"]["CommunicationF"]:InvokeServer("claimReward",4)
-			game:GetService("ReplicatedStorage")["RemoteEventContainer"]["CommunicationF"]:InvokeServer("claimReward",5)
-			game:GetService("ReplicatedStorage")["RemoteEventContainer"]["CommunicationF"]:InvokeServer("claimReward",6)
-			game:GetService("ReplicatedStorage")["RemoteEventContainer"]["CommunicationF"]:InvokeServer("claimReward",7)
-			game:GetService("ReplicatedStorage")["RemoteEventContainer"]["CommunicationF"]:InvokeServer("claimReward",8)
-			game:GetService("ReplicatedStorage")["RemoteEventContainer"]["CommunicationF"]:InvokeServer("claimReward",9)
-			game:GetService("ReplicatedStorage")["RemoteEventContainer"]["CommunicationF"]:InvokeServer("claimReward",10)
-			game:GetService("ReplicatedStorage")["RemoteEventContainer"]["CommunicationF"]:InvokeServer("claimReward",11)
-			game:GetService("ReplicatedStorage")["RemoteEventContainer"]["CommunicationF"]:InvokeServer("claimReward",12)
-			game:GetService("ReplicatedStorage")["RemoteEventContainer"]["CommunicationF"]:InvokeServer("claimReward",13)
-			game:GetService("ReplicatedStorage")["RemoteEventContainer"]["CommunicationF"]:InvokeServer("claimReward",14)
-			game:GetService("ReplicatedStorage")["RemoteEventContainer"]["CommunicationF"]:InvokeServer("claimReward",15)
-			game:GetService("ReplicatedStorage")["RemoteEventContainer"]["CommunicationF"]:InvokeServer("claimReward",16)
-			game:GetService("ReplicatedStorage")["RemoteEventContainer"]["CommunicationF"]:InvokeServer("claimReward",17)
-			game:GetService("ReplicatedStorage")["RemoteEventContainer"]["CommunicationF"]:InvokeServer("claimReward",18)
-			game:GetService("ReplicatedStorage")["RemoteEventContainer"]["CommunicationF"]:InvokeServer("claimReward",19)
-			game:GetService("ReplicatedStorage")["RemoteEventContainer"]["CommunicationF"]:InvokeServer("claimReward",20)
-			game:GetService("ReplicatedStorage")["RemoteEventContainer"]["CommunicationF"]:InvokeServer("claimReward",21)
-			game:GetService("ReplicatedStorage")["RemoteEventContainer"]["CommunicationF"]:InvokeServer("claimReward",22)
-			game:GetService("ReplicatedStorage")["RemoteEventContainer"]["CommunicationF"]:InvokeServer("claimReward",23)
-			game:GetService("ReplicatedStorage")["RemoteEventContainer"]["CommunicationF"]:InvokeServer("claimReward",24)
-			game:GetService("ReplicatedStorage")["RemoteEventContainer"]["CommunicationF"]:InvokeServer("claimReward",25)
-			game:GetService("ReplicatedStorage")["RemoteEventContainer"]["CommunicationF"]:InvokeServer("claimReward",26)
-			game:GetService("ReplicatedStorage")["RemoteEventContainer"]["CommunicationF"]:InvokeServer("claimReward",27)
-			game:GetService("ReplicatedStorage")["RemoteEventContainer"]["CommunicationF"]:InvokeServer("claimReward",28)
-			game:GetService("ReplicatedStorage")["RemoteEventContainer"]["CommunicationF"]:InvokeServer("claimReward",29)
-	end
- end)
-    
-local Toggle = Tabs.Main:AddToggle("ClearMission", {Title = "Auto Discard Mission", Default = false })
-
-    Toggle:OnChanged(function(State)
-        _G._discardUserMission = State
-	while wait() do
-		if _G._discardUserMission == false then break end
-			game:GetService("ReplicatedStorage")["RemoteEventContainer"]["CommunicationF"]:InvokeServer("discardTask",1)
-			game:GetService("ReplicatedStorage")["RemoteEventContainer"]["CommunicationF"]:InvokeServer("discardTask",2)
-			game:GetService("ReplicatedStorage")["RemoteEventContainer"]["CommunicationF"]:InvokeServer("discardTask",3)
-			game:GetService("ReplicatedStorage")["RemoteEventContainer"]["CommunicationF"]:InvokeServer("discardTask",4)
-			game:GetService("ReplicatedStorage")["RemoteEventContainer"]["CommunicationF"]:InvokeServer("discardTask",5)
-			game:GetService("ReplicatedStorage")["RemoteEventContainer"]["CommunicationF"]:InvokeServer("discardTask",6)
-			game:GetService("ReplicatedStorage")["RemoteEventContainer"]["CommunicationF"]:InvokeServer("discardTask",7)
-			game:GetService("ReplicatedStorage")["RemoteEventContainer"]["CommunicationF"]:InvokeServer("discardTask",8)
-			game:GetService("ReplicatedStorage")["RemoteEventContainer"]["CommunicationF"]:InvokeServer("discardTask",9)
-			game:GetService("ReplicatedStorage")["RemoteEventContainer"]["CommunicationF"]:InvokeServer("discardTask",10)
-			game:GetService("ReplicatedStorage")["RemoteEventContainer"]["CommunicationF"]:InvokeServer("discardTask",11)
-			game:GetService("ReplicatedStorage")["RemoteEventContainer"]["CommunicationF"]:InvokeServer("discardTask",12)
-			game:GetService("ReplicatedStorage")["RemoteEventContainer"]["CommunicationF"]:InvokeServer("discardTask",13)
-			game:GetService("ReplicatedStorage")["RemoteEventContainer"]["CommunicationF"]:InvokeServer("discardTask",14)
-			game:GetService("ReplicatedStorage")["RemoteEventContainer"]["CommunicationF"]:InvokeServer("discardTask",15)
-			game:GetService("ReplicatedStorage")["RemoteEventContainer"]["CommunicationF"]:InvokeServer("discardTask",16)
-			game:GetService("ReplicatedStorage")["RemoteEventContainer"]["CommunicationF"]:InvokeServer("discardTask",17)
-			game:GetService("ReplicatedStorage")["RemoteEventContainer"]["CommunicationF"]:InvokeServer("discardTask",18)
-			game:GetService("ReplicatedStorage")["RemoteEventContainer"]["CommunicationF"]:InvokeServer("discardTask",19)
-			game:GetService("ReplicatedStorage")["RemoteEventContainer"]["CommunicationF"]:InvokeServer("discardTask",20)
-			game:GetService("ReplicatedStorage")["RemoteEventContainer"]["CommunicationF"]:InvokeServer("discardTask",21)
-			game:GetService("ReplicatedStorage")["RemoteEventContainer"]["CommunicationF"]:InvokeServer("discardTask",22)
-			game:GetService("ReplicatedStorage")["RemoteEventContainer"]["CommunicationF"]:InvokeServer("discardTask",23)
-			game:GetService("ReplicatedStorage")["RemoteEventContainer"]["CommunicationF"]:InvokeServer("discardTask",24)
-			game:GetService("ReplicatedStorage")["RemoteEventContainer"]["CommunicationF"]:InvokeServer("discardTask",25)
-			game:GetService("ReplicatedStorage")["RemoteEventContainer"]["CommunicationF"]:InvokeServer("discardTask",26)
-			game:GetService("ReplicatedStorage")["RemoteEventContainer"]["CommunicationF"]:InvokeServer("discardTask",27)
-			game:GetService("ReplicatedStorage")["RemoteEventContainer"]["CommunicationF"]:InvokeServer("discardTask",28)
-			game:GetService("ReplicatedStorage")["RemoteEventContainer"]["CommunicationF"]:InvokeServer("discardTask",29)
-	end
- end)
-
-local AutoCollectSystemIndic2 = false
-
-local Toggle = Tabs.Main:AddToggle("CollectPowers", {Title = "Auto Collect Power Ups", Default = false })
-
-    Toggle:OnChanged(function(State)
-        AutoCollectSystemIndic2 = State
-        
- workspace.Powerups.ChildAdded:Connect(function(variable)
-   repeat
-      if AutoCollectSystemIndic2 == true and wait(0.1) then
-      for i,v in pairs(variable:GetDescendants()) do
-       	if v:IsA("Part") or v:IsA("BasePart") then
-          	v.CFrame = CFrame.new(Player.Character.Torso.Position + Vector3.new(0, 0, 0.8))
-          	v.Position = Player.Character.Torso.Position + Vector3.new(0, 0, 0.8)
-          	v.CanCollide = false
-	        end
-      	end
-	   end
-	
-	    until AutoCollectSystemIndic2 == false	
-   end)
 end)
 
 Tabs.Main:AddParagraph({
@@ -548,7 +415,57 @@ local function getNearest()
     return nearest
 end
 
+local Player = game.Players.LocalPlayer
+
+function GetGunsName()
+    local gunNames = {}
+    for _, Thing in pairs(game:GetService("ReplicatedStorage").Guns:GetChildren()) do
+        if Thing:IsA("Tool") then
+            table.insert(gunNames, Thing.Name)
+        end
+    end
+    return gunNames
+end
+
+function GetKnivesName()
+    local knifeNames = {}
+    for _, Thing in pairs(game:GetService("ReplicatedStorage").Knives:GetChildren()) do
+        if Thing:IsA("Tool") then
+            table.insert(knifeNames, Thing.Name)
+        end
+    end
+    return knifeNames
+end
+
+function EquipGun()
+    local gunNames = GetGunsName() 
+    for _, Thing in pairs(Player.Backpack:GetChildren()) do
+        if Thing:IsA("Tool") and table.find(gunNames, Thing.Name) then
+            Thing.Parent = Player.Character
+        end
+    end
+end
+
+function EquipKnives()
+    local knifeNames = GetKnivesName()
+    for _, Thing in pairs(Player.Backpack:GetChildren()) do
+        if Thing:IsA("Tool") and table.find(knifeNames, Thing.Name) then
+            Thing.Parent = Player.Character
+        end
+    end
+end
+
+function tweenfunction(coordination)
+	TweenService:Create(game.Players.LocalPlayer.Character.HumanoidRootPart, TweenInfo.new(1, Enum.EasingStyle.Linear, Enum.EasingDirection.Out,0,false,0), {CFrame = coordination}):Play()
+end
+
+Tabs.AutoFarm:AddParagraph({
+        Title = "Auto Farm",
+        Content = " "
+    })
+
 local FarmToggle = false
+local FarmType = "CFrame"
 
 local Toggle = Tabs.AutoFarm:AddToggle("FarmZombies", {Title = "Auto Farm (Zombies/Boss)", Default = false })
 
@@ -560,24 +477,62 @@ else
 	workspace.Gravity = normalgrav
 end
 
+local PositonX = 0
 local groundDistance = 12
+local PositionZ = 9
 
 repeat
 if FarmToggle == true and wait() then
    if _G._userGun == true and getNearest() and getNearest():FindFirstChild("HumanoidRootPart") then
 -- game:GetService("Workspace").CurrentCamera.CFrame = CFrame.new(game:GetService("Workspace").CurrentCamera.CFrame.p, getNearest().Head.Position)
-Player.Character.HumanoidRootPart.CFrame = (getNearest().HumanoidRootPart.CFrame * CFrame.new(0, groundDistance, 9))
+if FarmType == "CFrame" then
+Player.Character.HumanoidRootPart.CFrame = (getNearest().HumanoidRootPart.CFrame * CFrame.new(PositonX, groundDistance, PositonZ))
+elseif FarmType == "Tween" then
+tweenfunction((getNearest().HumanoidRootPart.CFrame * CFrame.new(PositonX, groundDistance, PositonZ)))
+end
 game:GetService("ReplicatedStorage")["forhackers"]:InvokeServer("hit",getEquippedWeapon(Player),getNearest()[_G._ZombieKillPart])
 else
 -- game:GetService("Workspace").CurrentCamera.CFrame = CFrame.new(game:GetService("Workspace").CurrentCamera.CFrame.p, getNearest().Head.Position)
-Player.Character.HumanoidRootPart.CFrame = (getNearest().HumanoidRootPart.CFrame * CFrame.new(0, groundDistance, 9))
+if FarmType == "CFrame" then
+Player.Character.HumanoidRootPart.CFrame = (getNearest().HumanoidRootPart.CFrame * CFrame.new(PositonX, groundDistance, PositonZ))
+elseif FarmType == "Tween" then
+tweenfunction((getNearest().HumanoidRootPart.CFrame * CFrame.new(PositonX, groundDistance, PositonZ)))
+end
 game.ReplicatedStorage.Gun:FireServer({["Normal"] = Vector3.new(0, 0, 0), ["Direction"] = getNearest()[_G._ZombieKillPart].Position, ["Name"] = getEquippedWeapon(Player), ["Hit"] = getNearest()[_G._ZombieKillPart], ["Origin"] = getNearest()[_G._ZombieKillPart].Position, ["Pos"] = getNearest()[_G._ZombieKillPart].Position,})
            end
         end
 until FarmToggle == false
     end)
     
- local Slider = Tabs.AutoFarm:AddSlider("GroundDistance", {
+Tabs.AutoFarm:AddParagraph({
+        Title = "Farming Settings",
+        Content = ""
+    })
+
+ local Dropdown = Tabs.AutoFarm:AddDropdown("FarmingType", {
+        Title = "Farming Type",
+        Values = {"CFrame", "Tween"},
+        Multi = false,
+        Default = 1,
+    })
+
+    Dropdown:OnChanged(function(Value)
+        FarmType = Value
+    end)
+    
+ local Slider = Tabs.AutoFarm:AddSlider("PosX", {
+        Title = "Farm Position X",
+        Description = "",
+        Default = 0,
+        Min = 0,
+        Max = 30,
+        Rounding = 1,
+        Callback = function(Value)
+            PositonX = tonumber(Value) or 0
+        end
+    })
+    
+ local Slider = Tabs.AutoFarm:AddSlider("PosY", {
         Title = "Farm Position Y",
         Description = "",
         Default = 12,
@@ -588,6 +543,184 @@ until FarmToggle == false
             groundDistance = tonumber(Value) or 12
         end
     })
+    
+local Slider = Tabs.AutoFarm:AddSlider("PosZ", {
+        Title = "Farm Position Z",
+        Description = "",
+        Default = 9,
+        Min = 0,
+        Max = 30,
+        Rounding = 1,
+        Callback = function(Value)
+            PositonZ = tonumber(Value) or 9
+        end
+    })
+    
+Tabs.AutoFarm:AddParagraph({
+        Title = "Auto Equip",
+        Content = " "
+    })
+    
+local EquipKnivesTG = false
+local EquipGunsTG = false
+
+local Toggle = Tabs.AutoFarm:AddToggle("Equip1", {Title = "Equip Gun", Default = false })
+
+    Toggle:OnChanged(function(State)
+     EquipGunsTG = State
+     
+     
+while wait(1) and EquipGunsTG do
+          EquipGun()
+        end
+    end)
+    
+local Toggle = Tabs.AutoFarm:AddToggle("Equip2", {Title = "Equip Knives", Default = false })
+
+    Toggle:OnChanged(function(State)
+     EquipKnivesTG = State
+
+while wait(1) and EquipKnivesTG do
+         EquipKnives()
+      end
+    end)
+ 
+ Tabs.AutoFarm:AddParagraph({
+        Title = "Auto Crates",
+        Content = " "
+    })
+    
+local SelectedCrate = "Basic #1"
+
+local Dropdown = Tabs.AutoFarm:AddDropdown("SelectedCrate", {
+        Title = "Select Crate",
+        Values = {"Basic #1","Basic #2","Basic #3","Uncommon","Rare","Legendary"},
+        Multi = false,
+        Default = 1,
+    })
+
+
+    Dropdown:OnChanged(function(list)
+        SelectedCrate = list
+    end)
+    
+local Toggle = Tabs.AutoFarm:AddToggle("AutoBuyCrate", {Title = "Auto Buy Crates", Default = false })
+
+    Toggle:OnChanged(function(bool)
+    OpenCrates = bool
+	while wait(0.1) and OpenCrates do
+		if OpenCrates == false then break end
+         game:GetService("ReplicatedStorage")["RemoteEventContainer"]["CommunicationF"]:InvokeServer("unbox_box",SelectedCrate)
+        end
+    end)
+ 
+Tabs.AutoFarm:AddParagraph({
+        Title = "Auto Collect/Claim",
+        Content = " "
+    })
+
+    _G._claimUserMission = false
+
+local Toggle = Tabs.AutoFarm:AddToggle("ClaimMission", {Title = "Auto Claim Mission", Default = false })
+
+    Toggle:OnChanged(function(State)
+        _G._claimUserMission = State
+	while wait() do
+		if _G._claimUserMission == false then break end
+			game:GetService("ReplicatedStorage")["RemoteEventContainer"]["CommunicationF"]:InvokeServer("claimReward",1)
+			game:GetService("ReplicatedStorage")["RemoteEventContainer"]["CommunicationF"]:InvokeServer("claimReward",2)
+			game:GetService("ReplicatedStorage")["RemoteEventContainer"]["CommunicationF"]:InvokeServer("claimReward",3)
+			game:GetService("ReplicatedStorage")["RemoteEventContainer"]["CommunicationF"]:InvokeServer("claimReward",4)
+			game:GetService("ReplicatedStorage")["RemoteEventContainer"]["CommunicationF"]:InvokeServer("claimReward",5)
+			game:GetService("ReplicatedStorage")["RemoteEventContainer"]["CommunicationF"]:InvokeServer("claimReward",6)
+			game:GetService("ReplicatedStorage")["RemoteEventContainer"]["CommunicationF"]:InvokeServer("claimReward",7)
+			game:GetService("ReplicatedStorage")["RemoteEventContainer"]["CommunicationF"]:InvokeServer("claimReward",8)
+			game:GetService("ReplicatedStorage")["RemoteEventContainer"]["CommunicationF"]:InvokeServer("claimReward",9)
+			game:GetService("ReplicatedStorage")["RemoteEventContainer"]["CommunicationF"]:InvokeServer("claimReward",10)
+			game:GetService("ReplicatedStorage")["RemoteEventContainer"]["CommunicationF"]:InvokeServer("claimReward",11)
+			game:GetService("ReplicatedStorage")["RemoteEventContainer"]["CommunicationF"]:InvokeServer("claimReward",12)
+			game:GetService("ReplicatedStorage")["RemoteEventContainer"]["CommunicationF"]:InvokeServer("claimReward",13)
+			game:GetService("ReplicatedStorage")["RemoteEventContainer"]["CommunicationF"]:InvokeServer("claimReward",14)
+			game:GetService("ReplicatedStorage")["RemoteEventContainer"]["CommunicationF"]:InvokeServer("claimReward",15)
+			game:GetService("ReplicatedStorage")["RemoteEventContainer"]["CommunicationF"]:InvokeServer("claimReward",16)
+			game:GetService("ReplicatedStorage")["RemoteEventContainer"]["CommunicationF"]:InvokeServer("claimReward",17)
+			game:GetService("ReplicatedStorage")["RemoteEventContainer"]["CommunicationF"]:InvokeServer("claimReward",18)
+			game:GetService("ReplicatedStorage")["RemoteEventContainer"]["CommunicationF"]:InvokeServer("claimReward",19)
+			game:GetService("ReplicatedStorage")["RemoteEventContainer"]["CommunicationF"]:InvokeServer("claimReward",20)
+			game:GetService("ReplicatedStorage")["RemoteEventContainer"]["CommunicationF"]:InvokeServer("claimReward",21)
+			game:GetService("ReplicatedStorage")["RemoteEventContainer"]["CommunicationF"]:InvokeServer("claimReward",22)
+			game:GetService("ReplicatedStorage")["RemoteEventContainer"]["CommunicationF"]:InvokeServer("claimReward",23)
+			game:GetService("ReplicatedStorage")["RemoteEventContainer"]["CommunicationF"]:InvokeServer("claimReward",24)
+			game:GetService("ReplicatedStorage")["RemoteEventContainer"]["CommunicationF"]:InvokeServer("claimReward",25)
+			game:GetService("ReplicatedStorage")["RemoteEventContainer"]["CommunicationF"]:InvokeServer("claimReward",26)
+			game:GetService("ReplicatedStorage")["RemoteEventContainer"]["CommunicationF"]:InvokeServer("claimReward",27)
+			game:GetService("ReplicatedStorage")["RemoteEventContainer"]["CommunicationF"]:InvokeServer("claimReward",28)
+			game:GetService("ReplicatedStorage")["RemoteEventContainer"]["CommunicationF"]:InvokeServer("claimReward",29)
+	end
+ end)
+    
+   _G._discardUserMission = false
+   
+local Toggle = Tabs.AutoFarm:AddToggle("ClearMission", {Title = "Auto Discard Mission", Default = false })
+
+    Toggle:OnChanged(function(State)
+        _G._discardUserMission = State
+	while wait() do
+		if _G._discardUserMission == false then break end
+			game:GetService("ReplicatedStorage")["RemoteEventContainer"]["CommunicationF"]:InvokeServer("discardTask",1)
+			game:GetService("ReplicatedStorage")["RemoteEventContainer"]["CommunicationF"]:InvokeServer("discardTask",2)
+			game:GetService("ReplicatedStorage")["RemoteEventContainer"]["CommunicationF"]:InvokeServer("discardTask",3)
+			game:GetService("ReplicatedStorage")["RemoteEventContainer"]["CommunicationF"]:InvokeServer("discardTask",4)
+			game:GetService("ReplicatedStorage")["RemoteEventContainer"]["CommunicationF"]:InvokeServer("discardTask",5)
+			game:GetService("ReplicatedStorage")["RemoteEventContainer"]["CommunicationF"]:InvokeServer("discardTask",6)
+			game:GetService("ReplicatedStorage")["RemoteEventContainer"]["CommunicationF"]:InvokeServer("discardTask",7)
+			game:GetService("ReplicatedStorage")["RemoteEventContainer"]["CommunicationF"]:InvokeServer("discardTask",8)
+			game:GetService("ReplicatedStorage")["RemoteEventContainer"]["CommunicationF"]:InvokeServer("discardTask",9)
+			game:GetService("ReplicatedStorage")["RemoteEventContainer"]["CommunicationF"]:InvokeServer("discardTask",10)
+			game:GetService("ReplicatedStorage")["RemoteEventContainer"]["CommunicationF"]:InvokeServer("discardTask",11)
+			game:GetService("ReplicatedStorage")["RemoteEventContainer"]["CommunicationF"]:InvokeServer("discardTask",12)
+			game:GetService("ReplicatedStorage")["RemoteEventContainer"]["CommunicationF"]:InvokeServer("discardTask",13)
+			game:GetService("ReplicatedStorage")["RemoteEventContainer"]["CommunicationF"]:InvokeServer("discardTask",14)
+			game:GetService("ReplicatedStorage")["RemoteEventContainer"]["CommunicationF"]:InvokeServer("discardTask",15)
+			game:GetService("ReplicatedStorage")["RemoteEventContainer"]["CommunicationF"]:InvokeServer("discardTask",16)
+			game:GetService("ReplicatedStorage")["RemoteEventContainer"]["CommunicationF"]:InvokeServer("discardTask",17)
+			game:GetService("ReplicatedStorage")["RemoteEventContainer"]["CommunicationF"]:InvokeServer("discardTask",18)
+			game:GetService("ReplicatedStorage")["RemoteEventContainer"]["CommunicationF"]:InvokeServer("discardTask",19)
+			game:GetService("ReplicatedStorage")["RemoteEventContainer"]["CommunicationF"]:InvokeServer("discardTask",20)
+			game:GetService("ReplicatedStorage")["RemoteEventContainer"]["CommunicationF"]:InvokeServer("discardTask",21)
+			game:GetService("ReplicatedStorage")["RemoteEventContainer"]["CommunicationF"]:InvokeServer("discardTask",22)
+			game:GetService("ReplicatedStorage")["RemoteEventContainer"]["CommunicationF"]:InvokeServer("discardTask",23)
+			game:GetService("ReplicatedStorage")["RemoteEventContainer"]["CommunicationF"]:InvokeServer("discardTask",24)
+			game:GetService("ReplicatedStorage")["RemoteEventContainer"]["CommunicationF"]:InvokeServer("discardTask",25)
+			game:GetService("ReplicatedStorage")["RemoteEventContainer"]["CommunicationF"]:InvokeServer("discardTask",26)
+			game:GetService("ReplicatedStorage")["RemoteEventContainer"]["CommunicationF"]:InvokeServer("discardTask",27)
+			game:GetService("ReplicatedStorage")["RemoteEventContainer"]["CommunicationF"]:InvokeServer("discardTask",28)
+			game:GetService("ReplicatedStorage")["RemoteEventContainer"]["CommunicationF"]:InvokeServer("discardTask",29)
+	end
+ end)
+
+local AutoCollectSystemIndic2 = false
+
+local Toggle = Tabs.AutoFarm:AddToggle("CollectPowers", {Title = "Auto Collect Power Ups", Default = false })
+
+    Toggle:OnChanged(function(State)
+        AutoCollectSystemIndic2 = State
+        
+ workspace.Powerups.ChildAdded:Connect(function(variable)
+   repeat
+      if AutoCollectSystemIndic2 == true and wait(0.1) then
+      for i,v in pairs(variable:GetDescendants()) do
+       	if v:IsA("Part") or v:IsA("BasePart") then
+          	v.CFrame = CFrame.new(Player.Character.Torso.Position + Vector3.new(0, 0, 0.8))
+          	v.Position = Player.Character.Torso.Position + Vector3.new(0, 0, 0.8)
+          	v.CanCollide = false
+	        end
+      	end
+	   end
+	
+	    until AutoCollectSystemIndic2 == false	
+   end)
+end)
     
 -- Zombie
 
@@ -994,18 +1127,13 @@ return
 end
 
 Tabs.Misc:AddParagraph({
-        Title = "Tool/Stuff Mods",
-        Content = " "
-    })
-    
-Tabs.Misc:AddParagraph({
         Title = "Client Sided Stuff",
-        Content = ""
+        Content = " "
     })
 
 Tabs.Misc:AddButton({
         Title = "Equip All Guns",
-        Description = " ",
+        Description = "",
         Callback = function()
 for _,Thing in pairs(game.ReplicatedStorage.Guns:GetChildren()) do
 if Thing:IsA("Tool") then
@@ -1017,7 +1145,7 @@ end
     
 Tabs.Misc:AddButton({
         Title = "Equip All Knife",
-        Description = " ",
+        Description = "",
         Callback = function()
 for _,Thing in pairs(game.ReplicatedStorage.Knives:GetChildren()) do
 if Thing:IsA("Tool") then
@@ -1046,6 +1174,18 @@ for i, v in pairs(getgc(true)) do
       end
 end
         end
+    })
+ 
+ Tabs.Misc:AddParagraph({
+        Title = "Server Sided Stuff",
+        Content = "(Privated)"
+    })
+
+-- U can't stole it from me lol, its on my xdxdxdxd
+
+Tabs.Misc:AddParagraph({
+        Title = "Tool/Stuff Mods",
+        Content = " "
     })
     
 
