@@ -97,6 +97,8 @@ MakeDraggable(mainopen, mainopen) -- Making the button draggable
 
 local RunService = game:GetService("RunService")
 local fpsCounter = Instance.new("ScreenGui")
+local Player = game.Players.LocalPlayer
+local UserInputService = game:GetService("UserInputService")
 fpsCounter.Parent = game.CoreGui
 fpsCounter.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 fpsCounter.ResetOnSpawn = false
@@ -1106,6 +1108,10 @@ local Slider = Tabs.Zombie:AddSlider("HeadSize", {
 
 -- Misc
 
+-- fix getmouse
+game:GetService("VirtualInputManager"):SendKeyEvent(true, "C", false, game)
+game:GetService("VirtualInputManager"):SendKeyEvent(false, "C", false, game)
+
 local globalTarget = nil
 local camera = workspace.CurrentCamera
 
@@ -1278,35 +1284,55 @@ end
 _G._FOVrender = "V4" or V4()
 
 if not getexecutorname() == "Arceus X 1.4.3" or identifyexecutor() == "Arceus X" or identifyexecutor() == "ArceusX" then
-local Player = game.Players.LocalPlayer
 local Aim = function()
-local Distance = math.huge 
-local target = nil
- for value, index in next, game.Workspace.enemies:GetDescendants() do 
-   if index:FindFirstChild(PrimaryPart) and Player.Character:FindFirstChild(PrimaryPart) and not index:FindFirstChild('Guns') and index.Parent.Name ~= "deadenemies" then 
-     local Nearest = (index:FindFirstChild(PrimaryPart).Position - Player.Character.Head.Position).magnitude
-         if Nearest < Distance then 
-            Distance = Nearest
-            target = index
-         end
-     end
-   end
+    local distance = math.huge
+    local target = nil
+
+    for _, enemy in ipairs(game.Workspace.enemies:GetDescendants()) do
+        if enemy:IsA("Model") and enemy:FindFirstChild(PrimaryPart) and 
+           Player.Character:FindFirstChild(PrimaryPart) and 
+           not enemy:FindFirstChild("Guns") and 
+           enemy.Parent.Name ~= "deadenemies" then
+
+            local nearest = (enemy[PrimaryPart].Position - Player.Character[PrimaryPart].Position).magnitude
+            
+            if nearest < distance then
+                distance = nearest
+                target = enemy
+            end
+        end
+    end
+
     return target
 end
 
-local MousePos = Player:GetMouse()
+local function getInputPosition()
+    if UserInputService.TouchEnabled then
+        local touches = UserInputService:GetTouches()
+        if #touches > 0 then
+            return touches[1].Position 
+        end
+    else
+        return Player:GetMouse().Hit
+    end
+end
+
 local metatable = getrawmetatable(game)
 local hooking = metatable.__index
-setreadonly(metatable,false)
+setreadonly(metatable, false)
+
 metatable.__index = newcclosure(function(value2, index2)
-    if ConfirmSystem.Tracking and value2 == MousePos and tostring(index2) == "Hit" then 
-       return Aim():FindFirstChild(PrimaryPart).CFrame
+    if ConfirmSystem.Tracking and value2 == Player:GetMouse() and tostring(index2) == "Hit" then
+        local aimTarget = Aim()
+        if aimTarget and aimTarget:FindFirstChild(PrimaryPart) then
+            return aimTarget[PrimaryPart].CFrame
+        end
     end
     
     return hooking(value2, index2)
 end)
 
-setreadonly(metatable,true)
+setreadonly(metatable, true)
 else
 local namecall;
 namecall = hookmetamethod(game, "__namecall", function(Self, ...)
@@ -1407,7 +1433,7 @@ end
  
  Tabs.Misc:AddParagraph({
         Title = "Server Sided Stuff",
-        Content = "Tutorial: Equip the Knife to equipping other guns"
+        Content = "Tutorial: Equip the Knife to equipping other guns\nMaximum: 4-6 guns otherwise it will disappear!\nQuestion:Why it keep disappear every wave?, Answer: Because its ServerSided and Real"
     })
  
 function DupeSomethin()
@@ -1429,6 +1455,7 @@ local weaponList = {
     "Trench Shotgun",
     "Sniper",
     "Blaster",
+    "Platinum Gun",
     "Tactical Shotgun",
     "Scope Rifle",
     "Railgun",
@@ -1442,7 +1469,7 @@ local weaponList = {
 for _, Thing in pairs(gunsFolder:GetChildren()) do
     if Thing:IsA("Tool") and table.find(weaponList, Thing.Name) then
         game:GetService("ReplicatedStorage").RemoteEventContainer.CommunicationF:InvokeServer("EquipItem", Thing.Name)
-        wait(2)
+        wait(1)
     end
 end
 end
@@ -1495,36 +1522,56 @@ local Toggle = Tabs.Misc:AddToggle("SilentAimBosses", {Title = "Silent Aim Bosse
 
     Toggle:OnChanged(function(bool10)
     SilentAimBoss = bool10
-    
-local Player = game.Players.LocalPlayer
+
 local Aim = function()
-local Distance = math.huge 
-local target = nil
- for value, index in next, game.Workspace.BossFolder:GetDescendants() do 
-   if index:FindFirstChild(PrimaryPart) and Player.Character:FindFirstChild(PrimaryPart) and not index:FindFirstChild('Guns') and index.Parent.Name ~= "deadenemies" then 
-     local Nearest = (index:FindFirstChild(PrimaryPart).Position - Player.Character.Head.Position).magnitude
-         if Nearest < Distance then 
-            Distance = Nearest
-            target = index
-         end
-     end
-   end
+    local distance = math.huge
+    local target = nil
+
+    for _, enemy in ipairs(game.Workspace.BossFolder:GetDescendants()) do
+        if enemy:IsA("Model") and enemy:FindFirstChild(PrimaryPart) and 
+           Player.Character:FindFirstChild(PrimaryPart) and 
+           not enemy:FindFirstChild("Guns") and 
+           enemy.Parent.Name ~= "deadenemies" then
+
+            local nearest = (enemy[PrimaryPart].Position - Player.Character[PrimaryPart].Position).magnitude
+            
+            if nearest < distance then
+                distance = nearest
+                target = enemy
+            end
+        end
+    end
+
     return target
 end
 
-local MousePos = Player:GetMouse()
+local function getInputPosition()
+    if UserInputService.TouchEnabled then
+        local touches = UserInputService:GetTouches()
+        if #touches > 0 then
+            return touches[1].Position 
+        end
+    else
+        return Player:GetMouse().Hit
+    end
+end
+
 local metatable = getrawmetatable(game)
 local hooking = metatable.__index
-setreadonly(metatable,false)
+setreadonly(metatable, false)
+
 metatable.__index = newcclosure(function(value2, index2)
-    if SilentAimBoss and value2 == MousePos and tostring(index2) == "Hit" then 
-       return Aim():FindFirstChild(PrimaryPart).CFrame
+    if SilentAimBoss and value2 == Player:GetMouse() and tostring(index2) == "Hit" then
+        local aimTarget = Aim()
+        if aimTarget and aimTarget:FindFirstChild(PrimaryPart) then
+            return aimTarget[PrimaryPart].CFrame
+        end
     end
     
     return hooking(value2, index2)
 end)
 
-setreadonly(metatable,true)
+setreadonly(metatable, true)
     end)
  
 Tabs.Misc:AddParagraph({
