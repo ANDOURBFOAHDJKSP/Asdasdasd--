@@ -567,6 +567,19 @@ if NoClipx then
 Options.Noclip:SetValue(false)
 
 -- AutoFarm
+local function getNearestBosses()
+local nearest, dist = nil, math.huge -- Set a very large initial distance
+    for _, v in pairs(game.Workspace.BossFolder:GetDescendants()) do
+        if v:FindFirstChild("Head") then
+            local m = (Player.Character.Head.Position - v.Head.Position).magnitude
+            if m < dist then
+                dist = m
+                nearest = v
+            end
+        end
+    end
+    return nearest
+end
 
 local function getNearest()
     local nearest, dist = nil, math.huge -- Set a very large initial distance
@@ -641,6 +654,9 @@ Tabs.AutoFarm:AddParagraph({
     })
 
 local FarmToggle = false
+local PositonX = 0
+local groundDistance = 12
+local PositionZ = 9
 local FarmType = "CFrame"
 
 local Toggle = Tabs.AutoFarm:AddToggle("FarmZombies", {Title = "Auto Farm (Zombies/Boss)", Default = false })
@@ -652,10 +668,6 @@ if FarmToggle == true then
 else
 	workspace.Gravity = normalgrav
 end
-
-local PositonX = 0
-local groundDistance = 12
-local PositionZ = 9
 
 repeat
 if FarmToggle == true and wait() then
@@ -681,6 +693,8 @@ game.ReplicatedStorage.Gun:FireServer({["Normal"] = Vector3.new(0, 0, 0), ["Dire
     end
     until FarmToggle == false
 end)
+        
+
     
 Tabs.AutoFarm:AddParagraph({
         Title = "Farming Settings",
@@ -1108,10 +1122,6 @@ local Slider = Tabs.Zombie:AddSlider("HeadSize", {
 
 -- Misc
 
--- fix getmouse
-game:GetService("VirtualInputManager"):SendKeyEvent(true, "C", false, game)
-game:GetService("VirtualInputManager"):SendKeyEvent(false, "C", false, game)
-
 local globalTarget = nil
 local camera = workspace.CurrentCamera
 
@@ -1283,57 +1293,6 @@ end
 
 _G._FOVrender = "V4" or V4()
 
-if not getexecutorname() == "Arceus X 1.4.3" or identifyexecutor() == "Arceus X" or identifyexecutor() == "ArceusX" then
-local Aim = function()
-    local distance = math.huge
-    local target = nil
-
-    for _, enemy in ipairs(game.Workspace.enemies:GetDescendants()) do
-        if enemy:IsA("Model") and enemy:FindFirstChild(PrimaryPart) and 
-           Player.Character:FindFirstChild(PrimaryPart) and 
-           not enemy:FindFirstChild("Guns") and 
-           enemy.Parent.Name ~= "deadenemies" then
-
-            local nearest = (enemy[PrimaryPart].Position - Player.Character[PrimaryPart].Position).magnitude
-            
-            if nearest < distance then
-                distance = nearest
-                target = enemy
-            end
-        end
-    end
-
-    return target
-end
-
-local function getInputPosition()
-    if UserInputService.TouchEnabled then
-        local touches = UserInputService:GetTouches()
-        if #touches > 0 then
-            return touches[1].Position 
-        end
-    else
-        return Player:GetMouse().Hit
-    end
-end
-
-local metatable = getrawmetatable(game)
-local hooking = metatable.__index
-setreadonly(metatable, false)
-
-metatable.__index = newcclosure(function(value2, index2)
-    if ConfirmSystem.Tracking and value2 == Player:GetMouse() and tostring(index2) == "Hit" then
-        local aimTarget = Aim()
-        if aimTarget and aimTarget:FindFirstChild(PrimaryPart) then
-            return aimTarget[PrimaryPart].CFrame
-        end
-    end
-    
-    return hooking(value2, index2)
-end)
-
-setreadonly(metatable, true)
-else
 local namecall;
 namecall = hookmetamethod(game, "__namecall", function(Self, ...)
 	if not checkcaller() and tostring(getcallingscript()) == "GunController" and string.lower(getnamecallmethod()) == "findpartonraywithwhitelist" then
@@ -1352,20 +1311,23 @@ namecall = hookmetamethod(game, "__namecall", function(Self, ...)
 	end
 	return namecall(Self, ...)
 end)
-end
 
 local nearesthead = targetFolders
 
 function silentaim()
-if _G._userGun == true and nearesthead and nearesthead:FindFirstChild("Head") then
--- game:GetService("Workspace").CurrentCamera.CFrame = CFrame.new(game:GetService("Workspace").CurrentCamera.CFrame.p, getNearest().Head.Position)
--- Player.Character.HumanoidRootPart.CFrame = (getNearest().HumanoidRootPart.CFrame * CFrame.new(0, groundDistance, 9))
+if _G._userGun == true and getNearest() then
 game:GetService("ReplicatedStorage")["forhackers"]:InvokeServer("hit",getEquippedWeapon(Player),getNearest()[_G._ZombieKillPart])
 else
--- game:GetService("Workspace").CurrentCamera.CFrame = CFrame.new(game:GetService("Workspace").CurrentCamera.CFrame.p, getNearest().Head.Position)
--- Player.Character.HumanoidRootPart.CFrame = (getNearest().HumanoidRootPart.CFrame * CFrame.new(0, groundDistance, 9))
-game.ReplicatedStorage.Gun:FireServer({["Normal"] = Vector3.new(0, 0, 0), ["Direction"] = getNearest()[_G._ZombieKillPart].Position, ["Name"] = getEquippedWeapon(Player), ["Hit"] = getNearest()[_G._ZombieKillPart], ["Origin"] = getNearest()[_G._ZombieKillPart].Position, ["Pos"] = getNearest()[_G._ZombieKillPart].Position, ["Damage"] = math.huge,})
+game.ReplicatedStorage.Gun:FireServer({["Normal"] = Vector3.new(0, 0, 0), ["Direction"] = getNearest()[_G._ZombieKillPart].Position, ["Name"] = getEquippedWeapon(Player), ["Hit"] = getNearest()[_G._ZombieKillPart], ["Origin"] = getNearest()[_G._ZombieKillPart].Position, ["Pos"] = getNearest()[_G._ZombieKillPart].Position})
 end
+end
+
+function testCframeOrigin()
+game.ReplicatedStorage.Gun:FireServer({["Normal"] = CFrame.new(0, 0, 0), ["Direction"] = CFrame.new(getNearest()[_G._ZombieKillPart].Position), ["Name"] = getEquippedWeapon(Player), ["Hit"] = getNearest()[_G._ZombieKillPart], ["Origin"] = CFrame.new(getNearest()[_G._ZombieKillPart].Position), ["Pos"] = CFrame.new(getNearest()[_G._ZombieKillPart].Position)})
+end
+
+function testVectorOrigin()
+game.ReplicatedStorage.Gun:FireServer({["Normal"] = CFrame.new(0, 0, 0), ["Direction"] = Vector3.new(getNearest()[_G._ZombieKillPart].Position), ["Name"] = getEquippedWeapon(Player), ["Hit"] = getNearest()[_G._ZombieKillPart], ["Origin"] = Vector3.new(getNearest()[_G._ZombieKillPart].Position), ["Pos"] = Vector3.new(getNearest()[_G._ZombieKillPart].Position)})
 end
 
 function cameratrack()
@@ -1415,7 +1377,7 @@ Tabs.Misc:AddButton({
         Description = "(Laggy)",
         Callback = function()
 for i, v in pairs(getgc(true)) do
-     if type(v) == 'table' and rawget(v, 'Firerate') then
+     if type(v) == 'table' and rawget(v, 'BulletPerShot') then
        v.Damage = -9999
        v.BulletPerShot = 20
        v.Firerate = 20
@@ -1433,7 +1395,7 @@ end
  
  Tabs.Misc:AddParagraph({
         Title = "Server Sided Stuff",
-        Content = "Tutorial: Equip the Knife to equipping other guns\nMaximum: 4-6 guns otherwise it will disappear!\nQuestion:Why it keep disappear every wave?, Answer: Because its ServerSided and Real"
+        Content = "Tutorial: Equip the Knife to equipping other guns\nQuestion:Why it keep disappear every wave?, Answer: Because its ServerSided and Real"
     })
  
 function DupeSomethin()
@@ -1445,51 +1407,105 @@ function DupeSomethin()
     end
 end
 
-function RealFastFire()
-local gunsFolder = game:GetService("ReplicatedStorage").Guns
-local weaponList = {
-    "Machine Gun",
-    "Fiery Cannon",
-    "Minigun",
-    "Cobra",
-    "Trench Shotgun",
-    "Sniper",
-    "Blaster",
-    "Platinum Gun",
-    "Tactical Shotgun",
-    "Scope Rifle",
-    "Railgun",
-    "Beam Launcher",
-    "Venom",
-    "Gatling Laser",
-    "Tri Laser",
-    "Techno Rifle"
-}
+local weaponList = {}
 
-for _, Thing in pairs(gunsFolder:GetChildren()) do
-    if Thing:IsA("Tool") and table.find(weaponList, Thing.Name) then
-        game:GetService("ReplicatedStorage").RemoteEventContainer.CommunicationF:InvokeServer("EquipItem", Thing.Name)
-        wait(1)
+function FEEquipingGuns()
+    local player = game.Players.LocalPlayer
+    local character = player.Character or player.CharacterAdded:Wait()
+    local backpack = player.Backpack
+    local equippedGuns = {}
+
+    for _, tool in pairs(character:GetChildren()) do
+        if tool:IsA("Tool") then
+            table.insert(equippedGuns, tool.Name)
+        end
+    end
+    
+    for _, tool in pairs(backpack:GetChildren()) do
+        if tool:IsA("Tool") then
+            table.insert(equippedGuns, tool.Name)
+        end
+    end
+
+    for _, gunName in pairs(weaponList) do
+        if not table.find(equippedGuns, gunName) then
+            game:GetService("ReplicatedStorage").RemoteEventContainer.CommunicationF:InvokeServer("EquipItem", gunName)
+            wait(2) -- Give time for equipping before proceeding to the next gun
+
+            table.insert(equippedGuns, gunName)
+        end
+    end
+
+    -- Stop once all guns in the weaponList are equipped
+    if #equippedGuns >= #weaponList then
+        return
     end
 end
+
+
+function RealFastFire()
+for i, v in pairs(getgc(true)) do
+     if type(v) == 'table' and rawget(v, "bullets_per_shot") then
+       v["bullets_per_shot"] = 13
+       v.Spread = {
+          Min = 0,
+  		Rec = 0,
+  		Inc = 0,
+	  	Max = 0
+       }
+      end
+end
 end
 
- local Toggle = Tabs.Misc:AddToggle("WHYUENABLEIT", {Title = "Equip All Guns", Default = false })
+local Uhhhhhhhh = false
+local fastfivedmm = false
+
+--[[ alternative
+
+local Toggle = Tabs.Misc:AddToggle("ServerSidedFastFire", {Title = "Fast Fire", Default = false })
+
+    Toggle:OnChanged(function(duh)
+    fastfivedmm = duh
+    
+   while fastfivedmm and wait(0.1) do
+          RealFastFire()
+       end
+    end)
+]]
+
+ local Toggle = Tabs.Misc:AddToggle("ServerSidedEquipper", {Title = "Equip Multiple Guns", Default = false })
 
     Toggle:OnChanged(function(nastyAh)
     Uhhhhhhhh = nastyAh
     
    while Uhhhhhhhh and wait(2) do
-          RealFastFire()
           DupeSomethin()
+          FEEquipingGuns()
        end
     end)
- 
+    
+ local MultiDropdown = Tabs.Misc:AddDropdown("SelectedEquipGuns", {
+    Title = "Select A Gun to Equip in ServerSided",
+    Description = "4-6 guns Maximum otherwise it will disappear",
+    Values = GetGunsName(),
+    Multi = true,
+    Default = {"Machine Gun"},
+})
+
+MultiDropdown:OnChanged(function(selectedValues)
+    weaponList = {}
+
+    for gunName, state in pairs(selectedValues) do
+        if state then
+            table.insert(weaponList, gunName)
+        end
+    end
+end)
+
 Tabs.Misc:AddParagraph({
         Title = "Tool/Stuff Mods",
         Content = " "
     })
-    
 
 Tabs.Misc:AddParagraph({
         Title = "Silent Aim",
@@ -1515,15 +1531,15 @@ Tabs.Misc:AddParagraph({
     Circle.Visible = false
         BlacklistedPart()
     end)
-    
- local SilentAimBoss = false
+
+local SilentAimBoss = false
 
 local Toggle = Tabs.Misc:AddToggle("SilentAimBosses", {Title = "Silent Aim Bosses", Default = false })
 
-    Toggle:OnChanged(function(bool10)
+    Toggle:OnChanged(function(bool10)    
     SilentAimBoss = bool10
-
-local Aim = function()
+   local Aim = function()
+   local Mouse = Player:GetMouse()
     local distance = math.huge
     local target = nil
 
@@ -1561,7 +1577,7 @@ local hooking = metatable.__index
 setreadonly(metatable, false)
 
 metatable.__index = newcclosure(function(value2, index2)
-    if SilentAimBoss and value2 == Player:GetMouse() and tostring(index2) == "Hit" then
+    if SilentAimBoss and value2 == Mouse and tostring(index2) == "Hit" then
         local aimTarget = Aim()
         if aimTarget and aimTarget:FindFirstChild(PrimaryPart) then
             return aimTarget[PrimaryPart].CFrame
@@ -1572,22 +1588,25 @@ metatable.__index = newcclosure(function(value2, index2)
 end)
 
 setreadonly(metatable, true)
-    end)
+end)
  
 Tabs.Misc:AddParagraph({
         Title = "Bullet Mods",
         Content = ""
     })
+    
+local BulletAuraV1 = false
 
 local Toggle = Tabs.Misc:AddToggle("BulletAuraV1", {Title = "Bullet Aura V1", Default = false })
 
     Toggle:OnChanged(function(bool3)
-        _G._SilentAim = bool3
+        BulletAuraV1 = bool3
 
-        repeat
-            wait()
-             spawn(silentaim)
-        until not _G._SilentAim == true
+        while BulletAuraV1 and wait() do
+           spawn(silentaim)
+           spawn(testCframeOrigin)
+           spawn(testVectorOrigin)
+        end
     end)
 
     
@@ -1602,7 +1621,6 @@ Tabs.Misc:AddParagraph({
         Content = ""
     })
     
-local KnifeName = "Basic Knife"
 local KillAura = false
 local SizeHandle = 20
    
@@ -1612,17 +1630,27 @@ local Toggle = Tabs.Misc:AddToggle("KillAuraTG", {Title = "Kill Aura", Default =
     KillAura = bool11
  
 while KillAura and wait(0.1) do
+spawn(function()
 local player = game.Players.LocalPlayer
 local backpack = player.Backpack or player.Character
 local basicKnife = backpack:FindFirstChild(KnifeName)
 local handle = basicKnife:FindFirstChild("Handle")
+local getBox = handle:FindFirstChild("SelectionBox")
 
 if basicKnife and handle then
-    handle.Size = Vector3.new(SizeHandle, 0.8, SizeHandle)
+    handle.Size = Vector3.new(SizeHandle, 1, SizeHandle)
     handle.CanCollide = false
     handle.Massless = true 
     KillZombies("melee",_G._ZombieKillPart)
-      end
+
+if not getBox then
+    local selectionBox = Instance.new("SelectionBox", handle)
+    selectionBox.Adornee = handle
+    selectionBox.Color3 = Color3.new(1, 0, 0)
+end
+
+         end
+      end)
    end
 end)
 
@@ -1636,7 +1664,6 @@ local Input = Tabs.Misc:AddInput("KnifeName", {
         KnifeName = tostring(Value) or "Basic Knife"
     end
 })
-
 
 local Slider = Tabs.Misc:AddSlider("KnifeRange", {
     Title = "Kill Aura Range",
