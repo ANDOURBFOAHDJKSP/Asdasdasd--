@@ -183,7 +183,7 @@ end
 
 local Window = Fluent:CreateWindow({
     Title = "Unknown Hub X Evade (Testing)",
-    SubTitle = "V1.6.1 Made by Unknownproooolucky discord.gg/d2a3KkTD6r",
+    SubTitle = "V1.7 Made by Unknownproooolucky discord.gg/d2a3KkTD6r",
     TabWidth = 160,
     Size = UDim2.fromOffset(580, 460),
     Acrylic = false, -- The blur may be detectable, setting this to false disables blur entirely
@@ -501,19 +501,6 @@ else
            end
         end
     end)
-
---[[
-local NoCameraShake = false
-
-local Toggle = Tabs.Main:AddToggle("NoCamShake", {Title = "No Camera Shake", Default = false })
-
-    Toggle:OnChanged(function(State)
-    NoCameraShake = State
-while NoCameraShake and wait(0.1) do
-game:GetService("Players").LocalPlayer.PlayerScripts.CameraShake.Value = CFrame.new(0,0,0) * CFrame.new(0,0,0)
-		end        
-    end)
- ]]
  
 local NoDamage = false
 
@@ -756,15 +743,13 @@ Tabs.Main:AddButton({
 
 Tabs.AutoFarm:AddParagraph({
         Title = "Auto Farm",
-        Content = "Coming Soon..."
+        Content = "Recommend: Enable Quick Revive"
     })
 
---[[
 local FarmMoney = false
 local FarmTickets = false
 local AFKFarm = false
 local WorkspacePlayers = game:GetService("Workspace").Game.Players 
-local LegitReviveMode = false
 
 local GetDownedPlr = function()
     for i,v in pairs(WorkspacePlayers:GetChildren()) do
@@ -773,20 +758,20 @@ local GetDownedPlr = function()
         end
     end
 end
- 
+
 local revive = function()
     local downedplr = GetDownedPlr()
     if downedplr ~= nil and downedplr:FindFirstChild('HumanoidRootPart') then
         task.spawn(function()
             while task.wait() do
                 if game:GetService("Players").LocalPlayer.Character then
-                    game:GetService("Players").LocalPlayer.Character:FindFirstChild('HumanoidRootPart').CFrame = CFrame.new(downedplr:FindFirstChild('HumanoidRootPart').Position.X, downedplr:FindFirstChild('HumanoidRootPart').Position.Y - 0.1, downedplr:FindFirstChild('HumanoidRootPart').Position.Z)
+                    game:GetService("Players").LocalPlayer.Character:FindFirstChild('HumanoidRootPart').CFrame = CFrame.new(downedplr:FindFirstChild('HumanoidRootPart').Position.X, downedplr:FindFirstChild('HumanoidRootPart').Position.Y + 3, downedplr:FindFirstChild('HumanoidRootPart').Position.Z)
                     task.wait()
-                    game:GetService("ReplicatedStorage").Events.Revive.RevivePlayer:FireServer(tostring(downedplr), false)
+                    game:GetService("ReplicatedStorage").Events.Character.Interact:FireServer("Revive", false, tostring(downedplr))
                     task.wait(4.5)
-                    game:GetService("ReplicatedStorage").Events.Revive.RevivePlayer:FireServer(tostring(downedplr), true)
-                    game:GetService("ReplicatedStorage").Events.Revive.RevivePlayer:FireServer(tostring(downedplr), true)
-                    game:GetService("ReplicatedStorage").Events.Revive.RevivePlayer:FireServer(tostring(downedplr), true)
+                    game:GetService("ReplicatedStorage").Events.Character.Interact:FireServer("Revive", true, tostring(downedplr))
+                    game:GetService("ReplicatedStorage").Events.Character.Interact:FireServer("Revive", true, tostring(downedplr))
+                    game:GetService("ReplicatedStorage").Events.Character.Interact:FireServer("Revive", true, tostring(downedplr))
                     break
                 end
             end
@@ -797,8 +782,8 @@ end
 task.spawn(function()
     while task.wait() do
         if FarmMoney then
-            if game:GetService("Players").LocalPlayer.Character and game:GetService("Players").LocalPlayer.Character:GetAttribute("Downed") then
-                game:GetService("ReplicatedStorage").Events.Respawn:FireServer()
+            if game:GetService("Players").LocalPlayer.Character and game:GetService("Players").LocalPlayer.Character:GetAttribute("State") == "Downed" then
+                game:GetService("ReplicatedStorage").Events.Player.ChangePlayerMode:FireServer(true)
                 task.wait(3)
             else
                 revive()
@@ -875,8 +860,6 @@ Tabs.AutoFarm:AddButton({
         end
     })
     
-]]
-
 -- Nextbot
 
 Tabs.Nextbot:AddParagraph({
@@ -1123,7 +1106,6 @@ Tabs.Misc:AddParagraph({
         Content = " "
     })
 
---[[
 local TSpeed = 1500
 local TJump = 3
 local SavedSpeed = 1500
@@ -1152,7 +1134,21 @@ local Input = Tabs.Misc:AddInput("PlayerJump", {
             SavedJump = tonumber(Value) or 3
         end
     })
-    
+
+local RunUpdater = true
+
+spawn(function()
+while RunUpdater and wait(4) do
+for i, v in pairs(getgc(true)) do
+     if type(v) == 'table' and rawget(v, 'JumpHeight') then
+          v.Speed = TSpeed
+          v.JumpHeight = TJump
+          end
+      end
+    end
+end)
+
+
 Tabs.Misc:AddParagraph({
         Title = "Emote Mods",
         Content = " "
@@ -1180,15 +1176,9 @@ local Toggle = Tabs.Misc:AddToggle("EmoteD1", {Title = "Sprint Emote/Down Dash",
        if FakeEmoteDownDash then
        if game.Workspace:FindFirstChild("Game") and game.Workspace.Game:FindFirstChild("Players") and game.Workspace.Game.Players:FindFirstChild(game:GetService("Players").LocalPlayer.Name) then
 			local char = game:GetService("Players").LocalPlayer.Character or game:GetService("Players").LocalPlayer.CharacterAdded:Wait()
-			local stats = char:WaitForChild("StatChanges", 3)
-			if stats == nil then
-			  TSpeed = SavedSpeed
-				return
-			end
-			local EmoteError = char:GetAttribute("Emoting")
-			if char:GetAttribute("Crouching") == true and EmoteError and EmoteError == true then
+			if char and char:GetAttribute("State") == "Emoting" or char:GetAttribute("State") == "EmotingSlide" or char:GetAttribute("State") == "EmotingSlideAir" then
 				TSpeed = SelectedEmoteSpeed
-			elseif stats:FindFirstChild("Speed") and stats:FindFirstChild("Speed"):FindFirstChild("Downed") and char:GetAttribute("Crouching") == true then
+			elseif char and char:GetAttribute("State") == "Downed" then
 			    TSpeed = 7500
 			else
 			    TSpeed = SavedSpeed
@@ -1211,13 +1201,7 @@ local Toggle = Tabs.Misc:AddToggle("EmoteD2", {Title = "Sprint Emote Dash (No Cr
        if FakeEmoteDownDash2 then
            if game.Workspace:FindFirstChild("Game") and game.Workspace.Game:FindFirstChild("Players") and game.Workspace.Game.Players:FindFirstChild(game:GetService("Players").LocalPlayer.Name) then
 			local char = game:GetService("Players").LocalPlayer.Character or game:GetService("Players").LocalPlayer.CharacterAdded:Wait()
-			local stats = char:WaitForChild("StatChanges", 3)
-			if stats == nil then
-			  TSpeed = SavedSpeed
-				return
-			end
-			local EmoteError = char:GetAttribute("Emoting")
-			if EmoteError and EmoteError == true then
+			if char and char:GetAttribute("State") == "Emoting" or char:GetAttribute("State") == "EmotingAir" then
 				TSpeed = SelectedEmoteSpeed
 			else
 			    TSpeed = SavedSpeed
@@ -1229,7 +1213,7 @@ local Toggle = Tabs.Misc:AddToggle("EmoteD2", {Title = "Sprint Emote Dash (No Cr
 
   local Dropdown = Tabs.Misc:AddDropdown("EmoteSpeed", {
         Title = "Emote Dash Speed",
-        Values = {4500, 10000, 15000, 25000, 35000, 45000, 55000, 67000, 75000, 80000, 95000, 100000, 125000},
+        Values = {1000, 2000, 3000, 4000, 5000, 6000, 7000, 8000, 9000, 10000, 12500, 15000, 20000},
         Multi = false,
         Default = 2,
     })
@@ -1237,35 +1221,7 @@ local Toggle = Tabs.Misc:AddToggle("EmoteD2", {Title = "Sprint Emote Dash (No Cr
     Dropdown:OnChanged(function(Value)
         SelectedEmoteSpeed = Value
     end)
-]]
 
---[[
-local old
-old = hookmetamethod(game,"__namecall",newcclosure(function(self,...)
-    local Args = {...}
-    local method = getnamecallmethod()
-    if tostring(self) == 'Communicator' and method == "InvokeServer" and Args[1] == "update" then
-        return TSpeed, TJump 
-    end
-    return old(self,...)
-end))
-
-
-local old
-old = hookmetamethod(game, "__namecall", newcclosure(function(self, ...)
-    local Args = {...}
-    local method = getnamecallmethod()
-
-    -- Compare the name directly without using tostring
-    if self.Name == 'Communicator' and method == "InvokeServer" and Args[1] == "update" then
-        return TSpeed, TJump 
-    end
-
-    return old(self, ...)
-end))
-]]
-
---[[
 Tabs.Misc:AddParagraph({
         Title = "Fun Emotes",
         Content = "Mobile/Tablet only"
@@ -1274,7 +1230,6 @@ Tabs.Misc:AddParagraph({
 local BreakEmoteTG = false
 local BindableButtonToggle = false
 local SelectedEmoteSlot = "1"
-local CAS = game:GetService("ContextActionService")
 
 function BreakEmote()
 if game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:GetAttribute("Emoting") == true then
@@ -1291,90 +1246,6 @@ Toggle:OnChanged(function(StateBruh)
       BreakEmote()
    end
 end)
-]]
-
---[[
-    
-local CAS = game:GetService("ContextActionService")
-local UserInputService = game:GetService("UserInputService")
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
-local Players = game:GetService("Players")
-local LocalPlayer = Players.LocalPlayer
-
-function CreateBindableButton()
-    local function Action(actionName, inputState)
-      if inputState == Enum.UserInputState.Begin then
-        local ohString1 = SelectedEmoteSlot
-        game:GetService("ReplicatedStorage").Events.Emote:FireServer(ohString1)
-
-        wait(0.1)
-
-        ohString1 = "Crouching"
-        local ohBoolean2 = true
-        game.Players.LocalPlayer.Character.Communicator:InvokeServer(ohString1, ohBoolean2)
-        end
-    end
-
-    local function Action2(actionName, inputState)
-       if inputState == Enum.UserInputState.Begin then
-        local ohString1 = "Crouching"
-        local ohBoolean2 = false
-        game.Players.LocalPlayer.Character.Communicator:InvokeServer(ohString1, ohBoolean2)
-        end
-    end
-
-    -- Bind the actions
-    CAS:BindAction("ButtonTarget", Action, true, Enum.KeyCode.E)
-    CAS:BindAction("ButtonTarget2", Action2, true, Enum.KeyCode.E)
-
-    -- Set properties for ButtonTarget
-    local button1 = CAS:GetButton("ButtonTarget")
-    if button1 then  -- Ensure the button exists before modifying properties
-        CAS:SetPosition("ButtonTarget", UDim2.new(0, 0, 0.5, 0))
-        CAS:SetTitle("ButtonTarget", "Emote or Crouch")
-        CAS:SetImage("ButtonTarget", "IMAGEHERE")  -- Replace "IMAGEHERE" with the actual image ID
-        button1.Size = UDim2.new(0.3, 0, 0.3, 0) -- Set size if button exists
-    end
-
-    -- Set properties for ButtonTarget2
-    local button2 = CAS:GetButton("ButtonTarget2")
-    if button2 then  -- Ensure the button exists before modifying properties
-        CAS:SetPosition("ButtonTarget2", UDim2.new(0, 0, 0.2, 0))
-        CAS:SetTitle("ButtonTarget2", "Uncrouch")
-        CAS:SetImage("ButtonTarget2", "IMAGEHERE")  -- Replace "IMAGEHERE" with the actual image ID
-        button2.Size = UDim2.new(0.3, 0, 0.3, 0) -- Set size if button exists
-    end
-    
-    MakeDraggable(button1, button1)
-    MakeDraggable(button2, button2)
-end
-
-function RemoveBindableButton()
-    CAS:UnbindAction("ButtonTarget")
-    CAS:UnbindAction("ButtonTarget2")
-end
-
-local Toggle = Tabs.Misc:AddToggle("MacroMode", {Title = "Macro Button Toggle", Default = false})
-
-Toggle:OnChanged(function(State)
-    if State then
-        CreateBindableButton() -- Create buttons when toggled on
-    else
-        RemoveBindableButton() -- Remove buttons when toggled off
-    end
-end)
-    
- local Dropdown = Tabs.Misc:AddDropdown("SelectionEmoteSlot", {
-        Title = "Select Emote Slots",
-        Values = {"1", "2", "3", "4", "5", "6"},
-        Multi = false,
-        Default = 1,
-    })
-
-    Dropdown:OnChanged(function(Value)
-        SelectedEmoteSlot = Value
-    end)
-]]
 
 Tabs.Misc:AddParagraph({
         Title = "Adjusting Bounce",
@@ -1391,14 +1262,14 @@ local Toggle = Tabs.Misc:AddToggle("AdjustBounce", {Title = "Player Bounce Toggl
      
   while BounceToggle and wait(0.1) do
     local player = game.Players.LocalPlayer
-    local humanoid = player.Character:FindFirstChildOfClass("Humanoid") 
+    local humanoid = player.Character:FindFirstChild("Humanoid")
    if not  BounceToggle and humanoid then
        humanoid.WalkSpeed = 0
      end
      
     if player.Character and humanoid then
           humanoid.WalkSpeed = AdjustedBounce
-        if player.Character:GetAttribute("State") == "Downed" or not BounceToggle then
+        if player.Character:GetAttribute("State") == "Downed" or player.Character:GetAttribute("State") == "Emoting" or player.Character:GetAttribute("State") == "EmotingAir" or not BounceToggle then
           humanoid.WalkSpeed = 0
        end
     end
@@ -1532,7 +1403,6 @@ spawn(function()
       if BHop2 then
           local humanoid = game:GetService("Players").LocalPlayer.Character:FindFirstChildOfClass("Humanoid")
             if humanoid and humanoid.FloorMaterial ~= Enum.Material.Air and humanoid then
-             game.Players.LocalPlayer.Character.Communicator:InvokeServer("Jump")
              humanoid.Jump = true
           end
          end
