@@ -141,23 +141,9 @@ RunService.RenderStepped:Connect(function()
 end)
 
 mainopen.MouseButton1Click:Connect(function()
-    game:GetService("VirtualInputManager"):SendKeyEvent(true, "LeftControl", false, game)
-    game:GetService("VirtualInputManager"):SendKeyEvent(false, "LeftControl", false, game)
+    game:GetService("VirtualInputManager"):SendKeyEvent(true, "One", false, game)
+    game:GetService("VirtualInputManager"):SendKeyEvent(false, "One", false, game)
 end)
-
-local player = game:GetService("Players").LocalPlayer
-local screenGui = Instance.new("ScreenGui", player:WaitForChild("PlayerGui"))
-
--- Prevent the GUI from resetting when the player respawns
-screenGui.ResetOnSpawn = false
-
-local circleDot = Instance.new("ImageLabel", screenGui)
-
--- Set properties for the circle dot
-circleDot.Size = UDim2.new(0, 10, 0, 10) -- 10x10 pixels
-circleDot.Position = UDim2.new(0.5, -5, 0.476, -5) -- Center horizontally and slightly below center vertically
-circleDot.Image = "rbxassetid://4608020054" -- Set the image to a circular dot
-circleDot.BackgroundTransparency = 1 -- Make the background transparent
 
 if not require then
     return game:GetService("Players").LocalPlayer:Kick("UNC RESTRICTION MISSING: require(path) | PLEASE TRY OTHER EXECUTORS")
@@ -196,13 +182,13 @@ print("Common Api")
 end
 
 local Window = Fluent:CreateWindow({
-    Title = "Unknown Hub X Evade",
-    SubTitle = "V1.6 Made by Unknownproooolucky discord.gg/d2a3KkTD6r",
+    Title = "Unknown Hub X Evade (Testing)",
+    SubTitle = "V1.6.1 Made by Unknownproooolucky discord.gg/d2a3KkTD6r",
     TabWidth = 160,
     Size = UDim2.fromOffset(580, 460),
     Acrylic = false, -- The blur may be detectable, setting this to false disables blur entirely
     Theme = "Dark",
-    MinimizeKey = Enum.KeyCode.LeftControl -- Used when theres no MinimizeKeybind
+    MinimizeKey = Enum.KeyCode.One
 })
 
 local Tabs = {
@@ -365,10 +351,10 @@ Toggle:OnChanged(function(State)
                             local labelText = string.format("%s - %d M", player.Name, distance)
 
                             local gamePlayer = workspace:WaitForChild("Game", 1337).Players:FindFirstChild(player.Name)
-                            if gamePlayer and gamePlayer:GetAttribute('Downed') then
+                            if gamePlayer and gamePlayer:GetAttribute('Downed') == true then
                                 humanoidRootPart.PlayerESP.TextLabel.TextColor3 = Color3.fromRGB(255, 0, 0)
                                 labelText = labelText .. " (Downed)"
-                            elseif gamePlayer and gamePlayer:GetAttribute('Team') == "Enemy" then
+                            elseif gamePlayer and gamePlayer:GetAttribute('Team') == "Nextbot" then
                                 humanoidRootPart.PlayerESP.TextLabel.TextColor3 = Color3.fromRGB(255, 0, 0)
                                 labelText = labelText .. " (Enemy)"
                             else
@@ -433,24 +419,17 @@ local Toggle = Tabs.Main:AddToggle("AutoRespawn", {Title = "Auto Respawn", Defau
       wait(0.1)
       if AutoRespawn then
 		 local char = game:GetService("Players").LocalPlayer.Character or game:GetService("Players").LocalPlayer.CharacterAdded:Wait()
-			local stats = char:WaitForChild("StatChanges", 3)
-			if stats == nil then
-				return
-			end
-			if stats:FindFirstChild("Speed") and stats:FindFirstChild("Speed"):FindFirstChild("Downed") then
-				game:GetService("ReplicatedStorage").Events.Respawn:FireServer()
-			end
-		end
+		   if char and char:GetAttribute("State") == "Downed" then
+		        game:GetService("ReplicatedStorage").Events.Player.ChangePlayerMode:FireServer(true)
+	      	end
+	       end
 		until AutoRespawn == false
     end)
 
 local AutoWhistle = false
 
 function autowistlefunction()
-    local ohString1 = "Whistle"
-    local ohBoolean2 = true
-     game:GetService("Players").LocalPlayer.PlayerScripts.Events.KeybindUsed:Fire(ohString1, ohBoolean2)
-   game:GetService("ReplicatedStorage").Events.Whistle:FireServer()
+   game:GetService("ReplicatedStorage").Events.UseWhistle:FireServer()
 end
 
 local Toggle = Tabs.Main:AddToggle("AutoRespawn", {Title = "Auto Whistle", Default = false })
@@ -471,7 +450,7 @@ local Toggle = Tabs.Main:AddToggle("QuickRevive", {Title = "Quick Revive", Defau
 if Revive_Mod then
 workspace.Game.Settings:SetAttribute("ReviveTime", 1.75)
 		else
-workspace.Game.Settings:SetAttribute('ReviveTime', 3)
+workspace.Game.Settings:SetAttribute('ReviveTime', 2)
 		end        
     end)
     
@@ -518,11 +497,12 @@ else
 
     while TimerText and wait(0.1) do
        if game.Players.LocalPlayer.PlayerGui:FindFirstChild("TimerGui") then
-             game.Players.LocalPlayer.PlayerGui.TimerGui.TextLabel.Text = game.Players.LocalPlayer.PlayerGui:WaitForChild("HUD").Center.Vote.Info.Read.Timer.Text
+             game.Players.LocalPlayer.PlayerGui.TimerGui.TextLabel.Text = workspace.Game.Stats:GetAttribute("Timer")
            end
         end
     end)
-    
+
+--[[
 local NoCameraShake = false
 
 local Toggle = Tabs.Main:AddToggle("NoCamShake", {Title = "No Camera Shake", Default = false })
@@ -533,6 +513,7 @@ while NoCameraShake and wait(0.1) do
 game:GetService("Players").LocalPlayer.PlayerScripts.CameraShake.Value = CFrame.new(0,0,0) * CFrame.new(0,0,0)
 		end        
     end)
+ ]]
  
 local NoDamage = false
 
@@ -759,7 +740,7 @@ Tabs.Main:AddButton({
         Title = "Respawn Button",
         Description = "",
         Callback = function()
-        game:GetService("ReplicatedStorage").Events.Respawn:FireServer()
+        game:GetService("ReplicatedStorage").Events.Player.ChangePlayerMode:FireServer(true)
         end
     })
     
@@ -775,9 +756,10 @@ Tabs.Main:AddButton({
 
 Tabs.AutoFarm:AddParagraph({
         Title = "Auto Farm",
-        Content = "Recommend: Enable Quick Revive to Farm Money Faster"
+        Content = "Coming Soon..."
     })
 
+--[[
 local FarmMoney = false
 local FarmTickets = false
 local AFKFarm = false
@@ -893,6 +875,8 @@ Tabs.AutoFarm:AddButton({
         end
     })
     
+]]
+
 -- Nextbot
 
 Tabs.Nextbot:AddParagraph({
@@ -907,12 +891,12 @@ function AntiNextbot()
     if game.Workspace:FindFirstChild("Game") and game.Workspace.Game:FindFirstChild("Players") and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
     
         local playerTeam = game.Workspace.Game.Players[game.Players.LocalPlayer.Name]:GetAttribute("Team")
-        if playerTeam == "Enemy" then
-            return -- Exit the function if the player is on the "Enemy" team
+        if playerTeam == "Nextbot" then
+            return -- Exit the function if the player is on the "Nextbot" team
         end
     
         for i, v in pairs(game.Workspace.Game.Players:GetDescendants()) do
-            if v:IsA("Model") and v:GetAttribute("Team") == "Enemy" then
+            if v:IsA("Model") and v:GetAttribute("Team") == "Nextbot" then
                 local humanoidRootPart = v:FindFirstChild("HumanoidRootPart") or v:FindFirstChild("HRP")
                 if humanoidRootPart then
                     local distance = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - humanoidRootPart.Position).Magnitude
@@ -1041,7 +1025,7 @@ Tabs.Nextbot:AddParagraph({
 function KillAll()
     if game.Workspace:FindFirstChild("Game") and game.Workspace.Game:FindFirstChild("Players") and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
         for _, player in pairs(game.Players:GetPlayers()) do
-            if player ~= game.Players.LocalPlayer and player.Character and player.Character:FindFirstChild("HumanoidRootPart") and not player.Character :GetAttribute("Team") == "Enemy" then
+            if player ~= game.Players.LocalPlayer and player.Character and player.Character:FindFirstChild("HumanoidRootPart") and not player.Character :GetAttribute("Team") == "Nextbot" then
                 game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = player.Character.HumanoidRootPart.CFrame * CFrame.new(0, 0, 2)
             end
         end
@@ -1139,6 +1123,7 @@ Tabs.Misc:AddParagraph({
         Content = " "
     })
 
+--[[
 local TSpeed = 1500
 local TJump = 3
 local SavedSpeed = 1500
@@ -1252,6 +1237,7 @@ local Toggle = Tabs.Misc:AddToggle("EmoteD2", {Title = "Sprint Emote Dash (No Cr
     Dropdown:OnChanged(function(Value)
         SelectedEmoteSpeed = Value
     end)
+]]
 
 --[[
 local old
@@ -1263,7 +1249,7 @@ old = hookmetamethod(game,"__namecall",newcclosure(function(self,...)
     end
     return old(self,...)
 end))
-]]
+
 
 local old
 old = hookmetamethod(game, "__namecall", newcclosure(function(self, ...)
@@ -1277,7 +1263,9 @@ old = hookmetamethod(game, "__namecall", newcclosure(function(self, ...)
 
     return old(self, ...)
 end))
+]]
 
+--[[
 Tabs.Misc:AddParagraph({
         Title = "Fun Emotes",
         Content = "Mobile/Tablet only"
@@ -1303,6 +1291,9 @@ Toggle:OnChanged(function(StateBruh)
       BreakEmote()
    end
 end)
+]]
+
+--[[
     
 local CAS = game:GetService("ContextActionService")
 local UserInputService = game:GetService("UserInputService")
@@ -1383,6 +1374,7 @@ end)
     Dropdown:OnChanged(function(Value)
         SelectedEmoteSlot = Value
     end)
+]]
 
 Tabs.Misc:AddParagraph({
         Title = "Adjusting Bounce",
@@ -1405,9 +1397,8 @@ local Toggle = Tabs.Misc:AddToggle("AdjustBounce", {Title = "Player Bounce Toggl
      end
      
     if player.Character and humanoid then
-       local SpeedValue = player.Character:GetAttribute("CurrentMoveSpeed")
-          humanoid.WalkSpeed = SpeedValue + AdjustedBounce
-        if player.Character:GetAttribute("Emoting") == true or SpeedValue == 0 or player.Character:GetAttribute("Downed") == true or not BounceToggle then
+          humanoid.WalkSpeed = AdjustedBounce
+        if player.Character:GetAttribute("State") == "Downed" or not BounceToggle then
           humanoid.WalkSpeed = 0
        end
     end
@@ -1574,49 +1565,6 @@ else
 destroytoggle()
 end
 end)
-
-local SelectedCharacter = ""
-local SelectedUtilities = ""
-
-function UpdateFakeEquipment()
-game.Workspace.Game.Players[game:GetService("Players").LocalPlayer.Name]:SetAttribute("Character", SelectedCharacter)
-game.Workspace.Game.Players[game:GetService("Players").LocalPlayer.Name]:SetAttribute("Equipped", SelectedUtilities)
-end
-
-Tabs.Misc:AddParagraph({
-        Title = "Fake Equipment",
-        Content = "(Visual)"
-    })
- 
- local Dropdown = Tabs.Misc:AddDropdown("SelectionCharacter", {
-        Title = "Select Character",
-        Values = {"Player", "Jard", "Clownjard", "Bobo", "Seal", "Trooper", "DefectRebel", "Vanguard", "Krampus"},
-        Multi = false,
-        Default = 1,
-    })
-
-    Dropdown:OnChanged(function(Value)
-        SelectedCharacter = Value
-    end)
-    
-local Dropdown = Tabs.Misc:AddDropdown("SelectionUtility", {
-        Title = "Select Utility",
-        Values = {"Weaponless", "Compass", "Timer", "Decoy", "Radio", "GrappleHook", "AK-47", "Lantern", "Flashlight", "Night Vision", "Wrench"},
-        Multi = false,
-        Default = 1,
-    })
-
-    Dropdown:OnChanged(function(Value)
-        SelectedUtilities = Value
-    end)
-    
- Tabs.Misc:AddButton({
-        Title = "Update Selected Fake Equipment",
-        Description = "",
-        Callback = function()
-          UpdateFakeEquipment()
-        end
-    })
 
 Tabs.Misc:AddParagraph({
         Title = "Modified Client",
