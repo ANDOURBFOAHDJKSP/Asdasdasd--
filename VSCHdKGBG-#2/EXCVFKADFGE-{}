@@ -205,7 +205,7 @@ local Tabs = {
 local Options = Fluent.Options
 
 Fluent:Notify({
-        Title = "📢 Announcement 📢",
+        Title = "ðŸ“¢ Announcement ðŸ“¢",
         Content = "The icon is fixed that disappearing ur ui and now u can use it",
         SubContent = "Unknownproooolucky Message", -- Optional
         Duration = 10 -- Set to nil to make the notification not disappear
@@ -546,7 +546,7 @@ local Toggle = Tabs.Main:AddToggle("RemoveDamageParts", {Title = "Remove Damage 
 repeat
 wait(0.1)
 if NoDamage then
-disabletouch()
+spawn(disabletouch)
 		end  
 	 until NoDamage == false
     end)
@@ -821,11 +821,11 @@ task.spawn(function()
         end
         if FarmMoney == false and AFKFarm and game:GetService("Players").LocalPlayer.Character:FindFirstChild('HumanoidRootPart') ~= nil then
             game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(Vector3.new(0, -5000, 0))
-            wait(0.1)
+            wait(3)
             game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(Vector3.new(0, 5000, 0))
-            wait(0.1)
+            wait(3)
             game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(Vector3.new(5000, 0, 0))
-            wait(0.1)
+            wait(3)
             game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(Vector3.new(0, 0, 5000))
         end
     end
@@ -1174,7 +1174,7 @@ local RunUpdater = true
 
 spawn(function()
 repeat
-if RunUpdater and wait(0.3) then
+if RunUpdater and wait(1) then
 for i, v in pairs(getgc(true)) do
      if type(v) == 'table' and rawget(v, 'JumpHeight') then
           v.Speed = TSpeed
@@ -1218,7 +1218,11 @@ local Toggle = Tabs.Misc:AddToggle("EmoteD1", {Title = "Sprint Emote/Down Dash",
 			elseif char and char:GetAttribute("State") == "Downed" then
 			    TSpeed = 7500
 			else
-			    TSpeed = SavedSpeed
+	for i, v in pairs(getgc(true)) do
+     if type(v) == 'table' and rawget(v, 'JumpHeight') then
+          v.Speed = SavedSpeed
+          end
+      end
 			end
 		end
      end
@@ -1241,7 +1245,11 @@ local Toggle = Tabs.Misc:AddToggle("EmoteD2", {Title = "Sprint Emote Dash (No Cr
 			if char and char:GetAttribute("State") == "Emoting" or char:GetAttribute("State") == "EmotingAir" then
 				TSpeed = SelectedEmoteSpeed
 			else
-			    TSpeed = SavedSpeed
+for i, v in pairs(getgc(true)) do
+     if type(v) == 'table' and rawget(v, 'JumpHeight') then
+          v.Speed = SavedSpeed
+          end
+      end
 			end
 		end
      end
@@ -1307,7 +1315,7 @@ local Toggle = Tabs.Misc:AddToggle("AdjustBounce", {Title = "Player Bounce Toggl
      
     if player.Character and humanoid then
           humanoid.WalkSpeed = AdjustedBounce
-        if player.Character:GetAttribute("State") == "Downed" or player.Character:GetAttribute("State") == "Emoting" or player.Character:GetAttribute("State") == "EmotingAir" or not BounceToggle then
+        if player.Character:GetAttribute("State") == "Default" or player.Character:GetAttribute("State") == "Downed" or player.Character:GetAttribute("State") == "Emoting" or player.Character:GetAttribute("State") == "EmotingAir" or not BounceToggle then
           humanoid.WalkSpeed = 0
             end
         end
@@ -1436,17 +1444,6 @@ while true and wait(0.1) do
        end
     end
 end)
-
-spawn(function()
-     while true and wait(0.1) do
-      if BHop2 then
-          local humanoid = game:GetService("Players").LocalPlayer.Character:FindFirstChildOfClass("Humanoid")
-            if humanoid and humanoid.FloorMaterial ~= Enum.Material.Air and humanoid then
-             humanoid.Jump = true
-          end
-         end
-     end
- end)
 
 local Players = game:GetService("Players")
 
