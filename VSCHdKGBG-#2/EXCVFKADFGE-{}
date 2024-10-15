@@ -1174,7 +1174,7 @@ local RunUpdater = true
 
 spawn(function()
 repeat
-if RunUpdater and wait(1) then
+if RunUpdater and wait(4) then
 for i, v in pairs(getgc(true)) do
      if type(v) == 'table' and rawget(v, 'JumpHeight') then
           v.Speed = TSpeed
@@ -1258,7 +1258,7 @@ for i, v in pairs(getgc(true)) do
 
   local Dropdown = Tabs.Misc:AddDropdown("EmoteSpeed", {
         Title = "Emote Dash Speed",
-        Values = {1000, 2000, 3000, 4000, 5000, 6000, 7000, 8000, 9000, 10000, 12500, 15000, 20000},
+        Values = {1000, 2000, 3000, 4000, 5000, 6000, 7000, 8000, 9000, 10000, 12500, 15000, 20000, 30000, 40000, 50000},
         Multi = false,
         Default = 2,
     })
