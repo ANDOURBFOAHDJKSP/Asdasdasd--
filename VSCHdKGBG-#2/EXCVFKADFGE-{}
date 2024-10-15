@@ -1174,7 +1174,7 @@ local RunUpdater = true
 
 spawn(function()
 repeat
-if RunUpdater and wait(0.09) then
+if RunUpdater and wait(0.3) then
 for i, v in pairs(getgc(true)) do
      if type(v) == 'table' and rawget(v, 'JumpHeight') then
           v.Speed = TSpeed
