@@ -1222,6 +1222,7 @@ local Toggle = Tabs.Misc:AddToggle("EmoteD1", {Title = "Sprint Emote/Down Dash",
      if type(v) == 'table' and rawget(v, 'JumpHeight') then
           v.Speed = SavedSpeed
           end
+        wait(0.3)
       end
 			end
 		end
@@ -1249,6 +1250,7 @@ for i, v in pairs(getgc(true)) do
      if type(v) == 'table' and rawget(v, 'JumpHeight') then
           v.Speed = SavedSpeed
           end
+         wait(0.3)
       end
 			end
 		end
