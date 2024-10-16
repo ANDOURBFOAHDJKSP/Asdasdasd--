@@ -395,22 +395,56 @@ local Toggle = Tabs.Main:AddToggle("ESPObjective", {Title = "ESP Objective", Def
     Toggle:OnChanged(function(State)
         ObjectiveESP = State
         
-        task.spawn(
-                function()
-			while task.wait(0.4) do
-				ClearESP('Object_Tracker')
-				if not ObjectiveESP then
-					break
-				end
-				pcall(function()
-		          if workspace.Game.Map.Parts:FindFirstChild("Objectives") then
-              	   for i, v in next, workspace.Game.Map.Parts.Objectives:GetChildren() do
-						Simple_Create(v:FindFirstChildWhichIsA("BasePart"), "(OBJECTIVES)", "Object_Tracker")
-						end
-					end
-				end)
-			end
-	 end)
+	
+while ObjectiveESP and wait(0.4) do
+ pcall(function()
+        if ObjectiveESP and workspace.Game.Map.Parts:FindFirstChild("Objectives") then
+            local localPlayer = game:GetService("Players").LocalPlayer
+            local localCharacter = localPlayer.Character
+            local localHumanoidRootPart = localCharacter and localCharacter:FindFirstChild("HumanoidRootPart")
+
+            if not localHumanoidRootPart then
+                return
+            end
+
+            for i, v in next, workspace.Game.Map.Parts.Objectives:GetChildren() do
+                if v:FindFirstChildWhichIsA("BasePart") then
+                    if not v:FindFirstChild("ObjectiveESP") then
+                        local BillboardGui = Instance.new("BillboardGui")
+                        local TextLabel = Instance.new("TextLabel")
+
+                        -- Billboard settings
+                        BillboardGui.Parent = v 
+                        BillboardGui.Name = "ObjectiveESP"
+                        BillboardGui.AlwaysOnTop = true
+                        BillboardGui.Size = UDim2.new(0, 50, 0, 50)
+                        BillboardGui.StudsOffset = Vector3.new(0, 2, 0)
+                        BillboardGui.MaxDistance = 500
+
+                        -- TextLabel settings
+                        TextLabel.Parent = BillboardGui
+                        TextLabel.BackgroundColor3 = Color3.new(1, 1, 1) -- White background
+                        TextLabel.BackgroundTransparency = 1 -- Fully transparent
+                        TextLabel.Size = UDim2.new(1, 0, 1, 0) -- Fill the billboard
+                        TextLabel.Text = "(OBJECTIVES)" -- Display the grandparent name
+                        TextLabel.TextColor3 = Color3.new(1, 0, 0) -- Red text
+                        TextLabel.TextScaled = true -- Scale text to fit
+                        TextLabel.Font = Enum.Font.GothamBold -- Set font to GothamBold
+                    end
+                    
+                   local distance = math.floor((localHumanoidRootPart.Position - v.Position).Magnitude)
+                    v.ObjectiveESP.TextLabel.Text = string.format("(OBJECTIVES) - %d M", distance)
+                end
+            end
+        else
+            for _, v in pairs(game.Workspace.Game.Effects.Tickets:GetDescendants()) do
+                if v:IsA("BasePart") and v:FindFirstChild("ObjectiveESP") then
+                    v.ObjectiveESP:Destroy()
+                end
+            end
+        end
+    end)
+  end
  end)
  
  local ESPTickets = false
@@ -429,7 +463,54 @@ if highlight then
     highlight.OutlineTransparency = 0  -- Ensure the outline is visible
     highlight.FillColor = Color3.fromRGB(255, 0, 0)  -- Example: Set fill color to red
     highlight.OutlineColor = Color3.fromRGB(255, 255, 255)  -- Example: Set outline color to white
+end
+ pcall(function()
+        if ESPTickets then
+            local localPlayer = game:GetService("Players").LocalPlayer
+            local localCharacter = localPlayer.Character
+            local localHumanoidRootPart = localCharacter and localCharacter:FindFirstChild("HumanoidRootPart")
+
+            if not localHumanoidRootPart then
+                return
+            end
+
+            for _, v in pairs(game.Workspace.Game.Effects.Tickets:GetDescendants()) do
+                if v:IsA("BasePart") and v.Name == "HumanoidRootPart" then
+                    if not v:FindFirstChild("CandyESP") then
+                        local BillboardGui = Instance.new("BillboardGui")
+                        local TextLabel = Instance.new("TextLabel")
+
+                        -- Billboard settings
+                        BillboardGui.Parent = v 
+                        BillboardGui.Name = "CandyESP"
+                        BillboardGui.AlwaysOnTop = true
+                        BillboardGui.Size = UDim2.new(0, 50, 0, 50)
+                        BillboardGui.StudsOffset = Vector3.new(0, 2, 0)
+                        BillboardGui.MaxDistance = 500
+
+                        -- TextLabel settings
+                        TextLabel.Parent = BillboardGui
+                        TextLabel.BackgroundColor3 = Color3.new(1, 1, 1) -- White background
+                        TextLabel.BackgroundTransparency = 1 -- Fully transparent
+                        TextLabel.Size = UDim2.new(1, 0, 1, 0) -- Fill the billboard
+                        TextLabel.Text = "Candy Corn" -- Display the grandparent name
+                        TextLabel.TextColor3 = Color3.new(1, 0, 0) -- Red text
+                        TextLabel.TextScaled = true -- Scale text to fit
+                        TextLabel.Font = Enum.Font.GothamBold -- Set font to GothamBold
+                    end
+                    
+                   local distance = math.floor((localHumanoidRootPart.Position - v.Position).Magnitude)
+                    v.CandyESP.TextLabel.Text = string.format("Candy Corn - %d M", distance)
+                end
+            end
+        else
+            for _, v in pairs(game.Workspace.Game.Effects.Tickets:GetDescendants()) do
+                if v:IsA("MeshPart") and v:FindFirstChild("CandyESP") then
+                    v.CandyESP:Destroy()
+                end
+            end
         end
+    end)
     end
  end)
 
@@ -458,7 +539,7 @@ local Toggle = Tabs.Main:AddToggle("AutoRespawn", {Title = "Auto Respawn", Defau
 local AutoWhistle = false
 
 function autowistlefunction()
-   game:GetService("ReplicatedStorage").Events.Player.Whistle:FireServer()
+   game:GetService("ReplicatedStorage").Events.Character.Whistle:FireServer()
 end
 
 local Toggle = Tabs.Main:AddToggle("AutoRespawn", {Title = "Auto Whistle", Default = false })
@@ -856,6 +937,7 @@ if FarmTickets then
 			if hrp == nil then
 				return
 			end
+			game:GetService("ReplicatedStorage").Events.Other.TicketsEvent:FireServer(hrp.Position)
 			hrp.CFrame = CFrame.new(100, 500, 100)
 			for i, v in next, tickets:GetDescendants() do
 				if v.IsA(v, "BasePart") and v.Name == "HumanoidRootPart" then
@@ -1174,13 +1256,13 @@ local RunUpdater = true
 
 spawn(function()
 repeat
-if RunUpdater and wait(4) then
-for i, v in pairs(getgc(true)) do
-     if type(v) == 'table' and rawget(v, 'JumpHeight') then
-          v.Speed = TSpeed
-          v.JumpHeight = TJump
-          end
-      end
+if RunUpdater and wait(1.3) then
+for _, v in ipairs(getgc(true)) do
+    if type(v) == 'table' and rawget(v, "JumpHeight") then
+        rawset(v, "Speed", TSpeed)
+        rawset(v, "JumpHeight", TJump)
+    end
+end
     end
     until RunUpdater == false
 end)
@@ -1213,17 +1295,12 @@ local Toggle = Tabs.Misc:AddToggle("EmoteD1", {Title = "Sprint Emote/Down Dash",
        if FakeEmoteDownDash then
        if game.Workspace:FindFirstChild("Game") and game.Workspace.Game:FindFirstChild("Players") and game.Workspace.Game.Players:FindFirstChild(game:GetService("Players").LocalPlayer.Name) then
 			local char = game:GetService("Players").LocalPlayer.Character or game:GetService("Players").LocalPlayer.CharacterAdded:Wait()
-			if char and char:GetAttribute("State") == "Emoting" or char:GetAttribute("State") == "EmotingSlide" or char:GetAttribute("State") == "EmotingSlideAir" then
+			if char and char:GetAttribute("State") == "Emoting" or char:GetAttribute("State") == "EmotingAir" or char:GetAttribute("State") == "EmotingSlide" or char:GetAttribute("State") == "EmotingSlideAir" then
 				TSpeed = SelectedEmoteSpeed
 			elseif char and char:GetAttribute("State") == "Downed" then
 			    TSpeed = 7500
 			else
-	for i, v in pairs(getgc(true)) do
-     if type(v) == 'table' and rawget(v, 'JumpHeight') then
-          v.Speed = SavedSpeed
-          end
-        wait(0.3)
-      end
+	            TSpeed = SavedSpeed
 			end
 		end
      end
@@ -1246,12 +1323,7 @@ local Toggle = Tabs.Misc:AddToggle("EmoteD2", {Title = "Sprint Emote Dash (No Cr
 			if char and char:GetAttribute("State") == "Emoting" or char:GetAttribute("State") == "EmotingAir" then
 				TSpeed = SelectedEmoteSpeed
 			else
-for i, v in pairs(getgc(true)) do
-     if type(v) == 'table' and rawget(v, 'JumpHeight') then
-          v.Speed = SavedSpeed
-          end
-         wait(0.3)
-      end
+                 TSpeed = SavedSpeed
 			end
 		end
      end
@@ -1437,10 +1509,10 @@ spawn(function()
 while true and wait(0.1) do
     if BHop2 then
    setfflag("MaxAltitudePDStickHipHeightPercent", "-24") 
-        local humanoid = LocalPlayer.Character:FindFirstChildOfClass("Humanoid")
-        if humanoid and humanoid.FloorMaterial ~= Enum.Material.Air and humanoid then
-            humanoid:ChangeState(Enum.HumanoidStateType.Jumping)
-            end
+--        local humanoid = LocalPlayer.Character:FindFirstChildOfClass("Humanoid")
+--        if humanoid and humanoid.FloorMaterial ~= Enum.Material.Air and humanoid then
+  --          humanoid:ChangeState(Enum.HumanoidStateType.Jumping)
+--            end
       else
       setfflag("MaxAltitudePDStickHipHeightPercent", "10")
        end
