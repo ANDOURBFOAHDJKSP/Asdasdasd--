@@ -205,7 +205,7 @@ local Tabs = {
 local Options = Fluent.Options
 
 Fluent:Notify({
-        Title = "ðŸ“¢ Announcement ðŸ“¢",
+        Title = " Announcement ",
         Content = "The icon is fixed that disappearing ur ui and now u can use it",
         SubContent = "Unknownproooolucky Message", -- Optional
         Duration = 10 -- Set to nil to make the notification not disappear
@@ -1255,18 +1255,17 @@ local Input = Tabs.Misc:AddInput("PlayerJump", {
 local RunUpdater = true
 
 spawn(function()
-repeat
-if RunUpdater and wait(1.3) then
-for _, v in ipairs(getgc(true)) do
-    if type(v) == 'table' and rawget(v, "JumpHeight") then
-        rawset(v, "Speed", TSpeed)
-        rawset(v, "JumpHeight", TJump)
+    while RunUpdater do
+        wait(1) 
+        for _, v in ipairs(getgc(true)) do
+            if type(v) == 'table' and rawget(v, "JumpHeight") then
+                rawset(v, "Speed", TSpeed)
+                rawset(v, "JumpHeight", TJump)
+                break 
+            end
+        end
     end
-end
-    end
-    until RunUpdater == false
 end)
-
 
 Tabs.Misc:AddParagraph({
         Title = "Emote Mods",
@@ -1297,8 +1296,6 @@ local Toggle = Tabs.Misc:AddToggle("EmoteD1", {Title = "Sprint Emote/Down Dash",
 			local char = game:GetService("Players").LocalPlayer.Character or game:GetService("Players").LocalPlayer.CharacterAdded:Wait()
 			if char and char:GetAttribute("State") == "Emoting" or char:GetAttribute("State") == "EmotingAir" or char:GetAttribute("State") == "EmotingSlide" or char:GetAttribute("State") == "EmotingSlideAir" then
 				TSpeed = SelectedEmoteSpeed
-			elseif char and char:GetAttribute("State") == "Downed" then
-			    TSpeed = 7500
 			else
 	            TSpeed = SavedSpeed
 			end
