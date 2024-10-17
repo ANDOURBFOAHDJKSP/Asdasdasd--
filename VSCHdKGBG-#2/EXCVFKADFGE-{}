@@ -1255,13 +1255,12 @@ local Input = Tabs.Misc:AddInput("PlayerJump", {
 local RunUpdater = true
 
 spawn(function()
-    while RunUpdater do
-        wait(1) 
+    while RunUpdater and wait(2) do
         for _, v in ipairs(getgc(true)) do
             if type(v) == 'table' and rawget(v, "JumpHeight") then
                 rawset(v, "Speed", TSpeed)
                 rawset(v, "JumpHeight", TJump)
-                break 
+          --  break 
             end
         end
     end
