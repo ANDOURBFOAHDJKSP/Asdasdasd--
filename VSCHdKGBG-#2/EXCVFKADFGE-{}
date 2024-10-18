@@ -205,8 +205,8 @@ local Tabs = {
 local Options = Fluent.Options
 
 Fluent:Notify({
-        Title = " Announcement ",
-        Content = "The icon is fixed that disappearing ur ui and now u can use it",
+        Title = "📢 Announcement 📢",
+        Content = "OPTIMIZING UPDATER SYSTEM TEST",
         SubContent = "Unknownproooolucky Message", -- Optional
         Duration = 10 -- Set to nil to make the notification not disappear
     })
@@ -1255,12 +1255,20 @@ local Input = Tabs.Misc:AddInput("PlayerJump", {
 local RunUpdater = true
 
 spawn(function()
-    while RunUpdater and wait(2) do
+    while RunUpdater do
+        wait(0.3)
+        local updatedCount = 0 
         for _, v in ipairs(getgc(true)) do
-            if type(v) == 'table' and rawget(v, "JumpHeight") then
+            if type(v) == 'table' and rawget(v, "Friction") then
+              if v.JumpHeight and v.Speed then
                 rawset(v, "Speed", TSpeed)
-                rawset(v, "JumpHeight", TJump)
-          --  break 
+                rawset(v, "JumpHeight", TJump)                
+             end
+                
+                updatedCount = updatedCount + 1
+                if updatedCount >= 10 then
+                    break
+                end
             end
         end
     end
