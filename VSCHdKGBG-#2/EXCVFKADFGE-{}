@@ -205,11 +205,11 @@ local Tabs = {
 local Options = Fluent.Options
 
 Fluent:Notify({
-        Title = "📢 Announcement 📢",
-        Content = "OPTIMIZING UPDATER SYSTEM TEST",
-        SubContent = "Unknownproooolucky Message", -- Optional
-        Duration = 10 -- Set to nil to make the notification not disappear
-    })
+           Title = "Announcement",
+            Content = "Fixed API just coding for 10 minutes, i gotta sleep now",
+            SubContent = "", -- Optional
+            Duration = 10 -- Set to nil to make the notification not disappear
+        })
 
 -- Main
 
@@ -407,14 +407,14 @@ while ObjectiveESP and wait(0.4) do
                 return
             end
 
-            for i, v in next, workspace.Game.Map.Parts.Objectives:GetChildren() do
-                if v:FindFirstChildWhichIsA("BasePart") then
+         for i, v in next, workspace.Game.Map.Parts.Objectives:GetChildren() do
+			if v.IsA(v, "Model") then
                     if not v:FindFirstChild("ObjectiveESP") then
                         local BillboardGui = Instance.new("BillboardGui")
                         local TextLabel = Instance.new("TextLabel")
 
                         -- Billboard settings
-                        BillboardGui.Parent = v 
+                        BillboardGui.Parent = v:FindFirstChildWhichIsA("BasePart")
                         BillboardGui.Name = "ObjectiveESP"
                         BillboardGui.AlwaysOnTop = true
                         BillboardGui.Size = UDim2.new(0, 50, 0, 50)
@@ -437,9 +437,11 @@ while ObjectiveESP and wait(0.4) do
                 end
             end
         else
-            for _, v in pairs(game.Workspace.Game.Effects.Tickets:GetDescendants()) do
-                if v:IsA("BasePart") and v:FindFirstChild("ObjectiveESP") then
+            for i, v in next, workspace.Game.Map.Parts.Objectives:GetChildren() do
+	  		if v.IsA(v, "Model") then
+                if v:FindFirstChildWhichIsA("BasePart") and v:FindFirstChild("ObjectiveESP") then
                     v.ObjectiveESP:Destroy()
+                   end
                 end
             end
         end
@@ -1219,7 +1221,7 @@ local HitboxTransInput = Tabs.Nextbot:AddInput("HitboxTrans", {
 -- Misc
 
 Tabs.Misc:AddParagraph({
-        Title = "Adjustments",
+        Title = "Adjustment ",
         Content = " "
     })
 
@@ -1243,7 +1245,7 @@ local Input = Tabs.Misc:AddInput("PlayerSpeed", {
 local Input = Tabs.Misc:AddInput("PlayerJump", {
         Title = "Player Jump",
         Default = "3",
-        Placeholder = "Speed Number",
+        Placeholder = "Jump Number",
         Numeric = false, -- Only allows numbers
         Finished = false, -- Only calls callback when you press enter
         Callback = function(Value)
@@ -1251,12 +1253,123 @@ local Input = Tabs.Misc:AddInput("PlayerJump", {
             SavedJump = tonumber(Value) or 3
         end
     })
+    
+ Tabs.Misc:AddParagraph({
+        Title = "Adjustment (2)",
+        Content = ""
+    })
+    
+local UseOriginalJump = false
+local OriginalJumpPower = 25
+
+local Toggle = Tabs.Misc:AddToggle("PlayerJumpPower", {Title = "Jump Power Toggle", Default = false })
+
+    Toggle:OnChanged(function(State)
+        UseOriginalJump = State
+     
+  while UseOriginalJump and wait(0.1) do
+  spawn(function()
+    local player = game.Players.LocalPlayer
+    local humanoid = player.Character:FindFirstChild("Humanoid")
+   if not  UseOriginalJump and humanoid then
+       humanoid.UseJumpPower = false
+       humanoid.JumpPower = 25
+     end
+     
+    if player.Character and humanoid then
+          humanoid.UseJumpPower = true
+          humanoid.JumpPower = OriginalJumpPower
+        end
+    end)
+end
+end)
+
+local Input = Tabs.Misc:AddInput("PlayerJump", {
+        Title = "Player Jump Power",
+        Default = "25",
+        Placeholder = "Jump Number",
+        Numeric = false, -- Only allows numbers
+        Finished = false, -- Only calls callback when you press enter
+        Callback = function(Value)
+            OriginalJumpPower = tonumber(Value) or 25
+        end
+    })
+    
+local CFRAMEWalk = false
+local moveDistance = 5
+
+local RunService = game:GetService("RunService")
+local hb = RunService.Heartbeat
+local speaker = game.Players.LocalPlayer
+local chr = speaker.Character
+local hum = chr and chr:FindFirstChildWhichIsA("Humanoid")
+
+local Toggle = Tabs.Misc:AddToggle("PlayerWalkspeed", {Title = "Walkspeed Toggle", Default = false })
+
+    Toggle:OnChanged(function(State)
+        CFRAMEWalk = State
+     while CFRAMEWalk and chr and hum and hum.Parent do
+    local delta = hb:Wait()
+    
+    if hum.MoveDirection.Magnitude > 0 then
+        chr:TranslateBy(hum.MoveDirection * moveDistance * delta * 10)
+    end
+end
+    end)
+
+local Input = Tabs.Misc:AddInput("PlayerWalkCf", {
+        Title = "Player Walkspeed",
+        Default = "5",
+        Placeholder = "Walk Number",
+        Numeric = false, -- Only allows numbers
+        Finished = false, -- Only calls callback when you press enter
+        Callback = function(Value)
+            moveDistance = tonumber(Value) or 5
+        end
+    })
+    
+local BounceToggle = false
+local AdjustedBounce = 80
+
+local Toggle = Tabs.Misc:AddToggle("AdjustBounce", {Title = "Bounce Toggle", Default = false })
+
+    Toggle:OnChanged(function(State)
+        BounceToggle = State
+     
+  while BounceToggle and wait(0.1) do
+  spawn(function()
+    local player = game.Players.LocalPlayer
+    local humanoid = player.Character:FindFirstChild("Humanoid")
+   if not  BounceToggle and humanoid then
+       humanoid.WalkSpeed = 0
+     end
+     
+    if player.Character and humanoid then
+          humanoid.WalkSpeed = AdjustedBounce
+        if player.Character:GetAttribute("State") == "Default" or player.Character:GetAttribute("State") == "Downed" or player.Character:GetAttribute("State") == "Emoting" or player.Character:GetAttribute("State") == "EmotingAir" or not BounceToggle then
+          humanoid.WalkSpeed = 0
+            end
+        end
+    end)
+end
+    end)
+
+local Input = Tabs.Misc:AddInput("PlayerBounce", {
+        Title = "Player Bounce",
+        Default = "80",
+        Placeholder = "Bounce Number",
+        Numeric = false, -- Only allows numbers
+        Finished = false, -- Only calls callback when you press enter
+        Callback = function(Value)
+            AdjustedBounce = tonumber(Value) or 80
+        end
+    })
 
 local RunUpdater = true
 
 spawn(function()
     while RunUpdater do
-        wait(0.3)
+        wait(1)
         local updatedCount = 0 
         for _, v in ipairs(getgc(true)) do
             if type(v) == 'table' and rawget(v, "Friction") then
@@ -1288,7 +1401,7 @@ local FakeEmoteDownDash = false
 local FakeEmoteDownDash2 = false
 local SelectedEmoteSpeed = 2000
 
-local Toggle = Tabs.Misc:AddToggle("EmoteD1", {Title = "Sprint Emote/Down Dash", Default = false })
+local Toggle = Tabs.Misc:AddToggle("EmoteD1", {Title = "Sprint Emote Dash", Default = false })
 
     Toggle:OnChanged(function(State)
         FakeEmoteDownDash = State
@@ -1371,53 +1484,9 @@ Toggle:OnChanged(function(StateBruh)
 end)
 
 Tabs.Misc:AddParagraph({
-        Title = "Adjusting Bounce",
-        Content = "(Only works in trimping)\nWarning: Do not Put too high like 1000-2500"
-    })
-    
-local BounceToggle = false
-local AdjustedBounce = 80
-
-local Toggle = Tabs.Misc:AddToggle("AdjustBounce", {Title = "Player Bounce Toggle", Default = false })
-
-    Toggle:OnChanged(function(State)
-        BounceToggle = State
-     
-  while BounceToggle and wait(0.1) do
-  spawn(function()
-    local player = game.Players.LocalPlayer
-    local humanoid = player.Character:FindFirstChild("Humanoid")
-   if not  BounceToggle and humanoid then
-       humanoid.WalkSpeed = 0
-     end
-     
-    if player.Character and humanoid then
-          humanoid.WalkSpeed = AdjustedBounce
-        if player.Character:GetAttribute("State") == "Default" or player.Character:GetAttribute("State") == "Downed" or player.Character:GetAttribute("State") == "Emoting" or player.Character:GetAttribute("State") == "EmotingAir" or not BounceToggle then
-          humanoid.WalkSpeed = 0
-            end
-        end
-    end)
-end
-    end)
-
-local Input = Tabs.Misc:AddInput("PlayerBounce", {
-        Title = "Player Bounce",
-        Default = "80",
-        Placeholder = "Bounce Number",
-        Numeric = false, -- Only allows numbers
-        Finished = false, -- Only calls callback when you press enter
-        Callback = function(Value)
-            AdjustedBounce = tonumber(Value) or 80
-        end
-    })
-
-Tabs.Misc:AddParagraph({
         Title = "Bhop",
         Content = " "
     })
-    
-local BHopKey = false
     
 local Keybind = Tabs.Misc:AddKeybind("KeyBHOP", {
         Title = "Keybind to BHOP",
@@ -1428,29 +1497,13 @@ local Keybind = Tabs.Misc:AddKeybind("KeyBHOP", {
         BHopKey = Bool
           spawn(function()
             while true and wait(0.1) do
-                if BHopKey then
-               local humanoid = game:GetService("Players").LocalPlayer.Character:FindFirstChildOfClass("Humanoid")
---        if humanoid and humanoid.FloorMaterial ~= Enum.Material.Air and humanoid then
---            humanoid:ChangeState(Enum.HumanoidStateType.Jumping)
---            end
+                if BHopKey then 
                  setfflag("MaxAltitudePDStickHipHeightPercent", "-24")
              else
                  setfflag("MaxAltitudePDStickHipHeightPercent", "10")
                 end
            end
        end)
-
-  spawn(function()
-     while true and wait(0.1) do
-      if BHopKey then
-           local humanoid = game:GetService("Players").LocalPlayer.Character:FindFirstChildOfClass("Humanoid")
-            if humanoid and humanoid.FloorMaterial ~= Enum.Material.Air and humanoid then
-             game.Players.LocalPlayer.Character.Communicator:InvokeServer("Jump")
-             humanoid.Jump = true
-             end
-           end
-        end
-     end)
    end,
 
         ChangedCallback = function(New)
@@ -1512,11 +1565,7 @@ end
 spawn(function()
 while true and wait(0.1) do
     if BHop2 then
-   setfflag("MaxAltitudePDStickHipHeightPercent", "-24") 
---        local humanoid = LocalPlayer.Character:FindFirstChildOfClass("Humanoid")
---        if humanoid and humanoid.FloorMaterial ~= Enum.Material.Air and humanoid then
-  --          humanoid:ChangeState(Enum.HumanoidStateType.Jumping)
---            end
+   setfflag("MaxAltitudePDStickHipHeightPercent", "-24")
       else
       setfflag("MaxAltitudePDStickHipHeightPercent", "10")
        end
