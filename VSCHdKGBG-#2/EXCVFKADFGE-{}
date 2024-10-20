@@ -206,7 +206,7 @@ local Options = Fluent.Options
 
 Fluent:Notify({
            Title = "Announcement",
-            Content = "Fixed API and i just coding for 10 minutes, i gotta sleep now",
+            Content = "Fixed API just coding for 10 minutes, i gotta sleep now",
             SubContent = "", -- Optional
             Duration = 10 -- Set to nil to make the notification not disappear
         })
@@ -1260,7 +1260,7 @@ local Input = Tabs.Misc:AddInput("PlayerJump", {
     })
     
 local UseOriginalJump = false
-local OriginalJumpPower = 25
+local OriginalJumpPower = 20
 
 local Toggle = Tabs.Misc:AddToggle("PlayerJumpPower", {Title = "Jump Power Toggle", Default = false })
 
@@ -1273,7 +1273,7 @@ local Toggle = Tabs.Misc:AddToggle("PlayerJumpPower", {Title = "Jump Power Toggl
     local humanoid = player.Character:FindFirstChild("Humanoid")
    if not  UseOriginalJump and humanoid then
        humanoid.UseJumpPower = false
-       humanoid.JumpPower = 25
+       humanoid.JumpPower = 20
      end
      
     if player.Character and humanoid then
@@ -1284,34 +1284,33 @@ local Toggle = Tabs.Misc:AddToggle("PlayerJumpPower", {Title = "Jump Power Toggl
 end
 end)
 
-local Input = Tabs.Misc:AddInput("PlayerJump", {
+local Input = Tabs.Misc:AddInput("PlayerJumpPower", {
         Title = "Player Jump Power",
-        Default = "25",
+        Default = "20",
         Placeholder = "Jump Number",
         Numeric = false, -- Only allows numbers
         Finished = false, -- Only calls callback when you press enter
         Callback = function(Value)
-            OriginalJumpPower = tonumber(Value) or 25
+            OriginalJumpPower = tonumber(Value) or 20
         end
     })
     
 local CFRAMEWalk = false
 local moveDistance = 5
 
+local Toggle = Tabs.Misc:AddToggle("PlayerWalkspeed", {Title = "Walkspeed Toggle", Default = false })
+
+    Toggle:OnChanged(function(State)
+        CFRAMEWalk = State
+     while CFRAMEWalk do
 local RunService = game:GetService("RunService")
 local hb = RunService.Heartbeat
 local speaker = game.Players.LocalPlayer
 local chr = speaker.Character
 local hum = chr and chr:FindFirstChildWhichIsA("Humanoid")
-
-local Toggle = Tabs.Misc:AddToggle("PlayerWalkspeed", {Title = "Walkspeed Toggle", Default = false })
-
-    Toggle:OnChanged(function(State)
-        CFRAMEWalk = State
-     while CFRAMEWalk and chr and hum and hum.Parent do
-    local delta = hb:Wait()
+local delta = hb:Wait()
     
-    if hum.MoveDirection.Magnitude > 0 then
+    if chr and hum then
         chr:TranslateBy(hum.MoveDirection * moveDistance * delta * 10)
     end
 end
@@ -1369,7 +1368,7 @@ local RunUpdater = true
 
 spawn(function()
     while RunUpdater do
-        wait(1)
+        wait(0.5)
         local updatedCount = 0 
         for _, v in ipairs(getgc(true)) do
             if type(v) == 'table' and rawget(v, "Friction") then
