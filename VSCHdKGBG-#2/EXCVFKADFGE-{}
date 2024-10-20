@@ -1729,7 +1729,7 @@ SaveManager:LoadAutoloadConfig()
 
 local RunUpdater = true
 
- while RunUpdater and wait(0.1) do
+ while RunUpdater and wait(0.3) do
         local updatedCount = 0 
         for _, v in ipairs(getgc(true)) do
             if type(v) == 'table' and rawget(v, "Friction") then
