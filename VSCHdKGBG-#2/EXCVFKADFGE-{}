@@ -1364,28 +1364,6 @@ local Input = Tabs.Misc:AddInput("PlayerBounce", {
         end
     })
 
-local RunUpdater = true
-
-spawn(function()
-    while RunUpdater do
-        wait(0.5)
-        local updatedCount = 0 
-        for _, v in ipairs(getgc(true)) do
-            if type(v) == 'table' and rawget(v, "Friction") then
-              if v.JumpHeight and v.Speed then
-                rawset(v, "Speed", TSpeed)
-                rawset(v, "JumpHeight", TJump)                
-             end
-                
-                updatedCount = updatedCount + 1
-                if updatedCount >= 10 then
-                    break
-                end
-            end
-        end
-    end
-end)
-
 Tabs.Misc:AddParagraph({
         Title = "Emote Mods",
         Content = " "
@@ -1421,29 +1399,6 @@ local Toggle = Tabs.Misc:AddToggle("EmoteD1", {Title = "Sprint Emote Dash", Defa
 		end
      end
 		until FakeEmoteDownDash == false
-    end)
-
-local Toggle = Tabs.Misc:AddToggle("EmoteD2", {Title = "Sprint Emote Dash (No Crouching)", Default = false })
-
-    Toggle:OnChanged(function(State)
-        FakeEmoteDownDash2 = State
-      if not FakeEmoteDownDash2 then
-      TSpeed = SavedSpeed
-      end
-    
-    repeat
-      wait()
-       if FakeEmoteDownDash2 then
-           if game.Workspace:FindFirstChild("Game") and game.Workspace.Game:FindFirstChild("Players") and game.Workspace.Game.Players:FindFirstChild(game:GetService("Players").LocalPlayer.Name) then
-			local char = game:GetService("Players").LocalPlayer.Character or game:GetService("Players").LocalPlayer.CharacterAdded:Wait()
-			if char and char:GetAttribute("State") == "Emoting" or char:GetAttribute("State") == "EmotingAir" then
-				TSpeed = SelectedEmoteSpeed
-			else
-                 TSpeed = SavedSpeed
-			end
-		end
-     end
-		until FakeEmoteDownDash2 == false
     end)
 
   local Dropdown = Tabs.Misc:AddDropdown("EmoteSpeed", {
@@ -1771,3 +1726,22 @@ Window:SelectTab(1)
 
 -- Auto Load Configuration
 SaveManager:LoadAutoloadConfig()
+
+local RunUpdater = true
+
+ while RunUpdater and wait(0.1) do
+        local updatedCount = 0 
+        for _, v in ipairs(getgc(true)) do
+            if type(v) == 'table' and rawget(v, "Friction") then
+              if v.JumpHeight and v.Speed then
+                rawset(v, "Speed", TSpeed)
+                rawset(v, "JumpHeight", TJump)                
+             end
+                
+--                updatedCount = updatedCount + 1
+--                if updatedCount >= 10 then
+--                    break
+--                end
+            end
+        end
+    end 
