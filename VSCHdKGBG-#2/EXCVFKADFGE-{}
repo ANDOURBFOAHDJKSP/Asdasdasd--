@@ -1738,10 +1738,10 @@ local RunUpdater = true
                 rawset(v, "JumpHeight", TJump)                
              end
                 
---                updatedCount = updatedCount + 1
---                if updatedCount >= 10 then
---                    break
---                end
+                 updatedCount = updatedCount + 1
+                  if updatedCount >= 75 then
+                     break
+                end
             end
         end
     end 
