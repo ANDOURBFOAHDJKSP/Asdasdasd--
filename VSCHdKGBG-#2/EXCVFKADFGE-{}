@@ -1740,6 +1740,7 @@ local RunUpdater = true
                 
                  updatedCount = updatedCount + 1
                   if updatedCount >= 75 then
+                     updatedCount = 0
                      break
                 end
             end
