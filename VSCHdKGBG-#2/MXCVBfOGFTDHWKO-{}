@@ -710,7 +710,7 @@ function Tween(table, callback)
 end    
 
 function getNearestCoins()
-    local Map = GetMap()
+    local Map = GetMap() or Workspace:FindFirstChild("Barn")
     local CoinContainer = Map:FindFirstChild("CoinContainer") or Map:FindFirstChild("CoinsAreas")
     local MinDistance = math.huge
     local Coin = nil
@@ -735,7 +735,7 @@ end
 end
 
 function getRandomCoins()
-    local Map = GetMap()
+    local Map = GetMap() or Workspace:FindFirstChild("Barn")
     local CoinContainer = Map:FindFirstChild("CoinContainer") or Map:FindFirstChild("CoinsAreas")
     local MinDistance = math.huge
     local Coin = nil
@@ -756,7 +756,7 @@ end
 end
 
 function CoinsAura()
-    local Map = GetMap()
+    local Map = GetMap() or Workspace:FindFirstChild("Barn")
     local CoinContainer = Map:FindFirstChild("CoinContainer") or Map:FindFirstChild("CoinsAreas")
     local MinDistance = 15
     local Coin = nil
@@ -785,22 +785,6 @@ if Coin then
    end
 end
 
-function AutoResetCharacter()
-Remotes.Gameplay.CoinCollected.OnClientEvent:Connect(function(Currency, CurrentCoins, MaxCoins)
-   if CurrentCoins == MaxCoins then
-         LocalPlayer.Character.Humanoid.Health = 0
-      end
-   end)
-end
-
-function XPFarm()
-Remotes.Gameplay.CoinCollected.OnClientEvent:Connect(function(Currency, CurrentCoins, MaxCoins)
-   if CurrentCoins == MaxCoins then
-         game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(workspace.Lobby.Spawns:FindFirstChild("SpawnLocation").Position) * CFrame.new(0,2.5,0) 
-      end
-   end)
-end
-
 Tabs.AutoFarm:AddParagraph({
         Title = "Farming Features",
         Content = " "
@@ -820,8 +804,15 @@ Toggle:OnChanged(function(value)
    TweenAutoFarm = value
    
    if TweenAutoFarm then
+   
+     if getNearestCoins() then
+      LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(getNearestCoins().Position)
+    end
+    
+      wait(0.1)
       StartFarm = true
       workspace.Gravity = 0
+      LocalPlayer.Character.PrimaryPart.AssemblyLinearVelocity = Vector3.new(0, 0, 0)
  else
       workspace.Gravity = Gravity
       LocalPlayer.Character.Humanoid.Sit = false
@@ -831,6 +822,7 @@ Toggle:OnChanged(function(value)
   spawn(function()
      if StartFarm then
         LocalPlayer.Character.PrimaryPart.AssemblyLinearVelocity = Vector3.new(0, 0, 0)
+        workspace.Gravity = 0
         LocalPlayer.Character.Humanoid.Sit = true
         Tween({
         	targetPart = getNearestCoins(),
@@ -846,11 +838,13 @@ Toggle:OnChanged(function(value)
    Remotes.Gameplay.CoinCollected.OnClientEvent:Connect(function(Currency, CurrentCoins, MaxCoins)
    if CurrentCoins == MaxCoins then
          StartFarm = false
+         workspace.Gravity = Gravity
       end
    end)
    
   Remotes.Gameplay.VictoryScreen.OnClientEvent:Connect(function()
        StartFarm = false
+       workspace.Gravity = Gravity
        end)
     end
 end)
@@ -871,9 +865,12 @@ local Toggle = Tabs.AutoFarm:AddToggle("XPFarm", {Title = "Auto Farm XP", Defaul
 Toggle:OnChanged(function(state1)
 AutoFarmXP = state1
 
-  while AutoFarmXP and wait(0.1) do
-    XPFarm()
-  end
+  Remotes.Gameplay.CoinCollected.OnClientEvent:Connect(function(Currency, CurrentCoins, MaxCoins)
+   if AutoFarmXP and CurrentCoins == MaxCoins then
+       wait(0.5)
+         game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(workspace.Lobby.Spawns:FindFirstChild("SpawnLocation").Position) * CFrame.new(0,2.5,0) 
+      end
+   end)
 end)
 
 local Toggle = Tabs.AutoFarm:AddToggle("AutoReset", {Title = "Auto Reset When Coins Bag Full", Default = false })
@@ -881,9 +878,11 @@ local Toggle = Tabs.AutoFarm:AddToggle("AutoReset", {Title = "Auto Reset When Co
 Toggle:OnChanged(function(state2)
    AutoReset = state2
    
-   while AutoReset and wait(0.1) do
-      AutoResetCharacter()
-   end
+   Remotes.Gameplay.CoinCollected.OnClientEvent:Connect(function(Currency, CurrentCoins, MaxCoins)
+   if AutoReset and CurrentCoins == MaxCoins then
+         LocalPlayer.Character.Humanoid.Health = 0
+      end
+   end)
 end)
 
 local AuraCoins = false
@@ -1720,7 +1719,7 @@ local CFrameWidth = -20
     })
 
 local Input = Tabs.Trolls:AddInput("Width", {
-        Title = "Speed Glitch",
+        Title = "Speed Glitch Length",
         Default = CFrameWidth,
         Placeholder = "-20",
         Numeric = false, -- Only allows numbers
