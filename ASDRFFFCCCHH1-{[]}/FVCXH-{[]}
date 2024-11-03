@@ -338,56 +338,6 @@ function getNearestAttack()
     return nearestAttack, closestDistance
 end
 
-local HitPartSizeX = 10
-local HitPartSizeY = 10
-local HitPartSizeZ = 10
-local ShowHitPart = false
-
-function getNearestHitPart()
-    local player = game:GetService("Players").LocalPlayer
-    local charpart = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
-    
-    if charpart then
-        for _, v in pairs(game:GetService("Workspace").Dungeon.Enemies:GetChildren()) do
-            local enemyRootPart = v:FindFirstChild("HumanoidRootPart")
-            local enemyUpperTorso = v:FindFirstChild("UpperTorso")
-            local enemyHead = v:FindFirstChild("Head")
-
-            if enemyRootPart and enemyHead and enemyUpperTorso then
-                local TargetDistance = 1000
-                local distance = (charpart.Position - enemyHead.Position).Magnitude
-                local distance2 = (charpart.Position - enemyRootPart.Position).Magnitude
-                
-                if distance2 <= 30 then
-                enemyRootPart.CFrame = enemyUpperTorso.CFrame
-                enemyRootPart.Position = enemyUpperTorso.Position
-                end
-
-                if distance <= TargetDistance then
-                    enemyHead.Size = Vector3.new(HitPartSizeX, HitPartSizeY, HitPartSizeZ)
-                    enemyHead.Anchored = true
-                    
-                    for _, child in pairs(enemyHead:GetChildren()) do
-                        if child:IsA("SpecialMesh") or child:IsA("Mesh") or v:IsA("Decal") then
-                            child:Destroy()
-                        end
-                    end
-                    
-                    local offset = charpart.CFrame:VectorToWorldSpace(Vector3.new(0, 0, -8))
-              --      enemyHead.Position = charpart.Position + offset                
-                    game:GetService("TweenService"):Create(enemyHead, TweenInfo.new(0.3), {Position = charpart.Position + offset}):Play()
-                    
-                    if ShowHitPart then
-                        enemyHead.Transparency = 0.7
-                    else
-                        enemyHead.Transparency = 1
-                    end
-                end
-            end
-        end
-    end
-end
-
 local Skill = {
 "Fireball", "Tsunami", "Freeze", "Heal", "HealBlast",
 "Shockwave", "LaserBeam", "LightningStrike",
@@ -413,6 +363,69 @@ local Skill1 = {
 "Cyclone", "BlackHole", "QuickSlash", "MeteorShower",
 "MeteorBlast", "Stomp", "Bullet"
 }
+
+local HitPartSizeX = 10
+local HitPartSizeY = 10
+local HitPartSizeZ = 10
+local HitPartBringType = "Character"
+local ShowHitPart = false
+
+function getNearestHitPart()
+    local player = game:GetService("Players").LocalPlayer
+    local charpart = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
+    
+    if charpart then
+        for _, v in pairs(game:GetService("Workspace").Dungeon.Enemies:GetChildren()) do
+            local enemyRootPart = v:FindFirstChild("HumanoidRootPart")
+            local enemyUpperTorso = v:FindFirstChild("UpperTorso")
+            local enemyHead = v:FindFirstChild("Head")
+
+            if enemyRootPart and enemyHead and enemyUpperTorso then
+                if HitPartBringType == "Character" then
+                    local TargetDistance = 500
+                    local distance = (charpart.Position - enemyHead.Position).Magnitude
+                    local distance2 = (charpart.Position - enemyRootPart.Position).Magnitude
+
+                    if distance2 <= 30 then
+                        enemyRootPart.CFrame = enemyUpperTorso.CFrame
+                        enemyRootPart.Position = enemyUpperTorso.Position
+                    end
+
+                    if distance <= TargetDistance then
+                        enemyHead.Size = Vector3.new(HitPartSizeX, HitPartSizeY, HitPartSizeZ)
+                        enemyHead.Anchored = true
+
+                        local offset = charpart.CFrame:VectorToWorldSpace(Vector3.new(0, 0, -8))
+                        game:GetService("TweenService"):Create(enemyHead, TweenInfo.new(0.3), {Position = charpart.Position + offset}):Play()
+                    end
+
+                elseif HitPartBringType == "Ability" then
+                    local TargetDistance = 500
+
+                    -- Iterate through Workspace.Ignore descendants to process all matching abilities
+                    for _, damage in ipairs(game:GetService("Workspace").Ignore:GetDescendants()) do
+                        if damage.Name == Skill or damage.Name == Skill1 or damage:FindFirstChildWhichIsA("TouchTransmitter") then
+                            local distance = (damage.Position - enemyHead.Position).Magnitude
+
+                            if distance <= TargetDistance then
+                                enemyHead.Size = Vector3.new(HitPartSizeX, HitPartSizeY, HitPartSizeZ)
+                                enemyHead.Anchored = true
+                                
+                                game:GetService("TweenService"):Create(enemyHead, TweenInfo.new(0.2), {Position = damage.Position}):Play()
+                            end
+                        end
+                    end
+                end
+
+                if ShowHitPart then
+                    enemyHead.Transparency = 0.7
+                else
+                    enemyHead.Transparency = 1
+                end
+            end
+        end
+    end
+end
 
 local killaurarange = 250
 
@@ -550,24 +563,16 @@ end
 local function AllKill()
 killAuraLow(monster)
 getNearestAttack()
-killAuraLow(monster)
-killAuraLow(monster)
 end
 
 local function AllKill2()
     killAuraHigh(monster)
     getNearestAttack()
-    killAuraHigh(monster)
-    killAuraHigh(monster)
-    RunService.RenderStepped:Wait()
 end
 
 local function AllKill3()
     killAuraMedium(monster)
     getNearestAttack()
-    killAuraMedium(monster)
-    killAuraMedium(monster)
-    RunService.RenderStepped:Wait()
 end
 
 
@@ -607,6 +612,7 @@ function floating()
     end
 end
 
+local Gravity = workspace.Gravity
 local SlowTween = false
 local NormalTween = false
 local FastTween = false
@@ -825,7 +831,7 @@ end
         newCFrame = CFrame.new(x, y, z)
     })
    
-   getNearestHitPart()
+   spawn(getNearestHitPart)
    
 end
 
@@ -905,7 +911,7 @@ local InterfaceManager = loadstring(game:HttpGet("https://raw.githubusercontent.
 local Options = Fluent.Options
 
 Fluent:Notify({
-        Title = "Made by Unknownproooolucky and guesttester_1",
+        Title = "Made by Unknownproooolucky",
         Content = " ",
         SubContent = " ", -- Optional
         Duration = 5 -- Set to nil to make the notification not disappear
@@ -920,7 +926,7 @@ Fluent:Notify({
     
 local Window = Fluent:CreateWindow({
     Title = "Unknown Hub X TQ ",
-    SubTitle = "V5.0 (Dungeon) discord.gg/d2a3KkTD6r",
+    SubTitle = "V5.0.1 (Dungeon) discord.gg/d2a3KkTD6r",
     TabWidth = 160,
     Size = UDim2.fromOffset(580, 460),
     Acrylic = true, -- The blur may be detectable, setting this to false disables blur entirely
@@ -937,6 +943,11 @@ local Tabs = {
     Settings = Window:AddTab({ Title = "Settings", Icon = "rbxassetid://7734052335" }),
 }
 
+function SwingAttack()
+ScriptFunction(Script)
+ScriptFunction2(Script, getNearestTarget().PrimaryPart.Position)
+end
+
 -- Main
 
 if isLobby or isMainDungeon or isEventDungeon then
@@ -951,26 +962,26 @@ local Toggle1 = Tabs.Main:AddToggle("AutokillMobs", {Title = "Auto Kill Mobs", D
 
 Toggle1:OnChanged(function(State)
     Settings.H = State
-    game:GetService("RunService").RenderStepped:Connect(function()
-        pcall(function()
-            if Settings.H then                
-                ScriptFunction(Script)
-                ScriptFunction2(Script, GetClosestt().PrimaryPart.Position)
-                RunService.RenderStepped:Wait()
-            end
-        end)
-    end)
+    
+if Settings.H then
+  workspace.Gravity = 0
+else
+  workspace.Gravity = Gravity
+end
     spawn(function()
         while Settings.H and wait(0.1) do
             pcall(function()
                 ReplicatedStorage.Shared.Remotes.Data.ClaimPrizes:FireServer()
+                SwingAttack()
                 for i, v in pairs(Workspace:GetChildren()) do
                     if v:FindFirstChild("FinishRoom", true) and v:FindFirstChild("FinishRoom", true):FindFirstChild("Hitbox", true) then
+                        workspace.Gravity = 0
+                        game.Players.LocalPlayer.Character.PrimaryPart.AssemblyLinearVelocity = Vector3.new(0, 0, 0)
                         firetouchinterest(Player.Character:FindFirstChild("HumanoidRootPart", true),v:FindFirstChild("FinishRoom",true):FindFirstChild("Hitbox",true):FindFirstChild("Part",true),0)
                         firetouchinterest(Player.Character:FindFirstChild("HumanoidRootPart", true),v:FindFirstChild("FinishRoom",true):FindFirstChild("Hitbox",true):FindFirstChild("Part",true),1)
                     end 
                 end 
-                tpToMonsters()
+                spawn(tpToMonsters)
              end)
           end
     end)
@@ -1002,7 +1013,7 @@ Tween({
 })
 
 if value:FindFirstChild("Head") then
-getNearestHitPart()
+spawn(getNearestHitPart)
 end
 
                    end
@@ -1017,18 +1028,18 @@ local Toggle = Tabs.Main:AddToggle("WaveDefenseFarm", {Title = "Auto Kill Mobs",
 
 Toggle:OnChanged(function(State)
     FarmWaveDefense1 = State
-    game:GetService("RunService").RenderStepped:Connect(function()
-        pcall(function()
-            if FarmWaveDefense1 then
-                ScriptFunction(Script)
-                ScriptFunction2(Script, GetClosestt().PrimaryPart.Position)
-                RunService.RenderStepped:Wait()
-            end
-        end)
-    end)
+    
+if FarmWaveDefense1 then
+  workspace.Gravity = 0
+else
+  workspace.Gravity = Gravity
+end
     spawn(function()
         while FarmWaveDefense1 and wait(0.1) do
             pcall(function()       
+                workspace.Gravity = 0
+                SwingAttack()
+                game.Players.LocalPlayer.Character.PrimaryPart.AssemblyLinearVelocity = Vector3.new(0, 0, 0)
                 ReplicatedStorage.Shared.Remotes.Data.ClaimPrizes:FireServer()
                 WaveDefenseWar()
             end)
@@ -1115,6 +1126,7 @@ Options.AutoMedkits:SetValue(false)
 
 end
  
+ --[[
 Tabs.Main:AddParagraph({
         Title = "Farming Events",
         Content = ""
@@ -1178,8 +1190,6 @@ Toggle1:OnChanged(function(State)
         end
     end)
 end)
-
---[[
 
 -- Initialize the global variable
 _G.TPG3 = false
@@ -1615,6 +1625,17 @@ local Input = Tabs.Enemies:AddInput("HitPartSizeZ", {
             HitPartSizeZ = Value
         end
     })
+    
+ local Dropdown = Tabs.Enemies:AddDropdown("HitPartType", {
+        Title = "HitPart Bring Type",
+        Values = {"Character", "Ability"},
+        Multi = false,
+        Default = 1,
+    })
+
+    Dropdown:OnChanged(function(Value)
+        HitPartBringType = Value
+    end)
 
 local Toggle = Tabs.Enemies:AddToggle("ShowHitPart", {Title = "Show HitPart", Default = false })
 
@@ -1660,16 +1681,16 @@ local isToggleActive = false
 Toggle:OnChanged(function(isToggled)
     isToggleActive = isToggled
 
-    while isToggleActive and wait(0.1) do
+    while isToggleActive and wait(0.2)  do
     if not isToggleActive then break end
     if SelectedLow then
-         AllKill()
+         spawn(AllKill)
          end
     if SelectedHigh then
-        AllKill2()
+        spawn(AllKill2)
       end
    if SelectedMedium then
-        AllKill3()
+        spawn(AllKill3)
         end
     end
 end)
@@ -1938,16 +1959,16 @@ local isToggleActive = false
 Toggle:OnChanged(function(isToggled)
     isToggleActive = isToggled
 
-    while isToggleActive and wait(0.08) do
+    while isToggleActive and wait(0.2) do
     if not isToggleActive then break end
     if SelectedLow then
-         AllKill()
+         spawn(AllKill)
          end
     if SelectedHigh then
-        AllKill2()
+        spawn(AllKill2)
       end
    if SelectedMedium then
-        AllKill3()
+        spawn(AllKill3)
         end
     end
 end)
@@ -2339,39 +2360,6 @@ local Combatctrl = require(game:GetService("Players").LocalPlayer.PlayerScripts.
 Combatctrl["_roll_cooldown"] = -1
 end
 end)
-
---[[
-
-local FastAttackXD = false
-
-local Toggle = Tabs.Character:AddToggle("DebounceAttack", {Title = "Debounce Attack", Default = false })
-
- Toggle:OnChanged(function(uhh)
- FastAttackXD = uhh
- 
-if FastAttackXD and not Player.Name == UsernameTester then
-wait(60)
-game:GetService("Players").LocalPlayer:Kick("Are u trying to use the debounce attack ಠ⁠_⁠ಠ")
- end
- 
- game:GetService("RunService").RenderStepped:Connect(function()
-    pcall(function()
-      if FastAttackXD then                
-        fireBasicAttack()
-        fireUseAbility()
-       RunService.RenderStepped:Wait()
-        end
-    end)
-end)
- 
-repeat
- if FastAttackXD then
- wait(0.1)
-FastAttack()
- end
-until not FastAttackXD == true
-end)
-]]
 
 -- FarmSettings
 
@@ -3013,212 +3001,6 @@ Tabs.Misc:AddButton({
 game:GetService("RunService"):Set3dRenderingEnabled(true)
         end
     })
-
-Tabs.Misc:AddParagraph({
-        Title = "Auto Buy Secret Shop",
-        Content = "make sure u encounter the mystery shop!"
-    })
-
-Tabs.Misc:AddParagraph({
-        Title = "Coral Kingdom",
-        Content = " "
-    })
-
-local BuyitemCK = false
-local selectedAmountCK = 1
-local selectedShopCK = "Aquatic Chest"
-
-local shopDataCK = {
-    ["Aquatic Chest"] = {
-        [1] = "AquaticArsenal",
-        [2] = "0",
-        [3] = selectedAmountCK
-    },
-    ["Bubble Effect"] = {
-        [1] = "AquaticArsenal",
-        [2] = "1",
-        [3] = selectedAmountCK
-    },
-    ["Speed Potion"] = {
-        [1] = "AquaticArsenal",
-        [2] = "2",
-        [3] = selectedAmountCK
-    },
-    ["Ability Potion"] = {
-        [1] = "AquaticArsenal",
-        [2] = "3",
-        [3] = selectedAmountCK
-    }
-}
-
-local Dropdown = Tabs.Misc:AddDropdown("Dropdown", {
-        Title = "Aquatic Shop",
-        Values = {"Aquatic Chest", "Bubble Effect", "Speed Potion", "Ability Potion"},
-        Multi = false,
-        Default = selectedShopCK,
-    })
-    
-Dropdown:OnChanged(function(value)
-        selectedShopCK = value
-    end)
-
-local Dropdown = Tabs.Misc:AddDropdown("Dropdown", {
-        Title = "Amount",
-        Values = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "15", "20", "25"},
-        Multi = false,
-        Default = tostring(selectedAmountCK),
-    })
-
-Dropdown:OnChanged(function(value)
-        selectedAmountCK = tonumber(value) or 1
-    end)
-
-local Toggle = Tabs.Misc:AddToggle("Buy1", {Title = "Buy item", Default = false })
-
-    Toggle:OnChanged(function(value)
-BuyitemCK = value
-        if BuyitemCK then
-            local c = shopDataCK[selectedShopCK]
-            args[3] = selectedAmountCK
-            game:GetService("ReplicatedStorage").Lobby.Remotes.ShopPurchase:FireServer(args[1], args[2], args[3])
-            wait(0.1)
-            game:GetService("ReplicatedStorage").Shared.Remotes.Data.ClaimPrizes:FireServer()
-        end
-    end)
-
-Tabs.Misc:AddParagraph({
-        Title = "Daring Dojo",
-        Content = " "
-    })
-
-local BuyitemDD = false
-local selectedAmountDD = 1
-local selectedShopDD = "Daring Chest"
-
-local shopDataDD = {
-    ["Daring Chest"] = {
-        [1] = "SilentStash",
-        [2] = "0",
-        [3] = selectedAmountDD
-    },
-    ["Stealth Effect"] = {
-        [1] = "SilentStash",
-        [2] = "1",
-        [3] = selectedAmountDD
-    },
-    ["Jump Potion"] = {
-        [1] = "SilentStash",
-        [2] = "2",
-        [3] = selectedAmountDD
-    }
-}
-
-local Dropdown = Tabs.Misc:AddDropdown("Dropdown", {
-        Title = "Silent Shop",
-        Values = {"Daring Chest", "Stealth Effect", "Jump Potion"},
-        Multi = false,
-        Default = selectedShopDD,
-    })
-    
-Dropdown:OnChanged(function(value)
-        selectedShopDD = value
-    end)
-
-local Dropdown = Tabs.Misc:AddDropdown("Dropdown", {
-        Title = "Amount",
-        Values = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "15", "20", "25"},
-        Multi = false,
-        Default = tostring(selectedAmountDD),
-    })
-
-Dropdown:OnChanged(function(value)
-        selectedAmountDD = tonumber(value) or 1
-    end)
-
-local Toggle = Tabs.Misc:AddToggle("Buy2", {Title = "Buy item", Default = false })
-
-    Toggle:OnChanged(function(value)
-BuyitemDD = value
-        if BuyitemDD then
-            local args = shopDataDD[selectedShopDD]
-            args[3] = selectedAmountDD
-            game:GetService("ReplicatedStorage").Lobby.Remotes.ShopPurchase:FireServer(args[1], args[2], args[3])
-            wait(0.1)
-            game:GetService("ReplicatedStorage").Shared.Remotes.Data.ClaimPrizes:FireServer()
-        end
-    end)
-
-Tabs.Misc:AddParagraph({
-        Title = "Fiery Fortress",
-        Content = " "
-    })
-
-local BuyitemFF = false
-local selectedAmountFF = 1
-local selectedShopFF = "Molten Chest"
-
-local shopDataFF = {
-    ["Molten Chest"] = {
-        [1] = "MoltenMarket",
-        [2] = "0",
-        [3] = selectedAmountFF
-    },
-    ["Embers Effect"] = {
-        [1] = "MoltenMarket",
-        [2] = "1",
-        [3] = selectedAmountFF
-    },
-    ["Warrior Potion"] = {
-        [1] = "MoltenMarket",
-        [2] = "2",
-        [3] = selectedAmountFF
-    },
-    ["Wizard Potion"] = {
-        [1] = "MoltenMarket",
-        [2] = "3",
-        [3] = selectedAmountFF
-    },
-    ["Archer Potion"] = {
-        [1] = "MoltenMarket",
-        [2] = "4",
-        [3] = selectedAmountFF
-    }
-}
-
-local Dropdown = Tabs.Misc:AddDropdown("Dropdown", {
-        Title = "Molten Market",
-        Values = {"Molten Chest", "Embers Effect", "Warrior Potion", "Wizard Potion", "Archer Potion"},
-        Multi = false,
-        Default = selectedShopFF,
-    })
-    
-Dropdown:OnChanged(function(value)
-        selectedShopFF = value
-    end)
-
-local Dropdown = Tabs.Misc:AddDropdown("Dropdown", {
-        Title = "Amount",
-        Values = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "15", "20", "25"},
-        Multi = false,
-        Default = tostring(selectedAmountFF),
-    })
-
-Dropdown:OnChanged(function(value)
-        selectedAmountFF = tonumber(value) or 1
-    end)
-
-local Toggle = Tabs.Misc:AddToggle("Buy3", {Title = "Buy item", Default = false })
-
-    Toggle:OnChanged(function(value)
-BuyitemFF = value
-        if BuyitemFF then
-            local args = shopDataFF[selectedShopFF]
-            args[3] = selectedAmountFF
-            game:GetService("ReplicatedStorage").Lobby.Remotes.ShopPurchase:FireServer(args[1], args[2], args[3])
-            wait(0.1)
-            game:GetService("ReplicatedStorage").Shared.Remotes.Data.ClaimPrizes:FireServer()
-        end
-    end)
 
 -- Settings
 
