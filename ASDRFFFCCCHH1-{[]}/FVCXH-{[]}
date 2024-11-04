@@ -1760,7 +1760,7 @@ end)
 
 local Slider = Tabs.Enemies:AddSlider("SwingAuraRange", {
         Title = "Swing Aura Range",
-        Description = "Only works for enemies targetted you",
+        Description = "Only works if enemy targets you",
         Default = 250,
         Min = 1,
         Max = 500,
@@ -2047,6 +2047,31 @@ if SelectedHigh then
 end
         end
     })
+    
+ local Toggle = Tabs.Enemies:AddToggle("SwingAura", {Title = "Swing Aura Toggle", Default = false })
+local isToggleActive2 = false
+
+Toggle:OnChanged(function(isToggled2)
+    isToggleActive2 = isToggled2
+
+    while isToggleActive2 and wait(0.2)  do
+    if not isToggleActive2 then break end
+        spawn(AllKill4)
+    end
+end)
+
+local Slider = Tabs.Enemies:AddSlider("SwingAuraRange", {
+        Title = "Swing Aura Range",
+        Description = "Only works if enemy targets you",
+        Default = 250,
+        Min = 1,
+        Max = 500,
+        Rounding = 1,
+        Callback = function(Value)
+    swingattackrange = tonumber(Value) or 250
+        end
+    })
+    
 
 Tabs.Enemies:AddParagraph({
         Title = "Enemy Mods",
