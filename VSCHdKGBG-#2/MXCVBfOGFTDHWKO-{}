@@ -350,7 +350,7 @@ spawn(function()
 while wait(1) do
 function GetMap()
     for i, v in pairs(Workspace:GetChildren()) do
-        if v:FindFirstChild("Spawns") or v:FindFirstChild("Base") and (v:FindFirstChild("CoinAreas") or v:FindFirstChild("CoinContainer")) then
+        if v:FindFirstChild("Spawns") or v:FindFirstChild("Base") then
             return v
         end
     end
@@ -958,6 +958,34 @@ Toggle:OnChanged(function(state4)
    end
 end)
 
+local Toggle = Tabs.Main:AddToggle("CoinChams", {
+    Title = "Coin Chams",
+    Default = false,
+    Callback = function(value)
+        if value then 
+            repeat task.wait()
+                if GetMap() then
+                    for _, v in pairs(GetMap():GetChildren()) do
+                        if v.Name == 'Coin_Server' and not highlights[v] then
+                            local esp = Instance.new("Highlight")
+                            esp.Name = "CoinESP"
+                            esp.FillTransparency = 0.5
+                            esp.FillColor = Color3.new(94/255, 1, 255/255)
+                            esp.OutlineColor = Color3.new(94/255, 1, 255/255)
+                            esp.OutlineTransparency = 0
+                            esp.Parent = v.Parent
+                            highlights[v] = esp  
+                        end
+                    end
+                end 
+            until not Options.CoinChams.Value
+            for _, highlight in pairs(highlights) do
+                highlight:Destroy()
+            end         
+        end
+    end
+})
+
 -- Combat
 
 Tabs.Combat:AddParagraph({
@@ -1010,23 +1038,45 @@ local Input = Tabs.Combat:AddInput("KillAuraRange", {
         end
     })
     
+function getNearestThrowPlayer()
+    local NearestTarget = nil
+    local Distance = math.huge
+
+    for _, v in pairs(game.Players:GetPlayers()) do
+        if v.Name ~= game.Players.LocalPlayer.Name then
+            pcall(function()
+                if v.Character and v.Character:FindFirstChild("HumanoidRootPart") then
+                    for _, knife in pairs(workspace:GetChildren()) do
+                        if knife.Name == "ThrowingKnife" and knife:FindFirstChild("KnifeVisual") then
+                            local KnifeVisual = knife.KnifeVisual
+                            local Mag = (v.Character.HumanoidRootPart.Position - KnifeVisual.Position).Magnitude
+                            if Mag < Distance then
+                                NearestTarget = v
+                                Distance = Mag
+                            end
+                        end
+                    end
+                end
+            end)
+        end
+    end
+
+    return NearestTarget
+end
+    
 function SetThrowHitbox()
 if game.Players.LocalPlayer.Character:FindFirstChild("Knife") or game.Players.LocalPlayer.Backpack:FindFirstChild("Knife") then
     for i, v in pairs(Workspace:GetChildren()) do
-          if v:FindFirstChild("ThrowingKnife") then
+          if v.Name == "ThrowingKnife" and v:FindFirstChild("KnifeVisual") then
             --    v.BladePosition.Size = Vector3.new(throwkniferange, throwkniferange, throwkniferange)
-            if v:FindFirstChild("KnifeVisual") then
-                   v.KnifeVisual.Size = Vector3.new(throwkniferange, throwkniferange, throwkniferange)
-                end
+                  v.KnifeVisual.Size = Vector3.new(throwkniferange, throwkniferange, throwkniferange)
             end
         end
   else
       for i, v in pairs(Workspace:GetChildren()) do
-          if v:FindFirstChild("ThrowingKnife") then
+         if v.Name == "ThrowingKnife" and v:FindFirstChild("KnifeVisual") then
             --    v.BladePosition.Size = Vector3.new(1, 1, 1)
-            if v:FindFirstChild("KnifeVisual") then
                 v.KnifeVisual.Size = Vector3.new(1, 1, 1)
-                end
             end
         end
     end
@@ -1116,32 +1166,6 @@ local GetGunAuto = false
 local AutoShoot = false
 local KillMurder = false
 local GunAccuracy = 50
-
-local function getNearestPlayerWithKnife()
-    local closestPlayer = nil
-    local closestDistance = math.huge
-
-    for _, player in pairs(Players:GetPlayers()) do
-        if player ~= LocalPlayer then
-            local hasKnife = player.Backpack:FindFirstChild("Knife") or (player.Character and player.Character:FindFirstChild("Knife"))
-            
-            if hasKnife and player.Character then
-                local humanoidRootPart = player.Character:FindFirstChild("HumanoidRootPart")
-                
-                if humanoidRootPart then
-                    local distance = (LocalPlayer.Character.HumanoidRootPart.Position - humanoidRootPart.Position).Magnitude
-                    
-                    if distance < closestDistance then
-                        closestDistance = distance
-                        closestPlayer = player
-                    end
-                end
-            end
-        end
-    end
-    
-        return closestPlayer
-end
 
 function AutoKillMurderer()
 if game.Players.LocalPlayer.Character:FindFirstChild("Gun") or game.Players.LocalPlayer.Backpack:FindFirstChild("Gun") then
@@ -1291,7 +1315,7 @@ local function getNearestTargetPlayer()
 				end
 			end
 			
-		return NearestTarget
+    return NearestTarget
 end
 
 local GunHook
@@ -1335,20 +1359,13 @@ GunHook = hookmetamethod(game, "__namecall", function(self, ...)
                         end
                     end
                 end
-            elseif MurdererSilentAim and self.Name == "Throw" and method == "FireServer" then
+            elseif self.Name == "Throw" and method == "FireServer" then
                 local Closest = getNearestTargetPlayer()
                 
-                if MurdererSilentAim and Closest and Closest.Character then
-                    local Velocity = Closest.Character.HumanoidRootPart.AssemblyLinearVelocity
-                    local Pos = Closest.Character.HumanoidRootPart.Position
-                    if Velocity.Magnitude == 0 then
-                       args[1] = CFrame.new(Pos)
-                 else
-                      local velocityUnit = Velocity.Unit
-                      local velocityMagnitude = Velocity.Magnitude
-                      local silentAimPosition = Pos + Vector3.new((velocityUnit * velocityMagnitude) / 17 + Closest.Character.Humanoid.MoveDirection)
-                      args[1] = CFrame.new(silentAimPosition)
-                    end
+                if MurdererSilentAim and Closest then
+                    local Y = Closest.Character.HumanoidRootPart.AssemblyLinearVelocity / 3
+                    
+                    args[1] = CFrame.new(Closest.Character.HumanoidRootPart.Position + Vector3.new(Y.X, Y.Y / 1.5, Y.Z))
                 end
             end
         end
@@ -1364,7 +1381,7 @@ Toggle:OnChanged(function(gunsilentaim)
 end)
 
 Tabs.Combat:AddParagraph({
-        Title = ""
+        Title = "",
         Content = "Linear: Needed Accuracy\nDynamic: No Accuracy Needed\nStatic: No Accuracy Needed\nOverflow: No Accuracy Needed"
     })
 
