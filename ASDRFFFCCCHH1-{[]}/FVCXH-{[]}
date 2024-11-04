@@ -428,6 +428,7 @@ function getNearestHitPart()
 end
 
 local killaurarange = 250
+local swingattackrange = 250
 
 function ExplosionDamage()
 if workspace:FindFirstChild("Dungeon") then
@@ -560,6 +561,34 @@ function killAuraHigh(monster)
        end
 end
 
+function SwingAttackAura()
+  if workspace:FindFirstChild("Dungeon") then
+   for _, monster in pairs(workspace.Dungeon:GetDescendants()) do
+    if monster:FindFirstChild("HumanoidRootPart") then
+        if monster.Name ~= game.Players.LocalPlayer.Name then
+            local monsterRootPart = monster.HumanoidRootPart
+        
+        for _, damage in ipairs(game:GetService("Workspace").Characters:GetDescendants()) do
+           if damage.Name == "Hitbox" or damage.Name == "hitbox" and damage:FindFirstChildWhichIsA("TouchTransmitter") then
+           local distance = (damage.Position - monster.HumanoidRootPart.Position).Magnitude
+           
+           if distance <= swingattackrange then
+               firetouchinterest(monster.HumanoidRootPart, damage, 0)
+               firetouchinterest(monster.HumanoidRootPart, damage, 1)
+               firetouchinterest(damage, monster.HumanoidRootPart, 0)
+               firetouchinterest(damage, monster.HumanoidRootPart, 1)
+            
+                end
+            end
+        end
+     wait(0.1)
+end
+            
+              end
+          end
+     end
+end
+
 local function AllKill()
 killAuraLow(monster)
 getNearestAttack()
@@ -575,7 +604,10 @@ local function AllKill3()
     getNearestAttack()
 end
 
-
+local function AllKill4()
+   SwingAttackAura()
+   getNearestAttack()
+end
 
 local h = require(ReplicatedStorage.Shared.Modules.DungeonLibrary)
 
@@ -1644,7 +1676,7 @@ Toggle:OnChanged(function(State)
 end)
 
 Tabs.Enemies:AddParagraph({
-        Title = "Ability Mods",
+        Title = "Ability and Weapon Mods",
         Content = "Disable the Toggle when you Changing the types"
     })
     
@@ -1711,6 +1743,30 @@ end
 if SelectedHigh then
    NewSize = tonumber(Value) or 250
 end
+        end
+    })
+
+local Toggle = Tabs.Enemies:AddToggle("SwingAura", {Title = "Swing Aura Toggle", Default = false })
+local isToggleActive2 = false
+
+Toggle:OnChanged(function(isToggled2)
+    isToggleActive2 = isToggled2
+
+    while isToggleActive2 and wait(0.2)  do
+    if not isToggleActive2 then break end
+        spawn(AllKill4)
+    end
+end)
+
+local Slider = Tabs.Enemies:AddSlider("SwingAuraRange", {
+        Title = "Swing Aura Range",
+        Description = "Only works for enemies targetted you",
+        Default = 250,
+        Min = 1,
+        Max = 500,
+        Rounding = 1,
+        Callback = function(Value)
+    swingattackrange = tonumber(Value) or 250
         end
     })
 
