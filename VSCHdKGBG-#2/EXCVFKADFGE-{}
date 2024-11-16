@@ -1378,7 +1378,7 @@ local FakeEmoteDownDash = false
 local FakeEmoteDownDash2 = false
 local SelectedEmoteSpeed = 2000
 
-local Toggle = Tabs.Misc:AddToggle("EmoteD1", {Title = "Sprint Emote Dash", Default = false })
+local Toggle = Tabs.Misc:AddToggle("EmoteD1", {Title = "Sprint Emote Dash (Unstable)", Default = false })
 
     Toggle:OnChanged(function(State)
         FakeEmoteDownDash = State
@@ -1729,7 +1729,7 @@ SaveManager:LoadAutoloadConfig()
 
 local RunUpdater = true
 
- while RunUpdater and wait(0.3) do
+ while RunUpdater and wait(1) do
         local updatedCount = 0 
         for _, v in ipairs(getgc(true)) do
             if type(v) == 'table' and rawget(v, "Friction") then
