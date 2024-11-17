@@ -1367,17 +1367,15 @@ if not FakeEmoteDash then
   setTSpeed(SavedSpeed)
 end
 
+while FakeEmoteDash and wait(0.2) do
 local char = game:GetService("Players").LocalPlayer.Character or game:GetService("Players").LocalPlayer.CharacterAdded:Wait()
-
-char:GetAttributeChangedSignal("State"):Connect(function()
-  if FakeEmoteDash then
     if char and char:GetAttribute("State") == "Emoting" or char:GetAttribute("State") == "EmotingAir" or char:GetAttribute("State") == "EmotingSlide" or char:GetAttribute("State") == "EmotingSlideAir" then
+          wait(1)
       setTSpeed(SelectedEmoteSpeed)
   else
       setTSpeed(SavedSpeed)
          end
-       end
-   end)
+     end
 end)
 
   local Dropdown = Tabs.Misc:AddDropdown("EmoteSpeed", {
@@ -1692,8 +1690,10 @@ local function optimizegetgc()
 end
 
 game.Players.LocalPlayer.CharacterAdded:Connect(function()
-      wait(1)
-    optimizegetgc()
+   if game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
+        wait(3)
+      optimizegetgc()
+   end
 end)
 
 if game.Players.LocalPlayer.Character then
@@ -1701,7 +1701,7 @@ if game.Players.LocalPlayer.Character then
 end
 
 spawn(function()
-while wait(0.1) do
+while wait(3) do
 setTSpeed(TSpeed2)
 setTJump(TJump2)
    end
