@@ -181,7 +181,7 @@ local SizeGuiZ = 460
 
 local Window = Fluent:CreateWindow({
     Title = "Unknown Hub X Evade (Overhaul)",
-    SubTitle = "V1.7 Made by Unknownproooolucky discord.gg/d2a3KkTD6r",
+    SubTitle = "V1.8 Made by Unknownproooolucky discord.gg/d2a3KkTD6r",
     TabWidth = 160,
     Size = UDim2.fromOffset(SizeGuiX, SizeGuiZ),
     Acrylic = false, -- The blur may be detectable, setting this to false disables blur entirely
@@ -193,28 +193,31 @@ mainopen.MouseButton1Click:Connect(function()
    Window:Minimize()
 end)
 
+
+Fluent:Notify({
+        Title = "Unknownproooolucky Message",
+        Content = "This is just a Update 1",
+        SubContent = "Well, atleast i fixed the massively lag :p whatever blah blah blah", -- Optional
+        Duration = 5 -- Set to nil to make the notification not disappear
+    })
+    
+
 local Tabs = {
     Main = Window:AddTab({ Title = "Main", Icon = "" }),
     AutoFarm = Window:AddTab({ Title = "Auto Farms", Icon = "" }),
     Nextbot = Window:AddTab({ Title = "Nextbot Mods", Icon = "" }),
     Misc = Window:AddTab({ Title = "Misc", Icon = "" }),
-    Settings = Window:AddTab({ Title = "Save Config", Icon = "rbxassetid://7734052335" })
---    Admin = Window:AddTab({ Title = "Admin Commands", Icon = "rbxassetid://7734052335" })
+    Settings = Window:AddTab({ Title = "Save Config", Icon = "rbxassetid://7734052335" }),
+    Admin = Window:AddTab({ Title = "", Icon = "" })
 }
 
 local Options = Fluent.Options
 
-Fluent:Notify({
-           Title = "Announcement",
-            Content = "Fixed API just coding for 10 minutes, i gotta sleep now",
-            SubContent = "", -- Optional
-            Duration = 10 -- Set to nil to make the notification not disappear
-        })
 
 -- Main
 
 Tabs.Main:AddParagraph({
-        Title = "ESP",
+        Title = "ESP Features",
         Content = " "
     })
 
@@ -245,7 +248,7 @@ function Simple_Create(base, name, trackername, studs)
     txtlbl.BackgroundTransparency = 1
     txtlbl.Position = UDim2.new(0, 0, 0, -48)
     txtlbl.Size = UDim2.new(1, 0, 10, 0)
-    txtlbl.Font = Enum.Font.GothamBold
+    txtlbl.Font = Enum.Font.SourceSans
     txtlbl.Text = name
     txtlbl.TextSize = 14    
     txtlbl.TextStrokeTransparency = 0.5
@@ -257,7 +260,7 @@ function Simple_Create(base, name, trackername, studs)
     txtdistance.BackgroundTransparency = 1
     txtdistance.Position = UDim2.new(0, 0, 0, -30)
     txtdistance.Size = UDim2.new(1, 0, 10, 0)
-    txtdistance.Font = Enum.Font.GothamBold
+    txtdistance.Font = Enum.Font.SourceSans
     txtdistance.TextSize = 14
     txtdistance.TextStrokeTransparency = 0.5
     txtdistance.TextColor3 = Color3.fromRGB(255, 255, 255)
@@ -293,7 +296,7 @@ local Toggle = Tabs.Main:AddToggle("ESPBot", {Title = "ESP Bot", Default = false
         
         task.spawn(
                 function()
-			while task.wait(0.4) do
+			while task.wait(1) do
 				ClearESP('AI_Tracker')
 				if not BotESP then
 					break
@@ -317,7 +320,7 @@ local Toggle = Tabs.Main:AddToggle("ESPPlayers", {Title = "ESP Players", Default
 Toggle:OnChanged(function(State)
     PlayerESP = State
    
-        while PlayerESP and wait(0.4) do
+        while PlayerESP and wait(1) do
             pcall(function()
                 if PlayerESP then
                     local localPlayer = game:GetService("Players").LocalPlayer
@@ -352,7 +355,7 @@ Toggle:OnChanged(function(State)
                                 TextLabel.Size = UDim2.new(0, 200, 0, 50)
                                 TextLabel.TextScaled = false
                                 TextLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
-                                TextLabel.Font = Enum.Font.GothamBold
+                                TextLabel.Font = Enum.Font.SourceSans
                                 TextLabel.TextSize = 14
                             end
 
@@ -517,7 +520,7 @@ end
  end)
 
 Tabs.Main:AddParagraph({
-        Title = "Game Mods",
+        Title = "Game Mods Features",
         Content = " "
     })
     
@@ -551,19 +554,6 @@ local Toggle = Tabs.Main:AddToggle("AutoRespawn", {Title = "Auto Whistle", Defau
       while task.wait(1) and AutoWhistle do
 			autowistlefunction()
 		end
-    end)
-    
-local Revive_Mod = false
-    
-local Toggle = Tabs.Main:AddToggle("QuickRevive", {Title = "Quick Revive", Default = false })
-
-    Toggle:OnChanged(function(State)
-    Revive_Mod = State
-if Revive_Mod then
-workspace.Game.Settings:SetAttribute("ReviveTime", 1.75)
-		else
-workspace.Game.Settings:SetAttribute('ReviveTime', 2)
-		end        
     end)
     
 function timernotify()
@@ -737,7 +727,7 @@ local function mobilefly(player, vfly)
         bg.Parent = root
         bg.MaxTorque = v3inf
         bg.P = 1000
-        bg.D = 20
+        bg.D = 2
 
         mfly1 = player.CharacterAdded:Connect(function()
             unmobilefly(player)
@@ -854,7 +844,7 @@ Tabs.Main:AddButton({
 -- AutoFarm
 
 Tabs.AutoFarm:AddParagraph({
-        Title = "Auto Farm",
+        Title = "Farming Features",
         Content = "Recommend: Enable Quick Revive"
     })
 
@@ -927,7 +917,7 @@ local Toggle = Tabs.AutoFarm:AddToggle("AutoFarmTickets", {Title = "Auto Farm Ti
 if FarmTickets then
          part = Instance.new("Part", workspace)
 			part.Anchored = true
-			part.CFrame = CFrame.new(100, 496, 100)
+			part.CFrame = CFrame.new(1000, 4996, 1000)
 		end
 		while task.wait(0.5) and FarmTickets do
 			if not FarmTickets then
@@ -940,7 +930,7 @@ if FarmTickets then
 				return
 			end
 			game:GetService("ReplicatedStorage").Events.Other.TicketsEvent:FireServer(hrp.Position)
-			hrp.CFrame = CFrame.new(100, 500, 100)
+			hrp.CFrame = CFrame.new(1000, 5000, 1000)
 			for i, v in next, tickets:GetDescendants() do
 				if v.IsA(v, "BasePart") and v.Name == "HumanoidRootPart" then
 					hrp.CFrame = CFrame.new(v.Position)
@@ -1052,181 +1042,118 @@ local Dropdown = Tabs.Nextbot:AddDropdown("AntiBotTeleport", {
     end
 })
 
-local HitPart = false
-local HitPartType = "HumanoidRootPart"
-local DistanceToBring = 1000
-local ShowHitPart = true
-
--- Distances Position
-local DistanceX = 1000
-local DistanceY = 1000
-local DistanceZ = 1000
-
-local Toggle = Tabs.Nextbot:AddToggle("TestV1", {Title = "Hitbox Nextbot", Default = false })
-
-Toggle:OnChanged(function(bool)
-HitPart = bool
-    while HitPart and wait(0.1) do
-        local player = game:GetService("Players").LocalPlayer
-        local charpart = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
-        
-        if charpart then
-         local GamePlayers = workspace.Game.Players
-			for i, v in pairs(GamePlayers:GetChildren()) do
-		   	if not game.Players:FindFirstChild(v.Name) then
-                local NextRootPart = v:FindFirstChild("HumanoidRootPart")
-                
-                local clone = nil
-                for _, part in pairs(v:GetChildren()) do
-                    if part:IsA("BasePart") and part:FindFirstChild("IsClone") then
-                        clone = part
-                        break
-                    end
-                end
-                
-                if NextRootPart then
-                    local distance = (charpart.Position - NextRootPart.Position).Magnitude
-                    local distanceX = math.abs(charpart.Position.X - NextRootPart.Position.X)
-                    local distanceY = math.abs(charpart.Position.Y - NextRootPart.Position.Y)
-                    local distanceZ = math.abs(charpart.Position.Z - NextRootPart.Position.Z)
-                    
-                    if distance <= DistanceToBring and distanceX <= DistanceX and distanceY <= DistanceY and distanceZ <= DistanceZ then
-                        if not clone then
-                            local BypassCFrameKick = NextRootPart:Clone()
-                            BypassCFrameKick.Anchored = true
-                            BypassCFrameKick.Name = HitPartType
-                            
-                            local isClone = Instance.new("BoolValue")
-                            isClone.Name = "IsClone"
-                            isClone.Parent = BypassCFrameKick
-                            
-                            BypassCFrameKick.Parent = v
-                            clone = BypassCFrameKick
-                        end
-                        local offset = charpart.CFrame:VectorToWorldSpace(Vector3.new(0, 0, -6))
-                        clone.Position = charpart.Position + offset
-                        clone.Name = HitPartType
-                            if ShowHitPart then
-                             clone.Transparency = 0.7
-                          else
-                             clone.Transparency = 1
-                             end
-                        end
-                    end
-                end
-            end
-        end
-    end
-end)
-    
-Tabs.Nextbot:AddParagraph({
-        Title = "Player Nextbot",
-        Content = " "
-    })
-
-function KillAll()
-    if game.Workspace:FindFirstChild("Game") and game.Workspace.Game:FindFirstChild("Players") and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
-        for _, player in pairs(game.Players:GetPlayers()) do
-            if player ~= game.Players.LocalPlayer and player.Character and player.Character:FindFirstChild("HumanoidRootPart") and not player.Character :GetAttribute("Team") == "Nextbot" then
-                game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = player.Character.HumanoidRootPart.CFrame * CFrame.new(0, 0, 2)
-            end
-        end
-    end
-end
-
-local HitboxSize = 3
-local HitboxTrans = 1
-
-function KillAura()
-    for i, v in pairs(game:GetService('Players'):GetPlayers()) do
-        if v.Name ~= game:GetService('Players').LocalPlayer.Name then
-            pcall(function()
-                if v.Character and v.Character:FindFirstChild("HumanoidRootPart") then
-                    v.Character.HumanoidRootPart.Size = Vector3.new(HitboxSize, HitboxSize, HitboxSize)
-                    v.Character.HumanoidRootPart.Transparency = HitboxTrans
-                    v.Character.HumanoidRootPart.CanCollide = false
-                    v.Character.HumanoidRootPart.Massless = true
-                end
-            end)
-        end
-    end
-end
-
-function DisKillAura()
-    for i, v in pairs(game:GetService('Players'):GetPlayers()) do
-        if v.Name ~= game:GetService('Players').LocalPlayer.Name then
-            pcall(function()
-                if v.Character and v.Character:FindFirstChild("HumanoidRootPart") then
-                    v.Character.HumanoidRootPart.Size = Vector3.new(3, 5, 3) -- Reset to correct default size
-                    v.Character.HumanoidRootPart.Transparency = 1 -- Reset to default transparency
-                    v.Character.HumanoidRootPart.CanCollide = false
-                end
-            end)
-        end
-    end
-end
-
-local HitboxToggle = false
-local KillAllT = false
-
-local KillAllToggle = Tabs.Nextbot:AddToggle("KillAll", {Title = "Kill All", Default = false })
-
-KillAllToggle:OnChanged(function(Value)
-    KillAllT = Value
-    
-    while KillAllT and wait(0.1) do
-        KillAura()
-    end
-end)
-
-local HitboxToggleControl = Tabs.Nextbot:AddToggle("HitboxPlayers", {Title = "Hitbox Players", Default = false })
-
-HitboxToggleControl:OnChanged(function(Value)
-    HitboxToggle = Value
-    
-    if not HitboxToggle then
-        DisKillAura()
-    end
-    
-    while HitboxToggle and wait(0.1) do
-     if not HitboxToggle then
-        DisKillAura()
-    end
-         KillAura()
-      end
-end)
-
-local HitboxSizeInput = Tabs.Nextbot:AddInput("HitboxSize", {
-    Title = "Hitbox Size",
-    Default = "3",
-    Placeholder = "Number",
-    Numeric = false, -- Only allows numbers
-    Finished = false, -- Only calls callback when you press enter
-    Callback = function(Value)
-        HitboxSize = tonumber(Value) or 3
-    end
-})
-
-local HitboxTransInput = Tabs.Nextbot:AddInput("HitboxTrans", {
-    Title = "Hitbox Transparency",
-    Default = "1",
-    Placeholder = "Number",
-    Numeric = false, -- Only allows numbers
-    Finished = false, -- Only calls callback when you press enter
-    Callback = function(Value)
-        HitboxTrans = tonumber(Value) or 1
-    end
-})
-
 -- Misc
 
 Tabs.Misc:AddParagraph({
-        Title = "Adjustment ",
+        Title = "Game Features",
+        Content = " "
+    })
+    
+local WorkspacePlayers = game:GetService("Workspace").Game.Players
+
+local function getNearestDownedPlayer()
+    local nearestPlayer = nil
+    local nearestDistance = 1000
+    
+    local localPlayer = game.Players.LocalPlayer
+    local localPlayerPosition = localPlayer.Character and localPlayer.Character:FindFirstChild("HumanoidRootPart") and localPlayer.Character.HumanoidRootPart.Position
+
+    for _, player in pairs(WorkspacePlayers:GetChildren()) 
+        if player:GetAttribute("Downed") and player:FindFirstChild("HumanoidRootPart") then
+            local distance = (localPlayerPosition - player.HumanoidRootPart.Position).Magnitude
+
+            if distance < nearestDistance then
+                nearestDistance = distance
+                nearestPlayer = player
+            end
+        end
+    end
+
+    return nearestPlayer
+end
+
+
+function InstantRevive()
+local nearestPlayer = getNearestDownedPlayer()
+      if nearestPlayer then
+         game:GetService("ReplicatedStorage").Events.Character.Interact:FireServer("Revive", nil, tostring(nearestPlayer))
+         game:GetService("ReplicatedStorage").Events.Character.Interact:FireServer("Revive", false, tostring(nearestPlayer))
+         game:GetService("ReplicatedStorage").Events.Character.Interact:FireServer("Revive", true, tostring(nearestPlayer))
+         game:GetService("ReplicatedStorage").Events.Character.Interact:FireServer("Revive", true, tostring(nearestPlayer))
+         game:GetService("ReplicatedStorage").Events.Character.Interact:FireServer("Revive", true, tostring(nearestPlayer))
+         game:GetService("ReplicatedStorage").Events.Character.Interact:FireServer("Revive", true, tostring(nearestPlayer))
+         game:GetService("ReplicatedStorage").Events.Character.Interact:FireServer("Revive", true, tostring(nearestPlayer))
+      end
+end
+
+local AutoRevive = false
+
+local Toggle = Tabs.Misc:AddToggle("InsRev", {Title = "Instant Revive", Default = false})
+
+Toggle:OnChanged(function(State)
+    AutoRevive = State
+  while AutoRevive and wait() do
+     spawn(InstantRevive)
+    end
+end)
+
+function BreakTheDoor()
+local args = {
+    [1] = math.random(1, 100)
+}
+
+game:GetService("ReplicatedStorage").Events.Map.BreakDoor:FireServer(unpack(args))
+end
+
+function OpenDoor()
+local args = {
+    [1] = math.random(1, 100)
+}
+
+game:GetService("ReplicatedStorage").Events.Map.UseInteractable:FireServer(unpack(args))
+end
+
+local AutoInteractDoor = false
+
+local Toggle = Tabs.Misc:AddToggle("AutoRev", {Title = "Auto Interaction Door", Default = false})
+
+Toggle:OnChanged(function(State)
+    AutoInteractDoor = State
+    
+ while AutoInteractDoor and wait() do
+       BreakTheDoor()
+  --    OpenDoor()
+    end
+end)
+
+function DrinkCola()
+local ohNumber1 = 0
+local ohNumber2 = 13
+
+game:GetService("ReplicatedStorage").Events.Character.ToolAction:FireServer(ohNumber1, ohNumber2)
+end
+
+local AutoDrinkCola = false
+
+local Toggle = Tabs.Misc:AddToggle("AutoRev", {Title = "Auto Drink Cola", Default = false})
+
+Toggle:OnChanged(function(State)
+    AutoDrinkCola = State
+    
+ while AutoDrinkCola and wait() do
+       DrinkCola()
+    end
+end)
+    
+Tabs.Misc:AddParagraph({
+        Title = "Adjustment Features",
         Content = " "
     })
 
 local TSpeed = 1500
+local TSpeed2 = 1500
 local TJump = 3
+local TJump2 = 3
 local SavedSpeed = 1500
 local SavedJump = 3
 
@@ -1237,7 +1164,7 @@ local Input = Tabs.Misc:AddInput("PlayerSpeed", {
         Numeric = false, -- Only allows numbers
         Finished = false, -- Only calls callback when you press enter
         Callback = function(Value)
-            TSpeed = tonumber(Value) or 1500
+            TSpeed2 = tonumber(Value) or 1500
             SavedSpeed = tonumber(Value) or 1500
         end
     })
@@ -1249,10 +1176,52 @@ local Input = Tabs.Misc:AddInput("PlayerJump", {
         Numeric = false, -- Only allows numbers
         Finished = false, -- Only calls callback when you press enter
         Callback = function(Value)
-            TJump = tonumber(Value) or 3
+            TJump2 = tonumber(Value) or 3
             SavedJump = tonumber(Value) or 3
         end
     })
+    
+function setTSpeed(newSpeed)
+    if TSpeed ~= newSpeed then
+        TSpeed = newSpeed
+        
+    local OptimizerGarbageCollection = true
+    local gcObjects = getgc(OptimizerGarbageCollection)
+
+    for i = 1, #gcObjects do
+        local v = gcObjects[i]
+        if type(v) == "table" and rawget(v, "SprintCap") then
+            rawset(v, "Speed", TSpeed)
+            rawset(v, "AirStrafeAcceleration", 384)
+            rawset(v, "AirAcceleration", 3)
+           end
+        end
+    end
+end
+
+function setTJump(newJump)
+    if TJump ~= newJump then
+        TJump = newJump
+    local OptimizerGarbageCollection = true
+    local gcObjects = getgc(OptimizerGarbageCollection)
+
+    for i = 1, #gcObjects do
+        local v = gcObjects[i]
+        if type(v) == "table" and rawget(v, "SprintCap") then
+            rawset(v, "JumpHeight", TJump)
+            rawset(v, "AirStrafeAcceleration", 384)
+            rawset(v, "AirAcceleration", 3)
+           end
+        end
+    end
+end
+
+spawn(function()
+while wait(0.1) do
+setTSpeed(TSpeed2)
+setTJump(TJump2)
+   end
+end)
     
  Tabs.Misc:AddParagraph({
         Title = "Adjustment (2)",
@@ -1328,7 +1297,9 @@ local Input = Tabs.Misc:AddInput("PlayerWalkCf", {
     })
     
 local BounceToggle = false
+local GetSpeedometer
 local AdjustedBounce = 80
+local AdjustedBounce2 = 120
 
 local Toggle = Tabs.Misc:AddToggle("AdjustBounce", {Title = "Bounce Toggle", Default = false })
 
@@ -1337,6 +1308,7 @@ local Toggle = Tabs.Misc:AddToggle("AdjustBounce", {Title = "Bounce Toggle", Def
      
   while BounceToggle and wait(0.1) do
   spawn(function()
+    GetSpeedometer = game:GetService("Players").LocalPlayer.PlayerGui.Shared.HUD.Overlay.Default.CharacterInfo.Item.Speedometer.Players.Text
     local player = game.Players.LocalPlayer
     local humanoid = player.Character:FindFirstChild("Humanoid")
    if not  BounceToggle and humanoid then
@@ -1345,9 +1317,17 @@ local Toggle = Tabs.Misc:AddToggle("AdjustBounce", {Title = "Bounce Toggle", Def
      
     if player.Character and humanoid then
           humanoid.WalkSpeed = AdjustedBounce
-        if player.Character:GetAttribute("State") == "Default" or player.Character:GetAttribute("State") == "Downed" or player.Character:GetAttribute("State") == "Emoting" or player.Character:GetAttribute("State") == "EmotingAir" or not BounceToggle then
+        if player.Character:GetAttribute("State") == "Default" or player.Character:GetAttribute("State") == "Downed" or not BounceToggle then
           humanoid.WalkSpeed = 0
             end
+            
+        if player.Character:GetAttribute("State") == "Emoting" or player.Character:GetAttribute("State") == "EmotingAir" or player.Character:GetAttribute("State") == "EmoteSlide" or player.Character:GetAttribute("State") == "EmoteSlideAir" then
+            humanoid.WalkSpeed = AdjustedBounce2 + GetSpeedometer
+        elseif GetSpeedometer == 15 or player.Character:GetAttribute("State") == "Default" then -- anti stunning bug
+          humanoid.WalkSpeed = 0
+        else
+           humanoid.WalkSpeed = AdjustedBounce + GetSpeedometer
+           end
         end
     end)
 end
@@ -1363,43 +1343,46 @@ local Input = Tabs.Misc:AddInput("PlayerBounce", {
             AdjustedBounce = tonumber(Value) or 80
         end
     })
+    
+local Input = Tabs.Misc:AddInput("EmoteBounce", {
+        Title = "Emote Bounce",
+        Default = "120",
+        Placeholder = "Bounce Number",
+        Numeric = false, -- Only allows numbers
+        Finished = false, -- Only calls callback when you press enter
+        Callback = function(Value)
+            AdjustedBounce2 = tonumber(Value) or 120
+        end
+    })
 
 Tabs.Misc:AddParagraph({
-        Title = "Emote Mods",
+        Title = "Emote Features",
         Content = " "
     })
 
-Tabs.Misc:AddParagraph({
-        Title = "Sprint Emote Dash",
-        Content = ""
-    })
-
-local FakeEmoteDownDash = false
-local FakeEmoteDownDash2 = false
+local FakeEmoteDash = false
 local SelectedEmoteSpeed = 2000
 
-local Toggle = Tabs.Misc:AddToggle("EmoteD1", {Title = "Sprint Emote Dash (Unstable)", Default = false })
+local Toggle = Tabs.Misc:AddToggle("EmoteD1", {Title = "Sprint Emote Dash", Default = false })
 
     Toggle:OnChanged(function(State)
-        FakeEmoteDownDash = State
-      if not FakeEmoteDownDash then
-      TSpeed = SavedSpeed
-      end
-    
-    repeat
-      wait()
-       if FakeEmoteDownDash then
-       if game.Workspace:FindFirstChild("Game") and game.Workspace.Game:FindFirstChild("Players") and game.Workspace.Game.Players:FindFirstChild(game:GetService("Players").LocalPlayer.Name) then
-			local char = game:GetService("Players").LocalPlayer.Character or game:GetService("Players").LocalPlayer.CharacterAdded:Wait()
-			if char and char:GetAttribute("State") == "Emoting" or char:GetAttribute("State") == "EmotingAir" or char:GetAttribute("State") == "EmotingSlide" or char:GetAttribute("State") == "EmotingSlideAir" then
-				TSpeed = SelectedEmoteSpeed
-			else
-	            TSpeed = SavedSpeed
-			end
-		end
-     end
-		until FakeEmoteDownDash == false
-    end)
+        FakeEmoteDash = State
+
+if not FakeEmoteDash then
+  setTSpeed(SavedSpeed)
+end
+
+game:GetService("Players").LocalPlayer.Character:GetAttributeChangedSignal("State"):Connect(function()
+  if FakeEmoteDash then
+  local char = game:GetService("Players").LocalPlayer.Character or game:GetService("Players").LocalPlayer.CharacterAdded:Wait()
+    if char and char:GetAttribute("State") == "Emoting" or char:GetAttribute("State") == "EmotingAir" or char:GetAttribute("State") == "EmotingSlide" or char:GetAttribute("State") == "EmotingSlideAir" then
+      setTSpeed(SelectedEmoteSpeed)
+  else
+      setTSpeed(SavedSpeed)
+         end
+       end
+   end)
+end)
 
   local Dropdown = Tabs.Misc:AddDropdown("EmoteSpeed", {
         Title = "Emote Dash Speed",
@@ -1413,32 +1396,7 @@ local Toggle = Tabs.Misc:AddToggle("EmoteD1", {Title = "Sprint Emote Dash (Unsta
     end)
 
 Tabs.Misc:AddParagraph({
-        Title = "Fun Emotes",
-        Content = "Mobile/Tablet only"
-    })
-    
-local BreakEmoteTG = false
-local BindableButtonToggle = false
-local SelectedEmoteSlot = "1"
-
-function BreakEmote()
-if game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:GetAttribute("Emoting") == true then
-      game.Players.LocalPlayer.Character.Humanoid.Sit = true
-   end
-end
-
-local Toggle = Tabs.Misc:AddToggle("RagdollEmote", {Title = "Ragdoll Emote", Default = false})
-
-Toggle:OnChanged(function(StateBruh)
-    BreakEmoteTG = StateBruh
- 
-   while BreakEmoteTG and wait(0.1) do
-      BreakEmote()
-   end
-end)
-
-Tabs.Misc:AddParagraph({
-        Title = "Bhop",
+        Title = "BHOP Features",
         Content = " "
     })
     
@@ -1465,11 +1423,6 @@ local Keybind = Tabs.Misc:AddKeybind("KeyBHOP", {
         end
     })
     
-Tabs.Misc:AddParagraph({
-        Title = "Mobile/Tablet Version",
-        Content = ""
-    })
- 
 local BHop = false
 local delay = 1
 
@@ -1519,7 +1472,7 @@ end
 spawn(function()
 while true and wait(0.1) do
     if BHop2 then
-   setfflag("MaxAltitudePDStickHipHeightPercent", "-24")
+      setfflag("MaxAltitudePDStickHipHeightPercent", "-24")
       else
       setfflag("MaxAltitudePDStickHipHeightPercent", "10")
        end
@@ -1727,22 +1680,26 @@ Window:SelectTab(1)
 -- Auto Load Configuration
 SaveManager:LoadAutoloadConfig()
 
-local RunUpdater = true
+local function optimizegetgc()
+    local OptimizerGarbageCollection = true
+    local gcObjects = getgc(OptimizerGarbageCollection)
 
- while RunUpdater and wait(1) do
-        local updatedCount = 0 
-        for _, v in ipairs(getgc(true)) do
-            if type(v) == 'table' and rawget(v, "Friction") then
-              if v.JumpHeight and v.Speed then
-                rawset(v, "Speed", TSpeed)
-                rawset(v, "JumpHeight", TJump)                
-             end
-                
-                 updatedCount = updatedCount + 1
-                  if updatedCount >= 75 then
-                     updatedCount = 0
-                     break
-                end
-            end
+    for i = 1, #gcObjects do
+        local v = gcObjects[i]
+        if type(v) == "table" and rawget(v, "SprintCap") then
+            rawset(v, "Speed", TSpeed)
+            rawset(v, "JumpHeight", TJump)
+            rawset(v, "AirStrafeAcceleration", 384)
+            rawset(v, "AirAcceleration", 3)
         end
-    end 
+    end
+end
+
+game.Players.LocalPlayer.CharacterAdded:Connect(function()
+      wait(1)
+    optimizegetgc()
+end)
+
+if game.Players.LocalPlayer.Character then
+    optimizegetgc()
+end
