@@ -1058,7 +1058,7 @@ local function getNearestDownedPlayer()
     local localPlayer = game.Players.LocalPlayer
     local localPlayerPosition = localPlayer.Character and localPlayer.Character:FindFirstChild("HumanoidRootPart") and localPlayer.Character.HumanoidRootPart.Position
 
-    for _, player in pairs(WorkspacePlayers:GetChildren()) 
+    for _, player in pairs(WorkspacePlayers:GetChildren()) do
         if player:GetAttribute("Downed") and player:FindFirstChild("HumanoidRootPart") then
             local distance = (localPlayerPosition - player.HumanoidRootPart.Position).Magnitude
 
@@ -1215,13 +1215,6 @@ function setTJump(newJump)
         end
     end
 end
-
-spawn(function()
-while wait(0.1) do
-setTSpeed(TSpeed2)
-setTJump(TJump2)
-   end
-end)
     
  Tabs.Misc:AddParagraph({
         Title = "Adjustment (2)",
@@ -1272,6 +1265,7 @@ local Toggle = Tabs.Misc:AddToggle("PlayerWalkspeed", {Title = "Walkspeed Toggle
     Toggle:OnChanged(function(State)
         CFRAMEWalk = State
      while CFRAMEWalk do
+spawn(function()
 local RunService = game:GetService("RunService")
 local hb = RunService.Heartbeat
 local speaker = game.Players.LocalPlayer
@@ -1281,7 +1275,8 @@ local delta = hb:Wait()
     
     if chr and hum then
         chr:TranslateBy(hum.MoveDirection * moveDistance * delta * 10)
-    end
+        end
+    end)
 end
     end)
 
@@ -1372,9 +1367,10 @@ if not FakeEmoteDash then
   setTSpeed(SavedSpeed)
 end
 
-game:GetService("Players").LocalPlayer.Character:GetAttributeChangedSignal("State"):Connect(function()
+local char = game:GetService("Players").LocalPlayer.Character or game:GetService("Players").LocalPlayer.CharacterAdded:Wait()
+
+char:GetAttributeChangedSignal("State"):Connect(function()
   if FakeEmoteDash then
-  local char = game:GetService("Players").LocalPlayer.Character or game:GetService("Players").LocalPlayer.CharacterAdded:Wait()
     if char and char:GetAttribute("State") == "Emoting" or char:GetAttribute("State") == "EmotingAir" or char:GetAttribute("State") == "EmotingSlide" or char:GetAttribute("State") == "EmotingSlideAir" then
       setTSpeed(SelectedEmoteSpeed)
   else
@@ -1703,3 +1699,10 @@ end)
 if game.Players.LocalPlayer.Character then
     optimizegetgc()
 end
+
+spawn(function()
+while wait(0.1) do
+setTSpeed(TSpeed2)
+setTJump(TJump2)
+   end
+end)
