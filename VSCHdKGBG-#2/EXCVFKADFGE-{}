@@ -195,9 +195,9 @@ end)
 
 
 Fluent:Notify({
-        Title = "Unknownproooolucky Message",
-        Content = "This is just a Update 1",
-        SubContent = "Well, atleast i fixed the massively lag :p whatever blah blah blah", -- Optional
+        Title = "Unknownproooolucky𓁹 Message",
+        Content = "Update 2 will Release at Nov 27",
+        SubContent = "", -- Optional
         Duration = 5 -- Set to nil to make the notification not disappear
     })
     
