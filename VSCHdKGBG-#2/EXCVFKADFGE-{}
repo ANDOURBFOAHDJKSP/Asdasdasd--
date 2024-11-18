@@ -1265,7 +1265,6 @@ local Toggle = Tabs.Misc:AddToggle("PlayerWalkspeed", {Title = "Walkspeed Toggle
     Toggle:OnChanged(function(State)
         CFRAMEWalk = State
      while CFRAMEWalk do
-spawn(function()
 local RunService = game:GetService("RunService")
 local hb = RunService.Heartbeat
 local speaker = game.Players.LocalPlayer
@@ -1274,10 +1273,9 @@ local hum = chr and chr:FindFirstChildWhichIsA("Humanoid")
 local delta = hb:Wait()
     
     if chr and hum then
-        chr:TranslateBy(hum.MoveDirection * moveDistance * delta * 10)
+             chr:TranslateBy(hum.MoveDirection * moveDistance * delta * 10)
+           end
         end
-    end)
-end
     end)
 
 local Input = Tabs.Misc:AddInput("PlayerWalkCf", {
