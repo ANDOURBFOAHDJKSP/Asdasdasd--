@@ -1184,7 +1184,7 @@ function setTSpeed(newSpeed)
         local v = gcObjects[i]
         if type(v) == "table" and rawget(v, "SprintCap") then
             rawset(v, "Speed", TSpeed)
-            rawset(v, "AirStrafeAcceleration", 384)
+            rawset(v, "AirStrafeAcceleration", 184)
             rawset(v, "AirAcceleration", 3)
            end
         end
@@ -1201,7 +1201,7 @@ function setTJump(newJump)
         local v = gcObjects[i]
         if type(v) == "table" and rawget(v, "SprintCap") then
             rawset(v, "JumpHeight", TJump)
-            rawset(v, "AirStrafeAcceleration", 384)
+            rawset(v, "AirStrafeAcceleration", 184)
             rawset(v, "AirAcceleration", 3)
            end
         end
@@ -1673,7 +1673,7 @@ local function optimizegetgc()
         if type(v) == "table" and rawget(v, "SprintCap") then
             rawset(v, "Speed", TSpeed)
             rawset(v, "JumpHeight", TJump)
-            rawset(v, "AirStrafeAcceleration", 384)
+            rawset(v, "AirStrafeAcceleration", 184)
             rawset(v, "AirAcceleration", 3)
         end
     end
