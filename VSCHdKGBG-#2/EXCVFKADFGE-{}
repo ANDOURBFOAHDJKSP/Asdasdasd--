@@ -194,14 +194,6 @@ mainopen.MouseButton1Click:Connect(function()
 end)
 
 
-Fluent:Notify({
-        Title = "Unknownproooolucky𓁹 Message",
-        Content = "Update 2 will Release at Nov 27",
-        SubContent = "", -- Optional
-        Duration = 5 -- Set to nil to make the notification not disappear
-    })
-    
-
 local Tabs = {
     Main = Window:AddTab({ Title = "Main", Icon = "" }),
     AutoFarm = Window:AddTab({ Title = "Auto Farms", Icon = "" }),
@@ -225,7 +217,7 @@ function Simple_Create(base, name, trackername, studs)
     local bb = Instance.new("BillboardGui")
     bb.Adornee = base
     bb.ExtentsOffset = Vector3.new(0, 1, 0)
-    bb.AlwaysOnTop = true
+    bb.AaysOnTop = true
     bb.Size = UDim2.new(0, 6, 0, 6)
     bb.StudsOffset = Vector3.new(0, 1, 0)
     bb.Name = trackername
@@ -1368,7 +1360,7 @@ end
 while FakeEmoteDash and wait(0.1) do
 local char = game:GetService("Players").LocalPlayer.Character or game:GetService("Players").LocalPlayer.CharacterAdded:Wait()
     if char and char:GetAttribute("State") == "Emoting" or char:GetAttribute("State") == "EmotingAir" or char:GetAttribute("State") == "EmotingSlide" or char:GetAttribute("State") == "EmotingSlideAir" then
-          wait(1)
+          wait(0.2)
       setTSpeed(SelectedEmoteSpeed)
   else
       setTSpeed(SavedSpeed)
