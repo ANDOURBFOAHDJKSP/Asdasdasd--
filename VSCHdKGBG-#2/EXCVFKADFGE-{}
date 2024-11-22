@@ -164,8 +164,8 @@ else
 print("Supported setfflag()")
 end
 
-if not hookmetamethod then
-    return game:GetService("Players").LocalPlayer:Kick("UNC RESTRICTION MISSING: hookmetamethod() | PLEASE TRY OTHER EXECUTORS")
+if not getgc then
+    return game:GetService("Players").LocalPlayer:Kick("UNC RESTRICTION MISSING: getgc() | PLEASE TRY OTHER EXECUTORS")
 else
 print("Supported hookmetamethod()")
 end
@@ -181,7 +181,7 @@ local SizeGuiZ = 460
 
 local Window = Fluent:CreateWindow({
     Title = "Unknown Hub X Evade (Overhaul)",
-    SubTitle = "V1.8 Made by Unknownproooolucky discord.gg/d2a3KkTD6r",
+    SubTitle = "V2 Made by Unknownproooolucky discord.gg/d2a3KkTD6r",
     TabWidth = 160,
     Size = UDim2.fromOffset(SizeGuiX, SizeGuiZ),
     Acrylic = false, -- The blur may be detectable, setting this to false disables blur entirely
@@ -217,7 +217,7 @@ function Simple_Create(base, name, trackername, studs)
     local bb = Instance.new("BillboardGui")
     bb.Adornee = base
     bb.ExtentsOffset = Vector3.new(0, 1, 0)
-    bb.AaysOnTop = true
+    bb.AlwaysOnTop = true
     bb.Size = UDim2.new(0, 6, 0, 6)
     bb.StudsOffset = Vector3.new(0, 1, 0)
     bb.Name = trackername
@@ -1064,10 +1064,13 @@ local function getNearestDownedPlayer()
     return nearestPlayer
 end
 
+local InstantReviveWhileEmote = false
 
 function InstantRevive()
 local nearestPlayer = getNearestDownedPlayer()
       if nearestPlayer then
+        if not InstantReviveWhileEmote then
+          if player.Character:GetAttribute("State") == "Run" or player.Character:GetAttribute("State") == "Air" or player.Character:GetAttribute("State") == "Fall" or player.Character:GetAttribute("State") == "Jump" or player.Character:GetAttribute("State") == "Crouch" then
          game:GetService("ReplicatedStorage").Events.Character.Interact:FireServer("Revive", nil, tostring(nearestPlayer))
          game:GetService("ReplicatedStorage").Events.Character.Interact:FireServer("Revive", false, tostring(nearestPlayer))
          game:GetService("ReplicatedStorage").Events.Character.Interact:FireServer("Revive", true, tostring(nearestPlayer))
@@ -1075,19 +1078,48 @@ local nearestPlayer = getNearestDownedPlayer()
          game:GetService("ReplicatedStorage").Events.Character.Interact:FireServer("Revive", true, tostring(nearestPlayer))
          game:GetService("ReplicatedStorage").Events.Character.Interact:FireServer("Revive", true, tostring(nearestPlayer))
          game:GetService("ReplicatedStorage").Events.Character.Interact:FireServer("Revive", true, tostring(nearestPlayer))
+             end
+      else
+         game:GetService("ReplicatedStorage").Events.Character.Interact:FireServer("Revive", nil, tostring(nearestPlayer))
+         game:GetService("ReplicatedStorage").Events.Character.Interact:FireServer("Revive", false, tostring(nearestPlayer))
+         game:GetService("ReplicatedStorage").Events.Character.Interact:FireServer("Revive", true, tostring(nearestPlayer))
+         game:GetService("ReplicatedStorage").Events.Character.Interact:FireServer("Revive", true, tostring(nearestPlayer))
+         game:GetService("ReplicatedStorage").Events.Character.Interact:FireServer("Revive", true, tostring(nearestPlayer))
+         game:GetService("ReplicatedStorage").Events.Character.Interact:FireServer("Revive", true, tostring(nearestPlayer))
+         game:GetService("ReplicatedStorage").Events.Character.Interact:FireServer("Revive", true, tostring(nearestPlayer))
+          end
       end
 end
 
 local AutoRevive = false
+local DelayRevive = 0.1
 
 local Toggle = Tabs.Misc:AddToggle("InsRev", {Title = "Instant Revive", Default = false})
 
 Toggle:OnChanged(function(State)
     AutoRevive = State
-  while AutoRevive and wait() do
-     spawn(InstantRevive)
+  while AutoRevive and wait(DelayRevive) do
+       spawn(InstantRevive)
     end
 end)
+
+local Toggle = Tabs.Misc:AddToggle("InsQua", {Title = "Instant Revive While Emote", Default = false})
+
+Toggle:OnChanged(function(State)
+    InstantReviveWhileEmote = State
+end)
+
+local Slider = Tabs.Misc:AddSlider("ReviveDelay", {
+        Title = "Instant Revive Delay",
+        Description = "",
+        Default = 0.1,
+        Min = 0,
+        Max = 5,
+        Rounding = 1,
+        Callback = function(v)
+            DelayRevive = v
+        end
+    })
 
 function BreakTheDoor()
 local args = {
@@ -1142,12 +1174,71 @@ Tabs.Misc:AddParagraph({
         Content = " "
     })
 
+local StrafeAcceleration = 184
+local StrafeAcceleration2 = 184
 local TSpeed = 1500
 local TSpeed2 = 1500
 local TJump = 3
 local TJump2 = 3
-local SavedSpeed = 1500
-local SavedJump = 3
+
+function setTSpeed(newSpeed)
+    if TSpeed ~= newSpeed then
+        TSpeed = newSpeed
+        
+    local OptimizerGarbageCollection = true
+    local gcObjects = getgc(OptimizerGarbageCollection)
+
+pcall(function()
+    for i = 1, #gcObjects do
+        local v = gcObjects[i]
+        if type(v) == "table" and rawget(v, "SprintCap") then
+            if v.Speed and v.JumpHeight then
+                   rawset(v, "Speed", TSpeed)
+                  end
+               end
+            end
+        end)
+    end
+end
+
+function setTJump(newJump)
+    if TJump ~= newJump then
+        TJump = newJump
+    local OptimizerGarbageCollection = true
+    local gcObjects = getgc(OptimizerGarbageCollection)
+
+pcall(function()
+    for i = 1, #gcObjects do
+        local v = gcObjects[i]
+        if type(v) == "table" and rawget(v, "SprintCap") then
+           if v.Speed and v.JumpHeight then
+                  rawset(v, "JumpHeight", TJump)
+                  end
+               end
+            end
+        end)
+    end
+end
+
+function setStrafeAcceleration(newAcceleration)
+    if StrafeAcceleration ~= newAcceleration then
+        StrafeAcceleration = newAcceleration
+    local OptimizerGarbageCollection = true
+    local gcObjects = getgc(OptimizerGarbageCollection)
+
+pcall(function()
+    for i = 1, #gcObjects do
+        local v = gcObjects[i]
+        if type(v) == "table" and rawget(v, "SprintCap") then
+            if v.Speed and v.JumpHeight then
+                  rawset(v, "AirStrafeAcceleration", StrafeAcceleration)
+                  rawset(v, "AirAcceleration", 3)
+                  end
+               end
+            end
+        end)
+    end
+end
 
 local Input = Tabs.Misc:AddInput("PlayerSpeed", {
         Title = "Player Speed",
@@ -1157,7 +1248,6 @@ local Input = Tabs.Misc:AddInput("PlayerSpeed", {
         Finished = false, -- Only calls callback when you press enter
         Callback = function(Value)
             TSpeed2 = tonumber(Value) or 1500
-            SavedSpeed = tonumber(Value) or 1500
         end
     })
     
@@ -1169,44 +1259,30 @@ local Input = Tabs.Misc:AddInput("PlayerJump", {
         Finished = false, -- Only calls callback when you press enter
         Callback = function(Value)
             TJump2 = tonumber(Value) or 3
-            SavedJump = tonumber(Value) or 3
         end
     })
     
-function setTSpeed(newSpeed)
-    if TSpeed ~= newSpeed then
-        TSpeed = newSpeed
-        
-    local OptimizerGarbageCollection = true
-    local gcObjects = getgc(OptimizerGarbageCollection)
-
-    for i = 1, #gcObjects do
-        local v = gcObjects[i]
-        if type(v) == "table" and rawget(v, "SprintCap") then
-            rawset(v, "Speed", TSpeed)
-            rawset(v, "AirStrafeAcceleration", 184)
-            rawset(v, "AirAcceleration", 3)
-           end
+local Input = Tabs.Misc:AddInput("PlayerStrafeAcceleration", {
+        Title = "Player Strafe Acceleration",
+        Default = "184",
+        Placeholder = "Number",
+        Numeric = false, -- Only allows numbers
+        Finished = false, -- Only calls callback when you press enter
+        Callback = function(Value)
+            StrafeAcceleration2 = tonumber(Value) or 184
         end
-    end
-end
-
-function setTJump(newJump)
-    if TJump ~= newJump then
-        TJump = newJump
-    local OptimizerGarbageCollection = true
-    local gcObjects = getgc(OptimizerGarbageCollection)
-
-    for i = 1, #gcObjects do
-        local v = gcObjects[i]
-        if type(v) == "table" and rawget(v, "SprintCap") then
-            rawset(v, "JumpHeight", TJump)
-            rawset(v, "AirStrafeAcceleration", 184)
-            rawset(v, "AirAcceleration", 3)
-           end
+    })
+    
+local Input = Tabs.Misc:AddInput("PlayerFOV", {
+        Title = "Player FOV",
+        Default = "1",
+        Placeholder = "Number",
+        Numeric = false, -- Only allows numbers
+        Finished = false, -- Only calls callback when you press enter
+        Callback = function(Value)
+            game:GetService("Players").LocalPlayer.PlayerScripts.Camera.FOVAdjusters.Zoom.Value = Value
         end
-    end
-end
+    })
     
  Tabs.Misc:AddParagraph({
         Title = "Adjustment (2)",
@@ -1256,15 +1332,16 @@ local Toggle = Tabs.Misc:AddToggle("PlayerWalkspeed", {Title = "Walkspeed Toggle
 
     Toggle:OnChanged(function(State)
         CFRAMEWalk = State
-     while CFRAMEWalk do
+ 
+ while CFRAMEWalk and wait(0.1) do
+    if chr and hum then
 local RunService = game:GetService("RunService")
 local hb = RunService.Heartbeat
 local speaker = game.Players.LocalPlayer
 local chr = speaker.Character
 local hum = chr and chr:FindFirstChildWhichIsA("Humanoid")
 local delta = hb:Wait()
-    
-    if chr and hum then
+
              chr:TranslateBy(hum.MoveDirection * moveDistance * delta * 10)
            end
         end
@@ -1353,31 +1430,198 @@ local Toggle = Tabs.Misc:AddToggle("EmoteD1", {Title = "Sprint Emote Dash", Defa
     Toggle:OnChanged(function(State)
         FakeEmoteDash = State
 
-if not FakeEmoteDash then
-  setTSpeed(SavedSpeed)
+if FakeEmoteDash == false then
+  setTSpeed(TSpeed2)
 end
 
 while FakeEmoteDash and wait(0.1) do
 local char = game:GetService("Players").LocalPlayer.Character or game:GetService("Players").LocalPlayer.CharacterAdded:Wait()
     if char and char:GetAttribute("State") == "Emoting" or char:GetAttribute("State") == "EmotingAir" or char:GetAttribute("State") == "EmotingSlide" or char:GetAttribute("State") == "EmotingSlideAir" then
-       wait(1)
+          wait(1)
       setTSpeed(SelectedEmoteSpeed)
   else
-      setTSpeed(SavedSpeed)
+      setTSpeed(TSpeed2)
          end
      end
 end)
 
-  local Dropdown = Tabs.Misc:AddDropdown("EmoteSpeed", {
-        Title = "Emote Dash Speed",
-        Values = {1000, 2000, 3000, 4000, 5000, 6000, 7000, 8000, 9000, 10000, 12500, 15000, 20000, 30000, 40000, 50000},
+  local Input = Tabs.Misc:AddInput("EmoteSpeed", {
+        Title = "Emote Speed",
+        Default = "2000",
+        Placeholder = "Emote Speed Number",
+        Numeric = false, -- Only allows numbers
+        Finished = false, -- Only calls callback when you press enter
+        Callback = function(Value)
+            SelectedEmoteSpeed = tonumber(Value) or 2000
+        end
+    })
+    
+ Tabs.Misc:AddParagraph({
+        Title = "Perks Features",
+        Content = "REQUIREMENTS: U need to buy Headphones to Equip Multiple Perks"
+    })
+    
+local SelectedPerks = "Briefcase"
+local LayoutPerkNumber = 3
+    
+function EquipMultiplePerks(Number)
+game:GetService("ReplicatedStorage").Events.Data.Equip:FireServer(tostring(1), "Perk1")
+
+wait(0.1)
+
+game:GetService("ReplicatedStorage").Events.Data.Equip:FireServer(tostring(Number), 1)
+end
+
+local Dropdown = Tabs.Misc:AddDropdown("SelectedPerks", {
+        Title = "Select A Perk",
+        Values = {"Briefcase", "Headphones", "Stethoscope", "Badge", "Bloxy Boy", "Medkit", "Stilts", "Mil-Grade Pack", "Hermes Shoes", "Spring Shoes", "Threads", "Boost Pack"},
         Multi = false,
-        Default = 2,
+        Default = 1,
     })
 
     Dropdown:OnChanged(function(Value)
-        SelectedEmoteSpeed = Value
+        SelectedPerks = Value
+
+if SelectedPerks == "Briefcase" then
+LayoutPerkNumber = 3
+elseif SelectedPerks == "Stethoscope" then
+LayoutPerkNumber = 2
+elseif SelectedPerks == "Headphones" then
+LayoutPerkNumber = 1
+elseif SelectedPerks == "Badge" then
+LayoutPerkNumber = 7
+elseif SelectedPerks == "Bloxy Boy" then
+LayoutPerkNumber = 4
+elseif SelectedPerks == "Medkit" then
+LayoutPerkNumber = 6
+elseif SelectedPerks == "Stilts" then
+LayoutPerkNumber = 5
+elseif SelectedPerks == "Mil-Grade Pack" then
+LayoutPerkNumber = 8
+elseif SelectedPerks == "Hermes Shoes" then
+LayoutPerkNumber = 9
+elseif SelectedPerks == "Spring Shoes" then
+LayoutPerkNumber = 10
+elseif SelectedPerks == "Threads" then
+LayoutPerkNumber = 696
+elseif SelectedPerks == "Boost Pack" then
+LayoutPerkNumber = 11
+ end
     end)
+
+local EquipMultiplePerksTG = false
+
+local Toggle = Tabs.Misc:AddToggle("TGEquipPerksMulti", {Title = "Equip Multiple Perks", Default = false})
+
+Toggle:OnChanged(function(State)
+    EquipMultiplePerksTG = State
+ 
+ while EquipMultiplePerksTG and wait(0.1) do
+       EquipMultiplePerks(LayoutPerkNumber)
+    end
+end)
+
+function EquipAllPerks()
+game:GetService("ReplicatedStorage").Events.Data.Equip:FireServer(tostring(2), "Perk1")
+game:GetService("ReplicatedStorage").Events.Data.Equip:FireServer(tostring(3), "Perk1")
+game:GetService("ReplicatedStorage").Events.Data.Equip:FireServer(tostring(4), "Perk1")
+game:GetService("ReplicatedStorage").Events.Data.Equip:FireServer(tostring(5), "Perk1")
+game:GetService("ReplicatedStorage").Events.Data.Equip:FireServer(tostring(6), "Perk1")
+game:GetService("ReplicatedStorage").Events.Data.Equip:FireServer(tostring(7), "Perk1")
+game:GetService("ReplicatedStorage").Events.Data.Equip:FireServer(tostring(8), "Perk1")
+game:GetService("ReplicatedStorage").Events.Data.Equip:FireServer(tostring(9), "Perk1")
+game:GetService("ReplicatedStorage").Events.Data.Equip:FireServer(tostring(10), "Perk1")
+game:GetService("ReplicatedStorage").Events.Data.Equip:FireServer(tostring(11), "Perk1")
+game:GetService("ReplicatedStorage").Events.Data.Equip:FireServer(tostring(696), "Perk1")
+end
+
+function UnequipAllPerks()
+game:GetService("ReplicatedStorage").Events.Data.Equip:FireServer("Unequip", 2)
+game:GetService("ReplicatedStorage").Events.Data.Equip:FireServer("Unequip", 3)
+game:GetService("ReplicatedStorage").Events.Data.Equip:FireServer("Unequip", 4)
+game:GetService("ReplicatedStorage").Events.Data.Equip:FireServer("Unequip", 5)
+game:GetService("ReplicatedStorage").Events.Data.Equip:FireServer("Unequip", 6)
+game:GetService("ReplicatedStorage").Events.Data.Equip:FireServer("Unequip", 7)
+game:GetService("ReplicatedStorage").Events.Data.Equip:FireServer("Unequip", 8)
+game:GetService("ReplicatedStorage").Events.Data.Equip:FireServer("Unequip", 9)
+game:GetService("ReplicatedStorage").Events.Data.Equip:FireServer("Unequip", 10)
+game:GetService("ReplicatedStorage").Events.Data.Equip:FireServer("Unequip", 11)
+game:GetService("ReplicatedStorage").Events.Data.Equip:FireServer("Unequip", 696)
+end
+
+Tabs.Misc:AddButton({
+        Title = "Equip All Perks",
+        Description = " ",
+        Callback = function()
+        EquipAllPerks()
+  end
+})
+
+Tabs.Misc:AddButton({
+        Title = "Unequip All Perks",
+        Description = " ",
+        Callback = function()
+        UnequipAllPerks()
+  end
+})
+
+Tabs.Misc:AddParagraph({
+        Title = "Lag Switch Features",
+        Content = " "
+    })
+    
+local LagDelay = 0.1
+    
+ local CAS = game:GetService("ContextActionService")
+local UserInputService = game:GetService("UserInputService")
+ 
+ function CreateBindableButton()
+    local function Action(actionName, inputState)
+      if not inputState == Enum.UserInputState.Begin and inputState == Enum.UserInputType.MouseButton1 then
+          setfflag("TaskSchedulerTargetFps", "1")
+      wait(LagDelay)
+          setfflag("TaskSchedulerTargetFps", "900")
+        end
+    end
+
+    CAS:BindAction("ButtonTarget", Action, true, Enum.KeyCode.E)
+
+    local button1 = CAS:GetButton("ButtonTarget")
+    if button1 then 
+        CAS:SetPosition("ButtonTarget", UDim2.new(0, 0, 0.5, 0))
+        CAS:SetTitle("ButtonTarget", "Start Lag")
+        CAS:SetImage("ButtonTarget", "IMAGEHERE")  -- Replace "IMAGEHERE" with the actual image ID
+        button1.Size = UDim2.new(0.3, 0, 0.3, 0) -- Set size if button exists
+    end
+    
+    MakeDraggable(button1, button1)
+end
+
+function RemoveBindableButton()
+    CAS:UnbindAction("ButtonTarget")
+end
+
+local Toggle = Tabs.Misc:AddToggle("LagSwitch", {Title = "Lag Switch Toggle", Default = false})
+
+Toggle:OnChanged(function(State)
+    if State then
+        CreateBindableButton() -- Create buttons when toggled on
+    else
+        RemoveBindableButton() -- Remove buttons when toggled off
+    end
+end)
+
+local Slider = Tabs.Misc:AddSlider("LagDelay", {
+        Title = "Lag Delay",
+        Description = "",
+        Default = 0.1,
+        Min = 0,
+        Max = 5,
+        Rounding = 1,
+        Callback = function(v)
+            LagDelay = v
+        end
+    })
 
 Tabs.Misc:AddParagraph({
         Title = "BHOP Features",
@@ -1417,32 +1661,37 @@ local UserInputService = game:GetService("UserInputService")
 local BHop2 = false
 
 local function createtoggle()
-    -- Create ScreenGui
     local screenGui = Instance.new("ScreenGui")
     screenGui.Parent = game.CoreGui
     screenGui.Name = "BHopToggle"
     screenGui.ResetOnSpawn = false
-    
-    -- Create Frame
-    local frame = Instance.new("Frame")
-    frame.Size = UDim2.new(0, 200, 0, 50)
-    frame.Position = UDim2.new(1, -200, 0.5, -40)
-    frame.BackgroundColor3 = Color3.new(0.2, 0.2, 0.2)
-    frame.BackgroundTransparency = 1
-    frame.Parent = screenGui
 
-    -- Make frame draggable
+    local frame = Instance.new("Frame")
+    frame.Size = UDim2.new(0, 100, 0, 100)
+    frame.Position = UDim2.new(1, -120, 0.5, -50)
+    frame.BackgroundColor3 = Color3.new(1, 1, 1)
+    frame.BorderSizePixel = 2
+    frame.BorderColor3 = Color3.new(0, 0, 0)
+    frame.BackgroundTransparency = 0
+    frame.Parent = screenGui
     frame.Active = true
     frame.Draggable = true
+    frame.ClipsDescendants = true
+    
+    local uiCorner = Instance.new("UICorner")
+    uiCorner.CornerRadius = UDim.new(1, 0)
+    uiCorner.Parent = frame
 
-    -- Create Toggle Button
     local toggleButton = Instance.new("TextButton")
     toggleButton.Size = UDim2.new(1, 0, 1, 0)
-    toggleButton.BackgroundColor3 = Color3.new(0.3, 0.3, 0.3)
+    toggleButton.BackgroundColor3 = Color3.new(1, 1, 1)
+    toggleButton.BorderSizePixel = 0
+    toggleButton.TextColor3 = Color3.new(0, 0, 0)
+    toggleButton.Font = Enum.Font.GothamBold
+    toggleButton.TextSize = 14
     toggleButton.Text = "Auto Jump: OFF"
     toggleButton.Parent = frame
-
-    -- Toggle Button Functionality
+    
     toggleButton.MouseButton1Click:Connect(function()
         BHop2 = not BHop2
         toggleButton.Text = BHop2 and "Auto Jump: ON" or "Auto Jump: OFF"
@@ -1450,7 +1699,6 @@ local function createtoggle()
     
     MakeDraggable(toggleButton, frame)
 end
-
 
 -- Auto-Jump
 spawn(function()
@@ -1491,7 +1739,7 @@ end
 end)
 
 Tabs.Misc:AddParagraph({
-        Title = "Modified Client",
+        Title = "Lightning Modifier",
         Content = " "
     })
 
@@ -1526,8 +1774,8 @@ function nofb()
             Lighting.ClockTime = normalclock
             Lighting.Brightness = normalbrightness
 end
- 
-  local Fullbrighting = false
+
+local Fullbrighting = false
  
  local Toggle = Tabs.Misc:AddToggle("FullBright", {Title = "Full Bright", Default = false })
 
@@ -1542,9 +1790,148 @@ end)
 
 Options.FullBright:SetValue(false)
 
+Tabs.Misc:AddParagraph({
+        Title = "Fps Booster and Anti-Lags",
+        Content = " "
+    })
+
+local Lag1 = false
+
+local Toggle = Tabs.Misc:AddToggle("Anti_Lag1", {Title = "Anti Lag 1", Default = false })
+
+    Toggle:OnChanged(function(Value1)
+        Lag1 = Value1
+if Lag1 then
+for _, v in pairs(Workspace:GetDescendants()) do
+    if v:IsA("BasePart") and not v.Parent:FindFirstChild("Humanoid") then
+        v.Material = Enum.Material.SmoothPlastic
+        if v:IsA("Texture") then
+            v:Destroy()
+        end
+    end
+end
+end
+    end)
+
+Options.Anti_Lag1:SetValue(false)
+
+local Toggle = Tabs.Misc:AddToggle("Anti_Lag2", {Title = "Anti Lag 2", Default = false })
+
+    Toggle:OnChanged(function(Value3)
+        if Value3 then
+        local decalsyeeted = true -- Leaving this on makes games look shitty but the fps goes up by at least 20.
+local g = game
+local w = g.Workspace
+local l = g.Lighting
+local t = w.Terrain
+t.WaterWaveSize = 0
+t.WaterWaveSpeed = 0
+t.WaterReflectance = 0
+t.WaterTransparency = 0
+l.GlobalShadows = false
+l.FogEnd = 9e9
+l.Brightness = 0
+settings().Rendering.QualityLevel = "Level01"
+wait(1)
+for i,v in pairs(g:GetDescendants()) do
+    if v:IsA("Part") or v:IsA("Union") or v:IsA("MeshPart") then
+        v.Material = "Plastic"
+v.Reflectance = 0
+elseif v:IsA("Decal") and decalsyeeted then 
+v.Transparency = 1
+elseif v:IsA("ParticleEmitter") or v:IsA("Trail") then 
+v.Lifetime = NumberRange.new(0)
+    end
+end
+end
+    end)
+
+Options.Anti_Lag2:SetValue(false)
+
+local Toggle = Tabs.Misc:AddToggle("Anti_Lag3", {Title = "Anti Lag 3", Default = false })
+
+    Toggle:OnChanged(function(Value4)
+        if Value4 then
+        local decalsyeeted = true 
+local g = game
+local w = g.Workspace
+local l = g.Lighting
+local t = w.Terrain
+sethiddenproperty(l,"Technology",2)
+sethiddenproperty(t,"Decoration",false)
+t.WaterWaveSize = 0
+t.WaterWaveSpeed = 0
+t.WaterReflectance = 0
+t.WaterTransparency = 0
+l.GlobalShadows = 0
+l.FogEnd = 9e9
+l.Brightness = 0
+settings().Rendering.QualityLevel = "Level01"
+for i, v in pairs(w:GetDescendants()) do
+    if v:IsA("BasePart") and not v:IsA("MeshPart") then
+        v.Material = "Plastic"
+        v.Reflectance = 0
+    elseif (v:IsA("Decal") or v:IsA("Texture")) and decalsyeeted then
+        v.Transparency = 1
+    elseif v:IsA("ParticleEmitter") or v:IsA("Trail") then
+        v.Lifetime = NumberRange.new(0)
+    elseif v:IsA("Explosion") then
+        v.BlastPressure = 1
+        v.BlastRadius = 1
+    elseif v:IsA("Fire") or v:IsA("SpotLight") or v:IsA("Smoke") or v:IsA("Sparkles") then
+        v.Enabled = false
+    elseif v:IsA("MeshPart") and decalsyeeted then
+        v.Material = "Plastic"
+        v.Reflectance = 0
+        v.TextureID = 10385902758728957
+    elseif v:IsA("SpecialMesh") and decalsyeeted  then
+        v.TextureId=0
+    elseif v:IsA("ShirtGraphic") and decalsyeeted then
+        v.Graphic=0
+    elseif (v:IsA("Shirt") or v:IsA("Pants")) and decalsyeeted then
+        v[v.ClassName.."Template"]=0
+    end
+end
+for i = 1,#l:GetChildren() do
+    e=l:GetChildren()[i]
+    if e:IsA("BlurEffect") or e:IsA("SunRaysEffect") or e:IsA("ColorCorrectionEffect") or e:IsA("BloomEffect") or e:IsA("DepthOfFieldEffect") then
+        e.Enabled = false
+    end
+end
+w.DescendantAdded:Connect(function(v)
+    wait(1)--prevent errors and shit
+   if v:IsA("BasePart") and not v:IsA("MeshPart") then
+        v.Material = "Plastic"
+        v.Reflectance = 0
+    elseif v:IsA("Decal") or v:IsA("Texture") and decalsyeeted then
+        v.Transparency = 1
+    elseif v:IsA("ParticleEmitter") or v:IsA("Trail") then
+        v.Lifetime = NumberRange.new(0)
+    elseif v:IsA("Explosion") then
+        v.BlastPressure = 1
+        v.BlastRadius = 1
+    elseif v:IsA("Fire") or v:IsA("SpotLight") or v:IsA("Smoke") or v:IsA("Sparkles") then
+        v.Enabled = false
+    elseif v:IsA("MeshPart") and decalsyeeted then
+        v.Material = "Plastic"
+        v.Reflectance = 0
+        v.TextureID = 10385902758728957
+    elseif v:IsA("SpecialMesh") and decalsyeeted then
+        v.TextureId=0
+    elseif v:IsA("ShirtGraphic") and decalsyeeted then
+        v.ShirtGraphic=0
+    elseif (v:IsA("Shirt") or v:IsA("Pants")) and decalsyeeted then
+        v[v.ClassName.."Template"]=0
+                 end
+             end)
+         end
+    end)
+
+Options.Anti_Lag3:SetValue(false)
+
 Tabs.Misc:AddButton({
         Title = "Accurate Low Quality",
-        Description = "",
+        Description = "(FastFlag)",
         Callback = function()
         -- made by guesttester_1 (pls credit to me)
 -- i forgot to add remove textures script
@@ -1668,15 +2055,19 @@ local function optimizegetgc()
     local OptimizerGarbageCollection = true
     local gcObjects = getgc(OptimizerGarbageCollection)
 
+pcall(function()
     for i = 1, #gcObjects do
         local v = gcObjects[i]
         if type(v) == "table" and rawget(v, "SprintCap") then
-            rawset(v, "Speed", TSpeed)
-            rawset(v, "JumpHeight", TJump)
-            rawset(v, "AirStrafeAcceleration", 184)
-            rawset(v, "AirAcceleration", 3)
+           if v.Speed and v.JumpHeight then
+                  rawset(v, "Speed", TSpeed)
+                  rawset(v, "JumpHeight", TJump)
+                  rawset(v, "AirStrafeAcceleration", StrafeAcceleration)
+                  rawset(v, "AirAcceleration", 3)
+                  end
+             end
         end
-    end
+    end)
 end
 
 game.Players.LocalPlayer.CharacterAdded:Connect(function()
@@ -1693,6 +2084,7 @@ end
 spawn(function()
 while wait(3) do
 if not FakeEmoteDash then
+setStrafeAcceleration(StrafeAcceleration2)
 setTSpeed(TSpeed2)
 setTJump(TJump2)
      end
