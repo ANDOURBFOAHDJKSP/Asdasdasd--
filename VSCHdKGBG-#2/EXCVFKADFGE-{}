@@ -1398,7 +1398,7 @@ end)
         end
     })
     
-local PremiumUser = {"yzuicy", "nmivvr"}
+local PremiumUser = {"yzuicy", "nmivvr", "TinyCatFangs"}
 local OwnerUser = {"Guilfordy_sagalol", "Peleeelallee", "Unknownproooolucky", "Leorozon", "johnsam6"}
 
 if table.find(PremiumUser, game.Players.LocalPlayer.Name) or table.find(OwnerUser, game.Players.LocalPlayer.Name) then
