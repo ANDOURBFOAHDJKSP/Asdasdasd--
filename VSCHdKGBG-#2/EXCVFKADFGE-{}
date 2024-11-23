@@ -1398,10 +1398,10 @@ end)
         end
     })
     
-local PremiumUser = {""}
+local PremiumUser = {"yzuicy"}
 local OwnerUser = {"Guilfordy_sagalol", "Peleeelallee", "Unknownproooolucky", "Leorozon"}
 
-if OwnerUser or PremiumUser then
+if player.Name == OwnerUser or player.Name == PremiumUser then
  Tabs.Misc:AddParagraph({
         Title = "Perks Features",
         Content = "REQUIREMENTS: U need to buy Headphones to Equip Multiple Perks"
