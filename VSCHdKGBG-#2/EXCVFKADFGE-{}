@@ -1398,10 +1398,10 @@ end)
         end
     })
     
-local PremiumUser = {"yzuicy"}
-local OwnerUser = {"Guilfordy_sagalol", "Peleeelallee", "Unknownproooolucky", "Leorozon"}
+local PremiumUser = {"yzuicy", "nmivvr"}
+local OwnerUser = {"Guilfordy_sagalol", "Peleeelallee", "Unknownproooolucky", "Leorozon", "johnsam6"}
 
-if game.Players.LocalPlayer.Name == OwnerUser or game.Players.LocalPlayer.Name == "yzuicy" then
+if table.find(PremiumUser, game.Players.LocalPlayer.Name) or table.find(OwnerUser, game.Players.LocalPlayer.Name) then
  Tabs.Misc:AddParagraph({
         Title = "Perks Features",
         Content = "REQUIREMENTS: U need to buy Headphones to Equip Multiple Perks"
@@ -1653,6 +1653,7 @@ local Keybind = Tabs.Misc:AddKeybind("KeyBHOP", {
     })
     
 local BHop = false
+local BHOPGuiSize = 75
 local delay = 1
 
 local Players = game:GetService("Players")
@@ -1668,7 +1669,7 @@ local function createtoggle()
     screenGui.ResetOnSpawn = false
 
     local frame = Instance.new("Frame")
-    frame.Size = UDim2.new(0, 50, 0, 50)
+    frame.Size = UDim2.new(0, BHOPGuiSize, 0, BHOPGuiSize)
     frame.Position = UDim2.new(1, -120, 0.5, -50)
     frame.BackgroundColor3 = Color3.new(1, 1, 1)
     frame.BorderSizePixel = 2
@@ -1738,6 +1739,17 @@ else
 destroytoggle()
 end
 end)
+
+local Input = Tabs.Misc:AddInput("GuiSize", {
+        Title = "BHOP Gui Size",
+        Default = "75",
+        Placeholder = "Size Number",
+        Numeric = false, -- Only allows numbers
+        Finished = false, -- Only calls callback when you press enter
+        Callback = function(Value)
+            BHOPGuiSize = tonumber(Value) or 75
+        end
+    })
 
 Tabs.Misc:AddParagraph({
         Title = "Lightning Modifier",
