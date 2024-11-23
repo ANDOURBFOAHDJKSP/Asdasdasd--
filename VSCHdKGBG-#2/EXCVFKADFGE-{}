@@ -443,73 +443,6 @@ while ObjectiveESP and wait(0.4) do
     end)
   end
  end)
- 
- local ESPTickets = false
-
-local Toggle = Tabs.Main:AddToggle("ESPCandys", {Title = "ESP Candys", Default = false })
-
-    Toggle:OnChanged(function(State)
-        ESPTickets = State
-        
-        while ESPTickets and wait(0.4) do
-        local highlight = workspace.Game.Effects:FindFirstChild("TicketHighlight")
-
-if highlight then
-    highlight.DepthMode = Enum.HighlightDepthMode.AlwaysOnTop
-    highlight.FillTransparency = 0.5  -- Adjust transparency (0 is fully opaque)
-    highlight.OutlineTransparency = 0  -- Ensure the outline is visible
-    highlight.FillColor = Color3.fromRGB(255, 0, 0)  -- Example: Set fill color to red
-    highlight.OutlineColor = Color3.fromRGB(255, 255, 255)  -- Example: Set outline color to white
-end
- pcall(function()
-        if ESPTickets then
-            local localPlayer = game:GetService("Players").LocalPlayer
-            local localCharacter = localPlayer.Character
-            local localHumanoidRootPart = localCharacter and localCharacter:FindFirstChild("HumanoidRootPart")
-
-            if not localHumanoidRootPart then
-                return
-            end
-
-            for _, v in pairs(game.Workspace.Game.Effects.Tickets:GetDescendants()) do
-                if v:IsA("BasePart") and v.Name == "HumanoidRootPart" then
-                    if not v:FindFirstChild("CandyESP") then
-                        local BillboardGui = Instance.new("BillboardGui")
-                        local TextLabel = Instance.new("TextLabel")
-
-                        -- Billboard settings
-                        BillboardGui.Parent = v 
-                        BillboardGui.Name = "CandyESP"
-                        BillboardGui.AlwaysOnTop = true
-                        BillboardGui.Size = UDim2.new(0, 50, 0, 50)
-                        BillboardGui.StudsOffset = Vector3.new(0, 2, 0)
-                        BillboardGui.MaxDistance = 500
-
-                        -- TextLabel settings
-                        TextLabel.Parent = BillboardGui
-                        TextLabel.BackgroundColor3 = Color3.new(1, 1, 1) -- White background
-                        TextLabel.BackgroundTransparency = 1 -- Fully transparent
-                        TextLabel.Size = UDim2.new(1, 0, 1, 0) -- Fill the billboard
-                        TextLabel.Text = "Candy Corn" -- Display the grandparent name
-                        TextLabel.TextColor3 = Color3.new(1, 0, 0) -- Red text
-                        TextLabel.TextScaled = true -- Scale text to fit
-                        TextLabel.Font = Enum.Font.GothamBold -- Set font to GothamBold
-                    end
-                    
-                   local distance = math.floor((localHumanoidRootPart.Position - v.Position).Magnitude)
-                    v.CandyESP.TextLabel.Text = string.format("Candy Corn - %d M", distance)
-                end
-            end
-        else
-            for _, v in pairs(game.Workspace.Game.Effects.Tickets:GetDescendants()) do
-                if v:IsA("MeshPart") and v:FindFirstChild("CandyESP") then
-                    v.CandyESP:Destroy()
-                end
-            end
-        end
-    end)
-    end
- end)
 
 Tabs.Main:AddParagraph({
         Title = "Game Mods Features",
@@ -1067,10 +1000,9 @@ end
 local InstantReviveWhileEmote = false
 
 function InstantRevive()
+local player = game.Players.LocalPlayer
 local nearestPlayer = getNearestDownedPlayer()
       if nearestPlayer then
-        if not InstantReviveWhileEmote then
-          if player.Character:GetAttribute("State") == "Run" or player.Character:GetAttribute("State") == "Air" or player.Character:GetAttribute("State") == "Fall" or player.Character:GetAttribute("State") == "Jump" or player.Character:GetAttribute("State") == "Crouch" then
          game:GetService("ReplicatedStorage").Events.Character.Interact:FireServer("Revive", nil, tostring(nearestPlayer))
          game:GetService("ReplicatedStorage").Events.Character.Interact:FireServer("Revive", false, tostring(nearestPlayer))
          game:GetService("ReplicatedStorage").Events.Character.Interact:FireServer("Revive", true, tostring(nearestPlayer))
@@ -1078,8 +1010,14 @@ local nearestPlayer = getNearestDownedPlayer()
          game:GetService("ReplicatedStorage").Events.Character.Interact:FireServer("Revive", true, tostring(nearestPlayer))
          game:GetService("ReplicatedStorage").Events.Character.Interact:FireServer("Revive", true, tostring(nearestPlayer))
          game:GetService("ReplicatedStorage").Events.Character.Interact:FireServer("Revive", true, tostring(nearestPlayer))
-             end
-      else
+      end
+end
+
+function InstantReviveNoEmote()
+local player = game.Players.LocalPlayer
+local nearestPlayer = getNearestDownedPlayer()
+      if nearestPlayer then
+          if player.Character:GetAttribute("State") == "Run" or player.Character:GetAttribute("State") == "Air" or player.Character:GetAttribute("State") == "Fall" or player.Character:GetAttribute("State") == "Jump" or player.Character:GetAttribute("State") == "Crouch" then
          game:GetService("ReplicatedStorage").Events.Character.Interact:FireServer("Revive", nil, tostring(nearestPlayer))
          game:GetService("ReplicatedStorage").Events.Character.Interact:FireServer("Revive", false, tostring(nearestPlayer))
          game:GetService("ReplicatedStorage").Events.Character.Interact:FireServer("Revive", true, tostring(nearestPlayer))
@@ -1099,7 +1037,11 @@ local Toggle = Tabs.Misc:AddToggle("InsRev", {Title = "Instant Revive", Default 
 Toggle:OnChanged(function(State)
     AutoRevive = State
   while AutoRevive and wait(DelayRevive) do
+     if InstantReviveWhileEmote then
        spawn(InstantRevive)
+   else
+      spawn(InstantReviveNoEmote)
+       end
     end
 end)
 
@@ -1334,7 +1276,6 @@ local Toggle = Tabs.Misc:AddToggle("PlayerWalkspeed", {Title = "Walkspeed Toggle
         CFRAMEWalk = State
  
  while CFRAMEWalk and wait(0.1) do
-    if chr and hum then
 local RunService = game:GetService("RunService")
 local hb = RunService.Heartbeat
 local speaker = game.Players.LocalPlayer
@@ -1342,6 +1283,7 @@ local chr = speaker.Character
 local hum = chr and chr:FindFirstChildWhichIsA("Humanoid")
 local delta = hb:Wait()
 
+     if chr and hum then
              chr:TranslateBy(hum.MoveDirection * moveDistance * delta * 10)
            end
         end
@@ -1456,6 +1398,10 @@ end)
         end
     })
     
+local PremiumUser = {""}
+local OwnerUser = {"Guilfordy_sagalol", "Peleeelallee", "Unknownproooolucky", "Leorozon"}
+
+if OwnerUser or PremiumUser then
  Tabs.Misc:AddParagraph({
         Title = "Perks Features",
         Content = "REQUIREMENTS: U need to buy Headphones to Equip Multiple Perks"
@@ -1463,12 +1409,24 @@ end)
     
 local SelectedPerks = "Briefcase"
 local LayoutPerkNumber = 3
+local HttpService = game:GetService("HttpService")
+
     
 function EquipMultiplePerks(Number)
-game:GetService("ReplicatedStorage").Events.Data.Equip:FireServer(tostring(1), "Perk1")
+local ObfRemote = HttpService:JSONEncode({
+    Number = tostring(1),
+    Mode = "Stop Stealing Kiddo",
+})
 
+game:GetService("ReplicatedStorage").Events.Data.Equip:FireServer(ObfRemote)
+game:GetService("ReplicatedStorage").Events.Data.Equip:FireServer(tostring(1), "Perk1")
 wait(0.1)
 
+local ObfRemote2 = HttpService:JSONEncode({
+    Number = tostring(Number),
+    Mode = "Stop Stealing Kiddo",
+})
+game:GetService("ReplicatedStorage").Events.Data.Equip:FireServer(ObfRemote2)
 game:GetService("ReplicatedStorage").Events.Data.Equip:FireServer(tostring(Number), 1)
 end
 
@@ -1522,31 +1480,63 @@ Toggle:OnChanged(function(State)
 end)
 
 function EquipAllPerks()
+local ObfRemote = HttpService:JSONEncode({
+    Number = tostring(2),
+    Mode = "Stop Stealing Kiddo",
+})
+game:GetService("ReplicatedStorage").Events.Data.Equip:FireServer(ObfRemote)
 game:GetService("ReplicatedStorage").Events.Data.Equip:FireServer(tostring(2), "Perk1")
+game:GetService("ReplicatedStorage").Events.Data.Equip:FireServer(ObfRemote)
 game:GetService("ReplicatedStorage").Events.Data.Equip:FireServer(tostring(3), "Perk1")
+game:GetService("ReplicatedStorage").Events.Data.Equip:FireServer(ObfRemote)
 game:GetService("ReplicatedStorage").Events.Data.Equip:FireServer(tostring(4), "Perk1")
+game:GetService("ReplicatedStorage").Events.Data.Equip:FireServer(ObfRemote)
 game:GetService("ReplicatedStorage").Events.Data.Equip:FireServer(tostring(5), "Perk1")
+game:GetService("ReplicatedStorage").Events.Data.Equip:FireServer(ObfRemote)
 game:GetService("ReplicatedStorage").Events.Data.Equip:FireServer(tostring(6), "Perk1")
+game:GetService("ReplicatedStorage").Events.Data.Equip:FireServer(ObfRemote)
 game:GetService("ReplicatedStorage").Events.Data.Equip:FireServer(tostring(7), "Perk1")
+game:GetService("ReplicatedStorage").Events.Data.Equip:FireServer(ObfRemote)
 game:GetService("ReplicatedStorage").Events.Data.Equip:FireServer(tostring(8), "Perk1")
+game:GetService("ReplicatedStorage").Events.Data.Equip:FireServer(ObfRemote)
 game:GetService("ReplicatedStorage").Events.Data.Equip:FireServer(tostring(9), "Perk1")
+game:GetService("ReplicatedStorage").Events.Data.Equip:FireServer(ObfRemote)
 game:GetService("ReplicatedStorage").Events.Data.Equip:FireServer(tostring(10), "Perk1")
+game:GetService("ReplicatedStorage").Events.Data.Equip:FireServer(ObfRemote)
 game:GetService("ReplicatedStorage").Events.Data.Equip:FireServer(tostring(11), "Perk1")
+game:GetService("ReplicatedStorage").Events.Data.Equip:FireServer(ObfRemote)
 game:GetService("ReplicatedStorage").Events.Data.Equip:FireServer(tostring(696), "Perk1")
+game:GetService("ReplicatedStorage").Events.Data.Equip:FireServer(ObfRemote)
 end
 
 function UnequipAllPerks()
+local ObfRemote = HttpService:JSONEncode({
+    Number = "Unequip",
+    Mode = "Stop Stealing Kiddo"
+})
+game:GetService("ReplicatedStorage").Events.Data.Equip:FireServer(ObfRemote)
 game:GetService("ReplicatedStorage").Events.Data.Equip:FireServer("Unequip", 2)
+game:GetService("ReplicatedStorage").Events.Data.Equip:FireServer(ObfRemote)
 game:GetService("ReplicatedStorage").Events.Data.Equip:FireServer("Unequip", 3)
+game:GetService("ReplicatedStorage").Events.Data.Equip:FireServer(ObfRemote)
 game:GetService("ReplicatedStorage").Events.Data.Equip:FireServer("Unequip", 4)
+game:GetService("ReplicatedStorage").Events.Data.Equip:FireServer(ObfRemote)
 game:GetService("ReplicatedStorage").Events.Data.Equip:FireServer("Unequip", 5)
+game:GetService("ReplicatedStorage").Events.Data.Equip:FireServer(ObfRemote)
 game:GetService("ReplicatedStorage").Events.Data.Equip:FireServer("Unequip", 6)
+game:GetService("ReplicatedStorage").Events.Data.Equip:FireServer(ObfRemote)
 game:GetService("ReplicatedStorage").Events.Data.Equip:FireServer("Unequip", 7)
+game:GetService("ReplicatedStorage").Events.Data.Equip:FireServer(ObfRemote)
 game:GetService("ReplicatedStorage").Events.Data.Equip:FireServer("Unequip", 8)
+game:GetService("ReplicatedStorage").Events.Data.Equip:FireServer(ObfRemote)
 game:GetService("ReplicatedStorage").Events.Data.Equip:FireServer("Unequip", 9)
+game:GetService("ReplicatedStorage").Events.Data.Equip:FireServer(ObfRemote)
 game:GetService("ReplicatedStorage").Events.Data.Equip:FireServer("Unequip", 10)
+game:GetService("ReplicatedStorage").Events.Data.Equip:FireServer(ObfRemote)
 game:GetService("ReplicatedStorage").Events.Data.Equip:FireServer("Unequip", 11)
+game:GetService("ReplicatedStorage").Events.Data.Equip:FireServer(ObfRemote)
 game:GetService("ReplicatedStorage").Events.Data.Equip:FireServer("Unequip", 696)
+game:GetService("ReplicatedStorage").Events.Data.Equip:FireServer(ObfRemote)
 end
 
 Tabs.Misc:AddButton({
@@ -1565,6 +1555,15 @@ Tabs.Misc:AddButton({
   end
 })
 
+else
+
+Tabs.Misc:AddParagraph({
+        Title = "Perks Features",
+        Content = "(PREMIUM USER ONLY)\nGo to Discord Server if you want to buy"
+    })
+
+end
+
 Tabs.Misc:AddParagraph({
         Title = "Lag Switch Features",
         Content = " "
@@ -1577,10 +1576,12 @@ local UserInputService = game:GetService("UserInputService")
  
  function CreateBindableButton()
     local function Action(actionName, inputState)
-      if not inputState == Enum.UserInputState.Begin and inputState == Enum.UserInputType.MouseButton1 then
+      if inputState == Enum.UserInputState.Begin then
           setfflag("TaskSchedulerTargetFps", "1")
+          setfpscap(1)
       wait(LagDelay)
           setfflag("TaskSchedulerTargetFps", "900")
+          setfpscap (900) 
         end
     end
 
@@ -1667,7 +1668,7 @@ local function createtoggle()
     screenGui.ResetOnSpawn = false
 
     local frame = Instance.new("Frame")
-    frame.Size = UDim2.new(0, 100, 0, 100)
+    frame.Size = UDim2.new(0, 50, 0, 50)
     frame.Position = UDim2.new(1, -120, 0.5, -50)
     frame.BackgroundColor3 = Color3.new(1, 1, 1)
     frame.BorderSizePixel = 2
