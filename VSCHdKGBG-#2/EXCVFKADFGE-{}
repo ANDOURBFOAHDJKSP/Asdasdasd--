@@ -1578,10 +1578,8 @@ local UserInputService = game:GetService("UserInputService")
     local function Action(actionName, inputState)
       if inputState == Enum.UserInputState.Begin then
           setfflag("TaskSchedulerTargetFps", "1")
-          setfpscap(1)
       wait(LagDelay)
           setfflag("TaskSchedulerTargetFps", "900")
-          setfpscap (900) 
         end
     end
 
