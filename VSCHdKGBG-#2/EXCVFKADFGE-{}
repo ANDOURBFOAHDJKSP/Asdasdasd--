@@ -2037,15 +2037,13 @@ Tabs.Settings:AddParagraph({
         Content = " "
     })
 
---[[
 Tabs.Settings:AddButton({
         Title = "Remove FPS Counter",
-        Description = "",
+        Description = "(TEMPORARY)",
         Callback = function()
             fpsCounter:Destroy()
         end
     })
-]]
 
 SaveManager:SetLibrary(Fluent)
 InterfaceManager:SetLibrary(Fluent)
