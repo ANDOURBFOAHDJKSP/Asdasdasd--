@@ -28,7 +28,7 @@ loki.BackgroundColor3 = Color3.fromRGB(224,224,224)
 loki.BackgroundTransparency = 1.000
 loki.Position = UDim2.new(-0.0529999994, 0, -0.244000003, 0)
 loki.Size = UDim2.new(0, 69, 0, 62)
-loki.Image = "rbxassetid://117888653875503"
+loki.Image = "rbxassetid://73949062338801"
  
 posto.Name = "posto"
 posto.Parent = mainopen
