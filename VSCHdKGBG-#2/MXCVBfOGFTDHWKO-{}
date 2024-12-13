@@ -1639,6 +1639,8 @@ circle.Color = Color3.new(1, 0, 0)
 circle.Radius = circleRadius
 circle.Position = circleCenter
 
+local MurderAimType = "Linear Aim"
+
 local function MurderTarget()
     local target = nil
     local dist = math.huge
@@ -1674,15 +1676,22 @@ ThrowHook = hookmetamethod(game, "__namecall", function(self, ...)
         if target and target.Character and target.Character:FindFirstChild("HumanoidRootPart") then
             local TargetPosition = target.Character.HumanoidRootPart.Position
             local Y = target.Character.HumanoidRootPart.AssemblyLinearVelocity / 3
-
-            if MurdererSilentAim then
-                args[1] = CFrame.new(TargetPosition)
-                args[2] = LocalPlayer.Character.HumanoidRootPart.Position - Vector3.new(0, 1, 0)
-            elseif InstantThrowMode then
-                args[1] = CFrame.new(TargetPosition)
-                args[2] = TargetPosition - Vector3.new(0, 1, 0)
+            local MurderAimPos
+            
+            if MurderAimType == "Linear Aim" then
+              MurderAimPos = TargetPosition + Vector3.new(Y.X, Y.Y / 1.5, Y.Z) + target.Character.Humanoid.MoveDirection * 3
+            elseif MurderAimType == "Regular Aim" then
+              MurderAimPos = TargetPosition
             end
 
+            if MurdererSilentAim then
+                args[1] = CFrame.new(MurderAimPos)
+                args[2] = LocalPlayer.Character.HumanoidRootPart.Position - Vector3.new(0, 1, 0)
+            elseif InstantThrowMode then
+                args[1] = CFrame.new(MurderAimPos)
+                args[2] = TargetPosition - Vector3.new(0, 1, 0)
+            end
+            
             return self.FireServer(self, unpack(args))
         end
     end
@@ -1690,6 +1699,47 @@ ThrowHook = hookmetamethod(game, "__namecall", function(self, ...)
     return ThrowHook(self, ...)
 end)
 
+local Dropdown = Tabs.Combat:AddDropdown("MurderAimType", {
+        Title = "Silent Aim Type",
+        Values = {"Regular Aim", "Linear Aim"},
+        Multi = false,
+        Default = 2,
+    })
+
+    Dropdown:OnChanged(function(Value)
+        MurderAimType = Value
+    end)
+
+Tabs.Combat:AddParagraph({
+        Title = "Innocent",
+        Content = " "
+    })
+    
+ Tabs.Combat:AddButton({
+        Title = "Fake Dead (Sit)",
+        Description = "",
+        Callback = function()
+      LocalPlayer.Character.Humanoid.Sit = true
+    end
+})
+
+Tabs.Combat:AddButton({
+        Title = "Fake Dead (2)",
+        Description = "",
+        Callback = function()
+      LocalPlayer.Character.Humanoid.Sit = true
+      LocalPlayer.Character.Humanoid.PlatformStand = true
+    end
+})
+
+Tabs.Combat:AddButton({
+        Title = "Undead",
+        Description = "",
+        Callback = function()
+      LocalPlayer.Character.Humanoid.Sit = false
+      LocalPlayer.Character.Humanoid.PlatformStand = false
+    end
+})
 
 Tabs.Combat:AddParagraph({
         Title = "Sheriff",
@@ -1793,7 +1843,7 @@ GunHook = hookmetamethod(game, "__namecall", function(self, ...)
 end)
 
 
-local Toggle = Tabs.Combat:AddToggle("SilentAim", {Title = "Silent Aim", Default = false })
+local Toggle = Tabs.Combat:AddToggle("SilentAim", {Title = "Gun Silent Aim", Default = false })
 
 Toggle:OnChanged(function(gunsilentaim)
     SheriffAim = gunsilentaim
@@ -1811,7 +1861,7 @@ local Dropdown = Tabs.Combat:AddDropdown("SilentAimType", {
     end)
     
  local Input = Tabs.Combat:AddInput("ShootAccuracy", {
-    Title = "Silent Aim Accuracy",
+    Title = "Shoot Accuracy",
     Default = GunAccuracy,
     Placeholder = "50",
     Numeric = true, -- Only allows numbers
@@ -2947,7 +2997,7 @@ end
 
 Tabs.Trolls:AddParagraph({
         Title = "Fling Features",
-        Content = " "
+        Content = "(WIP)"
     })
  
 local Toggle = Tabs.Trolls:AddToggle("FlingToggle", { Title = "Fling Toggle", Default = false })
