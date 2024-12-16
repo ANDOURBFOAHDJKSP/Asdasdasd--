@@ -565,6 +565,8 @@ repeat
             if not billboard.Enabled and BillBoardSheriff then
                 billboard.Enabled = true
             end
+       elseif not player and not player.Character then
+            textLabel:Destroy()
         else
             textLabel.TextColor3 = Color3.new(0, 1, 0)
             textLabel.Text = labelText
@@ -690,14 +692,14 @@ Toggle:OnChanged(function(gunboard)
                         if textLabel then
                             local distance = math.floor((GunDrop.Position - LocalPlayer.Character.HumanoidRootPart.Position).Magnitude)
                             textLabel.Text = string.format("%s - %d M", "Gun Drop", distance)
-                       --     textLabel.Visible = true
+                            textLabel.Visible = true
                         end
                     end
-                else
+                elseif not GunDrop then
                     if GunESP then
                         local textLabel = GunESP:FindFirstChildWhichIsA("TextLabel")
                         if textLabel then
-                        --    textLabel.Visible = false
+                            textLabel.Visible = false
                         end
                     end
                 end
@@ -938,6 +940,7 @@ Tabs.Main:AddButton({
 -- Auto Farm
 
 local TweenSpeed = 25
+local StopTween = false
 
 function Tween(table, callback)
     local player, cha, plr, hum = getPlayer()
@@ -964,6 +967,11 @@ function Tween(table, callback)
         CFrame = tweenCFrame
     })
     tween:Play()
+    
+    if StopTween then
+       tween:Cancel()
+    end
+    
     if callback then
         tween.Completed:Wait()
         print("Completed")
@@ -1051,10 +1059,11 @@ if Coin then
    end
 end
 
-function HideAllCoins()
+function TPtoCoins()
+    local LocalPlayer = game.Players.LocalPlayer
     local Map = GetMap() or Workspace:FindFirstChild("Barn")
     local CoinContainer = Map:FindFirstChild("CoinContainer") or Map:FindFirstChild("CoinsAreas")
-    local MinDistance = math.huge
+    local MinDistance = CoinDistances
     local Coin = nil
     
 if not Map and not CoinContainer then
@@ -1062,7 +1071,7 @@ if not Map and not CoinContainer then
 end
 
     if CoinContainer and LocalPlayer and LocalPlayer.Character then
-        for _, v in pairs(CoinContainer:GetDescendants()) do
+        for _, v in pairs(CoinContainer:GetChildren()) do
             if v.Name == "Coin_Server" and v:FindFirstChildWhichIsA("TouchTransmitter") and v:FindFirstChild("CoinVisual") then
                 local Distance = (LocalPlayer.Character.HumanoidRootPart.Position - v.Position).Magnitude
                 if Distance < MinDistance then
@@ -1073,10 +1082,9 @@ end
         end
     end
     
-if Coin then
-        Coin.Transparency = 1
-        Coin.CoinVisual.Transparency = 1
-   end
+if Coin and MinDistance >= 550 then
+        HumanoidRootPart.CFrame = Coin.CFrame
+    end
 end
 
 Tabs.AutoFarm:AddParagraph({
@@ -1098,6 +1106,7 @@ function TweenAutoFarmCoins()
   spawn(function()
      if StartFarm then
         LocalPlayer.Character.PrimaryPart.AssemblyLinearVelocity = Vector3.new(0, 0, 0)
+        TPtoCoins()
         workspace.Gravity = 0
         LocalPlayer.Character.Humanoid.PlatformStand = true
         Tween({
@@ -1109,12 +1118,14 @@ function TweenAutoFarmCoins()
 
   if not LocalPlayer.Character.PrimaryPart or not getNearestCoins() then
          StartFarm = false
+         StopTween = true
       return
    end
 
 spawn(function()
  if getNearestCoins() then
       StartFarm = true
+      StopTween = false
        end
    end)
 end
@@ -1127,7 +1138,7 @@ Toggle:OnChanged(function(value)
    if TweenAutoFarm then 
      if getNearestCoins() then
      spawn(function()
-         LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(getNearestCoins().Position)
+         TPtoCoins()
       end)
     end
     
@@ -1135,8 +1146,10 @@ Toggle:OnChanged(function(value)
       StartFarm = true
       workspace.Gravity = 0
       LocalPlayer.Character.PrimaryPart.AssemblyLinearVelocity = Vector3.new(0, 0, 0)
+      StopTween = false
  else
       workspace.Gravity = Gravity
+      StopTween = true
       StartFarm = false
       LocalPlayer.Character.Humanoid.PlatformStand = false
       LocalPlayer.Character.Humanoid.Sit = false
@@ -1149,6 +1162,7 @@ end
    Remotes.Gameplay.CoinCollected.OnClientEvent:Connect(function(Currency, CurrentCoins, MaxCoins)
    if TweenAutoFarm and CurrentCoins == MaxCoins then
          StartFarm = false
+         StopTween = true
          LocalPlayer.Character.Humanoid.PlatformStand = false
          LocalPlayer.Character.Humanoid.Sit = false
          workspace.Gravity = Gravity
@@ -1158,6 +1172,7 @@ end
   Remotes.Gameplay.VictoryScreen.OnClientEvent:Connect(function()
   if TweenAutoFarm then
        StartFarm = false
+       StopTween = true
        LocalPlayer.Character.Humanoid.PlatformStand = false
        LocalPlayer.Character.Humanoid.Sit = false
        workspace.Gravity = Gravity
@@ -1503,7 +1518,6 @@ function SetThrowHitbox2()
     for i = 1, #descendants do
         local obj = descendants[i]
         if obj.Name == "Part" and obj:FindFirstChild("Handle") and obj.Handle:FindFirstChild("KnifeStickWeld") then
-           wait(0.03)
             table.insert(candidates, obj)
         end
     end
@@ -1550,12 +1564,23 @@ local Toggle = Tabs.Combat:AddToggle("ThrowHitbox", {Title = "Throw Hitbox", Def
 
     Toggle:OnChanged(function(throwaura)
         throwhitboxloop = throwaura
-        
+
+--[[
 while throwhitboxloop and task.wait(0.2) do
    pcall(function()
      SetThrowHitbox2()
      end)
    end
+]]
+
+Workspace.DescendantRemoving:Connect(function(descendant)
+if throwhitboxloop and descendant.Name == "ThrowingKnife" then
+     pcall(function()
+       SetThrowHitbox2()
+     end)
+   end
+end)
+
 end)
 
 local Dropdown = Tabs.Combat:AddDropdown("ThrowHitboxType", {
@@ -1680,6 +1705,8 @@ ThrowHook = hookmetamethod(game, "__namecall", function(self, ...)
             
             if MurderAimType == "Linear Aim" then
               MurderAimPos = TargetPosition + Vector3.new(Y.X, Y.Y / 1.5, Y.Z) + target.Character.Humanoid.MoveDirection * 3
+            elseif MurderAimType == "Precise Aim" then
+              MurderAimPos = TargetPosition + Vector3.new(Y.X, Y.Y / 1.5, Y.Z)
             elseif MurderAimType == "Regular Aim" then
               MurderAimPos = TargetPosition
             end
@@ -1701,7 +1728,7 @@ end)
 
 local Dropdown = Tabs.Combat:AddDropdown("MurderAimType", {
         Title = "Silent Aim Type",
-        Values = {"Regular Aim", "Linear Aim"},
+        Values = {"Regular Aim", "Linear Aim", "Precise Aim"},
         Multi = false,
         Default = 2,
     })
@@ -2608,6 +2635,26 @@ Toggle:OnChanged(function(antiflingvalue)
      spawn(Antifling)
   end
 end)
+
+local AntiKick = false
+
+local Toggle = Tabs.Misc:AddToggle("AntiKick", { Title = "Anti Kick (Client)", Default = false })
+
+Toggle:OnChanged(function(antikickvalue)
+    AntiKick = antikickvalue
+end)
+
+local mt = getrawmetatable(game)
+setreadonly(mt, false)
+local oldNamecall = mt.__namecall
+
+mt.__namecall = function(self, ...)
+    local method = getnamecallmethod()
+    if AntiKick and method == "Kick" then
+        return
+    end
+    return oldNamecall(self, ...)
+end
 
 
 local FLYING = false
