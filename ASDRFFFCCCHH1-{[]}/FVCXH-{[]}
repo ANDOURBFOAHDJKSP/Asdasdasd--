@@ -950,15 +950,15 @@ Fluent:Notify({
     })
    
 Fluent:Notify({
-        Title = "Quick Optimzer",
-        Content = "Done!",
+        Title = "Merry Christmas XD",
+        Content = " ",
         SubContent = " ", -- Optional
         Duration = 10 -- Set to nil to make the notification not disappear
     })
     
 local Window = Fluent:CreateWindow({
     Title = "Unknown Hub X TQ ",
-    SubTitle = "V5.0.1 (Dungeon) discord.gg/d2a3KkTD6r",
+    SubTitle = "V5.0.2 (Dungeon) discord.gg/d2a3KkTD6r",
     TabWidth = 160,
     Size = UDim2.fromOffset(580, 460),
     Acrylic = true, -- The blur may be detectable, setting this to false disables blur entirely
@@ -990,7 +990,7 @@ Tabs.Main:AddParagraph({
     })
 
 -- Example usage in your second script
-local Toggle1 = Tabs.Main:AddToggle("AutokillMobs", {Title = "Auto Kill Mobs", Default = false })
+local Toggle1 = Tabs.Main:AddToggle("AutokillMobs", {Title = "Auto Farm Mobs", Default = false })
 
 Toggle1:OnChanged(function(State)
     Settings.H = State
@@ -1056,7 +1056,7 @@ end
  
  local FarmWaveDefense1 = false
 
-local Toggle = Tabs.Main:AddToggle("WaveDefenseFarm", {Title = "Auto Kill Mobs", Default = false })
+local Toggle = Tabs.Main:AddToggle("WaveDefenseFarm", {Title = "Auto Farm Mobs", Default = false })
 
 Toggle:OnChanged(function(State)
     FarmWaveDefense1 = State
@@ -1158,13 +1158,12 @@ Options.AutoMedkits:SetValue(false)
 
 end
  
- --[[
 Tabs.Main:AddParagraph({
         Title = "Farming Events",
         Content = ""
     })
 
-local Toggle1 = Tabs.Main:AddToggle("EventFarm", {Title = "Auto Kill Event Mobs", Default = false })
+local Toggle1 = Tabs.Main:AddToggle("EventFarm", {Title = "Auto Farm Mobs", Default = false })
 
 Toggle1:OnChanged(function(State)
     Settings.Re = State
@@ -1207,23 +1206,8 @@ Toggle1:OnChanged(function(State)
             wait()
         end
     end)
-    spawn(function()
-        while wait() and Settings.Re do
-            local player, cha, plr, hum = getPlayer()
-            local dungeon, rooms, enemies, shrines = getDungeon()
-            for _, v in pairs(rooms:GetDescendants()) do
-                if v:FindFirstChildWhichIsA("TouchTransmitter", true) and v.Name == "UnderwaterTeleporter" then
-                    v.Start.CFrame = plr.CFrame
-                    wait(3)
-                    v.Start:Destroy()
-                end
-            end
-            wait()
-        end
-    end)
 end)
 
--- Initialize the global variable
 _G.TPG3 = false
 
 local Toggle = Tabs.Main:AddToggle("AutoKillGrottoBoss", {Title = "Teleport to Spawn Boss", Default = false })
@@ -1239,9 +1223,9 @@ Toggle:OnChanged(function(Tswx)
         if not character then
             return  -- Character might not exist (e.g., during respawn)
         end
-
+        
         local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
-        local destinationCFrame = CFrame.new(Vector3.new(-1214.52, 62.3912, -143.918))
+        local destinationCFrame = CFrame.new(Vector3.new(-1593.79, 515.489, 606.865))
 
         local Distance = (destinationCFrame.Position - humanoidRootPart.Position).Magnitude
 
@@ -1275,7 +1259,6 @@ Toggle:OnChanged(function(Tswx)
         end
     end
 end)
-]]
 
 function tpToShrines()
     local shrines = getShrines()
