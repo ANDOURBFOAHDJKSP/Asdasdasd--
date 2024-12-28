@@ -28,7 +28,7 @@ loki.BackgroundColor3 = Color3.fromRGB(224,224,224)
 loki.BackgroundTransparency = 1.000
 loki.Position = UDim2.new(-0.0529999994, 0, -0.244000003, 0)
 loki.Size = UDim2.new(0, 69, 0, 62)
-loki.Image = "rbxassetid://17339439921"
+loki.Image = "rbxassetid://73949062338801"
  
 posto.Name = "posto"
 posto.Parent = mainopen
@@ -473,7 +473,7 @@ end
 
             for _, v in pairs(game.Workspace.Game.Effects.Tickets:GetDescendants()) do
                 if v:IsA("BasePart") and v.Name == "HumanoidRootPart" then
-                    if not v:FindFirstChild("CandyESP") then
+                    if not v:FindFirstChild("TicketESP") then
                         local BillboardGui = Instance.new("BillboardGui")
                         local TextLabel = Instance.new("TextLabel")
 
@@ -497,13 +497,13 @@ end
                     end
                     
                    local distance = math.floor((localHumanoidRootPart.Position - v.Position).Magnitude)
-                    v.CandyESP.TextLabel.Text = string.format("Ticket - %d M", distance)
+                    v.TicketESP.TextLabel.Text = string.format("Ticket - %d M", distance)
                 end
             end
         else
             for _, v in pairs(game.Workspace.Game.Effects.Tickets:GetDescendants()) do
-                if v:IsA("MeshPart") and v:FindFirstChild("CandyESP") then
-                    v.CandyESP:Destroy()
+                if v:IsA("MeshPart") and v:FindFirstChild("TicketESP") then
+                    v.TicketESP:Destroy()
                 end
             end
         end
