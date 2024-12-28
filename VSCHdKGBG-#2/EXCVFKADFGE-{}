@@ -444,6 +444,74 @@ while ObjectiveESP and wait(0.4) do
   end
  end)
 
+local ESPTickets = false
+
+local Toggle = Tabs.Main:AddToggle("ESPTicket", {Title = "ESP Tickets", Default = false })
+
+    Toggle:OnChanged(function(State)
+        ESPTickets = State
+        
+        while ESPTickets and wait(0.4) do
+        local highlight = workspace.Game.Effects:FindFirstChild("TicketHighlight")
+
+if highlight then
+    highlight.DepthMode = Enum.HighlightDepthMode.AlwaysOnTop
+    highlight.FillTransparency = 0.5  -- Adjust transparency (0 is fully opaque)
+    highlight.OutlineTransparency = 0  -- Ensure the outline is visible
+    highlight.FillColor = Color3.fromRGB(255, 0, 0)  -- Example: Set fill color to red
+    highlight.OutlineColor = Color3.fromRGB(255, 255, 255)  -- Example: Set outline color to white
+end
+ pcall(function()
+        if ESPTickets then
+            local localPlayer = game:GetService("Players").LocalPlayer
+            local localCharacter = localPlayer.Character
+            local localHumanoidRootPart = localCharacter and localCharacter:FindFirstChild("HumanoidRootPart")
+
+            if not localHumanoidRootPart then
+                return
+            end
+
+            for _, v in pairs(game.Workspace.Game.Effects.Tickets:GetDescendants()) do
+                if v:IsA("BasePart") and v.Name == "HumanoidRootPart" then
+                    if not v:FindFirstChild("CandyESP") then
+                        local BillboardGui = Instance.new("BillboardGui")
+                        local TextLabel = Instance.new("TextLabel")
+
+                        -- Billboard settings
+                        BillboardGui.Parent = v 
+                        BillboardGui.Name = "TicketESP"
+                        BillboardGui.AlwaysOnTop = true
+                        BillboardGui.Size = UDim2.new(0, 50, 0, 50)
+                        BillboardGui.StudsOffset = Vector3.new(0, 2, 0)
+                        BillboardGui.MaxDistance = 500
+
+                        -- TextLabel settings
+                        TextLabel.Parent = BillboardGui
+                        TextLabel.BackgroundColor3 = Color3.new(1, 1, 1) -- White background
+                        TextLabel.BackgroundTransparency = 1 -- Fully transparent
+                        TextLabel.Size = UDim2.new(1, 0, 1, 0) -- Fill the billboard
+                        TextLabel.Text = "Candy Corn" -- Display the grandparent name
+                        TextLabel.TextColor3 = Color3.new(1, 0, 0) -- Red text
+                        TextLabel.TextScaled = true -- Scale text to fit
+                        TextLabel.Font = Enum.Font.GothamBold -- Set font to GothamBold
+                    end
+                    
+                   local distance = math.floor((localHumanoidRootPart.Position - v.Position).Magnitude)
+                    v.CandyESP.TextLabel.Text = string.format("Ticket - %d M", distance)
+                end
+            end
+        else
+            for _, v in pairs(game.Workspace.Game.Effects.Tickets:GetDescendants()) do
+                if v:IsA("MeshPart") and v:FindFirstChild("CandyESP") then
+                    v.CandyESP:Destroy()
+                end
+            end
+        end
+    end)
+    end
+ end)
+
+
 Tabs.Main:AddParagraph({
         Title = "Game Mods Features",
         Content = " "
