@@ -296,6 +296,11 @@ icon.Position = UDim2.new(0.65, 0, -0.1, 0) -- Adjust position
 icon.Image = "rbxassetid://73949062338801" -- Set icon asset id
 icon.Parent = gui
 
+-- Function to destroy GUI
+function destroyGui()
+    gui:Destroy()
+end
+
 -- Function to handle correct key
 local function correctKeyFunction()
     game.StarterGui:SetCore("SendNotification", {
@@ -311,11 +316,6 @@ end
 -- Function to handle incorrect key
 local function incorrectKeyFunction()
     print("Key is incorrect!")
-end
-
--- Function to destroy GUI
-function destroyGui()
-    gui:Destroy()
 end
 
 local function checkKey()
