@@ -298,7 +298,9 @@ icon.Parent = gui
 
 -- Function to destroy GUI
 function destroyGui()
-    gui:Destroy()
+  if gui then
+       gui:Destroy()
+    end
 end
 
 -- Function to handle correct key
@@ -309,7 +311,7 @@ local function correctKeyFunction()
         Duration = 20
     })
     runloadstring()
-    wait(1) 
+    wait(1)
     destroyGui()
 end
 
@@ -325,8 +327,6 @@ local function checkKey()
    if success then
         saveKeyToFile(textBox.Text);
         correctKeyFunction()
-        wait(1)
-        destroyGui()
     else
         incorrectKeyFunction()
     end
